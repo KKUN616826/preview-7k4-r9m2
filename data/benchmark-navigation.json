@@ -1,0 +1,149 @@
+[
+  {
+    "slug": "mind",
+    "name": "Mind",
+    "label": "Memory and task decisions",
+    "description": "Retain task information, learn from feedback, and choose the next operation.",
+    "question": "What must the robot remember or infer before it acts?",
+    "cases": [
+      {
+        "id": "E",
+        "title": "Duplicate Item Identification",
+        "summary": "Identify previously observed items across successive batches and place each repeated item in the submission tray.",
+        "cover": "media/task-previews/E/easy.webp",
+        "nav_title": "Duplicate Identification",
+        "row_cover": "media/benchmark-covers/E.jpg"
+      },
+      {
+        "id": "F",
+        "title": "Unknown Button Mapping and Slider Navigation",
+        "summary": "Infer an unknown button-to-motion mapping from feedback, retain it after reset, and navigate to the target.",
+        "cover": "media/task-previews/F/easy.webp",
+        "nav_title": "Button Mapping",
+        "row_cover": "media/benchmark-covers/F.jpg"
+      },
+      {
+        "id": "P",
+        "title": "Order-Based Meal Assembly",
+        "summary": "Remember initial and additional orders and deliver the requested ingredients to the correct containers.",
+        "cover": "media/task-previews/P/easy.webp",
+        "nav_title": "Meal Assembly",
+        "row_cover": "media/benchmark-covers/P.jpg"
+      },
+      {
+        "id": "S",
+        "title": "Rotating Tray Layout Reconstruction",
+        "summary": "Remember a colored-slot arrangement and restore it after the tray rotates.",
+        "cover": "media/task-previews/S/easy.webp",
+        "nav_title": "Layout Reconstruction",
+        "row_cover": "media/benchmark-covers/S.jpg"
+      },
+      {
+        "id": "M",
+        "title": "Workpiece Tracking and Route Reproduction",
+        "summary": "Track a hidden target through cover exchanges and reproduce its required station route.",
+        "cover": "media/task-previews/M/easy.webp",
+        "nav_title": "Workpiece Tracking",
+        "row_cover": "media/benchmark-covers/M.jpg"
+      }
+    ]
+  },
+  {
+    "slug": "act",
+    "name": "Act",
+    "label": "Physical execution",
+    "description": "Respond to dynamic cues and execute precise, stable actions under physical constraints.",
+    "question": "Can the robot turn the intended action into a valid physical outcome?",
+    "cases": [
+      {
+        "id": "FR1",
+        "title": "Continuous Conveyor Picking",
+        "summary": "Pick moving packages from a conveyor and place them in the collection tray.",
+        "cover": "media/task-previews/FR1/easy.webp",
+        "nav_title": "Conveyor Picking",
+        "row_cover": "media/benchmark-covers/FR1.jpg"
+      },
+      {
+        "id": "FR2",
+        "title": "Light-Guided Button Response",
+        "summary": "Respond to illuminated button cues with timely, correct presses and releases.",
+        "cover": "media/task-previews/FR2/easy.webp",
+        "nav_title": "Button Response",
+        "row_cover": "media/benchmark-covers/FR2.jpg"
+      },
+      {
+        "id": "PR1",
+        "title": "Linear Resistor Adjustment",
+        "summary": "Adjust a linear resistor to the target reading and maintain it after release.",
+        "cover": "media/task-previews/PR1/easy.webp",
+        "nav_title": "Linear Adjustment",
+        "row_cover": "media/benchmark-covers/PR1.jpg"
+      },
+      {
+        "id": "PR2",
+        "title": "Rotary Voltage Regulator Setting",
+        "summary": "Adjust a rotary voltage regulator to the target reading and maintain it after release.",
+        "cover": "media/task-previews/PR2/easy.webp",
+        "nav_title": "Rotary Adjustment",
+        "row_cover": "media/benchmark-covers/PR2.jpg"
+      },
+      {
+        "id": "PR3",
+        "title": "Marker Line Tracing",
+        "summary": "Grasp a marker and trace a visible path with controlled contact and precision.",
+        "cover": "media/task-previews/PR3/easy.webp",
+        "nav_title": "Line Tracing",
+        "row_cover": "media/benchmark-covers/PR3.jpg"
+      }
+    ]
+  },
+  {
+    "slug": "mind2act",
+    "name": "Mind2Act",
+    "label": "Reasoning and execution together",
+    "description": "Coordinate task decisions and physical execution across multiple stages.",
+    "question": "How does execution feedback change what happens next?",
+    "cases": [
+      {
+        "id": "CP01",
+        "title": "Conveyor Meal Assembly",
+        "summary": "Remember reference orders and assemble meals from a continuously moving food supply.",
+        "cover": "media/task-previews/CP01/easy.webp",
+        "nav_title": "Conveyor Meal Assembly",
+        "row_cover": "media/benchmark-covers/CP01.jpg"
+      },
+      {
+        "id": "CP02",
+        "title": "Rotating Cake Decoration",
+        "summary": "Remember a decoration layout and reproduce it on a rotating cake while completing the required stages.",
+        "cover": "media/task-previews/CP02/easy.webp",
+        "nav_title": "Cake Decoration",
+        "row_cover": "media/benchmark-covers/CP02.jpg"
+      },
+      {
+        "id": "CP03",
+        "title": "Dynamic Rack Loading",
+        "summary": "Load upright plates into moving empty rack slots without disturbing other plates.",
+        "cover": "media/task-previews/CP03/easy.webp",
+        "nav_title": "Rack Loading",
+        "row_cover": "media/benchmark-covers/CP03.jpg"
+      },
+      {
+        "id": "CP04",
+        "title": "Dual-Arm Cooking",
+        "summary": "Remember a recipe and coordinate preparation, cooking, temperature control, and cleanup.",
+        "cover": "media/task-previews/CP04/easy.webp",
+        "nav_title": "Dual-Arm Cooking",
+        "row_cover": "media/benchmark-covers/CP04.jpg"
+      },
+      {
+        "id": "CP05",
+        "title": "Keyboard Sequence Reproduction",
+        "summary": "Remember a demonstrated key sequence, reproduce it with mallets, and return the tools.",
+        "cover": "media/task-previews/CP05/easy.webp",
+        "nav_title": "Keyboard Sequence",
+        "row_cover": "media/benchmark-covers/CP05.jpg"
+      }
+    ]
+  }
+]

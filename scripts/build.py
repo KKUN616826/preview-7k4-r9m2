@@ -9,6 +9,7 @@ from view_leaderboard import render as render_view_leaderboard
 from build_rollouts import build_rollouts
 from hero_demo import render as render_hero
 from task_previews import apply_previews
+from build_benchmark import main as build_benchmark
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -116,6 +117,7 @@ def main():
     assert not re.search(r'__[A-Z_]+__', page)
     page = apply_previews(page)
     (ROOT / 'index.html').write_text(page, newline='\n')
+    build_benchmark()
     print(f'Built {len(records)} cases, {videos} videos, {images} images.')
 
 if __name__ == '__main__':

@@ -1,0 +1,76 @@
+/* Benchmark navigation and layout. Card appearance and hover live in benchmark-catalog.css. */
+.benchmark-workspace{--workspace-header:88px;background:#faf9f4;color:#203447}
+body.benchmark-workspace .header .header-inner{flex-direction:row!important}
+.workspace-layout{display:grid;grid-template-columns:258px minmax(0,1fr);max-width:1600px;margin:0 auto;align-items:start}
+.workspace-sidebar{position:sticky;top:var(--workspace-header);height:calc(100dvh - var(--workspace-header));overflow:auto;overscroll-behavior:contain;padding:32px 18px 40px 24px;border-right:1px solid #d7ded8;scrollbar-width:thin;scrollbar-color:#c2cecb transparent}
+.workspace-nav-title{font-family:Sora,Arial,sans-serif;font-size:16px;font-weight:650;margin:0 0 20px;color:#203447}
+.workspace-sidebar a,.workspace-sidebar button,#task-drawer a,#task-drawer button{font-family:Arial,sans-serif}
+.workspace-overview{display:block;padding:10px 12px;margin:0 0 20px;border-radius:5px;font-size:15px;color:#536d78}
+.workspace-nav-group{margin:0 0 14px}
+.workspace-group-row{display:flex;align-items:center;gap:3px}
+.workspace-group-row>a{flex:1;display:flex;align-items:center;gap:10px;min-height:40px;padding:8px 12px;font-weight:600;font-size:15px;color:#203447;border-radius:5px}
+.workspace-count{margin-left:auto;color:#718188;font-size:12px;font-weight:400}
+.workspace-group-row button{border:0;border-radius:4px;background:transparent;color:#536d78;cursor:pointer;width:34px;min-height:38px;font-size:22px;line-height:1}
+.workspace-group-row button[aria-expanded=false] span{display:inline-block;transform:rotate(-90deg)}
+.workspace-case-list{list-style:none;margin:5px 0 0 12px;padding:0 0 0 8px;border-left:1px solid #d7ded8}
+.workspace-case-list a{display:flex;align-items:baseline;gap:8px;padding:9px 8px;min-height:40px;border-radius:5px;color:#536d78;font-size:13px;line-height:1.45}
+.workspace-case-id{flex:0 0 32px;font-size:12px;color:#718188;letter-spacing:.1px}
+.workspace-sidebar a:hover,.workspace-group-row button:hover,#task-drawer nav a:hover{background:#edf0ea;text-decoration:none}
+.workspace-sidebar a[aria-current=page],#task-drawer nav a[aria-current=page]{color:#234c5b;background:#e3ebe5;font-weight:600;box-shadow:inset 3px 0 #376b80}
+.workspace-sidebar a[aria-current=page] .workspace-case-id,#task-drawer a[aria-current=page] .workspace-case-id{color:#315f72}
+body.benchmark-workspace main.workspace-content{width:100%;min-width:0;max-width:none;padding:42px 44px 80px;margin:0}
+.workspace-page-head{margin:0 0 36px}
+.workspace-kicker{font-size:14px;color:#637d85;margin:0 0 12px}
+.workspace-content .benchmark-description{max-width:760px;font-size:18px;margin:0 0 18px}
+.workspace-meta{font-size:14px;color:#63737a;margin:0;line-height:1.6}
+.workspace-meta span{padding:0 8px;color:#a1afad}
+.workspace-content h2{font:600 23px/1.4 Sora,Arial,sans-serif;letter-spacing:-.5px;margin:0 0 22px}
+.workspace-content .workspace-section{border-top:1px solid #cfdad7;padding:30px 0 0;margin:34px 0 0}
+.workspace-suites{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.workspace-suite-link{display:block;color:#203447;padding:8px 0 14px;text-decoration:none;border-bottom:2px solid #d7ded8}
+.workspace-suite-link:hover{border-color:#376b80;text-decoration:none}
+.workspace-suite-link h3{font:650 25px/1.3 Sora,Arial,sans-serif;letter-spacing:-.6px;margin:0 0 10px}
+.workspace-suite-link p{font-size:15px;line-height:1.65;color:#63737a;margin:0 0 17px}
+.workspace-suite-link .workspace-suite-label{font-size:16px;font-weight:600;line-height:1.45;color:#315f72;min-height:46px;margin:0 0 12px}
+.workspace-suite-link>span{font-size:14px;color:#315f72}
+.workspace-section-heading{margin-bottom:24px}
+.workspace-section-heading h2{margin-bottom:5px}
+.workspace-section-heading p{font-size:15px;color:#63737a;margin:0}
+.workspace-task-index{display:grid;grid-template-columns:140px minmax(0,1fr);gap:24px;margin:24px 0 0}
+.workspace-task-index h3{font:600 18px/1.5 Sora,Arial,sans-serif;margin:10px 0}
+.workspace-task-index ul{list-style:none;margin:0;padding:0}
+.workspace-task-index li+li{border-top:1px solid #e2e7e0}
+.workspace-task-index li a{display:flex;gap:14px;align-items:baseline;padding:12px 2px;font-size:15px;color:#315267}
+.workspace-task-index li a>span:last-child{margin-left:auto}
+.workspace-breadcrumb{font-size:13px;color:#718188;margin:0 0 20px;line-height:1.5}
+.workspace-breadcrumb a{color:#536d78}
+.workspace-content .workspace-suite-subtitle{font-size:22px;line-height:1.4;color:#315f72;margin:-8px 0 18px}
+.workspace-question{border-left:3px solid #8ba397;padding:4px 0 4px 22px;margin:0 0 36px}
+.workspace-question h2{font:600 14px/1.5 Arial,sans-serif;letter-spacing:0;color:#63737a;margin:0 0 7px}
+.workspace-question p{font-size:19px;line-height:1.6;margin:0;max-width:700px}
+.workspace-comparison{margin:0}
+.workspace-comparison>div{display:grid;grid-template-columns:minmax(180px,1fr) 1.6fr;gap:30px;padding:17px 0}
+.workspace-comparison>div+div{border-top:1px solid #e2e7e0}
+.workspace-comparison dt{font-size:15px;font-weight:600;line-height:1.6}
+.workspace-comparison dd{font-size:15px;color:#63737a;line-height:1.65;margin:0}
+body.benchmark-workspace.task-detail .task-head h1{max-width:none;padding:0;font-size:clamp(26px,2.4vw,36px)}
+body.benchmark-workspace.task-detail .task-head p{font-size:17px}
+body.benchmark-workspace.task-detail .demo-layout{grid-template-columns:minmax(0,1fr) 260px}
+body.benchmark-workspace.task-detail .brief{padding:24px 20px}
+body.benchmark-workspace.task-detail .instruction p{font-size:16px}
+body.benchmark-workspace.task-detail .task-footer{flex-wrap:wrap}
+body.benchmark-workspace.task-detail .task-footer a{max-width:36%}
+.workspace-mobile-bar{display:none}
+.workspace-skip{position:fixed;top:8px;left:20px;z-index:200;transform:translateY(-180%);padding:10px 18px;background:#faf9f4;border:2px solid #376b80;border-radius:5px}
+.workspace-skip:focus{transform:none}
+#task-drawer{width:min(360px,calc(100% - 32px));height:100dvh;max-height:100dvh;margin:0 auto 0 0;padding:20px 18px 32px;border:0;border-right:1px solid #d7ded8;background:#faf9f4;color:#203447;overflow:auto}
+#task-drawer::backdrop{background:#102b3e66}
+.workspace-drawer-head{position:sticky;top:0;z-index:2;background:#faf9f4;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 20px;padding-bottom:8px}
+.workspace-drawer-head h2{font:600 18px Sora,Arial,sans-serif;margin:0}
+.workspace-drawer-head button,.workspace-mobile-bar button{border:1px solid #b9c9c5;border-radius:5px;background:transparent;color:#315f72;min-height:42px;padding:8px 12px;font:15px Arial,sans-serif;cursor:pointer}
+.workspace-drawer-head button:hover,.workspace-mobile-bar button:hover{background:#e3ebe5}
+[hidden]{display:none!important}
+@media(max-width:1200px){.workspace-layout{grid-template-columns:236px minmax(0,1fr)}body.benchmark-workspace main.workspace-content{padding:32px 28px 60px}.workspace-sidebar{padding-left:16px;padding-right:12px}.workspace-content .task-explanations{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-suites{gap:18px}.workspace-suite-link h3{font-size:23px}body.benchmark-workspace.task-detail .demo-layout{grid-template-columns:minmax(0,1fr)}body.benchmark-workspace.task-detail .brief{border-left:0;border-top:1px solid #d6dfd9}.workspace-task-index{grid-template-columns:110px minmax(0,1fr);gap:14px}}
+@media(max-width:1040px){.benchmark-workspace{--workspace-header:76px}}
+@media(max-width:850px){.workspace-layout{display:block}.workspace-sidebar{display:none}.workspace-mobile-bar{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid #d7ded8;background:#faf9f4}.workspace-mobile-bar>span{font-size:13px;line-height:1.4;color:#63737a;min-width:0}.workspace-mobile-bar button{flex-shrink:0}body.benchmark-workspace main.workspace-content{padding:28px 24px 50px}.workspace-suites{gap:24px}}
+@media(max-width:560px){body.benchmark-workspace main.workspace-content{padding:24px 20px 44px}.workspace-content .task-explanations{grid-template-columns:1fr}.workspace-suites{grid-template-columns:1fr;gap:14px}.workspace-suite-link{padding-bottom:20px}.workspace-suite-link .workspace-suite-label{min-height:0;margin-bottom:8px}.workspace-task-index{grid-template-columns:1fr;gap:0}.workspace-comparison>div{grid-template-columns:1fr;gap:5px}.workspace-content h2{font-size:21px}.workspace-page-head{margin-bottom:28px}.workspace-question p{font-size:17px}.workspace-mobile-bar{padding-inline:20px}body.benchmark-workspace.task-detail .task-footer a{max-width:100%}}

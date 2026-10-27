@@ -21,6 +21,18 @@
 
 ## 修改与构建
 
+### Benchmark 任务浏览
+
+`benchmark.html` 为总览，`benchmark/mind.html`、`benchmark/act.html`、`benchmark/mind2act.html` 为分类页；原有 `tasks/<ID>.html#easy|medium|hard` 任务地址保持有效。
+
+- 导航、分类说明与卡片内容：`data/benchmark-navigation.json`。
+- 任务详情内容源：`scripts/benchmark/<ID>.html`；共享顶部导航：`scripts/benchmark/header.html`。
+- 浏览布局与侧栏：`tasks/benchmark-workspace.css`、`scripts/benchmark-workspace.js`。
+- 卡片与悬停沿用 `tasks/benchmark-catalog.css`。
+- 分类页图文行样式：`tasks/benchmark-task-rows.css`；高清封面保存在 `media/benchmark-covers/`，用 `python3 scripts/export_benchmark_covers.py` 从原始视频重新提取（需要 ffmpeg），来源记录见该目录的 `sources.json`。
+
+单独运行 `python3 scripts/build_benchmark.py` 更新总览、分类和任务详情；完整构建也会调用它。请修改上述源文件，不直接修改生成页面。浏览器回归运行 `node scripts/test_benchmark_browser.cjs`，使用与现有测试相同的 Playwright / `NODE_PATH` 环境。
+
 - 修改任务定义、媒体路径、难度和证据说明：`data/showcase-cases.json`。
 - 修改核心观点与任务设计介绍：`scripts/research_intro.html`。
 - 修改介绍样式：`scripts/research.css`；目录与交互：`scripts/showcase.html`。

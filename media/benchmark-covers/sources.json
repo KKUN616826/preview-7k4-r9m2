@@ -1,0 +1,107 @@
+[
+  {
+    "task": "E",
+    "source": "media/videos/E__E_easy.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/E.jpg"
+  },
+  {
+    "task": "F",
+    "source": "media/videos/F__F_easy.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/F.jpg"
+  },
+  {
+    "task": "P",
+    "source": "media/videos/P__P_hard_general_012.mp4",
+    "source_label": "Hard 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/P.jpg"
+  },
+  {
+    "task": "S",
+    "source": "media/videos/S__S_easy.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/S.jpg"
+  },
+  {
+    "task": "M",
+    "source": "media/videos/M__M_easy_frontlabel.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/M.jpg"
+  },
+  {
+    "task": "FR1",
+    "source": "media/videos/FR1__picking__01.mp4",
+    "source_label": "运控演示 1（档位未标注）",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/FR1.jpg"
+  },
+  {
+    "task": "FR2",
+    "source": "media/videos/FR2__FR2.mp4",
+    "source_label": "运控演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/FR2.jpg"
+  },
+  {
+    "task": "PR1",
+    "source": "media/videos/PR1__PR1_Easy_control_20260919.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/PR1.jpg"
+  },
+  {
+    "task": "PR2",
+    "source": "media/videos/PR2__PR2_Easy_control_20260919.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/PR2.jpg"
+  },
+  {
+    "task": "PR3",
+    "source": "media/videos/PR3__PR3_Easy_head_reference_20260919.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/PR3.jpg"
+  },
+  {
+    "task": "CP01",
+    "source": "media/videos/CP01__CP01_easy_adaptive_v2_20260920.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/CP01.jpg"
+  },
+  {
+    "task": "CP02",
+    "source": "media/videos/CP02__CP02_easy_v6_完整示范与运控_20260920.mp4",
+    "source_label": "Easy 演示",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/CP02.jpg"
+  },
+  {
+    "task": "CP03",
+    "source": "media/videos/CP03__CP03_Easy_3盘_12mms_连续空槽_原速.mp4",
+    "source_label": "Easy · 专家运控演示（仿真状态）",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/CP03.jpg"
+  },
+  {
+    "task": "CP04",
+    "source": "media/videos/CP04__CP04_easy.mp4",
+    "source_label": "Easy · 场景/流程预览",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/CP04.jpg"
+  },
+  {
+    "task": "CP05",
+    "source": "media/videos/CP05__CP05_Easy_中央单棒_8次复奏_20260923.mp4",
+    "source_label": "Easy · 中央单棒复奏",
+    "time_seconds": 1,
+    "output": "media/benchmark-covers/CP05.jpg"
+  }
+]

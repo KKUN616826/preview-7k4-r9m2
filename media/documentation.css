@@ -8,3 +8,18 @@
 .doc-suite-table tfoot{background:#eaf1ed;font-weight:600}.doc-suite-table tfoot th,.doc-suite-table tfoot td{border-bottom:0}
 .doc-suite-table td:nth-child(3),.doc-suite-table thead th:nth-child(3){text-align:center}
 @media(max-width:760px){.doc-suite-table{min-width:600px}.doc-suite-table th,.doc-suite-table td{padding:14px}}
+
+/* Align document navigation with the Benchmark sidebar instead of centering a second column. */
+.documentation-page{--doc-header-height:88px}
+body.documentation-page .header .header-inner{flex-direction:row!important}
+body.documentation-page main.documentation{width:100%;max-width:none;margin:0;padding:0;grid-template-columns:258px minmax(0,1fr);gap:0;align-items:start}
+.documentation-page .documentation aside{top:var(--doc-header-height);height:calc(100dvh - var(--doc-header-height));overflow:auto;overscroll-behavior:contain;padding:32px 18px 40px 24px;gap:0;border-color:#d7ded8;font:15px/1.5 Arial,sans-serif;scrollbar-width:thin}
+.documentation-page .documentation aside strong{font-size:16px;line-height:1.5;margin:0 0 20px;color:#203447}
+.documentation-page .documentation aside a{display:block;min-height:40px;padding:10px 12px;border-radius:5px;color:#536d78}
+.documentation-page .documentation aside a:hover{background:#edf0ea;color:#234c5b}
+.documentation-page .documentation aside a:focus-visible{outline:2px solid #376b80;outline-offset:2px}
+.documentation-page .documentation article{padding:42px 44px 48px}
+@media(max-width:1200px){body.documentation-page main.documentation{grid-template-columns:236px minmax(0,1fr)}.documentation-page .documentation aside{padding-left:16px;padding-right:12px}.documentation-page .documentation article{padding:32px 28px 40px}}
+@media(max-width:1040px){.documentation-page{--doc-header-height:76px}}
+@media(max-width:850px){body.documentation-page main.documentation{grid-template-columns:1fr}.documentation-page .documentation aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:20px 24px 16px;gap:4px 8px;border-right:0;border-bottom:1px solid #d7ded8}.documentation-page .documentation aside strong{width:100%;margin-bottom:6px}.documentation-page .documentation aside a{padding:8px 10px}.documentation-page .documentation article{padding:28px 24px 40px}}
+@media(max-width:560px){.documentation-page .documentation aside{padding-inline:20px}.documentation-page .documentation article{padding:24px 20px 36px}}
