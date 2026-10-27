@@ -19,7 +19,19 @@
 
 本展示包含任务定义与演示，不包含模型评测成绩。暂定参数和待补素材在具体任务中标注。
 
+## 同事获取与运行优化版本
+
+请阅读 [优化分支预览教程](docs/Preview_Guide.md)，包含首次下载、macOS / Windows 启动、更新、评审入口和常见问题。
+
 ## 修改与构建
+
+### 独立 Leaderboard 页面
+
+- 数据：`data/leaderboard-results.json`，保留原页面转录的 Table 6 数值与来源信息；不与首页的旧候选名单文件混用。
+- 页面源：`scripts/leaderboard-page.html`；样式和交互：`scripts/leaderboard-explorer.css`、`scripts/leaderboard-explorer.js`。
+- 单独构建：`python3 scripts/build_leaderboard.py`。完整构建也会调用此构建器；不要直接修改生成的 `leaderboard.html`。
+- 浏览器回归：`node scripts/test_leaderboard_explorer.cjs`；首页与新榜单入口衔接：`node scripts/test_view_leaderboard.cjs`，使用现有 Playwright / `NODE_PATH` 环境。
+- 此轮改版前的已保存版本：提交 `87c6ccf`，标签 `checkpoint-before-leaderboard`。首页、Benchmark 与 Documents 不属于这次独立榜单改版的修改范围。
 
 ### Benchmark 任务浏览
 

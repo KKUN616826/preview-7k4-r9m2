@@ -10,6 +10,7 @@ from build_rollouts import build_rollouts
 from hero_demo import render as render_hero
 from task_previews import apply_previews
 from build_benchmark import main as build_benchmark
+from build_leaderboard import main as build_leaderboard
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -75,8 +76,6 @@ def main():
     page = page.replace('__RESEARCH_INTRO__', (ROOT / 'scripts/research_intro.html').read_text())
     public_board = render_view_leaderboard()
     page = page.replace('__VIEW_LEADERBOARD__', public_board)
-    full_board = (ROOT / 'scripts/leaderboard-page.html').read_text().replace('__VIEW_LEADERBOARD__', public_board)
-    (ROOT / 'leaderboard.html').write_text(full_board, newline='\n')
     page = page.replace('__HERO_DEMO__', render_hero())
     page = page.replace('__ACADEMIC_COVER_CSS__', (ROOT / 'scripts/academic-cover.css').read_text())
     page = page.replace('__PROJECT_POLISH_CSS__', (ROOT / 'scripts/project-polish.css').read_text())
@@ -118,6 +117,7 @@ def main():
     page = apply_previews(page)
     (ROOT / 'index.html').write_text(page, newline='\n')
     build_benchmark()
+    build_leaderboard()
     print(f'Built {len(records)} cases, {videos} videos, {images} images.')
 
 if __name__ == '__main__':
