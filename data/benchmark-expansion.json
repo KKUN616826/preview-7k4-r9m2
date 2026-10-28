@@ -1,0 +1,299 @@
+{
+  "source_document": "https://v00jwj7g4n7.feishu.cn/wiki/OYKTwm0nZipn1bk9gIycPAIBnQc",
+  "import_date": "2026-10-28",
+  "copy_basis": "Task names from the authenticated document coverage table; concise English briefs from those names and inspection of supplied video frames. Detailed per-level thresholds have not been imported.",
+  "aliases": {
+    "PR8": "PR6",
+    "FR3": "DR3",
+    "PR7": "DR7",
+    "CP": "CP07",
+    "P": "P2",
+    "M": "M2"
+  },
+  "cases": [
+    {
+      "id": "E2",
+      "suite": "mind",
+      "title_zh": "实物密码键盘",
+      "title": "Object-Code Keypad Entry",
+      "nav_title": "Object-Code Keypad",
+      "summary": "Remember object–digit associations, decode a visible object sequence, and enter the corresponding code.",
+      "instruction": "Observe and remember the object–digit pairs. After the display changes, read the object sequence from left to right and enter its digits on the keypad, pressing and releasing each key in order.",
+      "focus": [
+        "Object–digit memory",
+        "Sequence decoding",
+        "Ordered key entry"
+      ],
+      "media": {
+        "easy": "e2-easy.mp4",
+        "medium": "e2-mid2.mp4"
+      }
+    },
+    {
+      "id": "F2",
+      "suite": "mind",
+      "title_zh": "色块试排",
+      "title": "Color-Block Trial Ordering",
+      "nav_title": "Color-Block Ordering",
+      "summary": "Use feedback from trial arrangements to determine the required order of colored blocks.",
+      "instruction": "Arrange the colored blocks, inspect the displayed feedback, and revise the ordering until the required arrangement is reached.",
+      "focus": [
+        "Feedback interpretation",
+        "Order inference",
+        "Trial revision"
+      ],
+      "media": {
+        "easy": "F2_easy_seed0_20261022_30fps.mp4",
+        "hard": "F2_hard_seed0_20261022_30fps.mp4",
+        "medium": "F2_medium_seed0_20261022_30fps.mp4"
+      }
+    },
+    {
+      "id": "P2",
+      "suite": "mind",
+      "title_zh": "蒸笼顺序记忆与还原",
+      "title": "Steamer Stack Order Reconstruction",
+      "nav_title": "Steamer Stack Order",
+      "summary": "Remember a stack arrangement and reconstruct the order of the steamer components.",
+      "instruction": "Observe the initial steamer arrangement, retain its order, and reconstruct the stack after the reference is no longer available.",
+      "focus": [
+        "Order memory",
+        "Stack reconstruction",
+        "Placement sequence"
+      ],
+      "media": {
+        "easy": "P_Easy_head.mp4",
+        "medium": "P_Medium_head.mp4",
+        "hard": "P_Hard_front_head.mp4"
+      }
+    },
+    {
+      "id": "S2",
+      "suite": "mind",
+      "title_zh": "隐藏禁区导航",
+      "title": "Hidden-Zone Navigation",
+      "nav_title": "Hidden-Zone Navigation",
+      "summary": "Remember hidden restricted cells and guide a marker across the grid toward the goal.",
+      "instruction": "Observe the restricted cells when they are shown. Use the movement controls to guide the marker to the goal while avoiding the remembered restricted areas.",
+      "focus": [
+        "Spatial memory",
+        "Route selection",
+        "Hidden constraints"
+      ],
+      "media": {
+        "medium": "S2_medium_seed0_20261022_30fps.mp4",
+        "hard": "S2_hard_seed0_20261022_30fps.mp4",
+        "easy": "S2_easy_seed0_20261022_30fps.mp4"
+      }
+    },
+    {
+      "id": "M2",
+      "suite": "mind",
+      "title_zh": "翻牌游戏",
+      "title": "Memory Card Matching",
+      "nav_title": "Memory Card Matching",
+      "summary": "Remember revealed card identities and locations to find matching pairs.",
+      "instruction": "Reveal cards, remember their identities and positions, and use that history to select matching pairs.",
+      "focus": [
+        "Identity memory",
+        "Position memory",
+        "Pair matching"
+      ],
+      "media": {
+        "easy": "M_easy_head_1x.mp4",
+        "hard": "M_hard_head_1x.mp4",
+        "medium": "M_medium_head_1x.mp4"
+      }
+    },
+    {
+      "id": "PR4",
+      "suite": "act",
+      "title_zh": "方巾折边对齐与稳定落放",
+      "title": "Cloth Edge Alignment and Placement",
+      "nav_title": "Cloth Edge Alignment",
+      "summary": "Fold and align a cloth edge, then release it in a stable placement.",
+      "instruction": "Manipulate the cloth to align the required edges, complete the fold, and release the cloth onto the support surface.",
+      "focus": [
+        "Edge alignment",
+        "Cloth manipulation",
+        "Stable release"
+      ],
+      "media": {
+        "easy": "PR4_Easy_triview.mp4",
+        "medium": "PR4_Medium_triview.mp4",
+        "hard": "PR4_Hard_triview.mp4"
+      }
+    },
+    {
+      "id": "PR5",
+      "suite": "act",
+      "title_zh": "印章定向盖印",
+      "title": "Oriented Stamp Placement",
+      "nav_title": "Oriented Stamping",
+      "summary": "Orient a stamp and press it onto the designated area.",
+      "instruction": "Grasp the stamp, align its orientation with the indicated reference, press it onto the target area, and lift it away.",
+      "focus": [
+        "Orientation control",
+        "Contact placement",
+        "Stamp release"
+      ],
+      "media": {
+        "easy": "PR5_Easy_triview.mp4",
+        "medium": "PR5_Medium_triview.mp4",
+        "hard": "PR5_Hard_triview.mp4"
+      }
+    },
+    {
+      "id": "PR6",
+      "suite": "act",
+      "title_zh": "多米诺连锁敲铃",
+      "title": "Domino Chain Bell Ringing",
+      "nav_title": "Domino Chain",
+      "summary": "Arrange dominoes into a chain that carries a falling motion to the bell.",
+      "instruction": "Place the dominoes along the indicated route, then initiate the chain so that the final action reaches the bell.",
+      "focus": [
+        "Domino placement",
+        "Spacing and alignment",
+        "Chain propagation"
+      ],
+      "media": {
+        "easy": "PR8_easy_seed0_20261022_30fps.mp4",
+        "medium": "PR8_medium_seed0_20261022_30fps.mp4",
+        "hard": "PR8_hard_seed0_20261022_30fps.mp4"
+      }
+    },
+    {
+      "id": "DR3",
+      "suite": "act",
+      "title_zh": "周期挡门穿越与及时撤离",
+      "title": "Periodic Gate Crossing and Withdrawal",
+      "nav_title": "Periodic Gate Crossing",
+      "summary": "Time the arm’s movement through a periodically moving gate and withdraw safely.",
+      "instruction": "Observe the gate cycle, move through the opening to reach the target, and withdraw before the gate obstructs the passage.",
+      "focus": [
+        "Timing",
+        "Obstacle clearance",
+        "Timely withdrawal"
+      ],
+      "media": {
+        "easy": "FR3_Easy_triview.mp4",
+        "medium": "FR3_Medium_triview.mp4",
+        "hard": "FR3_Hard_triview.mp4"
+      }
+    },
+    {
+      "id": "DR7",
+      "suite": "act",
+      "title_zh": "托盘带球搬运与稳定落放",
+      "title": "Ball-on-Tray Transport and Placement",
+      "nav_title": "Ball-on-Tray Transport",
+      "summary": "Carry a tray with a ball while controlling tilt, then place it on the destination surface.",
+      "instruction": "Lift and transport the tray while keeping the ball supported. Lower the tray onto the destination surface and release it stably.",
+      "focus": [
+        "Tray balance",
+        "Transport stability",
+        "Controlled placement"
+      ],
+      "media": {
+        "easy": "PR7_Easy_triview.mp4",
+        "medium": "PR7_Medium_triview.mp4",
+        "hard": "PR7_Hard_triview.mp4"
+      }
+    },
+    {
+      "id": "CP06",
+      "suite": "mind2act",
+      "title_zh": "蔬果称重配平",
+      "title": "Produce Weighing and Balancing",
+      "nav_title": "Produce Balancing",
+      "summary": "Use the balance scale’s feedback to select and adjust counterweights for produce.",
+      "instruction": "Place the produce on the scale, observe its balance, and adjust the counterweights in response to the scale’s feedback.",
+      "focus": [
+        "Weight inference",
+        "Feedback-driven adjustment",
+        "Balanced placement"
+      ],
+      "media": {
+        "easy": "CP06_Easy.mp4",
+        "medium": "CP06_Medium.mp4",
+        "hard": "CP06_Hard.mp4"
+      }
+    },
+    {
+      "id": "CP07",
+      "suite": "mind2act",
+      "title_zh": "搭桥",
+      "title": "Bridge Construction",
+      "nav_title": "Bridge Construction",
+      "summary": "Construct a bridge across a gap using the available building pieces.",
+      "instruction": "Select and position the bridge pieces to connect the two sides of the gap, coordinating the construction sequence with the structure already in place.",
+      "focus": [
+        "Construction planning",
+        "Part placement",
+        "Structural continuity"
+      ],
+      "media": {
+        "easy": "CP_easy_head_1x.mp4",
+        "medium": "CP_medium_head_1x.mp4",
+        "hard": "CP_hard_head_1x.mp4"
+      }
+    },
+    {
+      "id": "CP08",
+      "suite": "mind2act",
+      "title_zh": "按图搭建积木结构",
+      "title": "Reference-Guided Block Construction",
+      "nav_title": "Block Construction",
+      "summary": "Remember a reference structure and reproduce it with the available blocks.",
+      "instruction": "Observe the reference structure, retain the arrangement, and place the blocks to recreate it after the reference is hidden.",
+      "focus": [
+        "Reference memory",
+        "Assembly planning",
+        "Block placement"
+      ],
+      "media": {
+        "easy": "CP08_Easy_triview.mp4",
+        "hard": "CP08_Hard_triview.mp4",
+        "medium": "CP08_Medium_triview.mp4"
+      }
+    },
+    {
+      "id": "CP09",
+      "suite": "mind2act",
+      "title_zh": "白板图像复原",
+      "title": "Whiteboard Drawing Reconstruction",
+      "nav_title": "Drawing Reconstruction",
+      "summary": "Recreate a reference drawing on a whiteboard using the available markers.",
+      "instruction": "Observe the reference drawing and reproduce its shapes and layout on the whiteboard, selecting and manipulating the required markers.",
+      "focus": [
+        "Visual reconstruction",
+        "Tool selection",
+        "Drawing control"
+      ],
+      "media": {
+        "medium": "cp09-mid-1023.mp4",
+        "easy": "cp09-easy-1023.mp4",
+        "hard": "cp09-hard-1023.mp4"
+      }
+    },
+    {
+      "id": "CP10",
+      "suite": "mind2act",
+      "title_zh": "预测回球与红球避让",
+      "title": "Predictive Ball Return and Red-Ball Avoidance",
+      "nav_title": "Predictive Ball Return",
+      "summary": "Predict incoming ball motion, return target balls, and avoid red balls.",
+      "instruction": "Track the incoming balls and time the paddle to return target balls while avoiding contact with red balls.",
+      "focus": [
+        "Trajectory prediction",
+        "Timed response",
+        "Target discrimination"
+      ],
+      "media": {
+        "easy": "CP10_easy_seed0_20261023_v9_30fps.mp4",
+        "medium": "CP10_medium_seed0_20261023_v9_30fps.mp4",
+        "hard": "CP10_hard_seed0_20261023_v9_30fps.mp4"
+      }
+    }
+  ]
+}

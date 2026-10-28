@@ -99,6 +99,7 @@
       link.classList.toggle('lb-highlight-active', link.dataset.jumpView === state.view);
     });
     if (focusedResultControl && !focusedResultControl.closest('[hidden]')) focusedResultControl.focus({preventScroll: true});
+    window.dispatchEvent(new CustomEvent('lb:state', {detail:{view:state.view,metric:state.metric}}));
   }
   function update(changes, mode = 'push', hash) {
     state = {...state, ...changes};
@@ -126,6 +127,15 @@
     update({view: link.dataset.jumpView, metric: 'score', direction: 'desc'}, 'push', 'results');
     document.getElementById('results').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
   }));
+  window.addEventListener('lb:select', event => {
+    const {view,model,reveal}=event.detail||{};
+    if (!views.has(view)) return;
+    update({view,metric:'score',direction:'desc', ...(model&&models.has(model)?{model,q:'',paradigm:'all',status:'all'}:{})});
+    if (reveal) {
+      const target=model?rows.get(model):document.getElementById('results');
+      target?.scrollIntoView({block:model?'center':'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    }
+  });
   window.addEventListener('popstate', () => { state = readURL(); render(); });
   render();
 })();

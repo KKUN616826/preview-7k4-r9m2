@@ -11,6 +11,9 @@ from hero_demo import render as render_hero
 from task_previews import apply_previews
 from build_benchmark import main as build_benchmark
 from build_leaderboard import main as build_leaderboard
+from build_capability_map import render as render_capability_map
+from build_benchmark_expansion import main as prepare_expansion
+from sync_benchmark_expansion import apply_homepage
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -49,6 +52,7 @@ def task_wall(records):
     return ''.join(tiles)
 
 def main():
+    prepare_expansion()
     build_rollouts(ENGLISH_TITLES)
     records = json.loads((ROOT / 'data/showcase-cases.json').read_text())
     assert len(records) == len({c['id'] for c in records}) == 15
@@ -74,6 +78,7 @@ def main():
         payload = payload.replace(char, escape)
     page = (ROOT / 'scripts/showcase.html').read_text()
     page = page.replace('__RESEARCH_INTRO__', (ROOT / 'scripts/research_intro.html').read_text())
+    page = page.replace('__CAPABILITY_MAP__', render_capability_map())
     public_board = render_view_leaderboard()
     page = page.replace('__VIEW_LEADERBOARD__', public_board)
     page = page.replace('__HERO_DEMO__', render_hero())
@@ -115,6 +120,7 @@ def main():
         page = page.replace('__' + key + '__', value)
     assert not re.search(r'__[A-Z_]+__', page)
     page = apply_previews(page)
+    page = apply_homepage(page)
     (ROOT / 'index.html').write_text(page, newline='\n')
     build_benchmark()
     build_leaderboard()

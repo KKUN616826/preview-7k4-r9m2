@@ -11,7 +11,10 @@ def apply_previews(page):
     seen = set()
     def replace(match):
         source = match['source']
-        entry = previews[source]
+        entry = previews.get(source)
+        if entry is None:
+            # Expansion recordings already carry their own poster and keep native media.
+            return match.group(0)
         for field in ('preview', 'poster'):
             assert (ROOT / entry[field]).is_file(), entry[field]
         seen.add(source)

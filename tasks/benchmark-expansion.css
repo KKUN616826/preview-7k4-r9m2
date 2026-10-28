@@ -1,0 +1,6 @@
+/* Shared with existing task layouts; only the new brief and pending state are added. */
+.task-detail .task-head .task-original-title{font-size:13px;line-height:1.5;color:#718186;margin-top:8px}
+.task-detail .difficulty a{gap:6px}.difficulty-status{font:400 10px/1.3 Arial,sans-serif;color:#798789}
+.expansion-demo{width:100%;margin:0;min-width:0}.expansion-demo figcaption{font:400 12px/1.5 Arial,sans-serif;color:#d4e0df;padding:8px 14px;background:#193442}
+.task-detail .demo-pending{padding:34px;min-height:300px;display:flex;flex-direction:column;justify-content:center;width:100%;color:#d4e0df;background:#193442}.task-detail .demo-pending h2{font-size:23px;line-height:1.3;color:#f7f7ee;margin:0 0 14px}.task-detail .demo-pending p{font-size:15px;line-height:1.6;color:#d4e0df;margin:0 0 12px}.task-detail .demo-pending a{color:#e4ecdf;font-size:14px;line-height:1.5;text-underline-offset:4px;width:fit-content}
+@media(max-width:760px){.task-detail .difficulty a{padding-inline:10px;flex-wrap:wrap}.task-detail .demo-pending{min-height:240px;padding:24px}}

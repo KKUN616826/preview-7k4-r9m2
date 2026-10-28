@@ -6,6 +6,7 @@ const { chromium } = require('playwright');
 const suites = require('../data/benchmark-navigation.json');
 const base = process.env.HERO_PREVIEW_URL || 'http://127.0.0.1:8765/';
 const output = process.env.BENCHMARK_SCREENSHOTS;
+const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
 
 (async () => {
   const browser = await chromium.launch({ headless: true,
@@ -16,9 +17,9 @@ const output = process.env.BENCHMARK_SCREENSHOTS;
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(new URL('benchmark.html', base).href);
     await page.evaluate(() => document.fonts.ready);
-    assert.equal(await page.locator('.workspace-sidebar .workspace-case-list a').count(), 15);
+    assert.equal(await page.locator('.workspace-sidebar .workspace-case-list a').count(), taskCount);
     assert.equal(await page.locator('.workspace-sidebar a[aria-current=page]').textContent(), 'Overview');
-    assert.equal(await page.locator('.workspace-task-index li').count(), 15);
+    assert.equal(await page.locator('.workspace-task-index li').count(), taskCount);
 
     // Collapsing a group must not navigate. Clicking its name must navigate.
     const toggle = page.locator('.workspace-sidebar [data-group="act"] button');
@@ -27,7 +28,7 @@ const output = process.env.BENCHMARK_SCREENSHOTS;
     assert.ok(page.url().endsWith('/benchmark.html'));
     await page.locator('.workspace-sidebar .workspace-group-row a[href="benchmark/mind.html"]').click();
     assert.ok(page.url().endsWith('/benchmark/mind.html'));
-    assert.equal(await page.locator('.benchmark-task-row').count(), 5);
+    assert.equal(await page.locator('.benchmark-task-row').count(), suites[0].cases.length);
     assert.equal(await page.locator('.workspace-sidebar [data-group="act"] button').getAttribute('aria-expanded'), 'false');
 
     // Row copy is visible before hover; only the image and arrow move, never the row.
@@ -64,7 +65,7 @@ const output = process.env.BENCHMARK_SCREENSHOTS;
         assert.equal(result.status(), 200, asset);
       }
     }
-    console.log('PASS: overview, suites, all 15 tasks, links, assets, hover and history');
+    console.log('PASS: overview, suites, all catalog tasks, links, assets, hover and history');
 
     for (const width of [320, 390, 820, 1024, 1440, 1920, 2560]) {
       await page.setViewportSize({ width, height: 1000 });

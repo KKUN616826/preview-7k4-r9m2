@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Build only the standalone leaderboard from its versioned result snapshot."""
+from leaderboard_stage import render as render_stage
 import json
+import re
+import hashlib
 import math
 from html import escape
 from pathlib import Path
@@ -75,8 +78,11 @@ def main():
     options = ''.join(f'<option value="{e(key)}">{e(value)}</option>' for key, value in data['paradigms'].items())
     payload = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
     template = (ROOT / 'scripts/leaderboard-page.html').read_text()
-    for key, value in {'HEADER': header, 'TABLE': table(data), 'DATA': payload, 'PARADIGMS': options}.items():
+    for key, value in {'HEADER': header, 'TABLE': table(data), 'DATA': payload, 'PARADIGMS': options, 'STAGE': render_stage(data)}.items():
         template = template.replace('__' + key + '__', value)
+    for asset in ['scripts/leaderboard-stage.css', 'scripts/leaderboard-stage-ui.js', 'scripts/leaderboard-explorer.js']:
+        version = hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
+        template = re.sub(re.escape(asset)+r'\?v=[^"\s]+', asset+'?v='+version, template)
     (ROOT / 'leaderboard.html').write_text(template, newline='\n')
     print(f'Built standalone leaderboard: {len(data["models"])} entries; original results preserved.')
 

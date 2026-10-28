@@ -50,18 +50,19 @@ def card(case, prefix):
 
 
 def overview(suites):
+    total = sum(len(s['cases']) for s in suites)
     parts = ['<div class="workspace-page-head"><p class="workspace-kicker">Task explorer</p>'
              '<h1>Benchmark</h1><p class="benchmark-description">Explore task reasoning, physical execution, '
              'and how they work together in closed-loop robotic manipulation.</p>'
-             '<p class="workspace-meta">15 tasks <span>·</span> 3 capability suites <span>·</span> Easy / Medium / Hard</p></div>',
+             f'<p class="workspace-meta">{total} tasks <span>·</span> 3 capability suites <span>·</span> Easy / Medium / Hard</p></div>',
              '<section class="workspace-section" aria-labelledby="capabilities-title">'
              '<h2 id="capabilities-title">Three views of robot capability</h2><div class="workspace-suites">']
     for suite in suites:
         parts.append(f'<a class="workspace-suite-link" href="benchmark/{suite["slug"]}.html">'
                      f'<h3>{suite["name"]}</h3><p class="workspace-suite-label">{suite["label"]}</p>'
-                     f'<p>{suite["description"]}</p><span>Explore 5 tasks →</span></a>')
+                     f'<p>{suite["description"]}</p><span>Explore {len(suite["cases"])} tasks →</span></a>')
     parts.append('</div></section><section class="workspace-section" aria-labelledby="all-tasks-title">'
-                 '<h2 id="all-tasks-title">All 15 tasks</h2>')
+                 f'<h2 id="all-tasks-title">All {total} tasks</h2>')
     for suite in suites:
         parts.append(f'<div class="workspace-task-index"><h3><a href="benchmark/{suite["slug"]}.html">{suite["name"]} →</a></h3><ul>')
         for case in suite['cases']:
@@ -74,7 +75,7 @@ def overview(suites):
 
 def category(suite):
     task_rows = ''.join(
-        f'<article class="benchmark-task-row"><a class="benchmark-task-link" href="../tasks/{c["id"]}.html#easy">'
+        f'<article class="benchmark-task-row"><a class="benchmark-task-link" href="../tasks/{c["id"]}.html#{c.get("initial_level", "easy")}">'
         f'<div class="benchmark-task-image"><img src="../{e(c.get("row_cover", c["cover"]))}" loading="lazy" '
         f'alt="{e(c["title"])} demonstration"></div>'
         f'<div class="benchmark-task-copy"><p class="benchmark-task-meta">{c["id"]} · {suite["name"]}</p>'
@@ -87,7 +88,7 @@ def category(suite):
     return (f'<div class="workspace-page-head"><div class="workspace-breadcrumb"><a href="../benchmark.html">Benchmark</a> / {suite["name"]}</div>'
             f'<h1>{suite["name"]}</h1><p class="workspace-suite-subtitle">{suite["label"]}</p>'
             f'<p class="benchmark-description">{suite["description"]}</p>'
-            f'<p class="workspace-meta">5 tasks <span>·</span> Easy / Medium / Hard</p></div>'
+            f'<p class="workspace-meta">{len(suite["cases"])} tasks <span>·</span> Easy / Medium / Hard</p></div>'
             f'<div class="workspace-question"><h2>What does this suite test?</h2><p>{suite["question"]}</p></div>'
             f'<section class="workspace-section" aria-labelledby="suite-tasks-title"><h2 id="suite-tasks-title">Explore the tasks</h2>'
             f'<div class="benchmark-task-rows">{task_rows}</div></section>'
@@ -102,6 +103,12 @@ def detail(suite, case):
     content = re.sub(r'<div class="breadcrumb">.*?</div>', breadcrumb, content, count=1)
     content = content.replace('href="index.html">Browse all 15 tasks',
                               f'href="../benchmark/{suite["slug"]}.html">Back to {suite["name"]}')
+    order = [c['id'] for s in json.loads((ROOT / 'data/benchmark-navigation.json').read_text()) for c in s['cases']]
+    index = order.index(case['id'])
+    previous = f'<a href="{order[index-1]}.html">← Previous task · {order[index-1]}</a>' if index else '<span></span>'
+    following = f'<a href="{order[index+1]}.html">Next task · {order[index+1]} →</a>' if index+1 < len(order) else '<span></span>'
+    footer = f'<nav class="task-footer" aria-label="Adjacent tasks">{previous}<a href="../benchmark/{suite["slug"]}.html">Back to {suite["name"]}</a>{following}</nav>'
+    content = re.sub(r'<nav class="task-footer".*?</nav>', lambda _: footer, content, count=1)
     return content
 
 
@@ -113,7 +120,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
     styles = ''.join(f'<link rel="stylesheet" href="{prefix}{name}">' for name in [
         'tasks/task-pages.css', 'media/site-shell.css?v=unified-1',
         'tasks/benchmark-catalog.css?v=2',
-        *(['tasks/task-detail.css?v=case-1'] if is_detail else []),
+        *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
         'tasks/benchmark-workspace.css?v=1',
         *(['tasks/benchmark-task-rows.css?v=1'] if current in {s['slug'] for s in suites} else [])])
     body_class = 'benchmark-workspace' + (' task-detail' if is_detail else '')
@@ -144,7 +151,7 @@ def main():
         for case in suite['cases']:
             (ROOT / f'tasks/{case["id"]}.html').write_text(
                 page(suites, case['id'], case['title'], detail(suite, case), '../', True))
-    print('Built benchmark overview, 3 suites and 15 task pages.')
+    print(f'Built benchmark overview, {len(suites)} suites and {sum(len(s["cases"]) for s in suites)} task pages.')
 
 
 if __name__ == '__main__':

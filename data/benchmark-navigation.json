@@ -45,6 +45,85 @@
         "cover": "media/task-previews/M/easy.webp",
         "nav_title": "Workpiece Tracking",
         "row_cover": "media/benchmark-covers/M.jpg"
+      },
+      {
+        "id": "E2",
+        "title": "Object-Code Keypad Entry",
+        "summary": "Remember object–digit associations, decode a visible object sequence, and enter the corresponding code.",
+        "nav_title": "Object-Code Keypad",
+        "title_zh": "实物密码键盘",
+        "cover": "media/benchmark-covers/E2.jpg",
+        "row_cover": "media/benchmark-covers/E2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "F2",
+        "title": "Color-Block Trial Ordering",
+        "summary": "Use feedback from trial arrangements to determine the required order of colored blocks.",
+        "nav_title": "Color-Block Ordering",
+        "title_zh": "色块试排",
+        "cover": "media/benchmark-covers/F2.jpg",
+        "row_cover": "media/benchmark-covers/F2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "P2",
+        "title": "Steamer Stack Order Reconstruction",
+        "summary": "Remember a stack arrangement and reconstruct the order of the steamer components.",
+        "nav_title": "Steamer Stack Order",
+        "title_zh": "蒸笼顺序记忆与还原",
+        "cover": "media/benchmark-covers/P2.jpg",
+        "row_cover": "media/benchmark-covers/P2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "S2",
+        "title": "Hidden-Zone Navigation",
+        "summary": "Remember hidden restricted cells and guide a marker across the grid toward the goal.",
+        "nav_title": "Hidden-Zone Navigation",
+        "title_zh": "隐藏禁区导航",
+        "cover": "media/benchmark-covers/S2.jpg",
+        "row_cover": "media/benchmark-covers/S2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "M2",
+        "title": "Memory Card Matching",
+        "summary": "Remember revealed card identities and locations to find matching pairs.",
+        "nav_title": "Memory Card Matching",
+        "title_zh": "翻牌游戏",
+        "cover": "media/benchmark-covers/M2.jpg",
+        "row_cover": "media/benchmark-covers/M2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
       }
     ]
   },
@@ -94,6 +173,86 @@
         "cover": "media/task-previews/PR3/easy.webp",
         "nav_title": "Line Tracing",
         "row_cover": "media/benchmark-covers/PR3.jpg"
+      },
+      {
+        "id": "PR4",
+        "title": "Cloth Edge Alignment and Placement",
+        "summary": "Fold and align a cloth edge, then release it in a stable placement.",
+        "nav_title": "Cloth Edge Alignment",
+        "title_zh": "方巾折边对齐与稳定落放",
+        "cover": "media/benchmark-covers/PR4.jpg",
+        "row_cover": "media/benchmark-covers/PR4.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "PR5",
+        "title": "Oriented Stamp Placement",
+        "summary": "Orient a stamp and press it onto the designated area.",
+        "nav_title": "Oriented Stamping",
+        "title_zh": "印章定向盖印",
+        "cover": "media/benchmark-covers/PR5.jpg",
+        "row_cover": "media/benchmark-covers/PR5.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "PR6",
+        "title": "Domino Chain Bell Ringing",
+        "summary": "Arrange dominoes into a chain that carries a falling motion to the bell.",
+        "nav_title": "Domino Chain",
+        "title_zh": "多米诺连锁敲铃",
+        "cover": "media/benchmark-covers/PR6.jpg",
+        "row_cover": "media/benchmark-covers/PR6.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "DR3",
+        "title": "Periodic Gate Crossing and Withdrawal",
+        "summary": "Time the arm’s movement through a periodically moving gate and withdraw safely.",
+        "nav_title": "Periodic Gate Crossing",
+        "title_zh": "周期挡门穿越与及时撤离",
+        "cover": "media/benchmark-covers/DR3.jpg",
+        "row_cover": "media/benchmark-covers/DR3.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "DR7",
+        "title": "Ball-on-Tray Transport and Placement",
+        "summary": "Carry a tray with a ball while controlling tilt, then place it on the destination surface.",
+        "nav_title": "Ball-on-Tray Transport",
+        "title_zh": "托盘带球搬运与稳定落放",
+        "cover": "media/benchmark-covers/DR7.jpg",
+        "row_cover": "media/benchmark-covers/DR7.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
       }
     ]
   },
@@ -143,6 +302,86 @@
         "cover": "media/task-previews/CP05/easy.webp",
         "nav_title": "Keyboard Sequence",
         "row_cover": "media/benchmark-covers/CP05.jpg"
+      },
+      {
+        "id": "CP06",
+        "title": "Produce Weighing and Balancing",
+        "summary": "Use the balance scale’s feedback to select and adjust counterweights for produce.",
+        "nav_title": "Produce Balancing",
+        "title_zh": "蔬果称重配平",
+        "cover": "media/benchmark-covers/CP06.jpg",
+        "row_cover": "media/benchmark-covers/CP06.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "CP07",
+        "title": "Bridge Construction",
+        "summary": "Construct a bridge across a gap using the available building pieces.",
+        "nav_title": "Bridge Construction",
+        "title_zh": "搭桥",
+        "cover": "media/benchmark-covers/CP07.jpg",
+        "row_cover": "media/benchmark-covers/CP07.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "CP08",
+        "title": "Reference-Guided Block Construction",
+        "summary": "Remember a reference structure and reproduce it with the available blocks.",
+        "nav_title": "Block Construction",
+        "title_zh": "按图搭建积木结构",
+        "cover": "media/benchmark-covers/CP08.jpg",
+        "row_cover": "media/benchmark-covers/CP08.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "CP09",
+        "title": "Whiteboard Drawing Reconstruction",
+        "summary": "Recreate a reference drawing on a whiteboard using the available markers.",
+        "nav_title": "Drawing Reconstruction",
+        "title_zh": "白板图像复原",
+        "cover": "media/benchmark-covers/CP09.jpg",
+        "row_cover": "media/benchmark-covers/CP09.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "CP10",
+        "title": "Predictive Ball Return and Red-Ball Avoidance",
+        "summary": "Predict incoming ball motion, return target balls, and avoid red balls.",
+        "nav_title": "Predictive Ball Return",
+        "title_zh": "预测回球与红球避让",
+        "cover": "media/benchmark-covers/CP10.jpg",
+        "row_cover": "media/benchmark-covers/CP10.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
       }
     ]
   }

@@ -11,14 +11,17 @@ const shots = process.env.LEADERBOARD_SCREENSHOTS;
   const old = execFileSync('git', ['show', 'checkpoint-before-leaderboard:leaderboard.html'], {cwd:path.join(__dirname,'..'), encoding:'utf8'});
   const snapshot = JSON.parse(old.match(/<script[^>]*id="viewLeaderboardData"[^>]*>(.*?)<\/script>/s)[1]);
   assert.deepEqual(data.models, snapshot.models, 'Preserve every reported value, missing value, model and demo link');
-  assert.equal(fs.readFileSync(path.join(__dirname,'../index.html'),'utf8'), execFileSync('git',['show','HEAD:index.html'],{cwd:path.join(__dirname,'..'),encoding:'utf8'}),'Homepage remains unchanged');
+  const homepage=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+  const originalHomepage=execFileSync('git',['show','HEAD:index.html'],{cwd:path.join(__dirname,'..'),encoding:'utf8'});
+  const homePayload=s=>JSON.parse(s.match(/<script[^>]*id="viewLeaderboardData"[^>]*>(.*?)<\/script>/s)[1]);
+  assert.deepEqual(homePayload(homepage),homePayload(originalHomepage),'Homepage result snapshot remains unchanged');
   const browser = await chromium.launch({headless:true, ...(process.env.CHROMIUM_EXECUTABLE?{executablePath:process.env.CHROMIUM_EXECUTABLE}:{})});
   try {
     const page = await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
     const errors=[];page.on('pageerror',e=>errors.push(e.message));
     await page.goto(new URL('leaderboard.html',base).href);
     const firstId=()=>page.locator('.lb-result:not([hidden])').first().getAttribute('data-model');
-    assert.equal(await page.locator('.lb-highlight').count(),5);
+    assert.equal(await page.locator('.lb-stage-board').count(),3);
     assert.equal(await page.locator('.lb-result').count(),16);
     assert.equal(await firstId(),'astra');
     assert.equal(await page.locator('.lb-result').first().locator('.lb-number').count(),6);
@@ -91,11 +94,12 @@ const shots = process.env.LEADERBOARD_SCREENSHOTS;
     }
     await page.setViewportSize({width:1440,height:1000});
     await page.goto(new URL('leaderboard.html',base).href);
-    await page.locator('[data-jump-view="act"]').click();
+    await page.locator('.lb-stage-tabs [data-stage-select="act"]').click();
+    await page.locator('.lb-stage-full').click();
     assert.equal(await page.locator('[data-rank-view="act"]').getAttribute('aria-pressed'),'true');
-    assert.ok(page.url().endsWith('#results'));
+    await page.waitForFunction(()=>document.getElementById('results').getBoundingClientRect().y<200);
     assert.ok((await page.locator('#results').boundingBox()).y>=88);
     assert.deepEqual(errors,[]);
-    console.log('PASS: summary-card navigation and no browser errors');
+    console.log('PASS: static hero navigation and no browser errors');
   } finally { await browser.close(); }
 })().catch(error=>{console.error(error);process.exit(1)});
