@@ -12,6 +12,7 @@ from task_previews import apply_previews
 from build_benchmark import main as build_benchmark
 from build_leaderboard import main as build_leaderboard
 from build_capability_map import render as render_capability_map
+from build_intro_story import render as render_intro_story
 from build_benchmark_expansion import main as prepare_expansion
 from sync_benchmark_expansion import apply_homepage
 
@@ -77,7 +78,7 @@ def main():
     for char, escape in [('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'), ('\u2028', '\\u2028'), ('\u2029', '\\u2029')]:
         payload = payload.replace(char, escape)
     page = (ROOT / 'scripts/showcase.html').read_text()
-    page = page.replace('__RESEARCH_INTRO__', (ROOT / 'scripts/research_intro.html').read_text())
+    page = page.replace('__RESEARCH_INTRO__', (ROOT / 'scripts/research_intro.html').read_text().replace('__INTRO_STORY__', render_intro_story()))
     page = page.replace('__CAPABILITY_MAP__', render_capability_map())
     public_board = render_view_leaderboard()
     page = page.replace('__VIEW_LEADERBOARD__', public_board)
