@@ -27,3 +27,11 @@ body.leaderboard-explorer{background:#f8f7f0}.leaderboard-explorer .lb-page{padd
  .lb-page>.lb-results,.lb-page>.lb-protocol{max-width:1520px;margin-inline:auto}
 }
 @media(min-width:851px) and (max-width:1200px){.lb-stage{margin-inline:-28px}}
+/* Three-arm local motion, with an unchanged static-image fallback. */
+.lb-stage-motion-video{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center;visibility:hidden;pointer-events:none}
+.lb-stage[data-motion-ready=true] .lb-stage-motion-video{visibility:visible}
+.lb-stage[data-motion-ready=true] .lb-stage-art{visibility:hidden}
+.lb-stage .lb-stage-motion-toggle{position:absolute;bottom:14px;right:20px;z-index:4;min-height:32px;padding:5px 10px;border:1px solid #b5cbc1;border-radius:4px;background:#f8f7f0e8;color:#315f64;font:500 12px/1.5 Arial,sans-serif;cursor:pointer}
+.lb-stage-motion-toggle[hidden]{display:none!important}.lb-stage-motion-toggle:disabled{cursor:default;color:#637c81}
+@media(max-width:850px){.lb-stage .lb-stage-motion-toggle{right:12px;bottom:8px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){.lb-stage[data-motion-ready=true] .lb-stage-motion-video{visibility:hidden}.lb-stage[data-motion-ready=true] .lb-stage-art{visibility:visible}}

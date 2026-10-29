@@ -80,7 +80,7 @@ def main():
     template = (ROOT / 'scripts/leaderboard-page.html').read_text()
     for key, value in {'HEADER': header, 'TABLE': table(data), 'DATA': payload, 'PARADIGMS': options, 'STAGE': render_stage(data)}.items():
         template = template.replace('__' + key + '__', value)
-    for asset in ['scripts/leaderboard-stage.css', 'scripts/leaderboard-stage-ui.js', 'scripts/leaderboard-explorer.js']:
+    for asset in ['scripts/leaderboard-stage.css', 'scripts/leaderboard-stage-ui.js', 'scripts/leaderboard-stage-motion.js', 'scripts/leaderboard-explorer.js']:
         version = hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
         template = re.sub(re.escape(asset)+r'\?v=[^"\s]+', asset+'?v='+version, template)
     (ROOT / 'leaderboard.html').write_text(template, newline='\n')
