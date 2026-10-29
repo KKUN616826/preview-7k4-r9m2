@@ -36,9 +36,9 @@ body.leaderboard-explorer{background:#f8f7f0}.leaderboard-explorer .lb-page{padd
 @media(max-width:850px){.lb-stage .lb-stage-motion-toggle{right:12px;bottom:8px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.lb-stage[data-motion-ready=true] .lb-stage-motion-video{visibility:hidden}.lb-stage[data-motion-ready=true] .lb-stage-art{visibility:visible}}
 /* Let the scene continue behind the rankings instead of ending at a card row. */
-.lb-stage-lower{position:relative;isolation:isolate;z-index:3;margin-top:-42px;padding:12px 0 2px}
-.lb-stage-lower:before{content:"";position:absolute;z-index:-2;inset:-24px -32px -24px;pointer-events:none;background:url('../media/images/leaderboard-lunar-campus-v1.png') center bottom/100% auto no-repeat;filter:blur(6px);opacity:.8;mask-image:linear-gradient(180deg,transparent,black 23%,black 68%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,black 23%,black 68%,transparent)}
-.lb-stage-lower:after{content:"";position:absolute;z-index:-1;inset:-16px -20px -16px;pointer-events:none;background:linear-gradient(180deg,#f8f7f000,#f8f7f052 55%,#f8f7f0 100%)}
+.lb-stage-lower{position:relative;isolation:isolate;z-index:3;margin-top:0;padding:18px 0 2px;clip-path:inset(0 -40px -24px)}
+.lb-stage-lower:before{content:"";position:absolute;z-index:-2;inset:0 -32px -24px;pointer-events:none;background:url('../media/images/leaderboard-lunar-campus-v1.png') center bottom/100% auto no-repeat;filter:blur(6px);opacity:.8;mask-image:linear-gradient(180deg,transparent,black 23%,black 68%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,black 23%,black 68%,transparent)}
+.lb-stage-lower:after{content:"";position:absolute;z-index:-1;inset:0 -20px -16px;pointer-events:none;background:linear-gradient(180deg,#f8f7f000,#f8f7f052 55%,#f8f7f0 100%)}
 .lb-stage .lb-stage-board{border:1px solid #ffffff8c;border-radius:10px;background:#fafbf250;box-shadow:inset 0 1px 0 #ffffffa8,0 8px 24px #344e4a0c;-webkit-backdrop-filter:blur(14px) saturate(.85);backdrop-filter:blur(14px) saturate(.85);transition:background .2s,border-color .2s,box-shadow .2s}
 .lb-stage .lb-stage-board.is-active{background:#f2f8ef70;border-color:#9bbdb18c;box-shadow:inset 0 1px 0 #ffffffe0,0 8px 24px #344e4a10}
 .lb-stage .lb-stage-board:hover{background:#fafbf280;border-color:#b4c9be99}
@@ -48,8 +48,12 @@ body.leaderboard-explorer{background:#f8f7f0}.leaderboard-explorer .lb-page{padd
 .lb-stage .lb-stage-board li button:hover{background:#edf5e85c}
 .lb-stage-footer{position:relative;z-index:1;padding-top:16px}
 .lb-stage-footer p{color:#4b6871}.lb-stage-full{background:#f8faf0a6;border-color:#abc5ba80}
-.lb-stage .lb-stage-motion-toggle{bottom:64px;background:#f8f7f0c9;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-@media(max-width:850px){.lb-stage-lower{margin-top:0;padding-top:8px}.lb-stage-lower:before{inset:-16px -24px -20px;background-size:auto 420px;opacity:.48}.lb-stage .lb-stage-motion-toggle{bottom:8px}.lb-stage .lb-stage-board{border-radius:8px;background:#fafbf278}.lb-stage .lb-stage-board.is-active{background:#f2f8ef99}}
+.lb-stage .lb-stage-motion-toggle{bottom:14px;background:#f8f7f0c9;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+@media(max-width:850px){.lb-stage-lower{margin-top:0;padding-top:8px}.lb-stage-lower:before{inset:0 -24px -20px;background-size:auto 420px;opacity:.48}.lb-stage .lb-stage-motion-toggle{bottom:8px}.lb-stage .lb-stage-board{border-radius:8px;background:#fafbf278}.lb-stage .lb-stage-board.is-active{background:#f2f8ef99}}
 @media(prefers-reduced-transparency:reduce){.lb-stage .lb-stage-board,.lb-stage .lb-stage-board.is-active{background:#f8faf2f5;backdrop-filter:none;-webkit-backdrop-filter:none}}
 @media(prefers-contrast:more){.lb-stage .lb-stage-board,.lb-stage .lb-stage-board.is-active{background:#fafbf2f5;border-color:#678c7d}}
 @supports not (backdrop-filter:blur(1px)){.lb-stage .lb-stage-board,.lb-stage .lb-stage-board.is-active{background:#fafbf2df}}
+
+/* Preserve the whole campus: never crop its lower platform to fit the rankings. */
+.lb-stage-world{margin-bottom:0}
+@media(min-width:851px){.lb-stage-world{aspect-ratio:1983/793;height:auto;min-height:0;max-height:none}}

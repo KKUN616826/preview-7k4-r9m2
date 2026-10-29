@@ -10,7 +10,9 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
   await p.goto(new URL('leaderboard.html',base).href);await p.evaluate(()=>document.fonts.ready);
   assert.ok(!requests.some(url=>/three|stage-scene/.test(url)),'no WebGL dependency');
   assert.equal(await p.locator('.lb-stage canvas').count(),0);
-  const stage=await p.locator('.lb-stage').boundingBox();assert.ok(stage.y>=88&&stage.y+stage.height<=900,'desktop overview fits first screen');
+  const stage=await p.locator('.lb-stage').boundingBox();assert.ok(stage.y>=88,'desktop overview begins below navigation');
+  const scene=await p.locator('.lb-stage-world').boundingBox(),panels=await p.locator('.lb-stage-boards').boundingBox();
+  assert.ok(panels.y>=scene.y+scene.height,'ranking panels never cover the campus');
   assert.ok(await p.locator('.lb-stage-art').evaluate(img=>img.complete&&img.naturalWidth>0));
   for(const v of data.views){
    await p.locator(`.lb-stage-tabs [data-stage-select="${v.key}"]`).click();
@@ -35,7 +37,7 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
    await p.setViewportSize({width,height:900});await p.goto(new URL('leaderboard.html?view=coupling',base).href);
    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'page overflow '+width);
    const world=await p.locator('.lb-stage-world').boundingBox();assert.ok(world.x+world.width<=width,'scene fits '+width);
-   if(width>850){assert.ok(Math.abs(world.width-width)<2,'artwork fills desktop width '+width);assert.equal(await p.locator('.lb-stage-metric').evaluate(e=>getComputedStyle(e).position),'absolute','metric occupies no layout space');}
+   if(width>850){assert.ok(Math.abs(world.width-width)<2,'artwork fills desktop width '+width);assert.ok(Math.abs(world.width/world.height-1983/793)<.01,'full image aspect ratio '+width);assert.equal(await p.locator('.lb-stage-metric').evaluate(e=>getComputedStyle(e).position),'absolute','metric occupies no layout space');}
    for(const r of await p.locator('.lb-podium-label').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().toJSON())))assert.ok(r.left>=world.x&&r.right<=world.x+world.width,'podium labels fit '+width);
    assert.equal(await p.locator('.lb-stage-board[data-board-view="coupling"] ol').isVisible(),true);
    if(width===390){await p.locator('.lb-board-title[data-stage-select="act"]').click();assert.equal(await p.locator('.lb-stage-board[data-board-view="act"] ol').isVisible(),true);}
