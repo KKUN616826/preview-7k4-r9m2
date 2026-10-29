@@ -9,7 +9,6 @@
   const v=views.get(view);root.dataset.currentView=view;
   root.querySelector('.lb-stage-caption strong').textContent=v.label;
   root.querySelectorAll('[data-stage-select]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.stageSelect===view)));
-  root.querySelectorAll('[data-board-view]').forEach(b=>b.classList.toggle('is-active',b.dataset.boardView===view));
   const leaders=data.models.filter(m=>m.results[view].score!=null).sort((a,b)=>b.results[view].score-a.results[view].score).slice(0,3);
   root.querySelectorAll('[data-podium-rank]').forEach(button=>{
    const model=leaders[Number(button.dataset.podiumRank)-1];button.hidden=!model;if(!model)return;

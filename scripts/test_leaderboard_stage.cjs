@@ -11,12 +11,9 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
   assert.ok(!requests.some(url=>/three|stage-scene/.test(url)),'no WebGL dependency');
   assert.equal(await p.locator('.lb-stage canvas').count(),0);
   const stage=await p.locator('.lb-stage').boundingBox();assert.ok(stage.y>=88,'desktop overview begins below navigation');
-  const scene=await p.locator('.lb-stage-world').boundingBox(),panels=await p.locator('.lb-stage-boards').boundingBox();
-  const triangle=await p.locator('.lb-stage-board').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().toJSON()));
-  assert.ok(Math.abs(triangle[0].top-triangle[1].top)<1,'Mind and Act occupy the two upper corners');
-  assert.ok(triangle[0].right<triangle[1].left,'upper cards leave the central podium clear');
-  assert.ok(triangle[2].top>triangle[0].bottom&&Math.abs((triangle[2].left+triangle[2].width/2)-(scene.x+scene.width/2))<1,'Mind2Act forms the lower center of the triangle');
-  assert.ok(triangle[2].top>=scene.y+scene.height*.9,'front mechanical arm stays unobscured');
+  const scene=await p.locator('.lb-stage-world').boundingBox(),heading=await p.locator('.lb-stage-head').boundingBox();
+  assert.equal(await p.locator('.lb-stage-board').count(),0,'all three ranking cards removed');
+  assert.ok(heading.y>=scene.y&&heading.y+heading.height<=scene.y+scene.height,'desktop title and tabs overlay the artwork');
   assert.ok(await p.locator('.lb-stage-art').evaluate(img=>img.complete&&img.naturalWidth>0));
   for(const v of data.views){
    await p.locator(`.lb-stage-tabs [data-stage-select="${v.key}"]`).click();
@@ -31,7 +28,8 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
    assert.equal(await p.locator(`[data-rank-view="${v.key}"]`).getAttribute('aria-pressed'),'true');
   }
   await p.locator('#lb-search').fill('no match');
-  await p.locator('.lb-stage-board[data-board-view="act"] [data-stage-model="pi05"]').click();
+  await p.locator('.lb-stage-tabs [data-stage-select="act"]').click();
+  await p.locator('.lb-podium-rank-1').click();
   assert.equal(await p.locator('#detail-pi05').isVisible(),true);assert.equal(await p.locator('#lb-search').inputValue(),'');
   assert.ok(new URL(p.url()).searchParams.get('model')==='pi05');
   await p.goBack();assert.equal(await p.locator('#detail-pi05').isVisible(),false);
@@ -43,10 +41,10 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
    const world=await p.locator('.lb-stage-world').boundingBox();assert.ok(world.x+world.width<=width,'scene fits '+width);
    if(width>850){assert.ok(Math.abs(world.width-width)<2,'artwork fills desktop width '+width);assert.ok(Math.abs(world.width/world.height-1983/793)<.01,'full image aspect ratio '+width);assert.equal(await p.locator('.lb-stage-metric').evaluate(e=>getComputedStyle(e).position),'absolute','metric occupies no layout space');}
    for(const r of await p.locator('.lb-podium-label').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().toJSON())))assert.ok(r.left>=world.x&&r.right<=world.x+world.width,'podium labels fit '+width);
-   assert.equal(await p.locator('.lb-stage-board[data-board-view="coupling"] ol').isVisible(),true);
-   if(width===390){await p.locator('.lb-board-title[data-stage-select="act"]').click();assert.equal(await p.locator('.lb-stage-board[data-board-view="act"] ol').isVisible(),true);}
+   assert.equal(await p.locator('.lb-stage-board').count(),0);
+   if(width===390){await p.locator('.lb-stage-tabs [data-stage-select="act"]').click();assert.equal(await p.locator('.lb-podium-rank-1 .lb-podium-name').innerText(),'π0.5');}
   }
   assert.deepEqual(errors,[]);assert.deepEqual(bad,[]);
-  console.log('PASS: static artwork, real top-three scores, hero/table synchronization, model details, URL/history, no Three.js, triangular station cards, full scene proportions and seven responsive widths');
+  console.log('PASS: static artwork, real top-three scores, hero/table synchronization, model details, URL/history, no Three.js, overlaid heading and removed ranking cards, full scene proportions and seven responsive widths');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

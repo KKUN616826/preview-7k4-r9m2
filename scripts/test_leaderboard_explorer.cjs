@@ -21,7 +21,7 @@ const shots = process.env.LEADERBOARD_SCREENSHOTS;
     const errors=[];page.on('pageerror',e=>errors.push(e.message));
     await page.goto(new URL('leaderboard.html',base).href);
     const firstId=()=>page.locator('.lb-result:not([hidden])').first().getAttribute('data-model');
-    assert.equal(await page.locator('.lb-stage-board').count(),3);
+    assert.equal(await page.locator('.lb-stage-board').count(),0);
     assert.equal(await page.locator('.lb-result').count(),16);
     assert.equal(await firstId(),'astra');
     assert.equal(await page.locator('.lb-result').first().locator('.lb-number').count(),6);
