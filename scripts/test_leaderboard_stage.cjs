@@ -12,7 +12,11 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
   assert.equal(await p.locator('.lb-stage canvas').count(),0);
   const stage=await p.locator('.lb-stage').boundingBox();assert.ok(stage.y>=88,'desktop overview begins below navigation');
   const scene=await p.locator('.lb-stage-world').boundingBox(),panels=await p.locator('.lb-stage-boards').boundingBox();
-  assert.ok(panels.y>=scene.y+scene.height,'ranking panels never cover the campus');
+  const triangle=await p.locator('.lb-stage-board').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().toJSON()));
+  assert.ok(Math.abs(triangle[0].top-triangle[1].top)<1,'Mind and Act occupy the two upper corners');
+  assert.ok(triangle[0].right<triangle[1].left,'upper cards leave the central podium clear');
+  assert.ok(triangle[2].top>triangle[0].bottom&&Math.abs((triangle[2].left+triangle[2].width/2)-(scene.x+scene.width/2))<1,'Mind2Act forms the lower center of the triangle');
+  assert.ok(triangle[2].top>=scene.y+scene.height*.9,'front mechanical arm stays unobscured');
   assert.ok(await p.locator('.lb-stage-art').evaluate(img=>img.complete&&img.naturalWidth>0));
   for(const v of data.views){
    await p.locator(`.lb-stage-tabs [data-stage-select="${v.key}"]`).click();
@@ -43,6 +47,6 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
    if(width===390){await p.locator('.lb-board-title[data-stage-select="act"]').click();assert.equal(await p.locator('.lb-stage-board[data-board-view="act"] ol').isVisible(),true);}
   }
   assert.deepEqual(errors,[]);assert.deepEqual(bad,[]);
-  console.log('PASS: static artwork, real top-three scores, hero/table synchronization, model details, URL/history, no Three.js, first-screen desktop fit and six responsive widths');
+  console.log('PASS: static artwork, real top-three scores, hero/table synchronization, model details, URL/history, no Three.js, triangular station cards, full scene proportions and seven responsive widths');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});
