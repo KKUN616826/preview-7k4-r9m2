@@ -1,18 +1,15 @@
-# Four-screen research introduction
+# Research introduction layout
 
-The homepage introduction is now a scoped four-screen story: problem, project definition, feedback loop, and task exploration. Each screen fills the space below the fixed site navigation. Key statements rise and settle once on first reading; supporting text remains one paragraph. Brand colors and sans-serif typography match the site.
+The homepage introduction follows research motivation, three evaluation views, a feedback loop and benchmark scope. It uses one navy ink on the same ivory background throughout; the earlier green, blue and ochre distinctions are removed in this module.
 
-Only the introduction uses this behavior. Desktop wheel bursts advance one screen, reverse input can return, and the first/last screens release ordinary scrolling at their boundaries. Touch uses native scroll snapping. Progress buttons, Next, arrow/Page keys, and Skip to benchmark provide alternatives. Tall content remains scrollable instead of being clipped. Reduced motion switches instantly without pop animations; without JavaScript, all content remains a normal document.
+The motivation follows an image-left, text-right layout. Its real CP05 simulation frame links to the Hard task page, with a descriptive caption. The first main-branch research paragraph is rendered from `scripts/intro-story-background.html`. The evaluation definitions and closed-loop explanation retain the main branch's meaning.
 
-Original research paragraphs live in the expandable research background. The existing full-resolution figure and its original-task-set caption are preserved. The task count comes from the shared benchmark catalog. Intro screen four does not imply the added tasks have scored results.
+The three evaluation views retain their separate definitions and each pair an actual simulation frame with editable HTML copy. Mind uses S (Rotating Tray Layout Reconstruction), Act uses PR3 (Marker Line Tracing), and Mind2Act uses CP01 (Conveyor Meal Assembly). Each image links to the corresponding Medium task recording. Images retain their complete 4:3 frame and original colors, with no grayscale filter or category-specific color scheme.
 
-## Source and regeneration
+The closed-loop explanation is paired with four 16:9 keyframes from the same CP05 recording: a K18 observation cue, the right mallet approaching K18, registered K18 contact, and the subsequent K14 contact. These are demonstration frames that make the explanation concrete; they do not claim to expose an agent's internal decision process. Labels remain HTML text, in chronological reading order. The two-column sequence becomes one column on narrow mobile screens.
 
-- `scripts/intro-story.html`: four screens and navigation.
-- `scripts/intro-story.css` and `.js`: scoped layout and interaction.
-- `scripts/intro-story-background.html`: original research text.
-- `scripts/intro-story-figure.html`: existing overview figure.
-- `scripts/build_intro_story.py`: rebuild only this module with asset cache versions.
-- `scripts/research_intro.html` includes `__INTRO_STORY__`; the main build resolves it too.
+The seven frames live in `media/research-frames/`. `sources.json` records each original video and extraction timestamp. Frames are extracted with FFmpeg (`-ss TIME -i VIDEO -frames:v 1 -q:v 2 OUTPUT.jpg`), with no recoloring, cropping or synthetic elements. CP05 clip-to-source timing and keyboard events are recorded in `data/hero-demo.json`. The earlier generated assets in `media/research-illustrations/` are superseded experiments and are no longer used by the homepage.
 
-Run `python3 scripts/build_intro_story.py` for a focused update. `scripts/test_intro_story.cjs` checks gestures, keyboard, boundaries, skip navigation, content preservation, reduced motion, six widths, touch and no-script fallback. Other homepage modules and results are unchanged.
+The benchmark's long third research paragraph is condensed into task count, difficulty levels, three forms of evaluation evidence and a short comparison note. The original paragraph remains in the canonical copy source. Task count comes from the shared catalog. The original overview illustration retains its aspect ratio and PDF link; the caption distinguishes its older 45-task snapshot and preliminary results from the current catalog. All task images and the overview preview retain their original colors; no grayscale filter is applied.
+
+Edit `scripts/intro-story.html`, `.css` and `.js`; original research copy lives in `scripts/intro-story-background.html`, and the overview illustration in `scripts/intro-story-figure.html`. Run `python3 scripts/build_intro_story.py` to update only this module in `index.html`. The full builder uses the same renderer. Run `node scripts/test_intro_story.cjs` with the existing Playwright environment to check media sources, original colors and aspect ratios, visible motivation, layout at five widths, scrolling, overview ratio, and task links.

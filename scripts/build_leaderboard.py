@@ -50,9 +50,9 @@ def table(data):
         values = ''.join(f'<td data-group="{v["key"]}" data-value="{metric}" class="lb-number">{number(model["results"][v["key"]][metric], metric)}</td>' for v in views for metric in ['score', 'success'])
         rows.append(f'<tr class="lb-result" data-model="{mid}"><td class="lb-rank">—</td>'
                     f'<th scope="row" class="lb-model-cell"><button type="button" class="lb-model-button" data-details="{mid}" aria-expanded="false" aria-controls="detail-{mid}">'
-                    f'{icon}<span>{e(model["name"])}</span></button></th>'
-                    f'<td><span class="lb-paradigm">{e(data["paradigms"][model["paradigm"]])}</span></td>{values}'
-                    f'<td><button type="button" class="lb-details-button" data-details="{mid}" aria-expanded="false" aria-controls="detail-{mid}">Details <span aria-hidden="true">+</span></button></td></tr>')
+                    f'{icon}<span>{e(model["name"])}</span><span class="lb-expand" aria-hidden="true">+</span></button></th>'
+                    f'<td><span class="lb-paradigm" data-family="{e(model["paradigm"])}">{e(data["paradigms"][model["paradigm"]])}</span></td>{values}'
+                    '</tr>')
         detail_scores = ''.join(f'<div><h4>{v["label"]}</h4><p>{number(model["results"][v["key"]]["score"], "score")} <span>Score</span></p>'
                                 f'<p>{number(model["results"][v["key"]]["success"], "success")} <span>Success %</span></p></div>' for v in views)
         has_results = any(r['score'] is not None or r['success'] is not None for r in model['results'].values())
@@ -67,8 +67,8 @@ def table(data):
     return ('<div class="lb-table-scroll" role="region" aria-label="Model results; scroll to view all metrics" tabindex="0">'
             '<table class="lb-table"><caption class="lb-sr-only">Mind2Act World results across Mind, Act and Mind2Act</caption>'
             '<thead><tr><th scope="col" rowspan="2" class="lb-rank-heading">Rank</th><th scope="col" rowspan="2" class="lb-model-heading">Model</th>'
-            f'<th scope="col" rowspan="2">Paradigm</th>{group_head}<th scope="col" rowspan="2">Explore</th></tr><tr>{metrics}</tr></thead>'
-            f'<tbody>{"".join(rows)}</tbody></table></div>')
+            f'<th scope="col" rowspan="2">Paradigm</th>{group_head}</tr><tr>{metrics}</tr></thead>'
+            f'<tbody id="lb-rows">{"".join(rows)}</tbody></table></div>')
 
 
 def main():
@@ -80,7 +80,7 @@ def main():
     template = (ROOT / 'scripts/leaderboard-page.html').read_text()
     for key, value in {'HEADER': header, 'TABLE': table(data), 'DATA': payload, 'PARADIGMS': options, 'STAGE': render_stage(data)}.items():
         template = template.replace('__' + key + '__', value)
-    for asset in ['scripts/leaderboard-stage.css', 'scripts/leaderboard-stage-ui.js', 'scripts/leaderboard-stage-motion.js', 'scripts/leaderboard-explorer.js']:
+    for asset in ['scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-stage-ui.js', 'scripts/leaderboard-stage-motion.js', 'scripts/leaderboard-explorer.js']:
         version = hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
         template = re.sub(re.escape(asset)+r'\?v=[^"\s]+', asset+'?v='+version, template)
     (ROOT / 'leaderboard.html').write_text(template, newline='\n')

@@ -1,4 +1,67 @@
-const assert=require('node:assert/strict');const{chromium}=require('playwright');
-(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});try{const page=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'no-preference'});const errors=[];page.on('pageerror',e=>errors.push(e.message));const url='http://127.0.0.1:8765/?preview=intro-story#introduction';await page.goto(url);await page.waitForTimeout(800);const root=page.locator('.intro-story'),viewport=root.locator('.story-viewport'),dots=root.locator('[data-story-index]');assert.equal(await root.locator('.story-panel').count(),4);const geo=await viewport.boundingBox();assert.ok(Math.abs(geo.y-89)<5,'story sits below fixed navigation');assert.ok(Math.abs(geo.y+geo.height-900)<5,'story fills one screen');assert.equal(await viewport.evaluate(v=>[...v.children].every(p=>Math.abs(p.offsetHeight-v.clientHeight)<3)),true,'all four panels fit desktop');await page.mouse.move(geo.x+geo.width/2,geo.y+geo.height/2);for(let i=0;i<12;i++){await page.mouse.wheel(0,90);await page.waitForTimeout(15)}await page.waitForTimeout(1200);assert.equal(await dots.nth(1).getAttribute('aria-current'),'step','inertial wheel burst advances only one screen');assert.ok(Math.abs((await viewport.boundingBox()).y-geo.y)<3,'wheel does not scroll outer page mid-story');await page.mouse.wheel(0,120);await page.waitForTimeout(1300);assert.equal(await dots.nth(2).getAttribute('aria-current'),'step');await page.mouse.wheel(0,-120);await page.waitForTimeout(1300);assert.equal(await dots.nth(1).getAttribute('aria-current'),'step','reverse gesture goes back');await viewport.focus();await page.keyboard.press('PageDown');await page.waitForTimeout(1300);assert.equal(await dots.nth(2).getAttribute('aria-current'),'step','keyboard navigation');await dots.nth(3).click();await page.waitForTimeout(1400);assert.equal(await dots.nth(3).getAttribute('aria-current'),'step');assert.equal(await root.locator('.intro-overview img').evaluate(i=>i.complete&&i.naturalWidth>0),true);await page.screenshot({path:'../../outputs/intro-story-screen-4.png'});const previousY=await page.evaluate(()=>scrollY);await page.mouse.move(700,450);await page.mouse.wheel(0,240);await page.waitForTimeout(500);assert.ok(await page.evaluate(y=>scrollY>y+10,previousY),'last screen releases native scrolling');await dots.nth(0).click();await page.waitForTimeout(1200);await page.screenshot({path:'../../outputs/intro-story-screen-1.png'});await root.locator('.story-skip').click();await page.waitForTimeout(1200);assert.ok((await page.locator('.capability-map').boundingBox()).y>=75,'skip reaches benchmark below navigation');assert.equal(await page.locator('.cm-orbit-card').count(),30);await root.locator('.story-background summary').click();assert.equal(await root.locator('.story-background').getAttribute('open'),'');assert.match(await root.locator('.story-background').innerText(),/Robotic manipulation requires more/);
-await page.goto(url);await page.emulateMedia({reducedMotion:'reduce'});await dots.nth(2).click();await page.waitForTimeout(150);assert.equal(await dots.nth(2).getAttribute('aria-current'),'step');assert.equal(await root.evaluate(r=>r.getAnimations({subtree:true}).some(a=>a.playState==='running')),false,'reduced motion has no pop animation');for(const width of[320,390,820,1024,1440,1920]){await page.setViewportSize({width,height:900});await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no horizontal overflow '+width);await dots.nth(3).click();await page.waitForTimeout(160);const footer=await root.locator('.story-footer').boundingBox();assert.ok(footer.x>=0&&footer.x+footer.width<=width,'navigation fits '+width);const img=await root.locator('.intro-overview img').boundingBox();assert.ok(img.width<=width,'overview fits '+width);}
-const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});await mobile.goto(url);await mobile.locator('[data-story-index="1"]').click();await mobile.waitForTimeout(150);const panel=mobile.locator('#intro-views'),box=await panel.boundingBox();assert.ok(box.height>500);assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await mobile.screenshot({path:'../../outputs/intro-story-mobile.png'});const fallback=await browser.newPage({viewport:{width:1440,height:900},javaScriptEnabled:false});await fallback.goto(url);assert.equal(await fallback.locator('.story-panel').count(),4);assert.equal(await fallback.locator('.story-progress').isVisible(),false,'no-script retains ordinary readable document');assert.deepEqual(errors,[]);console.log('PASS: four screens, complete desktop fit, one-gesture paging, reverse and keyboard navigation, escape to native scrolling, skip, original research text, reduced motion, six widths, touch and no-script fallback');}finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
+const assert = require('node:assert/strict');
+const {chromium} = require('playwright');
+const {readFileSync} = require('node:fs');
+const plain = s => s.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+(async () => {
+  const browser = await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+  try {
+    const page = await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+    const errors = [];
+    page.on('pageerror', e => errors.push(e.message));
+    await page.goto('http://127.0.0.1:8765/index.html#introduction');
+    const root = page.locator('#introduction');
+    const paragraphs = readFileSync('scripts/intro-story-background.html','utf8').match(/<p>.*?<\/p>/gs);
+    const visibleCopy = plain(await root.innerText());
+    for (const i of [0]) assert.ok(visibleCopy.includes(plain(paragraphs[i])), 'original research paragraph visible');
+    assert.equal(await root.locator('details').count(), 0, 'core research needs no expansion');
+    assert.equal(await page.locator('.benchmark-facts').isVisible(), false, 'redundant statistic cards removed');
+    const taskImage = root.locator('.story-task-media img');
+    await taskImage.evaluate(i=>i.decode());
+    assert.equal(await root.locator('.story-task-media a').getAttribute('href'),'tasks/CP05.html#hard');
+    assert.equal(await root.locator('.story-evidence-flow li').count(),3);
+    const frames=root.locator('.story-view-art,.story-loop-art');
+    const sources=JSON.parse(readFileSync('media/research-frames/sources.json','utf8')).frames;
+    assert.equal(await frames.count(),7);
+    assert.equal(await root.locator('img[src*="research-illustrations"]').count(),0,'generated illustrations replaced');
+    assert.deepEqual(await frames.evaluateAll(images=>images.map(i=>i.getAttribute('src'))),sources.map(f=>f.image),'every frame has a recorded video source');
+    assert.deepEqual(await root.locator('.story-view-example').evaluateAll(links=>links.map(a=>a.getAttribute('href'))),['tasks/S.html#medium','tasks/PR3.html#medium','tasks/CP01.html#medium']);
+    for (const frame of await frames.all()) {
+      await frame.scrollIntoViewIfNeeded();
+      await frame.evaluate(e=>e.decode());
+      assert.ok(await frame.evaluate(e=>e.naturalWidth>=960),'full-resolution simulation frame loads');
+    }
+    const img = root.locator('.intro-overview img');
+    await img.scrollIntoViewIfNeeded();
+    await img.evaluate(i => i.decode());
+    for (const width of [320,390,820,1440,1920]) {
+      await page.setViewportSize({width,height:1000});
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'no horizontal overflow at '+width);
+      for (const frame of await frames.all()) {
+        const bounds=await frame.boundingBox();
+        assert.ok(bounds.width <= width, 'simulation frame fits at '+width);
+        const naturalRatio=await frame.evaluate(e=>e.naturalWidth/e.naturalHeight);
+        assert.ok(Math.abs(bounds.width/bounds.height-naturalRatio)<.01,'frame is not cropped or distorted');
+        assert.equal(await frame.evaluate(e=>getComputedStyle(e).filter),'none','original simulation colors');
+      }
+      const box = await img.boundingBox();
+      assert.ok(Math.abs(box.width/box.height - 2600/2113)<.01, 'overview aspect ratio');
+      const columns = await root.locator('.story-view-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length);
+      assert.equal(columns, width<=600 ? 1 : 3, 'evaluation views adapt at '+width);
+      const frameColumns=await root.locator('.story-keyframes').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length);
+      assert.equal(frameColumns,width<=450?1:2,'keyframes remain readable at '+width);
+    }
+    await page.setViewportSize({width:1440,height:1000});
+    await root.scrollIntoViewIfNeeded();
+    const before = await page.evaluate(()=>scrollY);
+    await page.mouse.move(700,400);
+    await page.mouse.wheel(0,260);
+    await page.waitForTimeout(400);
+    assert.ok(await page.evaluate(y=>scrollY>y+100,before), 'ordinary document scrolling');
+    await root.locator('.story-explore-link').click();
+    await page.waitForTimeout(300);
+    assert.equal(new URL(page.url()).hash, '#capability-explorer');
+    assert.equal(await page.locator('.cm-orbit-card').count(),30);
+    assert.deepEqual(errors,[]);
+    console.log('PASS: seven authentic video frames, original colors and aspect ratios, task links, research visible, responsive columns, no overflow at five widths, overview ratio, document scrolling, 30-task explorer link.');
+  } finally {await browser.close()}
+})().catch(e=>{console.error(e);process.exit(1)});

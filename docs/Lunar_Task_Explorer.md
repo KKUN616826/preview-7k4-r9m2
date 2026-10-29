@@ -1,0 +1,31 @@
+# Lunar task explorer
+
+The homepage explorer uses the shared 30-task catalog. Mind occupies the light hemisphere, Act the shadow hemisphere, and Mind2Act two staggered rows around the diagonal terminator. The initial orientation selects Mind2Act. No extra decorative particles are rendered.
+
+The sphere is a local Three.js 0.180.0 WebGL mesh with a custom shader: category lighting is fixed in object coordinates, sparse grid lines follow the sphere, and the local NASA LROC color texture supplies subdued gray lunar terrain. Rotating the view cannot move a task into a different category's lighting region. Task controls remain HTML buttons projected with the same orthographic camera; labels stay upright. Back-facing controls are hidden and removed from the tab order.
+
+Every visible task is a small cover card attached to the sphere. Hover or keyboard focus opens a larger cover, title, summary and task link, connected to the source card by an SVG line. A short departure delay allows pointer travel into the preview. Clicking pins the preview without changing the left category explanation or moving the source underneath the pointer. Escape or the close button dismisses it and returns focus to the source card. Dragging or choosing a category dismisses the preview. Category buttons rotate the appropriate region forward; Reset view returns to Mind2Act. Arrow keys rotate when the globe itself is focused. Pointer dragging pauses motion; vertical touch scrolling remains native. Motion is opt-in, only a small oscillation, disabled for reduced motion, and suspended offscreen or while the page is hidden.
+
+The renderer is dynamically imported from local vendored files, with MIT license included, so visitors do not need a third-party CDN connection. Import or WebGL failure uses a CSS shaded sphere with functional projected task buttons. A normal expandable list links all 30 tasks even without JavaScript. Mobile previews flow below the globe instead of obscuring it.
+
+Sources: `scripts/build_capability_map.py`, `scripts/capability-map.css`, `scripts/capability-map.js`, `data/benchmark-navigation.json`. Rebuild only this module with `python3 scripts/build_capability_map.py`. Local vendor: `scripts/vendor/three/`.
+
+Validation: `scripts/test_capability_map.cjs` exercises all 30 real task previews and destinations, default selection, category navigation, keyboard/drag rotation, reset and motion controls, six viewport widths, mobile preview, import failure fallback and the no-script task index. Other homepage sections and leaderboard results are outside this change.
+
+## Texture attribution
+
+Local asset: `media/moon/lroc-color-2k.jpg` (2048 × 1024). Source: [NASA SVS CGI Moon Kit](https://svs.gsfc.nasa.gov/4720), https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_2k.jpg . Credit: NASA’s Scientific Visualization Studio; LRO/LROC source data. Retrieved 2026-10-30. An attribution link appears inside the expandable task index. The shader uses grayscale albedo, conceptual category lighting and sparse grids; this is not a scientific lunar map. Failed texture loading retains a smooth shaded sphere and all task interactions.
+
+## Left-side information hierarchy
+
+The header introduces remembering, acting and using feedback. Scale is one compact line (30 tasks, 3 suites, Easy / Medium / Hard). Three category buttons sit above one plain-text explanation, a concrete capability question and an explicit link to that category’s ten tasks. Mind2Act is selected initially. Category selection rotates the sphere and highlights its ten task covers; task hover and pinning leave this explanation stable. The large colored description panel and repeated category summaries are removed. No instruction text or region legend appears beside the moon; motion and reset controls remain. The large preview stays centered at 62% of globe height, slightly to the right.
+
+## Capability process and representative case
+
+Each category now has a short capability heading, description, a compact process and a real representative case drawn from the existing catalog. Mind: E / Observe → Remember → Choose. Act: FR1 / Detect → Respond → Execute. Mind2Act: CP04 / Plan → Execute → Observe → Update. These are explanatory processes rather than scoring stages. Case cover, title, summary and destinations come from the shared task catalog. A case click pins its globe preview and turns that point forward, while the category explanation stays fixed. On small screens it scrolls the preview into view. The example remains a normal task-page link without JavaScript. Process steps reveal once on category change; reduced motion disables the reveal. Introductory copy is defined in `EXPLORER_COPY` in the generator and sent to the client with the catalog to prevent separate static and interactive copies drifting.
+
+## Bounded navigation
+
+The populated hemisphere stays reachable without exposing an empty back. Yaw is limited to ±60° and pitch to ±20°, with a fixed diagonal tilt. Pointer dragging has up to 3.2° of soft edge resistance and settles to the limit on release. Keyboard navigation, category turns and representative-case focus share these limits. Rotation is rebuilt from yaw/pitch instead of accumulating free-axis turns. Poleward task rows are pulled inward to ±47° and outer category columns to about ±60°, retaining the light / shadow / terminator meaning. All 30 task previews remain reachable through their category. Opt-in motion starts at the current orientation and gently oscillates within the limits; it never resets to the default angle.
+
+Additional validation: `scripts/test_lunar_rotation.cjs` checks repeated keyboard input and drags, visible cards in all four angle corners, and motion starting without a jump.

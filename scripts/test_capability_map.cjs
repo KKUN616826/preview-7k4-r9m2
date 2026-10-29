@@ -1,82 +1,24 @@
-const assert = require('node:assert/strict');
-const {chromium} = require('playwright');
-const suites=require('../data/benchmark-navigation.json');
-const count=suites.reduce((n,s)=>n+s.cases.length,0);
-(async () => {
-  const browser = await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE});
-  try {
-    const page = await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
-    const errors=[];page.on('pageerror',e=>errors.push(e.message));
-    await page.goto(process.env.HERO_PREVIEW_URL || 'http://127.0.0.1:8765/#capability-explorer');
-    const root=page.locator('.capability-map'), card=id=>root.locator(`.cm-orbit-card[data-task="${id}"]`);
-    assert.equal(await root.locator('.cm-orbit-card').count(),count);
-    assert.equal(await root.locator('.cm-orbit-card:not([hidden]) img').evaluateAll(imgs=>imgs.every(img=>img.complete&&img.naturalWidth>0)),true);
-    assert.equal(await root.locator('.cm-orbit-card:not([hidden])').count(),count);
-    assert.equal(await root.locator('.cm-sphere-pager').count(),0);
-    assert.equal(await root.locator('.cm-stats dd').first().innerText(),String(count));
-    for(const suite of suites) assert.match(await root.locator(`.cm-suite-choice[data-suite="${suite.slug}"] .cm-count`).innerText(),new RegExp(String(suite.cases.length)));
-    assert.ok((await root.locator('.cm-orbit').boundingBox()).width>=650,'enlarged desktop sphere');
-    const surface=await root.locator('.cm-orbit').boundingBox();
-    const markers=await root.locator('.cm-orbit-card').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().toJSON()));
-    assert.ok(markers.every(r=>r.width<85),'small task thumbnails leave the dotted shell readable');
-    assert.ok(markers.every(r=>r.left>=surface.x&&r.right<=surface.x+surface.width&&r.top>=surface.y&&r.bottom<=surface.y+surface.height),'task thumbnails fit without clipping');
-    assert.equal(await card('CP10').isVisible(),true);
-    await card('CP10').focus();await page.keyboard.press('Enter');
-    assert.match(await root.locator('.cm-detail-title').innerText(),/Predictive Ball Return/);
-    const preview=root.locator('.cm-task-preview');
-    assert.equal(await preview.isVisible(),true);
-    assert.match(await preview.locator('h3').innerText(),/Predictive Ball Return/);
-    assert.equal(await preview.locator('a').getAttribute('href'),'tasks/CP10.html');
-    assert.ok((await preview.boundingBox()).width>=550,'large foreground task card');
-    await page.keyboard.press('Escape');
-    assert.equal(await preview.isVisible(),false);
-    assert.equal(await card('CP10').evaluate(e=>e===document.activeElement),true,'close returns focus to task');
-    await root.locator('.cm-reset').click();
-    await root.locator('.cm-suite-choice[data-suite="act"]').click();
-    assert.match(await root.locator('.cm-detail-title').innerText(),/Physical execution/);
-    await card('FR1').focus();await page.keyboard.press('Enter');
-    await page.waitForFunction(()=>new DOMMatrix(getComputedStyle(document.querySelector('.cm-orbit-card[data-task="FR1"]')).transform).m43>100);
-    assert.match(await root.locator('.cm-detail-title').innerText(),/Continuous Conveyor Picking/);
-    assert.equal(await root.locator('.cm-detail-link').getAttribute('href'),'tasks/FR1.html');
-    assert.ok(await card('FR1').evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m43>100),'selected task rotates to front');
-    const detail=await root.locator('.cm-detail').boundingBox();
-    assert.ok(detail.y>=100&&detail.y+detail.height<900,'details visible below navigation');
-    assert.ok((await root.boundingBox()).height<=810,'module fits desktop below navigation');
-    assert.equal(await root.locator('.cm-suite-choice[data-suite="act"]').evaluate(el=>el.classList.contains('is-context')),true);
-    await root.locator('.cm-reset').click();
-    assert.equal(await root.locator('[aria-pressed="true"][data-task]').count(),0);
-    const orbit=await root.locator('.cm-orbit').boundingBox();
-    await page.mouse.move(orbit.x+orbit.width/2,orbit.y+orbit.height/2);
-    await page.mouse.down();await page.mouse.move(orbit.x+orbit.width/2+70,orbit.y+orbit.height/2,{steps:8});await page.mouse.up();
-    assert.equal(await root.locator('[aria-pressed="true"][data-task]').count(),0,'drag does not select a task');
-    assert.equal(await root.locator('.cm-motion').isDisabled(),true,'reduced motion disables auto rotation');
-    await page.emulateMedia({reducedMotion:'no-preference'});
-    await root.locator('.cm-motion').click(); // Resume after drag.
-    await page.mouse.move(10,100);
-    const before=await card('E').getAttribute('style');await page.waitForTimeout(140);
-    assert.notEqual(await card('E').getAttribute('style'),before,'auto rotation moves cards');
-    await root.locator('.cm-motion').click();
-    await page.waitForTimeout(50);const stopped=await card('E').getAttribute('style');await page.waitForTimeout(100);
-    assert.equal(await card('E').getAttribute('style'),stopped,'pause stops rendering movement');
-    for(const width of [320,390,820,1024,1440,1920]) {
-      await page.setViewportSize({width,height:900});await root.scrollIntoViewIfNeeded();
-      assert.ok(await root.evaluate(el=>el.getBoundingClientRect().right<=innerWidth),`fits viewport ${width}`);
-      assert.ok(await root.evaluate(el=>el.scrollWidth<=el.clientWidth+1),`no overflow ${width}`);
-    }
-    for(const href of await root.locator('.cm-text-index a').evaluateAll(as=>as.map(a=>a.href))) assert.equal((await page.request.get(href)).status(),200);
-    const touch=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
-    await touch.goto(page.url());await touch.locator('.capability-map').scrollIntoViewIfNeeded();
-    assert.equal(await touch.locator('.cm-motion').innerText(),'Play rotation','touch has no initial auto rotation');
-    await touch.locator('.cm-suite-choice[data-suite="mind"]').click();
-    assert.match(await touch.locator('.cm-detail-title').innerText(),/Memory/);
-    await touch.locator('.cm-orbit-card[data-task="E2"]').focus();await touch.keyboard.press('Enter');
-    const mobilePreview=touch.locator('.cm-task-preview');
-    assert.equal(await mobilePreview.isVisible(),true);
-    const box=await mobilePreview.boundingBox();
-    assert.ok(box.x>=0&&box.x+box.width<=390,'mobile preview fits screen');
-    await mobilePreview.locator('.cm-preview-close').click();
-    assert.equal(await mobilePreview.isVisible(),false);
-    assert.deepEqual(errors,[]);
-    console.log('PASS: all 30 task cards on one enlarged sphere, front positioning, compact layout, keyboard, task links, drag threshold, play/pause, reduced motion, six widths and touch defaults');
-  } finally {await browser.close();}
-})();
+const assert=require('node:assert/strict');const{chromium}=require('playwright');
+(async()=>{const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});try{
+ const p=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ const url='http://127.0.0.1:8765/?preview=lunar-grid#capability-explorer';await p.goto(url);const root=p.locator('.capability-map');await p.waitForFunction(()=>document.querySelector('.capability-map').dataset.renderer==='webgl');
+ assert.equal(await root.locator('[data-task]').count(),30);assert.equal(await root.locator('.cm-text-index nav a').count(),30);assert.equal(await root.locator('[data-suite="mind2act"]').getAttribute('aria-pressed'),'true');assert.match(await root.locator('.cm-detail-title').innerText(),/Reason, act, and adapt/);
+ await p.waitForFunction(()=>document.querySelector('.capability-map').dataset.texture==='loaded');
+ const hoverNode=root.locator('[data-task="CP04"]'),hoverPanel=root.locator('.cm-task-preview');await hoverNode.hover();await p.waitForTimeout(150);
+ assert.equal(await hoverPanel.isVisible(),true);assert.equal(await root.locator('.cm-connector').isVisible(),true);assert.match(await root.locator('.cm-connector path').getAttribute('d'),/^M /);
+ await hoverPanel.hover();await p.waitForTimeout(450);assert.equal(await hoverPanel.isVisible(),true,'pointer can enter preview');
+ assert.equal(await root.locator('.cm-preview-link').getAttribute('href'),'tasks/CP04.html');await p.screenshot({path:'../../outputs/lunar-cards-hover.png'});
+ await root.locator('#cm-heading').hover();await p.waitForTimeout(400);assert.equal(await hoverPanel.isVisible(),false,'unlocked preview closes after leaving');
+ await hoverNode.click();await root.locator('#cm-heading').hover();await p.waitForTimeout(400);assert.equal(await hoverPanel.isVisible(),true,'clicked preview stays pinned');await p.keyboard.press('Escape');assert.equal(await hoverPanel.isVisible(),false);assert.equal(await hoverNode.evaluate(e=>document.activeElement===e),true);
+ const suiteData=await root.locator('#cm-data').textContent();const suites=JSON.parse(suiteData);
+ for(const suite of suites){await root.locator(`[data-suite="${suite.slug}"]`).click();await p.waitForTimeout(130);assert.equal(await root.locator('.cm-process li').count(),suite.explorer.steps.length);const sample=suite.explorer.example;assert.equal(await root.locator('.cm-example-open').getAttribute('href'),`tasks/${sample}.html`);await root.locator('.cm-example-open').click();await p.waitForTimeout(130);assert.equal(await root.locator('.cm-preview-link').getAttribute('href'),`tasks/${sample}.html`);assert.equal(await root.locator(`[data-task="${sample}"]`).getAttribute('aria-pressed'),'true');await p.keyboard.press('Escape');}
+
+ let checked=0;for(const suite of suites){await root.locator(`[data-suite="${suite.slug}"]`).click();await p.waitForTimeout(130);for(const task of suite.cases){const button=root.locator(`[data-task="${task.id}"]`);if(await button.isVisible()){await button.focus();await p.keyboard.press('Enter');checked++;await p.waitForTimeout(150);assert.equal(await root.locator('.cm-task-preview').isVisible(),true);assert.equal(await root.locator('.cm-preview-link').getAttribute('href'),`tasks/${task.id}.html`);assert.equal(await root.locator('.cm-preview-image').evaluate(i=>i.complete&&i.naturalWidth>0),true);assert.equal(await root.getAttribute('data-suite'),suite.slug);assert.equal(await root.locator('.cm-detail-link').getAttribute('href'),`benchmark/${suite.slug}.html`);await p.keyboard.press('Escape');await p.waitForTimeout(100);assert.equal(await root.locator('.cm-task-preview').isVisible(),false);}}}
+ assert.equal(checked,30,'all task nodes tested through their category');await root.locator('.cm-reset').click();await p.waitForTimeout(150);const initial=await root.locator('[data-task="CP04"]').getAttribute('style');const orbit=root.locator('.cm-orbit');await orbit.focus();await p.keyboard.press('ArrowRight');await p.waitForTimeout(130);assert.notEqual(await root.locator('[data-task="CP04"]').getAttribute('style'),initial,'keyboard rotates');await root.locator('.cm-reset').click();await p.waitForTimeout(150);
+ await orbit.scrollIntoViewIfNeeded();await p.screenshot({path:'../../outputs/lunar-grid-desktop.png'});
+ await p.emulateMedia({reducedMotion:'no-preference'});const box=await orbit.boundingBox();await p.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await p.mouse.down();await p.mouse.move(box.x+box.width*.7,box.y+box.height*.6,{steps:12});await p.mouse.up();assert.notEqual(await root.locator('[data-task="CP04"]').getAttribute('style'),initial,'drag rotates');await root.locator('.cm-motion').click();assert.equal(await root.locator('.cm-motion').innerText(),'Pause motion');await root.locator('.cm-motion').click();assert.equal(await root.locator('.cm-motion').innerText(),'Play motion');
+ for(const width of[320,390,820,1024,1440,1920]){await p.setViewportSize({width,height:900});await p.waitForTimeout(100);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no overflow '+width)}
+ const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});await mobile.goto(url);await mobile.waitForFunction(()=>document.querySelector('.capability-map').dataset.renderer==='webgl');await mobile.locator('.cm-orbit').scrollIntoViewIfNeeded();await mobile.locator('[data-task="CP04"]').click();await mobile.waitForTimeout(200);assert.equal(await mobile.locator('.cm-task-preview').isVisible(),true);const preview=await mobile.locator('.cm-task-preview').boundingBox();assert.ok(preview.width<390);await mobile.locator('.cm-task-preview').scrollIntoViewIfNeeded();await mobile.screenshot({path:'../../outputs/lunar-grid-mobile.png'});
+ const fallback=await browser.newPage();await fallback.route('**/vendor/three/**',r=>r.abort());await fallback.goto(url);await fallback.waitForFunction(()=>document.querySelector('.capability-map').dataset.renderer==='fallback');assert.equal(await fallback.locator('.cm-moon-fallback').isVisible(),true);await fallback.locator('[data-task="CP04"]').click();assert.equal(await fallback.locator('.cm-task-preview').isVisible(),true);assert.equal(await fallback.locator('.cm-motion').isDisabled(),true);
+ await mobile.close();await fallback.close();console.log('Interactive checks passed');const nojs=await browser.newPage({javaScriptEnabled:false,reducedMotion:'reduce'});await nojs.route('**/*',r=>['media','image','font'].includes(r.request().resourceType())?r.abort():r.continue());await nojs.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});assert.equal(await nojs.locator('.cm-text-index nav a').count(),30);assert.equal(await nojs.locator('.cm-text-index summary').count(),1);assert.deepEqual(errors,[]);console.log('PASS: WebGL moon, all 30 tasks, category selection, real previews, keyboard/drag rotation, reset/motion, six widths, mobile, import-failure fallback and no-script list.');
+ }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});

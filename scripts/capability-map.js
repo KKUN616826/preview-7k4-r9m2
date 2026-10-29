@@ -1,196 +1,182 @@
-(() => {
-  const root = document.querySelector('.capability-map');
-  if (!root) return;
-  const suites = JSON.parse(root.querySelector('#cm-data').textContent);
-  const orbit = root.querySelector('.cm-orbit');
-  const cards = [...root.querySelectorAll('.cm-orbit-card')];
-  const controls = [...root.querySelectorAll('[data-suite], [data-task]')];
-  const canvas = root.querySelector('.cm-particles');
-  const ctx = canvas.getContext('2d');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const coarse = matchMedia('(pointer: coarse)');
-  const motion = root.querySelector('.cm-motion');
-  const detail = root.querySelector('.cm-detail');
-  const label = root.querySelector('.cm-detail-label');
-  const title = root.querySelector('.cm-detail-title');
-  const copy = root.querySelector('.cm-detail-copy');
-  const link = root.querySelector('.cm-detail-link');
-  const preview=root.querySelector('.cm-task-preview');
-  const closePreview=root.querySelector('.cm-preview-close');
-  let selectedCard=null;
-  const colors = ['#4a786a','#456d85','#8b743d'];
-  const tau = Math.PI*2;
-  const total=suites.reduce((n,s)=>n+s.cases.length,0);
-  let yaw=-.28, pitch=-.12, target=null, selected=null, suiteKey=null;
-  let visible=false, hovering=false, focused=false, paused=coarse.matches, frame=0, lastTime=0;
-  let size=420, radius=150, perspective=760, dragging=null, suppressClick=false;
-  const points = cards.map((card,i) => {
-    const group=suites.findIndex(s=>s.slug===card.dataset.parent);
-    const index=suites[group].cases.findIndex(c=>c.id===card.dataset.task);
-    // Two staggered meridians per suite keep all ten tasks on the same sphere.
-    const rows=Math.ceil(suites[group].cases.length/2);
-    const row=index%rows, column=Math.floor(index/rows);
-    const lat=(-55+row*(110/Math.max(1,rows-1))+column*4)*Math.PI/180;
-    const lon=group*tau/3+(column-.5)*.98+(row%2 ? .05 : -.05);
-    return {card,lat,lon,v:[Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)]};
+/* Lunar explorer. Task data and all destinations come from the shared catalog.
+ * Orthographic projection keeps HTML labels legible; Three.js renders the mesh.
+ * Category lighting is attached to local coordinates, so rotating cannot reclassify tasks. */
+(async () => {
+  const root=document.querySelector('.capability-map');if(!root)return;
+  const suites=JSON.parse(root.querySelector('#cm-data').textContent);
+  const orbit=root.querySelector('.cm-orbit'),canvas=root.querySelector('canvas');
+  const cards=[...root.querySelectorAll('[data-task]')],choices=[...root.querySelectorAll('[data-suite]')];
+  const preview=root.querySelector('.cm-task-preview'),close=root.querySelector('.cm-preview-close');
+  const motion=root.querySelector('.cm-motion'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  let THREE,renderer,scene,camera,moon,geometry,material;
+  let size=400,visible=false,frame=0,last=0,target=null,selected=null,origin=null,drag=null,suppress=false,playing=false,hover=false;
+  let quaternion,base;
+  // Keep the populated hemisphere in view; rebuild from two angles to avoid accumulated roll.
+  const limits={yaw:Math.PI/3,pitch:Math.PI/9},view={yaw:0,pitch:0};
+  let motionCenter={...view},motionPhase=0;
+  const clamp=(value,limit)=>Math.max(-limit,Math.min(limit,value));
+  function bounded(next){return {yaw:clamp(next.yaw,limits.yaw),pitch:clamp(next.pitch,limits.pitch)}}
+  function resisted(value,limit){const magnitude=Math.abs(value);return magnitude<=limit?value:Math.sign(value)*(limit+.055*(1-Math.exp(-(magnitude-limit)/.16)))}
+  function applyView(){if(quaternion)quaternion.copy(base).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(view.pitch,view.yaw,0,'XYZ')))}
+  function aim(next){target=bounded(next);wake()}
+  const connector=root.querySelector('.cm-connector'),visual=root.querySelector('.cm-visual');
+  let activePoint=null,pinned=false,enterTimer,leaveTimer,ignoreFocus=false;
+  function cancelTimers(){clearTimeout(enterTimer);clearTimeout(leaveTimer)}
+  function hidePreview(){cancelTimers();selected=null;activePoint=null;pinned=false;preview.hidden=true;connector.setAttribute('hidden','');cards.forEach(c=>{c.setAttribute('aria-pressed','false');c.classList.remove('is-previewed')})}
+  function scheduleHide(){clearTimeout(enterTimer);clearTimeout(leaveTimer);if(!pinned)leaveTimer=setTimeout(()=>{hidePreview();wake()},300)}
+  function connectPreview(){
+    if(!activePoint||preview.hidden||activePoint.card.dataset.front==='false'){connector.setAttribute('hidden','');return}
+    const v=visual.getBoundingClientRect(),n=activePoint.card.getBoundingClientRect(),r=preview.getBoundingClientRect();
+    let x=n.x+n.width/2-v.x,y=n.y+n.height/2-v.y;
+    const left=r.left-v.left,right=r.right-v.left,top=r.top-v.top,bottom=r.bottom-v.top;
+    const candidates=[[left,Math.max(top+12,Math.min(bottom-12,y))],[right,Math.max(top+12,Math.min(bottom-12,y))],[Math.max(left+12,Math.min(right-12,x)),top],[Math.max(left+12,Math.min(right-12,x)),bottom]];
+    const [ex,ey]=y<top?[left+(right-left)*.65,top]:y>bottom?[left+(right-left)*.35,bottom]:candidates.sort((a,b)=>Math.hypot(x-a[0],y-a[1])-Math.hypot(x-b[0],y-b[1]))[0];
+    const dx=ex-x,dy=ey-y,edge=1/Math.max(Math.abs(dx)/(n.width/2+3),Math.abs(dy)/(n.height/2+3),1);
+    x+=dx*edge;y+=dy*edge;
+    connector.removeAttribute('hidden');connector.setAttribute('viewBox',`0 0 ${v.width} ${v.height}`);connector.style.color=colors[activePoint.suite.slug];
+    connector.querySelector('path').setAttribute('d',`M ${x} ${y} L ${ex+(ex>x?-14:14)} ${ey} L ${ex} ${ey}`);
+    connector.querySelector('circle').setAttribute('cx',x);connector.querySelector('circle').setAttribute('cy',y);
+  }
+  const colors={mind:'#4a786a',act:'#527d9b',mind2act:'#a07b30'};
+  const positions=cards.map(card=>{
+    const suite=suites.find(s=>s.slug===card.dataset.parent),index=suite.cases.findIndex(t=>t.id===card.dataset.task);
+    const row=index%5,column=Math.floor(index/5),lat=(-42+row*21+(column?5:-5))*Math.PI/180;
+    const lon=suite.slug==='mind2act'?(column?.14:-.14): (suite.slug==='mind'?-1:1)*(.60+column*.45);
+    return {card,suite,task:suite.cases[index],lat,lon,v:[Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)]};
   });
-  const dust = Array.from({length:780},(_,i)=>{
-    const y=1-2*(i+.5)/780, phi=i*2.399963229728653;
-    const v=[Math.sqrt(1-y*y)*Math.cos(phi),y,Math.sqrt(1-y*y)*Math.sin(phi)];
-    const group=Math.floor(((Math.atan2(v[0],v[2])+Math.PI/3+tau)%tau)/(tau/3));
-    return {v,group};
-  });
-  function rotate(v) {
-    const x=v[0]*Math.cos(yaw)+v[2]*Math.sin(yaw);
-    const z=-v[0]*Math.sin(yaw)+v[2]*Math.cos(yaw);
-    return [x,v[1]*Math.cos(pitch)-z*Math.sin(pitch),v[1]*Math.sin(pitch)+z*Math.cos(pitch)];
+  let activeSuite='mind2act';
+  function updateInfo(suite){
+    activeSuite=suite.slug;root.dataset.suite=activeSuite;
+    root.querySelector('.cm-detail').className=`cm-detail cm-${suite.slug}`;
+    root.querySelector('.cm-detail-label').textContent=`${suite.name} · ${suite.cases.length} tasks`;
+    root.querySelector('.cm-detail-title').textContent=suite.explorer.title;
+    root.querySelector('.cm-detail-copy').textContent=suite.explorer.description;
+    const process=root.querySelector('.cm-process');
+    process.replaceChildren(...suite.explorer.steps.map(([title,note])=>{
+      const item=document.createElement('li'),name=document.createElement('strong'),caption=document.createElement('span');
+      name.textContent=title;caption.textContent=note;item.append(name,caption);return item;
+    }));
+    const example=suite.cases.find(task=>task.id===suite.explorer.example),exampleLink=root.querySelector('.cm-example-open');
+    exampleLink.href=`tasks/${example.id}.html`;exampleLink.dataset.example=example.id;
+    root.querySelector('.cm-example-image').src=example.row_cover;
+    root.querySelector('.cm-example-title').textContent=`${example.id} · ${example.title}`;
+    root.querySelector('.cm-example-summary').textContent=example.summary;
+    const link=root.querySelector('.cm-detail-link');link.href=`benchmark/${suite.slug}.html`;link.textContent=`Browse all ${suite.cases.length} ${suite.name} tasks ↗`;
+    choices.forEach(c=>{c.setAttribute('aria-pressed',String(c.dataset.suite===suite.slug));c.classList.toggle('is-context',c.dataset.suite===suite.slug)});
   }
-  function render() {
-    if(ctx) {
-      ctx.clearRect(0,0,size,size);
-      // A continuous, perspective-correct silhouette gives the dots a readable sphere.
-      const r=radius*1.02, silhouette=r/Math.sqrt(1-(r/perspective)**2), center=size/2;
-      const surface=ctx.createRadialGradient(center-r*.32,center-r*.38,r*.06,center,center,silhouette);
-      surface.addColorStop(0,'rgba(255,255,255,.12)');
-      surface.addColorStop(.65,'rgba(173,194,186,.035)');
-      surface.addColorStop(1,'rgba(93,129,136,.13)');
-      ctx.fillStyle=surface;ctx.beginPath();ctx.arc(center,center,silhouette,0,tau);ctx.fill();
-      ctx.strokeStyle='rgba(95,130,137,.28)';ctx.lineWidth=.8;ctx.stroke();
-      const activeGroup=suites.findIndex(s=>s.slug===suiteKey);
-      const particles=dust.map(p=>({position:rotate(p.v),group:p.group})).sort((a,b)=>a.position[2]-b.position[2]);
-      for(const particle of particles) {
-        const [x,y,z]=particle.position, scale=perspective/(perspective-z*r);
-        const depth=(z+1)/2;
-        ctx.globalAlpha=(.12+.72*depth**1.6)*(activeGroup>=0&&particle.group!==activeGroup?.42:1);
-        ctx.fillStyle=colors[particle.group];ctx.beginPath();
-        ctx.arc(center+x*r*scale,center+y*r*scale,(.8+depth*1.05)*Math.max(.7,size/500),0,tau);ctx.fill();
-      }
-      ctx.globalAlpha=1;
-    }
-    for(const point of points) {
-      const [x,y,z]=rotate(point.v);
-      const card=point.card, matching=!suiteKey || card.dataset.parent===suiteKey;
-      card.style.transform=`translate3d(${x*radius}px,${y*radius}px,${z*radius}px) scale(${card.dataset.task===selected?1.12:.92})`;
-      card.style.opacity=String((.16+.84*((z+1)/2)**1.25)*(matching?1:.32));
-      card.style.filter=z<-.15?'saturate(.6)':'none';
-    }
+  function selectSuite(slug){
+    hidePreview();playing=false;
+    updateInfo(suites.find(s=>s.slug===slug));cards.forEach(c=>c.setAttribute('aria-pressed','false'));
+    if(THREE)aim({yaw:slug==='mind'?.82:slug==='act'?-.82:0,pitch:0});
+    motionState();wake();render();
   }
-  function auto() {return !paused&&!selected&&!hovering&&!focused&&!dragging&&!reduced.matches;}
-  function updateMotion() {
-    const disabled=reduced.matches;
-    motion.disabled=disabled;
-    motion.textContent=disabled?'Motion reduced':paused||selected?'Play rotation':'Pause rotation';
-    motion.setAttribute('aria-pressed',String(paused||!!selected));
+  function showPreview(point,pin=false){
+    if(suppress||drag?.moved)return;
+    if(pinned&&!pin&&activePoint!==point)return;
+    cancelTimers();origin=point.card;activePoint=point;pinned=pin||pinned;selected=point.task.id;playing=false;
+    cards.forEach(c=>{c.setAttribute('aria-pressed',String(pinned&&c===point.card));c.classList.toggle('is-previewed',c===point.card)});
+    preview.className=`cm-task-preview cm-${point.suite.slug}`;preview.hidden=false;
+    const image=preview.querySelector('img');image.src=point.task.row_cover;image.alt=point.task.title+' demonstration';
+    preview.querySelector('.cm-preview-meta').textContent=`${point.suite.name} · ${point.task.id}`;
+    preview.querySelector('h3').textContent=point.task.title;
+    preview.querySelector('.cm-preview-summary').textContent=point.task.summary;
+    preview.querySelector('a').href=`tasks/${point.task.id}.html`;
+    motionState();render();
   }
-  function tick(now) {
-    frame=0;
-    const dt=Math.min((now-(lastTime||now))/1000,.05);lastTime=now;
-    if(target) {
-      const delta=Math.atan2(Math.sin(target.yaw-yaw),Math.cos(target.yaw-yaw));
-      const blend=reduced.matches?1:1-Math.exp(-dt*9);
-      yaw+=delta*blend;pitch+=(target.pitch-pitch)*blend;
-      if(Math.abs(delta)<.002&&Math.abs(target.pitch-pitch)<.002){yaw=target.yaw;pitch=target.pitch;target=null;}
-    } else if(auto()) yaw+=dt*.10;
-    render();
-    if(visible&&!document.hidden&&(target||auto())) frame=requestAnimationFrame(tick);
-  }
-  function wake() { if(!frame&&visible&&!document.hidden){lastTime=0;frame=requestAnimationFrame(tick);} }
-  function select(el) {
-    selected=el ? el.dataset.task||el.dataset.suite : null;
-    const suite=suites.find(s=>s.slug===(el?.dataset.parent||el?.dataset.suite));
-    const task=suite?.cases.find(t=>t.id===el?.dataset.task);
-    suiteKey=suite?.slug||null;
-    root.classList.toggle('cm-has-selection',!!selected);
-    detail.className='cm-detail'+(suite?` cm-${suite.slug} cm-detail-selected`:'');
-    controls.forEach(c=>{
-      c.setAttribute('aria-pressed',String(!!selected&&(c.dataset.task||c.dataset.suite)===selected));
-      c.classList.toggle('is-context',!!suite&&(c.dataset.parent||c.dataset.suite)===suite.slug);
+  function dismiss(){const source=origin;hidePreview();if(source){ignoreFocus=true;source.focus({preventScroll:true});ignoreFocus=false}wake();render()}
+  function motionState(){motion.disabled=reduced.matches||!renderer;motion.textContent=reduced.matches?'Motion reduced':playing?'Pause motion':'Play motion';motion.setAttribute('aria-pressed',String(playing))}
+  function render(){
+    applyView();
+    if(renderer) {moon.quaternion.copy(quaternion);renderer.render(scene,camera)}
+    positions.forEach((point,index)=>{
+      let x,y,z;
+      if(THREE){const v=new THREE.Vector3(...point.v).applyQuaternion(quaternion);[x,y,z]=v.toArray()}
+      else {const [a,b,c]=point.v;x=a*.866+b*.5;y=-a*.5+b*.866;z=c}
+      const front=z>.075;
+      point.card.style.transform=`translate(${x*size*.425}px,${-y*size*.425}px) scale(${.65+.35*Math.max(0,z)})`;
+      point.card.style.visibility=front?'visible':'hidden';point.card.style.pointerEvents=front?'auto':'none';
+      point.card.tabIndex=front?0:-1;point.card.style.zIndex=String(10+Math.round(z*10));
+      point.card.style.setProperty('--node-color',colors[point.suite.slug]);
+      point.card.classList.toggle('is-region',point.suite.slug===activeSuite);
+      point.card.style.opacity=String((.48+.52*Math.max(0,z))*(point.suite.slug===activeSuite?1:.58));point.card.dataset.front=String(front);point.card.dataset.edge=x>.76?'right':'normal';
     });
-    label.textContent=task?`${suite.name} · Easy / Medium / Hard`:suite?`${suite.name} · ${suite.cases.length} tasks`:'THE FULL BENCHMARK';
-    title.textContent=task?`${task.id} · ${task.title}`:suite?suite.label:'Three views of robotic manipulation';
-    copy.textContent=task?task.summary:suite?suite.description:'Explore tasks across three suites, with Easy, Medium, and Hard configurations.';
-    link.href=task?`tasks/${task.id}.html`:suite?`benchmark/${suite.slug}.html`:'benchmark.html';
-    link.textContent=task?'View task ↗':suite?`Explore ${suite.cases.length} ${suite.name} tasks ↗`:`Explore all ${total} tasks ↗`;
-    const point=task?points.find(p=>p.card.dataset.task===task.id):null;
-    preview.hidden=!task;
-    if(task){
-      selectedCard=point.card;
-      preview.className=`cm-task-preview cm-${suite.slug}`;
-      const image=preview.querySelector('.cm-preview-image');
-      image.src=task.row_cover||task.cover;image.alt=task.title+' demonstration';
-      preview.querySelector('.cm-preview-meta').textContent=`${suite.name} · ${task.id}`;
-      preview.querySelector('#cm-preview-title').textContent=task.title;
-      preview.querySelector('.cm-preview-link').href=`tasks/${task.id}.html`;
-      if(!reduced.matches)preview.animate([{opacity:0,translate:'0 8px'},{opacity:1,translate:'0 0'}],{duration:220,easing:'ease-out'});
-      // Give keyboard users a visible close control instead of leaving focus behind the card.
-      if(document.activeElement===el)closePreview.focus({preventScroll:true});
+    connectPreview();
+  }
+  function tick(now){frame=0;const dt=Math.min((now-(last||now))/1000,.045);last=now;
+    if(target&&quaternion){
+      const blend=reduced.matches?1:1-Math.exp(-dt*8);
+      view.yaw+=(target.yaw-view.yaw)*blend;view.pitch+=(target.pitch-view.pitch)*blend;
+      if(Math.hypot(target.yaw-view.yaw,target.pitch-view.pitch)<.002){Object.assign(view,target);target=null}
+    }else if(playing&&!hover&&!drag&&!selected&&!reduced.matches&&quaternion){
+      motionPhase+=dt*.35;
+      const amplitude=Math.min(.10,Math.max(0,limits.yaw-Math.abs(motionCenter.yaw)));
+      view.yaw=motionCenter.yaw+Math.sin(motionPhase)*amplitude;
     }
-    target=point?{yaw:-point.lon,pitch:point.lat}:suite?{yaw:-suites.indexOf(suite)*tau/3,pitch:0}:{yaw:-.28,pitch:-.12};
-    if(selected&&!reduced.matches) detail.animate([{opacity:.55},{opacity:1}],{duration:220});
-    if(selected) {
-      const readingTarget=task?preview:detail;
-      const box=readingTarget.getBoundingClientRect();
-      if(box.top<110||box.bottom>innerHeight-12) readingTarget.scrollIntoView({block:'nearest',behavior:'instant'});
-    }
-    updateMotion();wake();
+    render();if(visible&&!document.hidden&&(target||(playing&&!hover&&!selected&&!reduced.matches)))frame=requestAnimationFrame(tick);
   }
-  controls.forEach(el=>{
-    el.addEventListener('click',()=>{if(!suppressClick)select(el);});
-    el.addEventListener('pointerenter',()=>{
-      const slug=el.dataset.parent||el.dataset.suite;
-      root.querySelectorAll('.cm-suite-choice').forEach(c=>c.classList.toggle('is-preview',c.dataset.suite===slug));
-    });
-    el.addEventListener('pointerleave',()=>root.querySelectorAll('.is-preview').forEach(c=>c.classList.remove('is-preview')));
+  function wake(){if(!frame&&visible&&!document.hidden){last=0;frame=requestAnimationFrame(tick)}}
+  choices.forEach(c=>c.addEventListener('click',()=>selectSuite(c.dataset.suite)));
+  root.querySelector('.cm-example-open').addEventListener('click',e=>{
+    e.preventDefault();const point=positions.find(p=>p.task.id===e.currentTarget.dataset.example);if(!point)return;
+    showPreview(point,true);
+    if(THREE&&quaternion){aim({yaw:-point.lon-.25,pitch:point.lat-.1})}
+    if(matchMedia('(max-width:850px)').matches)preview.scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});
   });
-  orbit.addEventListener('pointerenter',()=>{hovering=true;});
-  orbit.addEventListener('pointerleave',()=>{hovering=false;wake();});
-  orbit.addEventListener('focusin',e=>{
-    focused=true;
-    const point=points.find(p=>p.card===e.target);
-    if(point){target={yaw:-point.lon,pitch:point.lat};wake();}
+  positions.forEach(p=>{
+    p.card.addEventListener('click',()=>showPreview(p,true));
+    p.card.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;cancelTimers();enterTimer=setTimeout(()=>showPreview(p),100)});
+    p.card.addEventListener('pointerleave',scheduleHide);
+    p.card.addEventListener('focus',()=>{if(!ignoreFocus)showPreview(p)});
+    p.card.addEventListener('blur',()=>{if(!preview.contains(document.activeElement))scheduleHide()});
   });
-  orbit.addEventListener('focusout',()=>{requestAnimationFrame(()=>{focused=orbit.contains(document.activeElement);wake();});});
-  orbit.addEventListener('pointerdown',e=>{
-    if(e.button!==0)return;
-    dragging={id:e.pointerId,x:e.clientX,y:e.clientY,yaw,pitch,moved:false};target=null;
-  });
-  orbit.addEventListener('pointermove',e=>{
-    if(!dragging||e.pointerId!==dragging.id)return;
-    const dx=e.clientX-dragging.x,dy=e.clientY-dragging.y;
-    if(!dragging.moved&&Math.hypot(dx,dy)<7)return;
-    if(!dragging.moved){dragging.moved=true;orbit.setPointerCapture(e.pointerId);orbit.classList.add('is-dragging');}
-    yaw=dragging.yaw+dx*.008;pitch=Math.max(-1.2,Math.min(1.2,dragging.pitch-dy*.008));render();
-  });
-  function endDrag(e) {
-    if(!dragging||e.pointerId!==dragging.id)return;
-    const moved=dragging.moved;dragging=null;orbit.classList.remove('is-dragging');
-    if(orbit.hasPointerCapture(e.pointerId))orbit.releasePointerCapture(e.pointerId);
-    if(moved){paused=true;suppressClick=true;setTimeout(()=>{suppressClick=false;},0);updateMotion();}
-    wake();
-  }
-  orbit.addEventListener('pointerup',endDrag);orbit.addEventListener('pointercancel',endDrag);
-  window.addEventListener('pointerup',endDrag);
-  function dismissPreview(){
-    const origin=selectedCard;selectedCard=null;select(null);
-    if(origin)origin.focus({preventScroll:true});
-  }
-  closePreview.addEventListener('click',dismissPreview);
-  root.addEventListener('keydown',event=>{if(event.key==='Escape'&&!preview.hidden){event.preventDefault();dismissPreview();}});
-  root.querySelector('.cm-reset').addEventListener('click',()=>select(null));
-  motion.addEventListener('click',()=>{
-    if(selected){select(null);paused=false;}else paused=!paused;
-    updateMotion();wake();
-  });
-  const resize=new ResizeObserver(()=>{
-    size=orbit.clientWidth;radius=size*(innerWidth>850?.42:.40);
-    // Scale the viewing distance with the desktop sphere, so cards keep their screen size.
-    perspective=innerWidth>850?radius*3.8:760;
-    root.querySelector('.cm-orbit-cards').style.perspective=perspective+'px';
-    const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(size*dpr);canvas.height=Math.round(size*dpr);
-    ctx?.setTransform(dpr,0,0,dpr,0,0);render();
-  });resize.observe(orbit);
-  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)wake();else if(frame){cancelAnimationFrame(frame);frame=0;}},{threshold:.05}).observe(root);
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&frame){cancelAnimationFrame(frame);frame=0;}else wake();});
-  reduced.addEventListener('change',()=>{updateMotion();wake();});
-  updateMotion();render();
+  preview.addEventListener('pointerenter',cancelTimers);preview.addEventListener('pointerleave',scheduleHide);
+  preview.addEventListener('focusin',cancelTimers);preview.addEventListener('focusout',e=>{if(!preview.contains(e.relatedTarget))scheduleHide()});
+  new ResizeObserver(connectPreview).observe(preview);
+  close.addEventListener('click',dismiss);root.addEventListener('keydown',e=>{if(e.key==='Escape'&&!preview.hidden){e.preventDefault();dismiss()}});
+  root.querySelector('.cm-reset').addEventListener('click',()=>selectSuite('mind2act'));
+  motion.addEventListener('click',()=>{playing=!playing;target=null;Object.assign(view,bounded(view));motionCenter={...view};motionPhase=0;motionState();wake()});
+  orbit.addEventListener('focusin',()=>{playing=false;motionState()});
+  orbit.addEventListener('pointerenter',()=>{hover=true});orbit.addEventListener('pointerleave',()=>{hover=false;wake()});
+  orbit.addEventListener('pointerdown',e=>{if(e.button!==0||!quaternion)return;drag={id:e.pointerId,x:e.clientX,y:e.clientY,start:{...view},moved:false};target=null;playing=false;motionState()});
+  orbit.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!drag.moved&&Math.hypot(dx,dy)<7)return;if(e.pointerType==='touch'&&!drag.moved&&Math.abs(dy)>Math.abs(dx)){drag=null;return}if(!drag.moved)hidePreview();drag.moved=true;orbit.setPointerCapture(e.pointerId);orbit.classList.add('is-dragging');view.yaw=resisted(drag.start.yaw+dx*.004,limits.yaw);view.pitch=resisted(drag.start.pitch+dy*.004,limits.pitch);render()});
+  function end(e){if(!drag||drag.id!==e.pointerId)return;if(drag.moved){aim(view);suppress=true;setTimeout(()=>suppress=false,50)}drag=null;orbit.classList.remove('is-dragging');if(orbit.hasPointerCapture(e.pointerId))orbit.releasePointerCapture(e.pointerId)}
+  orbit.addEventListener('pointerup',end);orbit.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);
+  orbit.addEventListener('keydown',e=>{if(e.target!==orbit||!THREE)return;const axes={ArrowLeft:[0,-.22],ArrowRight:[0,.22],ArrowUp:[-.14,0],ArrowDown:[.14,0]};if(!axes[e.key])return;e.preventDefault();hidePreview();playing=false;const start=target||view;aim({pitch:start.pitch+axes[e.key][0],yaw:start.yaw+axes[e.key][1]});motionState()});
+  function resize(){size=orbit.clientWidth;visual.style.setProperty('--cm-orbit-size',`${size}px`);if(renderer){renderer.setSize(size,size,false)}render()}
+  new ResizeObserver(resize).observe(orbit);
+  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)wake();else if(frame){cancelAnimationFrame(frame);frame=0}},{threshold:.02}).observe(orbit);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0}else wake()});
+  reduced.addEventListener('change',()=>{if(reduced.matches)playing=false;motionState();wake()});
+  // A no-script task list remains in the HTML; a CSS moon is the WebGL fallback.
+  updateInfo(suites.find(s=>s.slug==='mind2act'));root.classList.add('cm-lunar-ready');resize();
+  try {
+    THREE=await import('./vendor/three/three.module.min.js');
+    renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setClearColor(0x000000,0);
+    scene=new THREE.Scene();camera=new THREE.OrthographicCamera(-1.1765,1.1765,1.1765,-1.1765,.1,10);camera.position.z=4;
+    base=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),-Math.PI/6);quaternion=base.clone();
+    geometry=new THREE.SphereGeometry(1,96,64);
+    material=new THREE.ShaderMaterial({uniforms:{moonMap:{value:null},hasTexture:{value:0}},vertexShader:`varying vec3 localP; varying vec3 viewN; varying vec2 moonUv; void main(){moonUv=uv;localP=position;viewN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+      fragmentShader:`varying vec3 localP; varying vec3 viewN; varying vec2 moonUv; uniform sampler2D moonMap; uniform float hasTexture;
+      float line(float v){float d=abs(fract(v-.5)-.5);return 1.0-smoothstep(0.0,fwidth(v)*.8,d);}
+      void main(){vec3 p=normalize(localP);float light=1.0-smoothstep(-.24,.27,p.x);
+      vec3 dark=vec3(.018,.023,.029);vec3 bright=vec3(.84,.835,.80);
+      float albedo=dot(texture2D(moonMap,vec2(fract(moonUv.x+.24),moonUv.y)).rgb,vec3(.299,.587,.114));
+      float terrain=mix(1.0,clamp(.24+albedo*1.15,.30,1.05),hasTexture);
+      vec3 col=mix(dark*terrain,bright*terrain,light);float edge=pow(max(viewN.z,0.0),.24);col*=.69+.31*edge;
+      float band=exp(-pow(p.x/.095,2.0));col=mix(col,vec3(.38,.29,.13),band*.16);
+      float lon=atan(p.z,p.x)/6.2831853;float lat=asin(p.y)/3.14159265;
+      float grid=max(line(lon*16.0),line(lat*9.0));
+      vec3 ink=mix(vec3(.25,.29,.32),vec3(.46,.48,.46),light);col=mix(col,ink,grid*.12);
+      float texture=(sin(p.x*21.0+p.z*13.0)*sin(p.y*17.0-p.z*8.0))*.002;col+=texture*light;
+      gl_FragColor=vec4(col,1.0);
+      #include <colorspace_fragment>
+      }`});
+    moon=new THREE.Mesh(geometry,material);scene.add(moon);root.classList.add('cm-webgl');root.dataset.renderer='webgl';resize();motionState();wake();
+    new THREE.TextureLoader().load('media/moon/lroc-color-2k.jpg',texture=>{
+      texture.wrapS=THREE.RepeatWrapping;material.uniforms.moonMap.value=texture;material.uniforms.hasTexture.value=1;
+      root.dataset.texture='loaded';render();
+    },undefined,()=>{root.dataset.texture='fallback'});
+    canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(frame);frame=0;renderer=null;root.classList.remove('cm-webgl');root.dataset.renderer='fallback';motionState();render()});
+  }catch(error){renderer=null;THREE=null;root.dataset.renderer='fallback';motionState();render()}
 })();

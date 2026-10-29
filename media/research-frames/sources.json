@@ -1,0 +1,40 @@
+{
+  "description": "Frames extracted from existing simulation demonstrations without recoloring or retouching. CP05 source clock mapping and events are in data/hero-demo.json.",
+  "frames": [
+    {
+      "image": "media/research-frames/mind.jpg",
+      "video": "media/videos/S__S_medium.mp4",
+      "time_seconds": 30
+    },
+    {
+      "image": "media/research-frames/act.jpg",
+      "video": "media/videos/PR3__PR3_Medium_head_reference_20260919.mp4",
+      "time_seconds": 20
+    },
+    {
+      "image": "media/research-frames/coordination.jpg",
+      "video": "media/videos/CP01__CP01_medium_adaptive_v2_20260920.mp4",
+      "time_seconds": 75
+    },
+    {
+      "image": "media/research-frames/loop-observe.jpg",
+      "video": "media/videos/CP05_hero_fullframe_act.mp4",
+      "time_seconds": 0.2
+    },
+    {
+      "image": "media/research-frames/loop-action.jpg",
+      "video": "media/videos/CP05_hero_fullframe_act.mp4",
+      "time_seconds": 10.9
+    },
+    {
+      "image": "media/research-frames/loop-contact.jpg",
+      "video": "media/videos/CP05_hero_fullframe_act.mp4",
+      "time_seconds": 11.033333
+    },
+    {
+      "image": "media/research-frames/loop-next.jpg",
+      "video": "media/videos/CP05_hero_fullframe_act.mp4",
+      "time_seconds": 11.741667
+    }
+  ]
+}

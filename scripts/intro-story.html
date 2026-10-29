@@ -1,17 +1,62 @@
 <!-- INTRO_STORY_START -->
 <section id="introduction" class="intro-story" aria-label="Mind2Act World research introduction">
 <link rel="stylesheet" href="scripts/intro-story.css">
-<div class="story-stage">
-<div class="story-viewport" tabindex="0" role="region" aria-label="Four-screen project introduction. Use arrow keys or scroll to explore.">
-<section class="story-panel story-problem" id="intro-problem" aria-labelledby="intro-problem-title"><div class="story-content"><span class="story-kicker">01 / THE QUESTION</span><h2 class="story-thesis" id="intro-problem-title"><span>Success alone</span> does not explain where a task <span>breaks down.</span></h2></div></section>
-<section class="story-panel story-views" id="intro-views" aria-labelledby="intro-views-label"><div class="story-content"><span class="story-kicker" id="intro-views-label">02 / MIND2ACT WORLD</span><p class="story-explanation">Mind2Act World is a simulation benchmark for task reasoning, physical execution, and their coordination. <strong class="story-mind">Mind</strong> examines what robots remember and decide. <strong class="story-act">Act</strong> examines execution under physical constraints. <strong class="story-coupling">Mind2Act</strong> examines how decisions and execution influence one another through feedback.</p></div></section>
-<section class="story-panel story-loop" id="intro-loop" aria-labelledby="intro-loop-title"><div class="story-content"><span class="story-kicker">03 / THE CLOSED LOOP</span><h2 class="story-thesis" id="intro-loop-title">Task intent guides <span>action.</span><br>Execution feedback guides <span>what comes next.</span></h2><div class="story-loop-line" aria-hidden="true"><span>Intent</span><i>→</i><span>Action</span><i>→</i><span>Feedback</span><i>↵</i></div></div></section>
-<section class="story-panel story-explore" id="intro-explore" aria-labelledby="intro-explore-title"><div class="story-content"><span class="story-kicker">04 / START EXPLORING</span><p class="story-explore-copy" id="intro-explore-title">Explore <strong>__TASK_COUNT__ tasks</strong> across Mind, Act, and Mind2Act, each with three difficulty levels.</p>__OVERVIEW_FIGURE__</div></section>
-</div>
-<nav class="story-progress" aria-label="Introduction screens"><button type="button" data-story-index="0" aria-controls="intro-problem" aria-current="step" aria-label="Screen 1: The question"><span>01</span><i></i></button><button type="button" data-story-index="1" aria-controls="intro-views" aria-label="Screen 2: Mind2Act World"><span>02</span><i></i></button><button type="button" data-story-index="2" aria-controls="intro-loop" aria-label="Screen 3: The closed loop"><span>03</span><i></i></button><button type="button" data-story-index="3" aria-controls="intro-explore" aria-label="Screen 4: Start exploring"><span>04</span><i></i></button></nav>
-<div class="story-footer"><a class="story-skip" href="#capability-explorer">Skip to benchmark ↘</a><span class="story-scroll-hint" aria-hidden="true">Scroll to explore</span><button type="button" class="story-next">Next <span aria-hidden="true">↓</span></button><span class="story-status story-sr" aria-live="polite"></span></div>
-</div>
-<details class="story-background"><summary>Read the research background <span aria-hidden="true">＋</span></summary><div>__RESEARCH_BACKGROUND__</div></details>
+<div class="story-stage"><div class="story-viewport">
+<section class="story-panel story-problem" id="intro-problem" aria-labelledby="intro-problem-title">
+  <div class="story-content story-split story-motivation-layout">
+    <figure class="story-task-media">
+      <a href="tasks/CP05.html#hard" aria-label="Explore CP05 keyboard sequence reproduction"><img src="media/benchmark-covers/CP05.jpg" width="960" height="720" alt="Simulated robot arm operating the keyboard in the CP05 sequence reproduction task" loading="lazy"></a>
+      <figcaption>CP05 · Keyboard sequence reproduction · View task ↗</figcaption>
+    </figure>
+    <div><header><span class="story-kicker">RESEARCH MOTIVATION</span><h2 id="intro-problem-title">Beyond task success</h2></header><div class="story-body">__RESEARCH_MOTIVATION__</div></div>
+  </div>
+</section>
+<section class="story-panel story-views" id="intro-views" aria-labelledby="intro-views-label">
+  <div class="story-content">
+    <header class="story-section-heading"><span class="story-kicker">THE EVALUATION FRAMEWORK</span><h2 id="intro-views-label">Three complementary views</h2><p>Mind2Act World is a simulation benchmark for studying task reasoning, physical execution, and their coordination.</p></header>
+    <div class="story-view-grid">
+      <article class="story-view story-mind">
+        <a class="story-view-example" href="tasks/S.html#medium"><img class="story-view-art" src="media/research-frames/mind.jpg" width="1440" height="1080" loading="lazy" alt="Simulation frame: a robot places colored blocks in slots on a rotating tray"><span>S · Layout reconstruction <span aria-hidden="true">↗</span></span></a>
+        <h3>Mind</h3><p>Evaluates maintaining task information and selecting the required operations.</p><span class="story-view-focus">Task information &amp; operation selection</span>
+      </article>
+      <article class="story-view story-act">
+        <a class="story-view-example" href="tasks/PR3.html#medium"><img class="story-view-art" src="media/research-frames/act.jpg" width="1280" height="960" loading="lazy" alt="Simulation frame: a robot holds a marker above a curved path on a drawing board"><span>PR3 · Line tracing <span aria-hidden="true">↗</span></span></a>
+        <h3>Act</h3><p>Evaluates timely, precise, and stable execution under geometric, contact, and dynamic constraints.</p><span class="story-view-focus">Precision, timing &amp; stability</span>
+      </article>
+      <article class="story-view story-coupling">
+        <a class="story-view-example" href="tasks/CP01.html#medium"><img class="story-view-art" src="media/research-frames/coordination.jpg" width="960" height="720" loading="lazy" alt="Simulation frame: a robot assembles meals from food moving along a conveyor belt"><span>CP01 · Conveyor meal assembly <span aria-hidden="true">↗</span></span></a>
+        <h3>Mind2Act</h3><p>Brings task reasoning and physical execution together through ongoing coordination throughout a task.</p><span class="story-view-focus">Intent, execution &amp; feedback</span>
+      </article>
+    </div>
+    <p class="story-art-note">Frames from the benchmark’s simulation demonstrations. Select a task to watch the full recording.</p>
+  </div>
+</section>
+<section class="story-panel story-loop" id="intro-loop" aria-labelledby="intro-loop-title">
+  <div class="story-content story-split">
+    <div><span class="story-kicker">THE CLOSED LOOP</span><h2 id="intro-loop-title">Intent guides action.<br>Outcomes guide what comes next.</h2><div class="story-body"><p>Task intent guides physically valid actions, while execution outcomes update remaining goals, action timing, and phase progression.</p><p>This makes coordination an ongoing interaction throughout a task.</p></div></div>
+    <figure class="story-loop-figure" aria-label="Four keyframes from the CP05 keyboard sequence demonstration">
+      <ol class="story-keyframes">
+        <li><img class="story-loop-art" src="media/research-frames/loop-observe.jpg" width="1920" height="1080" loading="lazy" alt="During observation, key K18 is highlighted blue"><div class="story-keyframe-caption"><strong><span>01</span> Observe</strong><span>K18 cue</span></div></li>
+        <li><img class="story-loop-art" src="media/research-frames/loop-action.jpg" width="1920" height="1080" loading="lazy" alt="During reproduction, the right mallet approaches key K18"><div class="story-keyframe-caption"><strong><span>02</span> Approach</strong><span>Move to K18</span></div></li>
+        <li><img class="story-loop-art" src="media/research-frames/loop-contact.jpg" width="1920" height="1080" loading="lazy" alt="The right mallet contacts key K18 and the key turns green"><div class="story-keyframe-caption"><strong><span>03</span> Contact</strong><span>K18 registered</span></div></li>
+        <li><img class="story-loop-art" src="media/research-frames/loop-next.jpg" width="1920" height="1080" loading="lazy" alt="The demonstration continues with the left mallet contacting key K14"><div class="story-keyframe-caption"><strong><span>04</span> Continue</strong><span>Next key: K14</span></div></li>
+      </ol>
+      <figcaption>CP05 · Keyframes from one simulation demonstration<br><a href="tasks/CP05.html#hard">Watch keyboard sequence reproduction <span aria-hidden="true">↗</span></a></figcaption>
+    </figure>
+  </div>
+</section>
+<section class="story-panel story-explore" id="intro-explore" aria-labelledby="intro-explore-title">
+  <div class="story-content">
+    <header class="story-section-heading"><span class="story-kicker">BENCHMARK OVERVIEW</span><h2 id="intro-explore-title">From capabilities to task completion</h2></header>
+    <div class="story-benchmark-layout">
+      <div class="story-scope"><div class="story-scope-number"><strong>__TASK_COUNT__</strong><span>benchmark tasks</span></div><div class="story-difficulties" aria-label="Three difficulty levels"><span>Easy</span><span>Medium</span><span>Hard</span></div><p>Varying memory load, planning dependencies, precision and timing.</p></div>
+      <div class="story-evaluation"><h3>One outcome. A closer look at the process.</h3><ol class="story-evidence-flow"><li><span>Task success</span><p>Was the task completed?</p></li><li><span>Stage progress</span><p>How far did it get?</p></li><li><span>Event evidence</span><p>What happened along the way?</p></li></ol><p class="story-comparison-note">Shared interfaces, explicit timing and disclosed execution assistance support comparisons across VLA/WAM policies, coding agents and hybrid systems.</p></div>
+    </div>
+    __OVERVIEW_FIGURE__
+    <a class="story-explore-link" href="#capability-explorer">Explore all __TASK_COUNT__ tasks <span aria-hidden="true">↗</span></a>
+  </div>
+</section>
+</div></div>
 <script src="scripts/intro-story.js" defer></script>
 </section>
 <!-- INTRO_STORY_END -->
