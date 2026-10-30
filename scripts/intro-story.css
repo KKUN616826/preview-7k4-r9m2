@@ -1,5 +1,5 @@
-/* Original-color task media and explanatory graphics on a shared paper surface. */
-body #introduction.intro-story{box-sizing:border-box!important;position:relative!important;width:100%!important;max-width:none!important;margin:48px 0 0!important;padding:0!important;background:#f8f7f0!important;color:#203749!important;font-family:Arial,sans-serif!important;text-align:left!important;scroll-margin-top:96px}
+/* Original-color task media and explanatory graphics on a shared white surface. */
+body #introduction.intro-story{box-sizing:border-box!important;position:relative!important;width:100%!important;max-width:none!important;margin:48px 0 0!important;padding:0!important;background:#ffffff!important;color:#203749!important;font-family:Arial,sans-serif!important;text-align:left!important;scroll-margin-top:96px}
 #introduction.intro-story *{box-sizing:border-box}
 #introduction .story-stage{border-top:1px solid #20374922}
 #introduction .story-viewport{overflow:visible}
@@ -34,12 +34,15 @@ body #introduction.intro-story .story-loop-figure{display:block!important;min-wi
 #introduction .story-view-example:hover>span{text-decoration:underline;text-underline-offset:3px;color:#203749}
 #introduction .story-view-art{display:block!important;width:100%!important;height:auto!important;aspect-ratio:4/3;object-fit:contain;margin:0!important;border:0!important;filter:none!important;border-radius:5px}
 body #introduction.intro-story .story-art-note{font-size:11px!important;color:#62727d!important;margin-top:24px!important}
-#introduction .story-keyframes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 18px;list-style:none;margin:0;padding:0}
-#introduction .story-keyframes li{min-width:0;margin:0;padding:0}
-#introduction .story-loop-art{display:block!important;width:100%!important;height:auto!important;aspect-ratio:16/9;object-fit:contain;margin:0!important;filter:none!important;border:0!important;border-radius:4px}
-#introduction .story-keyframe-caption{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-top:10px;color:#536674;font:400 11px/1.5 Arial,sans-serif}
-body #introduction.intro-story .story-keyframe-caption strong{font:600 13px/1.5 Arial,sans-serif;color:#203749;background:none;padding:0}
-#introduction .story-keyframe-caption strong>span{font-size:10px;font-weight:400;color:#62727d;margin-right:6px}
+#introduction .story-loop-video{display:block;width:100%!important;height:auto!important;aspect-ratio:16/9;object-fit:contain;margin:0;border:0;border-radius:5px;background:#fff;filter:none}
+#introduction .story-loop-chapters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px}
+#introduction .story-loop-chapters[hidden]{display:none}
+#introduction .story-loop-chapters button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0;min-height:70px;padding:12px 0;border:0;border-top:2px solid #d8e1e8;border-radius:0;background:transparent;color:#536674;cursor:pointer;text-align:left;font:600 14px/1.4 Arial,sans-serif}
+#introduction .story-loop-chapters button[aria-pressed=true]{border-color:#203749;color:#203749}
+#introduction .story-loop-chapters button:hover{border-color:#203749}
+#introduction .story-loop-chapters button:focus-visible{outline:2px solid #203749;outline-offset:4px}
+#introduction .story-loop-chapters small{font:400 12px/1.5 Arial,sans-serif;color:#62727d}
+body #introduction.intro-story .story-loop-guide{font-size:13px!important;line-height:1.6!important;margin:16px 0 0!important}
 #introduction .story-loop-figure figcaption a{color:#203749;text-underline-offset:3px;display:inline-block;margin-top:5px}
 #introduction .story-benchmark-layout{display:grid;grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr);gap:64px;margin:36px 0 44px}
 #introduction .story-scope-number{display:flex;align-items:baseline;gap:14px}
@@ -66,6 +69,5 @@ body #overview .benchmark-facts{display:none!important}
 @media(max-width:1000px){#introduction .story-split{gap:32px}#introduction .story-loop .story-split{grid-template-columns:1fr;gap:32px}#introduction .story-loop-figure{max-width:640px;margin-inline:auto!important}#introduction .story-benchmark-layout{gap:32px}#introduction .story-view-grid{gap:24px}}
 @media(max-width:700px){#introduction .story-motivation-layout{grid-template-columns:1fr}#introduction .story-task-media{max-width:520px}#introduction .story-benchmark-layout{grid-template-columns:1fr;gap:32px}#introduction .story-scope{max-width:360px}}
 @media(max-width:600px){body #introduction.intro-story{margin-top:32px!important}#introduction .story-panel{padding:40px 20px}#introduction .story-views{padding-top:8px}#introduction .story-kicker{font-size:10px;margin-bottom:12px}body #introduction.intro-story h2{font-size:28px!important}body #introduction.intro-story p,body #introduction .story-section-heading>p{font-size:16px!important;line-height:1.65!important}#introduction .story-section-heading{margin-bottom:28px}#introduction .story-view-grid{grid-template-columns:1fr;gap:28px}#introduction .story-view{padding-top:18px}body #introduction.intro-story .story-view h3{font-size:24px!important;margin-bottom:12px!important}body #introduction.intro-story .story-view p{margin-bottom:12px!important}#introduction .story-benchmark-layout{margin-top:28px}#introduction .story-evidence-flow{gap:12px}#introduction .story-evidence-flow li>span{font-size:13px}body #introduction.intro-story .story-evidence-flow p{font-size:12px!important}body #introduction.intro-story .story-comparison-note{font-size:13px!important}body #introduction.intro-story .story-scope p{font-size:14px!important}}
-@media(max-width:600px){#introduction .story-view-example{max-width:440px}#introduction .story-keyframe-caption{flex-wrap:wrap;gap:2px 8px}}
-@media(max-width:450px){#introduction .story-keyframes{grid-template-columns:1fr;gap:24px}}
+@media(max-width:600px){#introduction .story-view-example{max-width:440px}#introduction .story-loop-chapters{gap:14px}#introduction .story-loop-chapters button{font-size:13px}}
 @media(prefers-reduced-motion:reduce){#introduction *,#introduction *:before,#introduction *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from render_cases import card, case_md, cover, e
 from leaderboard import render as render_leaderboard
-from view_leaderboard import render as render_view_leaderboard
+from build_home_leaderboard_entry import main as build_home_leaderboard_entry
 from build_rollouts import build_rollouts
 from hero_demo import render as render_hero
 from task_previews import apply_previews
@@ -80,8 +80,6 @@ def main():
     page = (ROOT / 'scripts/showcase.html').read_text()
     page = page.replace('__RESEARCH_INTRO__', (ROOT / 'scripts/research_intro.html').read_text().replace('__INTRO_STORY__', render_intro_story()))
     page = page.replace('__CAPABILITY_MAP__', render_capability_map())
-    public_board = render_view_leaderboard()
-    page = page.replace('__VIEW_LEADERBOARD__', public_board)
     page = page.replace('__HERO_DEMO__', render_hero())
     page = page.replace('__ACADEMIC_COVER_CSS__', (ROOT / 'scripts/academic-cover.css').read_text())
     page = page.replace('__PROJECT_POLISH_CSS__', (ROOT / 'scripts/project-polish.css').read_text())
@@ -123,6 +121,7 @@ def main():
     page = apply_previews(page)
     page = apply_homepage(page)
     (ROOT / 'index.html').write_text(page, newline='\n')
+    build_home_leaderboard_entry()
     build_benchmark()
     build_leaderboard()
     print(f'Built {len(records)} cases, {videos} videos, {images} images.')

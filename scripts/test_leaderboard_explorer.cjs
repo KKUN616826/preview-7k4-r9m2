@@ -12,9 +12,8 @@ const shots = process.env.LEADERBOARD_SCREENSHOTS;
   const snapshot = JSON.parse(old.match(/<script[^>]*id="viewLeaderboardData"[^>]*>(.*?)<\/script>/s)[1]);
   assert.deepEqual(data.models, snapshot.models, 'Preserve every reported value, missing value, model and demo link');
   const homepage=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
-  const originalHomepage=execFileSync('git',['show','HEAD:index.html'],{cwd:path.join(__dirname,'..'),encoding:'utf8'});
-  const homePayload=s=>JSON.parse(s.match(/<script[^>]*id="viewLeaderboardData"[^>]*>(.*?)<\/script>/s)[1]);
-  assert.deepEqual(homePayload(homepage),homePayload(originalHomepage),'Homepage result snapshot remains unchanged');
+  assert.ok(!homepage.includes('id="viewLeaderboardData"'), 'Homepage directs readers to the standalone results');
+  assert.ok(homepage.includes('home-leaderboard-banner'), 'Homepage retains a visible leaderboard destination');
   const browser = await chromium.launch({headless:true, ...(process.env.CHROMIUM_EXECUTABLE?{executablePath:process.env.CHROMIUM_EXECUTABLE}:{})});
   try {
     const page = await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});

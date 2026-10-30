@@ -26,7 +26,7 @@ class Page(HTMLParser):
     def handle_data(self, data):
         if self.in_data == 'showcaseData': self.payload += data
         if self.in_data == 'leaderboardData': self.board_payload += data
-        if self.in_data == 'viewLeaderboardData': self.view_payload += data
+        if self.in_data in ('viewLeaderboardData', 'leaderboardExplorerData'): self.view_payload += data
 
 def main():
     records = json.loads((ROOT/'data/showcase-cases.json').read_text())
@@ -48,18 +48,19 @@ def main():
         if url.path: assert (ROOT/unquote(url.path)).is_file(), link
         elif url.fragment: assert unquote(url.fragment) in page.ids, link
     assert Counter(c['suite'] for c in records) == {'cognitive':5, 'motor':5, 'coupling':5}
-    from view_leaderboard import load as load_view_leaderboard
-    public_board = load_view_leaderboard()
-    assert json.loads(page.view_payload) == public_board
+    assert not page.view_payload, 'Homepage ranking table should be replaced by the destination banner'
+    assert 'home-leaderboard-banner' in content and 'href="leaderboard.html"' in content
+    from build_leaderboard import load as load_results
+    public_board = load_results()
     full = Page(); full.feed((ROOT / 'leaderboard.html').read_text())
-    assert json.loads(full.view_payload) == public_board
+    assert json.loads(full.view_payload) == public_board, 'Standalone results differ from their source snapshot'
     assert len(full.ids) == len(set(full.ids))
     for link in full.links:
         url = urlsplit(link)
         if url.scheme or url.netloc: continue
         if url.path: assert (ROOT / unquote(url.path)).is_file(), link
         elif url.fragment: assert unquote(url.fragment) in full.ids, link
-    print('PASS: shared three-view leaderboard, paradigm mappings, pending scores and full-page links')
+    print('PASS: homepage destination banner, standalone result snapshot and full-page links')
     board = load_leaderboard(records)
     assert json.loads(page.board_payload) == board, 'HTML leaderboard differs from source JSON'
     assert Counter(r['track'] for r in board['candidates']) == {'vla':5, 'coding':9}

@@ -1,0 +1,714 @@
+[
+  {
+    "task": "E",
+    "level": "easy",
+    "source": "media/task-demos/E/easy.mp4",
+    "time_seconds": 21.175,
+    "duration_seconds": 60.5,
+    "poster": "media/benchmark-overview/E-easy.jpg"
+  },
+  {
+    "task": "E",
+    "level": "medium",
+    "source": "media/task-demos/E/medium.mp4",
+    "time_seconds": 42.0,
+    "duration_seconds": 120.0,
+    "poster": "media/benchmark-overview/E-medium.jpg"
+  },
+  {
+    "task": "E",
+    "level": "hard",
+    "source": "media/task-demos/E/hard.mp4",
+    "time_seconds": 59.558,
+    "duration_seconds": 170.166667,
+    "poster": "media/benchmark-overview/E-hard.jpg"
+  },
+  {
+    "task": "F",
+    "level": "easy",
+    "source": "media/task-demos/F/easy.mp4",
+    "time_seconds": 5.915,
+    "duration_seconds": 16.9,
+    "poster": "media/benchmark-overview/F-easy.jpg"
+  },
+  {
+    "task": "F",
+    "level": "medium",
+    "source": "media/task-demos/F/medium.mp4",
+    "time_seconds": 9.648,
+    "duration_seconds": 27.566667,
+    "poster": "media/benchmark-overview/F-medium.jpg"
+  },
+  {
+    "task": "F",
+    "level": "hard",
+    "source": "media/task-demos/F/hard.mp4",
+    "time_seconds": 11.597,
+    "duration_seconds": 33.133333,
+    "poster": "media/benchmark-overview/F-hard.jpg"
+  },
+  {
+    "task": "P",
+    "level": "easy",
+    "source": "media/task-demos/P/easy.mp4",
+    "time_seconds": 16.228,
+    "duration_seconds": 46.366667,
+    "poster": "media/benchmark-overview/P-easy.jpg"
+  },
+  {
+    "task": "P",
+    "level": "medium",
+    "source": "media/task-demos/P/medium.mp4",
+    "time_seconds": 20.067,
+    "duration_seconds": 57.333333,
+    "poster": "media/benchmark-overview/P-medium.jpg"
+  },
+  {
+    "task": "P",
+    "level": "hard",
+    "source": "media/task-demos/P/hard.mp4",
+    "time_seconds": 26.705,
+    "duration_seconds": 76.3,
+    "poster": "media/benchmark-overview/P-hard.jpg"
+  },
+  {
+    "task": "S",
+    "level": "easy",
+    "source": "media/task-demos/S/easy.mp4",
+    "time_seconds": 22.68,
+    "duration_seconds": 64.8,
+    "poster": "media/benchmark-overview/S-easy.jpg"
+  },
+  {
+    "task": "S",
+    "level": "medium",
+    "source": "media/task-demos/S/medium.mp4",
+    "time_seconds": 25.2,
+    "duration_seconds": 72.0,
+    "poster": "media/benchmark-overview/S-medium.jpg"
+  },
+  {
+    "task": "S",
+    "level": "hard",
+    "source": "media/task-demos/S/hard.mp4",
+    "time_seconds": 25.34,
+    "duration_seconds": 72.4,
+    "poster": "media/benchmark-overview/S-hard.jpg"
+  },
+  {
+    "task": "M",
+    "level": "easy",
+    "source": "media/task-demos/M/easy.mp4",
+    "time_seconds": 26.075,
+    "duration_seconds": 74.5,
+    "poster": "media/benchmark-overview/M-easy.jpg"
+  },
+  {
+    "task": "M",
+    "level": "medium",
+    "source": "media/task-demos/M/medium.mp4",
+    "time_seconds": 31.488,
+    "duration_seconds": 89.966667,
+    "poster": "media/benchmark-overview/M-medium.jpg"
+  },
+  {
+    "task": "M",
+    "level": "hard",
+    "source": "media/task-demos/M/hard.mp4",
+    "time_seconds": 34.872,
+    "duration_seconds": 99.633333,
+    "poster": "media/benchmark-overview/M-hard.jpg"
+  },
+  {
+    "task": "E2",
+    "level": "easy",
+    "source": "media/task-demos/E2/easy.mp4",
+    "time_seconds": 8.108,
+    "duration_seconds": 23.166667,
+    "poster": "media/benchmark-overview/E2-easy.jpg"
+  },
+  {
+    "task": "E2",
+    "level": "medium",
+    "source": "media/task-demos/E2/medium.mp4",
+    "time_seconds": 10.762,
+    "duration_seconds": 30.75,
+    "poster": "media/benchmark-overview/E2-medium.jpg"
+  },
+  {
+    "task": "F2",
+    "level": "easy",
+    "source": "media/task-demos/F2/easy.mp4",
+    "time_seconds": 66.768,
+    "duration_seconds": 190.766667,
+    "poster": "media/benchmark-overview/F2-easy.jpg"
+  },
+  {
+    "task": "F2",
+    "level": "medium",
+    "source": "media/task-demos/F2/medium.mp4",
+    "time_seconds": 46.468,
+    "duration_seconds": 132.766667,
+    "poster": "media/benchmark-overview/F2-medium.jpg"
+  },
+  {
+    "task": "F2",
+    "level": "hard",
+    "source": "media/task-demos/F2/hard.mp4",
+    "time_seconds": 123.305,
+    "duration_seconds": 352.3,
+    "poster": "media/benchmark-overview/F2-hard.jpg"
+  },
+  {
+    "task": "P2",
+    "level": "easy",
+    "source": "media/task-demos/P2/easy.mp4",
+    "time_seconds": 18.585,
+    "duration_seconds": 53.1,
+    "poster": "media/benchmark-overview/P2-easy.jpg"
+  },
+  {
+    "task": "P2",
+    "level": "medium",
+    "source": "media/task-demos/P2/medium.mp4",
+    "time_seconds": 22.33,
+    "duration_seconds": 63.8,
+    "poster": "media/benchmark-overview/P2-medium.jpg"
+  },
+  {
+    "task": "P2",
+    "level": "hard",
+    "source": "media/task-demos/P2/hard.mp4",
+    "time_seconds": 22.33,
+    "duration_seconds": 63.8,
+    "poster": "media/benchmark-overview/P2-hard.jpg"
+  },
+  {
+    "task": "S2",
+    "level": "easy",
+    "source": "media/task-demos/S2/easy.mp4",
+    "time_seconds": 7.502,
+    "duration_seconds": 21.433333,
+    "poster": "media/benchmark-overview/S2-easy.jpg"
+  },
+  {
+    "task": "S2",
+    "level": "medium",
+    "source": "media/task-demos/S2/medium.mp4",
+    "time_seconds": 11.083,
+    "duration_seconds": 31.666667,
+    "poster": "media/benchmark-overview/S2-medium.jpg"
+  },
+  {
+    "task": "S2",
+    "level": "hard",
+    "source": "media/task-demos/S2/hard.mp4",
+    "time_seconds": 14.945,
+    "duration_seconds": 42.7,
+    "poster": "media/benchmark-overview/S2-hard.jpg"
+  },
+  {
+    "task": "M2",
+    "level": "easy",
+    "source": "media/task-demos/M2/easy.mp4",
+    "time_seconds": 9.852,
+    "duration_seconds": 28.15,
+    "poster": "media/benchmark-overview/M2-easy.jpg"
+  },
+  {
+    "task": "M2",
+    "level": "medium",
+    "source": "media/task-demos/M2/medium.mp4",
+    "time_seconds": 28.14,
+    "duration_seconds": 80.4,
+    "poster": "media/benchmark-overview/M2-medium.jpg"
+  },
+  {
+    "task": "M2",
+    "level": "hard",
+    "source": "media/task-demos/M2/hard.mp4",
+    "time_seconds": 54.88,
+    "duration_seconds": 156.8,
+    "poster": "media/benchmark-overview/M2-hard.jpg"
+  },
+  {
+    "task": "FR1",
+    "level": "easy",
+    "source": "media/task-demos/FR1/easy.mp4",
+    "time_seconds": 8.038,
+    "duration_seconds": 22.966667,
+    "poster": "media/benchmark-overview/FR1-easy.jpg"
+  },
+  {
+    "task": "FR1",
+    "level": "medium",
+    "source": "media/task-demos/FR1/medium.mp4",
+    "time_seconds": 9.718,
+    "duration_seconds": 27.766667,
+    "poster": "media/benchmark-overview/FR1-medium.jpg"
+  },
+  {
+    "task": "FR1",
+    "level": "hard",
+    "source": "media/task-demos/FR1/hard.mp4",
+    "time_seconds": 12.623,
+    "duration_seconds": 36.066667,
+    "poster": "media/benchmark-overview/FR1-hard.jpg"
+  },
+  {
+    "task": "FR2",
+    "level": "easy",
+    "source": "media/task-demos/FR2/easy.mp4",
+    "time_seconds": 5.367,
+    "duration_seconds": 15.333333,
+    "poster": "media/benchmark-overview/FR2-easy.jpg"
+  },
+  {
+    "task": "FR2",
+    "level": "medium",
+    "source": "media/task-demos/FR2/medium.mp4",
+    "time_seconds": 5.915,
+    "duration_seconds": 16.9,
+    "poster": "media/benchmark-overview/FR2-medium.jpg"
+  },
+  {
+    "task": "FR2",
+    "level": "hard",
+    "source": "media/task-demos/FR2/hard.mp4",
+    "time_seconds": 5.11,
+    "duration_seconds": 14.6,
+    "poster": "media/benchmark-overview/FR2-hard.jpg"
+  },
+  {
+    "task": "PR1",
+    "level": "easy",
+    "source": "media/task-demos/PR1/easy.mp4",
+    "time_seconds": 4.188,
+    "duration_seconds": 11.966667,
+    "poster": "media/benchmark-overview/PR1-easy.jpg"
+  },
+  {
+    "task": "PR1",
+    "level": "medium",
+    "source": "media/task-demos/PR1/medium.mp4",
+    "time_seconds": 3.64,
+    "duration_seconds": 10.4,
+    "poster": "media/benchmark-overview/PR1-medium.jpg"
+  },
+  {
+    "task": "PR1",
+    "level": "hard",
+    "source": "media/task-demos/PR1/hard.mp4",
+    "time_seconds": 4.293,
+    "duration_seconds": 12.266667,
+    "poster": "media/benchmark-overview/PR1-hard.jpg"
+  },
+  {
+    "task": "PR2",
+    "level": "easy",
+    "source": "media/task-demos/PR2/easy.mp4",
+    "time_seconds": 7.163,
+    "duration_seconds": 20.466667,
+    "poster": "media/benchmark-overview/PR2-easy.jpg"
+  },
+  {
+    "task": "PR2",
+    "level": "medium",
+    "source": "media/task-demos/PR2/medium.mp4",
+    "time_seconds": 7.152,
+    "duration_seconds": 20.433333,
+    "poster": "media/benchmark-overview/PR2-medium.jpg"
+  },
+  {
+    "task": "PR2",
+    "level": "hard",
+    "source": "media/task-demos/PR2/hard.mp4",
+    "time_seconds": 6.778,
+    "duration_seconds": 19.366667,
+    "poster": "media/benchmark-overview/PR2-hard.jpg"
+  },
+  {
+    "task": "PR3",
+    "level": "easy",
+    "source": "media/task-demos/PR3/easy.mp4",
+    "time_seconds": 8.587,
+    "duration_seconds": 24.533333,
+    "poster": "media/benchmark-overview/PR3-easy.jpg"
+  },
+  {
+    "task": "PR3",
+    "level": "medium",
+    "source": "media/task-demos/PR3/medium.mp4",
+    "time_seconds": 8.633,
+    "duration_seconds": 24.666667,
+    "poster": "media/benchmark-overview/PR3-medium.jpg"
+  },
+  {
+    "task": "PR3",
+    "level": "hard",
+    "source": "media/task-demos/PR3/hard.mp4",
+    "time_seconds": 8.61,
+    "duration_seconds": 24.6,
+    "poster": "media/benchmark-overview/PR3-hard.jpg"
+  },
+  {
+    "task": "PR4",
+    "level": "easy",
+    "source": "media/task-demos/PR4/easy.mp4",
+    "time_seconds": 12.285,
+    "duration_seconds": 35.1,
+    "poster": "media/benchmark-overview/PR4-easy.jpg"
+  },
+  {
+    "task": "PR4",
+    "level": "medium",
+    "source": "media/task-demos/PR4/medium.mp4",
+    "time_seconds": 11.013,
+    "duration_seconds": 31.466667,
+    "poster": "media/benchmark-overview/PR4-medium.jpg"
+  },
+  {
+    "task": "PR4",
+    "level": "hard",
+    "source": "media/task-demos/PR4/hard.mp4",
+    "time_seconds": 18.212,
+    "duration_seconds": 52.033333,
+    "poster": "media/benchmark-overview/PR4-hard.jpg"
+  },
+  {
+    "task": "PR5",
+    "level": "easy",
+    "source": "media/task-demos/PR5/easy.mp4",
+    "time_seconds": 4.503,
+    "duration_seconds": 12.866667,
+    "poster": "media/benchmark-overview/PR5-easy.jpg"
+  },
+  {
+    "task": "PR5",
+    "level": "medium",
+    "source": "media/task-demos/PR5/medium.mp4",
+    "time_seconds": 4.76,
+    "duration_seconds": 13.6,
+    "poster": "media/benchmark-overview/PR5-medium.jpg"
+  },
+  {
+    "task": "PR5",
+    "level": "hard",
+    "source": "media/task-demos/PR5/hard.mp4",
+    "time_seconds": 4.515,
+    "duration_seconds": 12.9,
+    "poster": "media/benchmark-overview/PR5-hard.jpg"
+  },
+  {
+    "task": "PR6",
+    "level": "easy",
+    "source": "media/task-demos/PR6/easy.mp4",
+    "time_seconds": 25.083,
+    "duration_seconds": 71.666667,
+    "poster": "media/benchmark-overview/PR6-easy.jpg"
+  },
+  {
+    "task": "PR6",
+    "level": "medium",
+    "source": "media/task-demos/PR6/medium.mp4",
+    "time_seconds": 32.748,
+    "duration_seconds": 93.566667,
+    "poster": "media/benchmark-overview/PR6-medium.jpg"
+  },
+  {
+    "task": "PR6",
+    "level": "hard",
+    "source": "media/task-demos/PR6/hard.mp4",
+    "time_seconds": 52.862,
+    "duration_seconds": 151.033333,
+    "poster": "media/benchmark-overview/PR6-hard.jpg"
+  },
+  {
+    "task": "DR3",
+    "level": "easy",
+    "source": "media/task-demos/DR3/easy.mp4",
+    "time_seconds": 8.202,
+    "duration_seconds": 23.433333,
+    "poster": "media/benchmark-overview/DR3-easy.jpg"
+  },
+  {
+    "task": "DR3",
+    "level": "medium",
+    "source": "media/task-demos/DR3/medium.mp4",
+    "time_seconds": 7.782,
+    "duration_seconds": 22.233333,
+    "poster": "media/benchmark-overview/DR3-medium.jpg"
+  },
+  {
+    "task": "DR3",
+    "level": "hard",
+    "source": "media/task-demos/DR3/hard.mp4",
+    "time_seconds": 13.242,
+    "duration_seconds": 37.833333,
+    "poster": "media/benchmark-overview/DR3-hard.jpg"
+  },
+  {
+    "task": "DR7",
+    "level": "easy",
+    "source": "media/task-demos/DR7/easy.mp4",
+    "time_seconds": 10.057,
+    "duration_seconds": 28.733333,
+    "poster": "media/benchmark-overview/DR7-easy.jpg"
+  },
+  {
+    "task": "DR7",
+    "level": "medium",
+    "source": "media/task-demos/DR7/medium.mp4",
+    "time_seconds": 9.52,
+    "duration_seconds": 27.2,
+    "poster": "media/benchmark-overview/DR7-medium.jpg"
+  },
+  {
+    "task": "DR7",
+    "level": "hard",
+    "source": "media/task-demos/DR7/hard.mp4",
+    "time_seconds": 9.298,
+    "duration_seconds": 26.566667,
+    "poster": "media/benchmark-overview/DR7-hard.jpg"
+  },
+  {
+    "task": "CP01",
+    "level": "easy",
+    "source": "media/task-demos/CP01/easy.mp4",
+    "time_seconds": 20.09,
+    "duration_seconds": 57.4,
+    "poster": "media/benchmark-overview/CP01-easy.jpg"
+  },
+  {
+    "task": "CP01",
+    "level": "medium",
+    "source": "media/task-demos/CP01/medium.mp4",
+    "time_seconds": 37.73,
+    "duration_seconds": 107.8,
+    "poster": "media/benchmark-overview/CP01-medium.jpg"
+  },
+  {
+    "task": "CP01",
+    "level": "hard",
+    "source": "media/task-demos/CP01/hard.mp4",
+    "time_seconds": 48.965,
+    "duration_seconds": 139.9,
+    "poster": "media/benchmark-overview/CP01-hard.jpg"
+  },
+  {
+    "task": "CP02",
+    "level": "easy",
+    "source": "media/task-demos/CP02/easy.mp4",
+    "time_seconds": 19.402,
+    "duration_seconds": 55.433333,
+    "poster": "media/benchmark-overview/CP02-easy.jpg"
+  },
+  {
+    "task": "CP02",
+    "level": "medium",
+    "source": "media/task-demos/CP02/medium.mp4",
+    "time_seconds": 32.317,
+    "duration_seconds": 92.333333,
+    "poster": "media/benchmark-overview/CP02-medium.jpg"
+  },
+  {
+    "task": "CP02",
+    "level": "hard",
+    "source": "media/task-demos/CP02/hard.mp4",
+    "time_seconds": 35.152,
+    "duration_seconds": 100.433333,
+    "poster": "media/benchmark-overview/CP02-hard.jpg"
+  },
+  {
+    "task": "CP03",
+    "level": "easy",
+    "source": "media/task-demos/CP03/easy.mp4",
+    "time_seconds": 29.622,
+    "duration_seconds": 84.633333,
+    "poster": "media/benchmark-overview/CP03-easy.jpg"
+  },
+  {
+    "task": "CP03",
+    "level": "medium",
+    "source": "media/task-demos/CP03/medium.mp4",
+    "time_seconds": 53.923,
+    "duration_seconds": 154.066667,
+    "poster": "media/benchmark-overview/CP03-medium.jpg"
+  },
+  {
+    "task": "CP03",
+    "level": "hard",
+    "source": "media/task-demos/CP03/hard.mp4",
+    "time_seconds": 65.812,
+    "duration_seconds": 188.033333,
+    "poster": "media/benchmark-overview/CP03-hard.jpg"
+  },
+  {
+    "task": "CP04",
+    "level": "easy",
+    "source": "media/task-demos/CP04/easy.mp4",
+    "time_seconds": 39.048,
+    "duration_seconds": 111.566667,
+    "poster": "media/benchmark-overview/CP04-easy.jpg"
+  },
+  {
+    "task": "CP04",
+    "level": "medium",
+    "source": "media/task-demos/CP04/medium.mp4",
+    "time_seconds": 43.342,
+    "duration_seconds": 123.833333,
+    "poster": "media/benchmark-overview/CP04-medium.jpg"
+  },
+  {
+    "task": "CP04",
+    "level": "hard",
+    "source": "media/task-demos/CP04/hard.mp4",
+    "time_seconds": 56.793,
+    "duration_seconds": 162.266667,
+    "poster": "media/benchmark-overview/CP04-hard.jpg"
+  },
+  {
+    "task": "CP05",
+    "level": "easy",
+    "source": "media/task-demos/CP05/easy.mp4",
+    "time_seconds": 21.723,
+    "duration_seconds": 62.066667,
+    "poster": "media/benchmark-overview/CP05-easy.jpg"
+  },
+  {
+    "task": "CP05",
+    "level": "medium",
+    "source": "media/task-demos/CP05/medium.mp4",
+    "time_seconds": 25.433,
+    "duration_seconds": 72.666667,
+    "poster": "media/benchmark-overview/CP05-medium.jpg"
+  },
+  {
+    "task": "CP05",
+    "level": "hard",
+    "source": "media/task-demos/CP05/hard.mp4",
+    "time_seconds": 41.988,
+    "duration_seconds": 119.966667,
+    "poster": "media/benchmark-overview/CP05-hard.jpg"
+  },
+  {
+    "task": "CP06",
+    "level": "easy",
+    "source": "media/task-demos/CP06/easy.mp4",
+    "time_seconds": 8.832,
+    "duration_seconds": 25.233333,
+    "poster": "media/benchmark-overview/CP06-easy.jpg"
+  },
+  {
+    "task": "CP06",
+    "level": "medium",
+    "source": "media/task-demos/CP06/medium.mp4",
+    "time_seconds": 13.242,
+    "duration_seconds": 37.833333,
+    "poster": "media/benchmark-overview/CP06-medium.jpg"
+  },
+  {
+    "task": "CP06",
+    "level": "hard",
+    "source": "media/task-demos/CP06/hard.mp4",
+    "time_seconds": 16.24,
+    "duration_seconds": 46.4,
+    "poster": "media/benchmark-overview/CP06-hard.jpg"
+  },
+  {
+    "task": "CP07",
+    "level": "easy",
+    "source": "media/task-demos/CP07/easy.mp4",
+    "time_seconds": 75.512,
+    "duration_seconds": 215.75,
+    "poster": "media/benchmark-overview/CP07-easy.jpg"
+  },
+  {
+    "task": "CP07",
+    "level": "medium",
+    "source": "media/task-demos/CP07/medium.mp4",
+    "time_seconds": 118.825,
+    "duration_seconds": 339.5,
+    "poster": "media/benchmark-overview/CP07-medium.jpg"
+  },
+  {
+    "task": "CP07",
+    "level": "hard",
+    "source": "media/task-demos/CP07/hard.mp4",
+    "time_seconds": 120.557,
+    "duration_seconds": 344.45,
+    "poster": "media/benchmark-overview/CP07-hard.jpg"
+  },
+  {
+    "task": "CP08",
+    "level": "easy",
+    "source": "media/task-demos/CP08/easy.mp4",
+    "time_seconds": 13.02,
+    "duration_seconds": 37.2,
+    "poster": "media/benchmark-overview/CP08-easy.jpg"
+  },
+  {
+    "task": "CP08",
+    "level": "medium",
+    "source": "media/task-demos/CP08/medium.mp4",
+    "time_seconds": 16.695,
+    "duration_seconds": 47.7,
+    "poster": "media/benchmark-overview/CP08-medium.jpg"
+  },
+  {
+    "task": "CP08",
+    "level": "hard",
+    "source": "media/task-demos/CP08/hard.mp4",
+    "time_seconds": 26.938,
+    "duration_seconds": 76.966667,
+    "poster": "media/benchmark-overview/CP08-hard.jpg"
+  },
+  {
+    "task": "CP09",
+    "level": "easy",
+    "source": "media/task-demos/CP09/easy.mp4",
+    "time_seconds": 33.495,
+    "duration_seconds": 95.7,
+    "poster": "media/benchmark-overview/CP09-easy.jpg"
+  },
+  {
+    "task": "CP09",
+    "level": "medium",
+    "source": "media/task-demos/CP09/medium.mp4",
+    "time_seconds": 59.103,
+    "duration_seconds": 168.866667,
+    "poster": "media/benchmark-overview/CP09-medium.jpg"
+  },
+  {
+    "task": "CP09",
+    "level": "hard",
+    "source": "media/task-demos/CP09/hard.mp4",
+    "time_seconds": 93.182,
+    "duration_seconds": 266.233333,
+    "poster": "media/benchmark-overview/CP09-hard.jpg"
+  },
+  {
+    "task": "CP10",
+    "level": "easy",
+    "source": "media/task-demos/CP10/easy.mp4",
+    "time_seconds": 18.748,
+    "duration_seconds": 53.566667,
+    "poster": "media/benchmark-overview/CP10-easy.jpg"
+  },
+  {
+    "task": "CP10",
+    "level": "medium",
+    "source": "media/task-demos/CP10/medium.mp4",
+    "time_seconds": 26.343,
+    "duration_seconds": 75.266667,
+    "poster": "media/benchmark-overview/CP10-medium.jpg"
+  },
+  {
+    "task": "CP10",
+    "level": "hard",
+    "source": "media/task-demos/CP10/hard.mp4",
+    "time_seconds": 26.04,
+    "duration_seconds": 74.4,
+    "poster": "media/benchmark-overview/CP10-hard.jpg"
+  }
+]

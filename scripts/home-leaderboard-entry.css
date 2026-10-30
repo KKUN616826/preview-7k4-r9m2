@@ -1,0 +1,15 @@
+/* Homepage invitation: keep the ranking interface on the dedicated page. */
+body main #top-ten.home-leaderboard-entry{width:min(1400px,calc(100% - 80px))!important;max-width:1400px!important;margin:32px auto!important;padding:0!important;border:0!important;scroll-margin-top:100px}
+.home-leaderboard-banner{position:relative;isolation:isolate;overflow:hidden;min-height:300px;border-radius:6px;background:#f4f2e9}
+.home-leaderboard-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 54%;z-index:-2}
+.home-leaderboard-banner:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#f8f7f1 0%,#f8f7f1f7 20%,#f8f7f1df 28%,#f8f7f166 43%,#f8f7f100 60%);pointer-events:none}
+.home-leaderboard-copy{padding:32px;max-width:440px}
+body #top-ten .home-leaderboard-label{font:600 11px/1.4 Arial,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#536e76;margin:0 0 12px}
+body #top-ten #home-leaderboard-title{font:650 clamp(28px,2.7vw,38px)/1.12 'Space Grotesk',Arial,sans-serif!important;letter-spacing:-.8px;color:#203b4c;margin:0 0 14px}
+body #top-ten .home-leaderboard-description{font:400 15px/1.6 Arial,sans-serif;color:#425f6b;margin:0 0 18px}
+body #top-ten .home-leaderboard-button{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-height:46px;padding:11px 20px;border:1px solid #4e7c70;border-radius:3px;background:#4e7c70;color:#fff;font:600 15px/1.5 Arial,sans-serif;text-decoration:none;transition:background .2s,border-color .2s}
+.home-leaderboard-button span{transition:transform .2s}
+@media(hover:hover){body #top-ten .home-leaderboard-button:hover{background:#3d685d;border-color:#3d685d}.home-leaderboard-button:hover span{transform:translateX(3px)}}
+.home-leaderboard-button:focus-visible{outline:3px solid #a07b30;outline-offset:4px}
+@media(max-width:700px){body main #top-ten.home-leaderboard-entry{width:calc(100% - 32px)!important;margin:24px auto!important}.home-leaderboard-banner{min-height:410px}.home-leaderboard-copy{padding:25px 24px;max-width:none}.home-leaderboard-art{object-position:60% 100%;height:62%;top:auto}.home-leaderboard-banner:before{background:linear-gradient(180deg,#f8f7f1 0%,#f8f7f1 40%,#f8f7f1db 53%,#f8f7f100 75%)}body #top-ten #home-leaderboard-title{font-size:30px!important}body #top-ten .home-leaderboard-description{font-size:14px;margin-bottom:16px}}
+@media(prefers-reduced-motion:reduce){.home-leaderboard-button,.home-leaderboard-button span{transition:none}.home-leaderboard-button:hover span{transform:none}}

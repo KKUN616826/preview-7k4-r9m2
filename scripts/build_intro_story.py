@@ -8,7 +8,7 @@ def render():
     paragraphs=re.findall(r'<p>.*?</p>',(ROOT/'scripts/intro-story-background.html').read_text(),re.S)
     assert len(paragraphs)==3
     for name,value in {'TASK_COUNT':str(count),'OVERVIEW_FIGURE':(ROOT/'scripts/intro-story-figure.html').read_text(),'RESEARCH_MOTIVATION':paragraphs[0]}.items():markup=markup.replace('__'+name+'__',value)
-    for asset in ['scripts/intro-story.css','scripts/intro-story.js']:
+    for asset in ['scripts/intro-story.css','scripts/intro-story.js','scripts/intro-typography.css']:
         markup=markup.replace(asset+'"',asset+'?v='+hashlib.sha256((ROOT/asset).read_bytes()).hexdigest()[:10]+'"')
     return markup.rstrip("\r\n")+"\n"
 if __name__=='__main__':

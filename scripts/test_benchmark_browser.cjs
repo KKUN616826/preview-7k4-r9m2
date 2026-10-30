@@ -17,16 +17,32 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(new URL('benchmark.html', base).href);
     await page.evaluate(() => document.fonts.ready);
-    assert.equal(await page.locator('.workspace-sidebar .workspace-case-list a').count(), taskCount);
-    assert.equal(await page.locator('.workspace-sidebar a[aria-current=page]').textContent(), 'Overview');
-    assert.equal(await page.locator('.workspace-task-index li').count(), taskCount);
+    assert.equal(await page.locator('.bo-chapter').count(), taskCount);
+    assert.equal(await page.locator('.bo-suite:not([hidden])').getAttribute('id'), 'suite-mind2act');
+    await page.locator('#task-CP01 select').selectOption('medium');
+    assert.match(await page.locator('#video-CP01').getAttribute('src'), /CP01\/medium.mp4$/);
+    assert.match(await page.locator('#task-CP01 .bo-task-detail').getAttribute('href'), /#medium$/);
+    await page.locator('#tab-mind').click();
+    assert.equal(await page.locator('#task-E2 option[value=hard]').isDisabled(), true);
+    await page.locator('#tab-mind').press('ArrowRight');
+    assert.equal(await page.locator('#tab-act').getAttribute('aria-selected'), 'true');
+    await page.locator('.bo-index [data-index-task=CP05]').click();
+    assert.equal(await page.locator('.bo-index [data-index-task=CP05]').getAttribute('aria-current'), 'location');
+    await page.locator('#task-CP05 select').selectOption('medium');
+    await page.locator('#task-CP05 [data-expand]').click();
+    await page.locator('.bo-video-dialog').waitFor({state:'visible'});
+    assert.match(await page.locator('.bo-expanded-video').getAttribute('src'), /CP05\/medium.mp4$/);
+    await page.getByRole('button', {name:'Close expanded video'}).press('Escape');
+    await page.locator('.bo-video-dialog').waitFor({state:'hidden'});
+    assert.equal(await page.locator('#task-CP05 [data-expand]').evaluate(el=>el===document.activeElement), true);
+    await page.goto(new URL('benchmark/mind.html', base).href);
 
     // Collapsing a group must not navigate. Clicking its name must navigate.
     const toggle = page.locator('.workspace-sidebar [data-group="act"] button');
     await toggle.click();
     assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
-    assert.ok(page.url().endsWith('/benchmark.html'));
-    await page.locator('.workspace-sidebar .workspace-group-row a[href="benchmark/mind.html"]').click();
+    assert.ok(page.url().endsWith('/benchmark/mind.html'));
+    await page.locator('.workspace-sidebar .workspace-group-row a[href="../benchmark/mind.html"]').click();
     assert.ok(page.url().endsWith('/benchmark/mind.html'));
     assert.equal(await page.locator('.benchmark-task-row').count(), suites[0].cases.length);
     assert.equal(await page.locator('.workspace-sidebar [data-group="act"] button').getAttribute('aria-expanded'), 'false');
@@ -57,7 +73,7 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     for (const relative of paths) {
       const response = await page.goto(new URL(relative, base).href);
       assert.equal(response.status(), 200, relative);
-      assert.equal(await page.locator('.workspace-sidebar a[aria-current=page]').count(), 1, relative);
+      assert.equal(await page.locator(relative === 'benchmark.html' ? '.bo-suite-tabs [aria-selected=true]' : '.workspace-sidebar a[aria-current=page]').count(), 1, relative);
       const assets = await page.locator('link[rel=stylesheet],img,video source').evaluateAll(elements =>
         elements.map(el => el.href || el.src).filter(url => url.startsWith(location.origin)));
       for (const asset of new Set(assets)) {

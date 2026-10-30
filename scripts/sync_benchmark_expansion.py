@@ -30,7 +30,7 @@ def apply_homepage(source):
     source=re.sub(r'<section class="academic-section" id="tasks">.*?</section>',update_wall,source,count=1,flags=re.S)
     source=source.replace('Explore all 15 task descriptions',f'Explore all {total} task descriptions')
     notice='<p class="expansion-result-scope">Results shown here preserve the original 15-task snapshot. Results for the added tasks have not been reported.</p>'
-    if 'expansion-result-scope' not in source:
+    if 'expansion-result-scope' not in source and 'home-leaderboard-banner' not in source:
         source=re.sub(r'(<section[^>]+id="top-ten"[^>]*>.*?</h2>)',lambda m:m[1]+notice,source,count=1,flags=re.S)
     return source
 

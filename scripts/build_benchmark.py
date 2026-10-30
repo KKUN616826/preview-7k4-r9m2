@@ -50,27 +50,8 @@ def card(case, prefix):
 
 
 def overview(suites):
-    total = sum(len(s['cases']) for s in suites)
-    parts = ['<div class="workspace-page-head"><p class="workspace-kicker">Task explorer</p>'
-             '<h1>Benchmark</h1><p class="benchmark-description">Explore task reasoning, physical execution, '
-             'and how they work together in closed-loop robotic manipulation.</p>'
-             f'<p class="workspace-meta">{total} tasks <span>·</span> 3 capability suites <span>·</span> Easy / Medium / Hard</p></div>',
-             '<section class="workspace-section" aria-labelledby="capabilities-title">'
-             '<h2 id="capabilities-title">Three views of robot capability</h2><div class="workspace-suites">']
-    for suite in suites:
-        parts.append(f'<a class="workspace-suite-link" href="benchmark/{suite["slug"]}.html">'
-                     f'<h3>{suite["name"]}</h3><p class="workspace-suite-label">{suite["label"]}</p>'
-                     f'<p>{suite["description"]}</p><span>Explore {len(suite["cases"])} tasks →</span></a>')
-    parts.append('</div></section><section class="workspace-section" aria-labelledby="all-tasks-title">'
-                 f'<h2 id="all-tasks-title">All {total} tasks</h2>')
-    for suite in suites:
-        parts.append(f'<div class="workspace-task-index"><h3><a href="benchmark/{suite["slug"]}.html">{suite["name"]} →</a></h3><ul>')
-        for case in suite['cases']:
-            parts.append(f'<li><a href="tasks/{case["id"]}.html"><span class="workspace-case-id">{case["id"]}</span>'
-                         f'<span>{e(case["title"])}</span><span aria-hidden="true">→</span></a></li>')
-        parts.append('</ul></div>')
-    parts.append('</section>')
-    return ''.join(parts)
+    from benchmark_overview import render
+    return render(suites)
 
 
 def category(suite):
@@ -113,12 +94,15 @@ def detail(suite, case):
 
 
 def page(suites, current, title, content, prefix='', is_detail=False):
+    if current == 'overview':
+        from benchmark_overview import document
+        return document(content)
     header = (ROOT / 'scripts/benchmark/header.html').read_text()
     header = re.sub(r'(href|src)="(?!https?:|#)([^"]+)"',
                     lambda m: f'{m[1]}="{prefix}{m[2]}"', header)
     nav = navigation(suites, current, prefix)
     styles = ''.join(f'<link rel="stylesheet" href="{prefix}{name}">' for name in [
-        'tasks/task-pages.css', 'media/site-shell.css?v=unified-1',
+        'tasks/task-pages.css', 'media/site-shell.css?v=white-canvas-1',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
         'tasks/benchmark-workspace.css?v=1',
@@ -141,10 +125,13 @@ def page(suites, current, title, content, prefix='', is_detail=False):
             f'<script src="{prefix}scripts/site-shell.js?v=unified-1" defer></script></body></html>\n')
 
 
-def main():
+def main(overview_only=False):
     suites = json.loads((ROOT / 'data/benchmark-navigation.json').read_text())
     (ROOT / 'benchmark').mkdir(exist_ok=True)
     (ROOT / 'benchmark.html').write_text(page(suites, 'overview', 'Benchmark', overview(suites)))
+    if overview_only:
+        print('Built Benchmark landing page only.')
+        return
     for suite in suites:
         (ROOT / f'benchmark/{suite["slug"]}.html').write_text(
             page(suites, suite['slug'], suite['name'], category(suite), '../'))
@@ -155,4 +142,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--overview-only', action='store_true', help='Rebuild benchmark.html only')
+    main(overview_only=parser.parse_args().overview_only)

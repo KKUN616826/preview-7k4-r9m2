@@ -1,6 +1,6 @@
 @font-face{font-family:Sora;src:url('../media/fonts/Sora-variable.ttf');font-weight:100 800;font-display:swap}
 *{box-sizing:border-box}
-body.leaderboard-explorer{--lb-header:88px;margin:0;background:#faf9f4;color:#203447;font:16px/1.65 Arial,sans-serif}
+body.leaderboard-explorer{--lb-header:88px;margin:0;background:#ffffff;color:#203447;font:16px/1.65 Arial,sans-serif}
 body.leaderboard-explorer .header .header-inner{flex-direction:row!important}
 .lb-page{max-width:1600px;margin:0 auto;padding:48px 40px 36px}
 .lb-page a{color:#315f72;text-underline-offset:4px}

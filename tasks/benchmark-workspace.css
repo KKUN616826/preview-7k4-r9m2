@@ -1,5 +1,5 @@
 /* Benchmark navigation and layout. Card appearance and hover live in benchmark-catalog.css. */
-.benchmark-workspace{--workspace-header:88px;background:#faf9f4;color:#203447}
+.benchmark-workspace{--workspace-header:88px;background:#ffffff;color:#203447}
 body.benchmark-workspace .header .header-inner{flex-direction:row!important}
 .workspace-layout{display:grid;grid-template-columns:258px minmax(0,1fr);max-width:1600px;margin:0 auto;align-items:start}
 .workspace-sidebar{position:sticky;top:var(--workspace-header);height:calc(100dvh - var(--workspace-header));overflow:auto;overscroll-behavior:contain;padding:32px 18px 40px 24px;border-right:1px solid #d7ded8;scrollbar-width:thin;scrollbar-color:#c2cecb transparent}
@@ -61,16 +61,16 @@ body.benchmark-workspace.task-detail .instruction p{font-size:16px}
 body.benchmark-workspace.task-detail .task-footer{flex-wrap:wrap}
 body.benchmark-workspace.task-detail .task-footer a{max-width:36%}
 .workspace-mobile-bar{display:none}
-.workspace-skip{position:fixed;top:8px;left:20px;z-index:200;transform:translateY(-180%);padding:10px 18px;background:#faf9f4;border:2px solid #376b80;border-radius:5px}
+.workspace-skip{position:fixed;top:8px;left:20px;z-index:200;transform:translateY(-180%);padding:10px 18px;background:#ffffff;border:2px solid #376b80;border-radius:5px}
 .workspace-skip:focus{transform:none}
-#task-drawer{width:min(360px,calc(100% - 32px));height:100dvh;max-height:100dvh;margin:0 auto 0 0;padding:20px 18px 32px;border:0;border-right:1px solid #d7ded8;background:#faf9f4;color:#203447;overflow:auto}
+#task-drawer{width:min(360px,calc(100% - 32px));height:100dvh;max-height:100dvh;margin:0 auto 0 0;padding:20px 18px 32px;border:0;border-right:1px solid #d7ded8;background:#ffffff;color:#203447;overflow:auto}
 #task-drawer::backdrop{background:#102b3e66}
-.workspace-drawer-head{position:sticky;top:0;z-index:2;background:#faf9f4;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 20px;padding-bottom:8px}
+.workspace-drawer-head{position:sticky;top:0;z-index:2;background:#ffffff;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 20px;padding-bottom:8px}
 .workspace-drawer-head h2{font:600 18px Sora,Arial,sans-serif;margin:0}
 .workspace-drawer-head button,.workspace-mobile-bar button{border:1px solid #b9c9c5;border-radius:5px;background:transparent;color:#315f72;min-height:42px;padding:8px 12px;font:15px Arial,sans-serif;cursor:pointer}
 .workspace-drawer-head button:hover,.workspace-mobile-bar button:hover{background:#e3ebe5}
 [hidden]{display:none!important}
 @media(max-width:1200px){.workspace-layout{grid-template-columns:236px minmax(0,1fr)}body.benchmark-workspace main.workspace-content{padding:32px 28px 60px}.workspace-sidebar{padding-left:16px;padding-right:12px}.workspace-content .task-explanations{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-suites{gap:18px}.workspace-suite-link h3{font-size:23px}body.benchmark-workspace.task-detail .demo-layout{grid-template-columns:minmax(0,1fr)}body.benchmark-workspace.task-detail .brief{border-left:0;border-top:1px solid #d6dfd9}.workspace-task-index{grid-template-columns:110px minmax(0,1fr);gap:14px}}
 @media(max-width:1040px){.benchmark-workspace{--workspace-header:76px}}
-@media(max-width:850px){.workspace-layout{display:block}.workspace-sidebar{display:none}.workspace-mobile-bar{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid #d7ded8;background:#faf9f4}.workspace-mobile-bar>span{font-size:13px;line-height:1.4;color:#63737a;min-width:0}.workspace-mobile-bar button{flex-shrink:0}body.benchmark-workspace main.workspace-content{padding:28px 24px 50px}.workspace-suites{gap:24px}}
+@media(max-width:850px){.workspace-layout{display:block}.workspace-sidebar{display:none}.workspace-mobile-bar{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid #d7ded8;background:#ffffff}.workspace-mobile-bar>span{font-size:13px;line-height:1.4;color:#63737a;min-width:0}.workspace-mobile-bar button{flex-shrink:0}body.benchmark-workspace main.workspace-content{padding:28px 24px 50px}.workspace-suites{gap:24px}}
 @media(max-width:560px){body.benchmark-workspace main.workspace-content{padding:24px 20px 44px}.workspace-content .task-explanations{grid-template-columns:1fr}.workspace-suites{grid-template-columns:1fr;gap:14px}.workspace-suite-link{padding-bottom:20px}.workspace-suite-link .workspace-suite-label{min-height:0;margin-bottom:8px}.workspace-task-index{grid-template-columns:1fr;gap:0}.workspace-comparison>div{grid-template-columns:1fr;gap:5px}.workspace-content h2{font-size:21px}.workspace-page-head{margin-bottom:28px}.workspace-question p{font-size:17px}.workspace-mobile-bar{padding-inline:20px}body.benchmark-workspace.task-detail .task-footer a{max-width:100%}}

@@ -1,67 +1,42 @@
-const assert = require('node:assert/strict');
-const {chromium} = require('playwright');
-const {readFileSync} = require('node:fs');
-const plain = s => s.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-(async () => {
-  const browser = await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
-  try {
-    const page = await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
-    const errors = [];
-    page.on('pageerror', e => errors.push(e.message));
-    await page.goto('http://127.0.0.1:8765/index.html#introduction');
-    const root = page.locator('#introduction');
-    const paragraphs = readFileSync('scripts/intro-story-background.html','utf8').match(/<p>.*?<\/p>/gs);
-    const visibleCopy = plain(await root.innerText());
-    for (const i of [0]) assert.ok(visibleCopy.includes(plain(paragraphs[i])), 'original research paragraph visible');
-    assert.equal(await root.locator('details').count(), 0, 'core research needs no expansion');
-    assert.equal(await page.locator('.benchmark-facts').isVisible(), false, 'redundant statistic cards removed');
-    const taskImage = root.locator('.story-task-media img');
-    await taskImage.evaluate(i=>i.decode());
-    assert.equal(await root.locator('.story-task-media a').getAttribute('href'),'tasks/CP05.html#hard');
-    assert.equal(await root.locator('.story-evidence-flow li').count(),3);
-    const frames=root.locator('.story-view-art,.story-loop-art');
-    const sources=JSON.parse(readFileSync('media/research-frames/sources.json','utf8')).frames;
-    assert.equal(await frames.count(),7);
-    assert.equal(await root.locator('img[src*="research-illustrations"]').count(),0,'generated illustrations replaced');
-    assert.deepEqual(await frames.evaluateAll(images=>images.map(i=>i.getAttribute('src'))),sources.map(f=>f.image),'every frame has a recorded video source');
-    assert.deepEqual(await root.locator('.story-view-example').evaluateAll(links=>links.map(a=>a.getAttribute('href'))),['tasks/S.html#medium','tasks/PR3.html#medium','tasks/CP01.html#medium']);
-    for (const frame of await frames.all()) {
-      await frame.scrollIntoViewIfNeeded();
-      await frame.evaluate(e=>e.decode());
-      assert.ok(await frame.evaluate(e=>e.naturalWidth>=960),'full-resolution simulation frame loads');
-    }
-    const img = root.locator('.intro-overview img');
-    await img.scrollIntoViewIfNeeded();
-    await img.evaluate(i => i.decode());
-    for (const width of [320,390,820,1440,1920]) {
-      await page.setViewportSize({width,height:1000});
-      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'no horizontal overflow at '+width);
-      for (const frame of await frames.all()) {
-        const bounds=await frame.boundingBox();
-        assert.ok(bounds.width <= width, 'simulation frame fits at '+width);
-        const naturalRatio=await frame.evaluate(e=>e.naturalWidth/e.naturalHeight);
-        assert.ok(Math.abs(bounds.width/bounds.height-naturalRatio)<.01,'frame is not cropped or distorted');
-        assert.equal(await frame.evaluate(e=>getComputedStyle(e).filter),'none','original simulation colors');
-      }
-      const box = await img.boundingBox();
-      assert.ok(Math.abs(box.width/box.height - 2600/2113)<.01, 'overview aspect ratio');
-      const columns = await root.locator('.story-view-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length);
-      assert.equal(columns, width<=600 ? 1 : 3, 'evaluation views adapt at '+width);
-      const frameColumns=await root.locator('.story-keyframes').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length);
-      assert.equal(frameColumns,width<=450?1:2,'keyframes remain readable at '+width);
-    }
-    await page.setViewportSize({width:1440,height:1000});
-    await root.scrollIntoViewIfNeeded();
-    const before = await page.evaluate(()=>scrollY);
-    await page.mouse.move(700,400);
-    await page.mouse.wheel(0,260);
-    await page.waitForTimeout(400);
-    assert.ok(await page.evaluate(y=>scrollY>y+100,before), 'ordinary document scrolling');
-    await root.locator('.story-explore-link').click();
-    await page.waitForTimeout(300);
-    assert.equal(new URL(page.url()).hash, '#capability-explorer');
-    assert.equal(await page.locator('.cm-orbit-card').count(),30);
-    assert.deepEqual(errors,[]);
-    console.log('PASS: seven authentic video frames, original colors and aspect ratios, task links, research visible, responsive columns, no overflow at five widths, overview ratio, document scrolling, 30-task explorer link.');
-  } finally {await browser.close()}
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+const {execFileSync}=require('node:child_process');
+const plain=s=>s.replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
+(async()=>{
+ const original=execFileSync('git',['show','f0adf89:index.html'],{encoding:'utf8'});
+ const markup=original.match(/<div id="introduction" class="research-abstract".*?<\/div>/s)[0];
+ const paragraphs=markup.match(/<p>.*?<\/p>/gs);
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+ try{
+  const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('http://127.0.0.1:8765/index.html#introduction');
+  const root=page.locator('#introduction.research-abstract');
+  assert.equal(await root.count(),1);
+  const words=s=>s.toLowerCase().match(/[a-z0-9]+/g);
+  const copy=await root.locator('.intro-copy').evaluateAll(elements=>elements.map(e=>e.innerText).join(' '));
+  assert.deepEqual(words(copy),words(paragraphs.map(plain).join(' ')),'original research wording and order retained');
+  assert.equal(await root.locator('.intro-views dt').count(),3);
+  assert.deepEqual(await root.locator('.intro-views dt').allTextContents(),['Mind','Act','Mind2Act']);
+  assert.match(await root.locator('.intro-copy p').first().evaluate(e=>getComputedStyle(e).fontFamily),/^Helvetica/,'Helvetica typography applied');
+  assert.deepEqual(await root.evaluate(e=>[...e.querySelectorAll(':scope > div,:scope > figure')].map(c=>c.className)),['intro-copy intro-motivation','intro-copy intro-framework','intro-overview','intro-copy intro-scope'],'original narrative order retained');
+  assert.equal(await page.locator('link[href*="intro-story.css"],script[src*="intro-story.js"],.story-loop-video,.story-view-grid').count(),0,'experimental narrative layout is not loaded');
+  assert.equal(await root.locator('details').count(),0);
+  assert.equal(await root.locator('figure').count(),1);
+  assert.ok((await root.locator('figure a').getAttribute('href')).includes('mind2act-overview-v3.pdf'));
+  const image=root.locator('figure img');await image.scrollIntoViewIfNeeded();await image.evaluate(i=>i.decode());
+  for(const width of [320,390,820,1440,1920]){
+   await page.setViewportSize({width,height:1000});
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no overflow '+width);
+   const box=await image.boundingBox();assert.ok(box.width<=width&&Math.abs(box.width/box.height-2600/2113)<.01,'overview keeps its aspect ratio');
+   for(const paragraph of await root.locator('.intro-copy p,.intro-views dd').all())assert.equal(await paragraph.isVisible(),true);
+   assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)','white page canvas retained');
+  }
+  const textBox=await root.locator('.intro-copy').first().boundingBox(),figureBox=await image.boundingBox();
+  assert.ok(Math.abs(textBox.width-figureBox.width)<1&&Math.abs(textBox.x-figureBox.x)<1,'text and overview share width and alignment');
+  assert.equal(await root.locator('.intro-framework p').first().evaluate(e=>getComputedStyle(e).fontSize),'21px','larger desktop body text');
+  assert.equal(await page.locator('.cm-orbit-card').count(),30,'task explorer retained');
+  assert.deepEqual(errors,[]);
+  console.log('PASS original wording, Helvetica, semantic definitions, aligned text and media, overview/PDF, five responsive widths, white background and task explorer.');
+ }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -1,0 +1,24 @@
+/* Helvetica text aligned to the same column as the surrounding media. */
+body #introduction.research-abstract.intro-readable{font-family:Helvetica,Arial,sans-serif!important;font-size:21px!important;line-height:1.7!important;color:#425563!important;text-align:left!important;letter-spacing:0!important}
+body #introduction.intro-readable .intro-copy{width:100%;max-width:none;margin:0 auto;font-family:Helvetica,Arial,sans-serif;font-size:21px;line-height:1.7}
+body #introduction.intro-readable .intro-copy p{font:400 21px/1.7 Helvetica,Arial,sans-serif!important;color:#425563!important;letter-spacing:0!important;text-align:left!important;text-wrap:pretty;margin:0 0 16px!important;max-width:none!important;padding:0!important}
+body #introduction.intro-readable .intro-copy p:last-child{margin-bottom:0!important}
+body #introduction.intro-readable .intro-copy .intro-lead{font-size:23px!important;line-height:1.6!important;color:#203749!important}
+body #introduction.intro-readable .intro-framework{margin-top:32px}
+body #introduction.intro-readable .intro-views{display:block;margin:20px 0;padding:0}
+body #introduction.intro-readable .intro-views>div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;margin:0;padding:12px 0}
+body #introduction.intro-readable .intro-views dt{font:600 21px/1.7 Helvetica,Arial,sans-serif;color:#203749;margin:0;padding:0}
+body #introduction.intro-readable .intro-views dd{font:400 21px/1.7 Helvetica,Arial,sans-serif;color:#425563;margin:0;padding:0;text-wrap:pretty}
+body #introduction.intro-readable .intro-overview{margin:36px 0!important}
+body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 Helvetica,Arial,sans-serif!important;color:#657785!important;margin-top:12px!important}
+@media(max-width:700px){
+ body #introduction.intro-readable .intro-copy{font-size:18px}
+ body #introduction.intro-readable .intro-copy p,body #introduction.intro-readable .intro-views dt,body #introduction.intro-readable .intro-views dd{font-size:18px!important;line-height:1.65!important}
+ body #introduction.intro-readable .intro-copy .intro-lead{font-size:20px!important;line-height:1.55!important}
+ body #introduction.intro-readable .intro-views>div{grid-template-columns:88px minmax(0,1fr);gap:16px;padding:10px 0}
+ body #introduction.intro-readable .intro-framework{margin-top:28px}
+ body #introduction.intro-readable .intro-overview{margin:28px 0!important}
+}
+@media(max-width:420px){
+ body #introduction.intro-readable .intro-views>div{grid-template-columns:1fr;gap:4px;padding:10px 0}
+}

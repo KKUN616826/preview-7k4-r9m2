@@ -1,6 +1,20 @@
 /* Reveal content as it enters the page; leave all scrolling to the browser. */
 (() => {
  const root=document.querySelector('#introduction.intro-story');if(!root)return;
+ const video=root.querySelector('.story-loop-video');
+ const chapters=root.querySelector('.story-loop-chapters');
+ if(video&&chapters){
+  const buttons=[...chapters.querySelectorAll('[data-loop-start]')];
+  const sync=()=>buttons.forEach((button,index)=>button.setAttribute('aria-pressed',String(video.currentTime>=Number(button.dataset.loopStart)&&(index===buttons.length-1||video.currentTime<Number(buttons[index+1].dataset.loopStart)))));
+  buttons.forEach(button=>button.addEventListener('click',()=>{
+   video.currentTime=Number(button.dataset.loopStart);
+   sync();
+   video.play().catch(()=>{}); // Native controls remain available if playback is interrupted.
+  }));
+  video.addEventListener('timeupdate',sync);
+  video.addEventListener('seeked',sync);
+  chapters.hidden=false;
+ }
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{
   if(!entry.isIntersecting)return;observer.unobserve(entry.target);
