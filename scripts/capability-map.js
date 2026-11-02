@@ -95,7 +95,7 @@
     activeSuite=suite.slug;root.dataset.suite=activeSuite;
     choices.forEach(choice=>{
       const active=choice.dataset.suite===suite.slug;
-      choice.closest('.cm-suite').classList.toggle('is-active',active);
+      choice.classList.toggle('is-active',active);
       choice.setAttribute('aria-pressed',String(active));
       choice.setAttribute('aria-expanded',String(active));
       root.querySelector(`#${choice.getAttribute('aria-controls')}`).hidden=!active;
@@ -154,6 +154,16 @@
   function wake(){if(!frame&&visible&&!document.hidden){last=0;frame=requestAnimationFrame(tick)}}
   choices.forEach(c=>c.addEventListener('click',()=>selectSuite(c.dataset.suite)));
   regionLabels.forEach(label=>label.addEventListener('click',()=>selectSuite(label.dataset.regionLabel)));
+  root.querySelectorAll('[data-example]').forEach(link=>link.addEventListener('click',event=>{
+    if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||event.button!==0)return;
+    const point=positions.find(p=>p.task.id===link.dataset.example);if(!point)return;
+    event.preventDefault();showPreview(point,true);origin=link;
+    if(THREE)aim({yaw:-point.lon,pitch:point.lat*.65});
+    if(matchMedia('(max-width:850px)').matches){
+      close.focus({preventScroll:true});
+      preview.scrollIntoView({block:'nearest',behavior:reduced.matches?'instant':'smooth'});
+    }
+  }));
   positions.forEach(p=>{
     p.card.addEventListener('click',()=>showPreview(p,true));
     p.card.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;cancelTimers();enterTimer=setTimeout(()=>showPreview(p),100)});

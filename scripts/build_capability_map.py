@@ -7,9 +7,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 EXPLORER_COPY = {
-    'mind': {'description': 'Remember and choose.', 'coverage': 'Memory retention · Rule inference · Spatial and sequence tracking'},
-    'act': {'description': 'Move with precision and timing.', 'coverage': 'Contact precision · Action timing · Motion stability'},
-    'mind2act': {'description': 'Decide, act, and adapt.', 'coverage': 'Multi-stage goals · Dynamic conditions · Feedback'}
+    'mind': {
+        'headline': 'Choose actions using memory.',
+        'description': 'Retain earlier observations to identify targets and select the required operation.',
+        'example': 'E',
+        'demands': [('Memory', 'Recall items from earlier batches.'), ('Action', 'Select the repeated item.'), ('Goal', 'Place it in the submission tray.')],
+    },
+    'act': {
+        'headline': 'Execute with precision and timing.',
+        'description': 'Respond to moving targets and perform stable actions under physical constraints.',
+        'example': 'FR1',
+        'demands': [('Cue', 'Track the moving packages.'), ('Action', 'Pick and place them into the tray.'), ('Goal', 'Collect every package in the tray.')],
+    },
+    'mind2act': {
+        'headline': 'Connect decisions with physical actions.',
+        'description': 'Keep track of the goal as actions change the task.',
+        'example': 'CP01',
+        'demands': [('Memory', 'Remember each order.'), ('Action', 'Pick food from the moving conveyor.'), ('Goal', 'Complete each meal correctly.')],
+    },
 }
 
 def render():
@@ -17,14 +32,20 @@ def render():
     for suite in suites:
         suite['explorer'] = EXPLORER_COPY[suite['slug']]
     total = sum(len(s['cases']) for s in suites)
-    rows, links = [], []
-    for i, suite in enumerate(suites):
+    tabs, panels, links = [], [], []
+    for suite in suites:
         slug, name = suite['slug'], suite['name']
         selected = slug == 'mind2act'
-        rows.append(f'''<div class="cm-suite cm-{slug}{" is-active" if selected else ""}">
-<button type="button" class="cm-suite-choice" data-suite="{slug}" aria-pressed="{str(selected).lower()}" aria-expanded="{str(selected).lower()}" aria-controls="cm-coverage-{slug}"><span class="cm-suite-heading"><strong>{name}</strong><small>{len(suite['cases'])}</small></span><span class="cm-suite-goal">{html.escape(suite['explorer']['description'])}</span></button>
-<div class="cm-detail" id="cm-coverage-{slug}"{'' if selected else ' hidden'}><a class="cm-detail-link" href="benchmark/{slug}.html" aria-label="Explore {name} tasks">Explore {name} tasks ↗</a></div></div>''')
-        for j, task in enumerate(suite['cases']):
+        copy = suite['explorer']
+        example = next(task for task in suite['cases'] if task['id'] == copy['example'])
+        tabs.append(f'''<button type="button" class="cm-suite-choice cm-{slug}{" is-active" if selected else ""}" data-suite="{slug}" aria-pressed="{str(selected).lower()}" aria-expanded="{str(selected).lower()}" aria-controls="cm-coverage-{slug}"><span>{name}</span><small>{len(suite['cases'])}</small></button>''')
+        demands = ''.join(f'<div><dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd></div>' for label, value in copy['demands'])
+        panels.append(f'''<div class="cm-detail cm-{slug}" id="cm-coverage-{slug}" role="region" aria-label="{name} tasks"{'' if selected else ' hidden'}>
+<p class="cm-suite-label">{name}</p><h3 class="cm-detail-title">{html.escape(copy['headline'])}</h3><p class="cm-suite-goal">{html.escape(copy['description'])}</p>
+<div class="cm-example"><p class="cm-example-label">A task in practice</p><div class="cm-example-layout"><a class="cm-example-link" data-example="{example['id']}" href="tasks/{example['id']}.html" aria-label="Preview {html.escape(example['title'])}"><img src="{example['row_cover']}" alt="{html.escape(example['title'])} simulation" loading="lazy" width="160" height="120"></a><div class="cm-example-copy"><h4><a data-example="{example['id']}" href="tasks/{example['id']}.html">{example['id']} · {html.escape(example['title'])}</a></h4><p>{html.escape(example['summary'])}</p></div></div></div>
+<dl class="cm-case-demands" aria-label="Example task requirements">{demands}</dl>
+<a class="cm-detail-link" href="benchmark/{slug}.html">Explore {len(suite['cases'])} {name} tasks ↗</a></div>''')
+        for task in suite['cases']:
             links.append(f'<a href="tasks/{task["id"]}.html">{task["id"]} · {html.escape(task["title"])}</a>')
     cards = []
     for suite in suites:
@@ -33,7 +54,7 @@ def render():
     payload = json.dumps(suites,ensure_ascii=False).replace('<','\\u003c')
     markup = '''<section id="capability-explorer" class="academic-section capability-map" aria-labelledby="cm-heading">
 <link rel="stylesheet" href="scripts/capability-map.css">
-<div class="cm-layout"><div class="cm-copy"><div class="cm-overview"><h2 id="cm-heading"><span class="cm-task-count">__TASK_COUNT__</span> <span class="cm-task-unit">Tasks</span></h2><p class="cm-overview-meta">3 suites · 3 difficulty levels</p><p class="cm-overview-levels">Easy / Medium / Hard</p></div><div class="cm-choices" role="group" aria-label="Evaluation suites">'''+''.join(rows)+'''</div></div>
+<div class="cm-layout"><div class="cm-copy"><h2 id="cm-heading" class="cm-sr-only">Explore __TASK_COUNT__ tasks</h2><p class="cm-overview-meta">__TASK_COUNT__ tasks · __SUITE_COUNT__ suites · 3 difficulty levels</p><div class="cm-choices" role="group" aria-label="Evaluation suites">'''+''.join(tabs)+'''</div><div class="cm-panels">'''+''.join(panels)+'''</div></div>
 <div class="cm-visual"><div class="cm-orbit" tabindex="0" role="group" aria-label="Three-dimensional task sphere. Drag to rotate or select a task.">
 <canvas class="cm-particles" aria-hidden="true"></canvas><div class="cm-moon-fallback" aria-hidden="true"></div>
 <svg class="cm-regions" aria-hidden="true"><g class="cm-corridor"><path data-band-edge="-0.30"></path><path data-band-edge="0.30"></path></g><g class="cm-region-leaders"><path data-region-line="mind"></path><circle data-region-dot="mind" r="3"></circle><path data-region-line="act"></path><circle data-region-dot="act" r="3"></circle><path data-region-line="mind2act"></path><circle data-region-dot="mind2act" r="3"></circle></g></svg>
@@ -46,7 +67,7 @@ def render():
 <details class="cm-text-index"><summary>Browse tasks as a list</summary><p class="cm-credit">Moon imagery: <a href="https://svs.gsfc.nasa.gov/4720">NASA’s Scientific Visualization Studio</a>. Task regions are a conceptual map.</p><nav aria-label="All benchmark tasks">'''+''.join(links)+'''</nav></details>
 <script type="application/json" id="cm-data">'''+payload+'''</script><script src="scripts/capability-map.js" defer></script></section>'''
 
-    markup = markup.replace('__TASK_COUNT__', str(total))
+    markup = markup.replace('__TASK_COUNT__', str(total)).replace('__SUITE_COUNT__', str(len(suites)))
     for asset in ['scripts/capability-map.css', 'scripts/capability-map.js']:
         version = hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
         markup = markup.replace(asset+'"', asset+'?v='+version+'"')
