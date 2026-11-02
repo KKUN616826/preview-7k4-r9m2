@@ -1,0 +1,4 @@
+/* Opacity only while waiting: preserve document flow and anchor geometry. */
+.home-reveal-pending{opacity:0}
+@media(prefers-reduced-motion:reduce){.home-reveal-pending{opacity:1}}
+@media print{.home-reveal-pending{opacity:1}}

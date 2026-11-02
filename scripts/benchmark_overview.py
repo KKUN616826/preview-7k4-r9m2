@@ -90,21 +90,19 @@ def chapter(case, index, total):
         for level in LEVELS)
     return f'''<article class="bo-chapter" id="task-{case['id']}" data-task="{case['id']}" aria-labelledby="title-{case['id']}">
       <div class="bo-chapter-layout">
+        <a class="bo-task-link" href="tasks/{case['id']}.html#{initial}" aria-labelledby="title-{case['id']}"></a>
         <div class="bo-media">
-          <video class="bo-task-video" id="video-{case['id']}" playsinline preload="none"
-            poster="{e(current['poster'])}" data-src="{e(current['video'])}" aria-label="{e(case['title'])}: {initial.title()} demonstration"></video>
-          <button type="button" class="bo-play" data-play aria-label="Play {e(case['title'])}"><span aria-hidden="true">▶</span></button>
-          <button type="button" class="bo-expand" data-expand aria-label="Expand {e(case['title'])}">Expand <span aria-hidden="true">↗</span></button>
+          <img class="bo-task-poster" src="{e(current['poster'])}" alt="" loading="lazy" decoding="async" width="640" height="480">
+          <span class="bo-play" aria-hidden="true"><span>▶</span></span>
         </div>
         <div class="bo-task-copy">
           <p class="bo-task-id">{case['id']}</p>
           <h3 id="title-{case['id']}" title="{e(case['title'])}">{e(case.get('nav_title', case['title']))}</h3>
           <p class="bo-task-goal" title="{e(case['summary'])}">{e(CATALOG_GOALS.get(case['id'], case['summary']))}</p>
-          <div class="bo-task-actions"><select class="bo-level-select" aria-label="Demonstration difficulty for {e(case['title'])}" aria-controls="video-{case['id']}">{choices}</select>
-          <a class="bo-task-detail" href="tasks/{case['id']}.html#{initial}">View task <span aria-hidden="true">↗</span></a></div>
+          <div class="bo-task-actions"><select class="bo-level-select" aria-label="Demonstration difficulty for {e(case['title'])}" aria-controls="task-{case['id']}">{choices}</select>
+          <span class="bo-task-arrow" aria-hidden="true">↗</span></div>
         </div>
       </div>
-      <p class="bo-media-error" hidden>Unable to load this demonstration. <button type="button" data-retry>Try again</button> or <a href="tasks/{case['id']}.html#{initial}">open the task page</a>.</p>
     </article>'''
 
 
@@ -112,7 +110,7 @@ def quick_index(suites):
     groups = []
     for suite in suites:
         links = ''.join(f'<li><a href="#task-{c["id"]}" data-index-task="{c["id"]}"><span>{c["id"]}</span>{e(c.get("nav_title", c["title"]))}</a></li>' for c in suite['cases'])
-        groups.append(f'<details data-index-group="{suite["slug"]}"{" open" if suite["slug"] == "mind2act" else ""}><summary><a href="#{suite["slug"]}" data-index-suite="{suite["slug"]}">{suite["name"]}<span>{len(suite["cases"])}</span></a></summary><ul>{links}</ul></details>')
+        groups.append(f'<details data-index-group="{suite["slug"]}" open><summary><a href="#suite-{suite["slug"]}" data-index-suite="{suite["slug"]}">{suite["name"]}<span>{len(suite["cases"])}</span></a></summary><ul>{links}</ul></details>')
     return '<nav aria-label="Task quick index">' + ''.join(groups) + '</nav>'
 
 
@@ -131,13 +129,12 @@ def render(suites):
           <figcaption>{task_id} <span>{e(c.get('nav_title', c['title']))}</span></figcaption>
         </figure>''')
     hero_buttons = ''.join(f'<button type="button" data-hero-select="{s["slug"]}" aria-pressed="{str(s["slug"] == default).lower()}"><span aria-hidden="true"></span>{s["name"]}</button>' for s in suites)
-    tabs = ''.join(f'<a role="tab" id="tab-{s["slug"]}" href="#{s["slug"]}" data-suite="{s["slug"]}" aria-controls="suite-{s["slug"]}" aria-selected="{str(s["slug"] == default).lower()}" tabindex="{0 if s["slug"] == default else -1}">{s["name"]}<span>{len(s["cases"])}</span></a>' for s in suites)
+    tabs = ''.join(f'<a id="tab-{s["slug"]}" href="#suite-{s["slug"]}" data-suite="{s["slug"]}">{s["name"]}<span>{len(s["cases"])}</span></a>' for s in suites)
     panels = []
     for s in suites:
-        hidden = ' hidden' if s['slug'] != default else ''
         chapters = ''.join(chapter(records[c['id']], i + 1, len(s['cases'])) for i, c in enumerate(s['cases']))
-        panels.append(f'''<section class="bo-suite" id="suite-{s['slug']}" role="tabpanel" aria-labelledby="tab-{s['slug']}"{hidden}>
-          <div class="bo-suite-intro"><h2>{s['name']}</h2><p>{e(s['description'])}</p></div><div class="bo-task-grid">{chapters}</div>
+        panels.append(f'''<section class="bo-suite" id="suite-{s['slug']}" data-suite-section="{s['slug']}" aria-labelledby="suite-heading-{s['slug']}">
+          <div class="bo-suite-intro"><h2 id="suite-heading-{s['slug']}">{s['name']}</h2><p>{e(s['description'])}</p></div><div class="bo-task-grid">{chapters}</div>
         </section>''')
     payload = {k: v['levels'] for k, v in records.items()}
     return f'''<section class="bo-hero" aria-labelledby="benchmark-title">
@@ -151,12 +148,11 @@ def render(suites):
     </section>
     <section class="bo-explorer" id="explore" aria-labelledby="explorer-title">
       <div class="bo-explorer-layout"><aside class="bo-index"><p class="bo-index-title">Quick index</p>{quick_index(suites)}</aside><div class="bo-explorer-body">
-      <div class="bo-explorer-heading"><h2 id="explorer-title">Explore the benchmark</h2><nav class="bo-suite-tabs" role="tablist" aria-label="Capability suite">{tabs}</nav></div>
+      <div class="bo-explorer-heading"><h2 id="explorer-title">Explore the benchmark</h2><nav class="bo-suite-tabs" aria-label="Jump to capability suite">{tabs}</nav></div>
       <details class="bo-mobile-index"><summary>Browse tasks</summary>{quick_index(suites)}</details>
       {''.join(panels)}
       </div></div>
     </section>
-    <dialog class="bo-video-dialog" aria-labelledby="expanded-title"><div class="bo-dialog-heading"><div><p class="bo-task-id" id="expanded-meta"></p><h2 id="expanded-title"></h2></div><button type="button" class="bo-dialog-close" aria-label="Close expanded video">Close ×</button></div><video class="bo-expanded-video" controls playsinline preload="none"></video><p id="expanded-instruction"></p><a class="bo-expanded-detail">View full task ↗</a></dialog>
     <script type="application/json" id="benchmark-overview-data">{json.dumps(payload, ensure_ascii=False).replace('<', chr(92) + 'u003c')}</script>'''
 
 
@@ -168,9 +164,9 @@ def document(content):
 <meta name="description" content="Explore 30 robotic manipulation tasks across Mind, Act, and Mind2Act. Watch demonstrations and compare available difficulty levels.">
 <link rel="icon" href="media/images/mind2act-favicon-v2.png">
 <link rel="preload" href="media/fonts/Sora-variable.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=white-canvas-1">
-<link rel="stylesheet" href="scripts/benchmark-overview.css?v=2">
+<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=compact-header-1">
+<link rel="stylesheet" href="scripts/benchmark-overview.css?v=3">
 </head><body class="benchmark-overview"><a class="bo-skip" href="#explore">Skip to tasks</a>{header}
 <main class="bo-main" id="benchmark-content">{content}</main>
-<script src="scripts/benchmark-overview.js?v=2" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>
+<script src="scripts/benchmark-overview.js?v=3" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>
 </body></html>\n'''

@@ -1,4 +1,4 @@
-/* Benchmark landing only. Native media controls and links remain the primary controls. */
+/* Benchmark landing only. Task cards use native links; difficulty selection updates their destination. */
 (() => {
   const data = JSON.parse(document.getElementById('benchmark-overview-data').textContent);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -14,17 +14,9 @@
   let selectedHero = 'mind2act';
   let heroVisible = true;
   let userPaused = reduced.matches;
-  let activeTask = null;
-
-  function load(video) {
-    if (!video.getAttribute('src')) {
-      video.src = video.dataset.src;
-      video.load();
-    }
-  }
 
   function updateHeroPlayback() {
-    const animate = heroVisible && !document.hidden && !userPaused && !reduced.matches && !activeTask;
+    const animate = heroVisible && !document.hidden && !userPaused && !reduced.matches;
     frames.forEach(frame => {
       const video = frame.querySelector('video');
       if (frame.dataset.heroFrame === selectedHero && animate) {
@@ -51,7 +43,6 @@
   motionButton.addEventListener('click', () => { userPaused = !userPaused; updateHeroPlayback(); });
   reduced.addEventListener('change', () => { userPaused = reduced.matches; updateHeroPlayback(); });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) document.querySelectorAll('.bo-task-video').forEach(v => v.pause());
     updateHeroPlayback();
   });
   const heroObserver = new IntersectionObserver(entries => {
@@ -60,7 +51,7 @@
   }, {threshold: .2});
   heroObserver.observe(hero);
   function rotateHero() {
-    if (!heroVisible || userPaused || reduced.matches || document.hidden || activeTask) return;
+    if (!heroVisible || userPaused || reduced.matches || document.hidden) return;
     const index = frames.findIndex(f => f.dataset.heroFrame === selectedHero);
     chooseHero(frames[(index + 1) % frames.length].dataset.heroFrame);
   }
@@ -74,55 +65,39 @@
       if (link.dataset.indexTask === id) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
+    const suite = id && document.getElementById('task-' + id)?.closest('[data-suite-section]');
+    if (suite) highlightSuite(suite.dataset.suiteSection);
   }
-  function selectSuite(slug) {
-    if (!tabs.some(t => t.dataset.suite === slug)) slug = 'mind2act';
+  function highlightSuite(slug) {
     tabs.forEach(tab => {
       const active = tab.dataset.suite === slug;
-      tab.setAttribute('aria-selected', String(active));
-      tab.tabIndex = active ? 0 : -1;
-      const panel = document.getElementById(tab.getAttribute('aria-controls'));
-      panel.hidden = !active;
-      panel.classList.toggle('is-entering', active);
-      if (!active) panel.querySelectorAll('video').forEach(v => v.pause());
+      if (active) tab.setAttribute('aria-current', 'location');
+      else tab.removeAttribute('aria-current');
     });
     document.querySelectorAll('[data-index-suite]').forEach(link => {
-      if (link.dataset.indexSuite === slug) link.setAttribute('aria-current', 'true');
+      if (link.dataset.indexSuite === slug) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
     document.querySelectorAll(`[data-index-group="${slug}"]`).forEach(group => { group.open = true; });
-    if (indexedTask && document.getElementById('task-' + indexedTask)?.closest('[hidden]')) markIndex(null);
   }
   function readHash() {
     const hash = location.hash.slice(1);
-    const task = document.getElementById(hash);
-    const panel = task?.closest('.bo-suite');
-    const selected = tabs.find(tab => tab.getAttribute('aria-selected') === 'true')?.dataset.suite;
-    selectSuite(panel ? panel.id.replace('suite-', '') : tabs.some(tab => tab.dataset.suite === hash) ? hash : selected);
-    if (task?.matches('.bo-chapter')) {
-      markIndex(task.dataset.task);
-      task.scrollIntoView({block:'start'});
-    }
+    // Old #mind / #act / #mind2act bookmarks also remain valid.
+    const target = document.getElementById(hash) || document.getElementById('suite-' + hash);
+    if (!target?.matches('.bo-chapter, .bo-suite')) return;
+    const suite = target.closest('[data-suite-section]');
+    markIndex(target.matches('.bo-chapter') ? target.dataset.task : null);
+    highlightSuite(suite.dataset.suiteSection);
+    target.scrollIntoView({block:'start', behavior:'auto'});
   }
   function pushHash(hash) {
     if (location.hash !== hash) history.pushState(null, '', hash);
   }
-  tabs.forEach((tab, index) => {
+  tabs.forEach(tab => {
     tab.addEventListener('click', event => {
       event.preventDefault();
-      pushHash('#' + tab.dataset.suite);
-      selectSuite(tab.dataset.suite);
-    });
-    tab.addEventListener('keydown', event => {
-      let next;
-      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-      if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
-      if (event.key === 'Home') next = 0;
-      if (event.key === 'End') next = tabs.length - 1;
-      if (next === undefined) return;
-      event.preventDefault();
-      tabs[next].focus();
-      tabs[next].click();
+      pushHash(tab.getAttribute('href'));
+      readHash();
     });
   });
   document.querySelectorAll('[data-index-task], [data-index-suite]').forEach(link => {
@@ -131,84 +106,11 @@
       document.querySelector('.bo-mobile-index').open = false;
       pushHash(link.getAttribute('href'));
       readHash();
-      if (link.dataset.indexSuite) document.getElementById('explore').scrollIntoView({block:'start'});
     });
   });
   window.addEventListener('hashchange', readHash);
   window.addEventListener('popstate', readHash);
 
-  const dialog = document.querySelector('.bo-video-dialog');
-  const expanded = dialog.querySelector('video');
-  let expandedChapter = null;
-  let oldOverflow = '';
-  function registerPlayback(video) {
-    video.addEventListener('play', () => {
-      activeTask = video;
-      document.querySelectorAll('video').forEach(other => { if (other !== video) other.pause(); });
-      const media = video.closest('.bo-media');
-      if (media) {
-        video.controls = true;
-        media.classList.add('is-playing');
-        media.querySelector('[data-play]').hidden = true;
-      }
-      updateHeroPlayback();
-    });
-    video.addEventListener('pause', () => {
-      if (activeTask === video) activeTask = null;
-      const media = video.closest('.bo-media');
-      if (media) {
-        media.classList.remove('is-playing');
-        media.querySelector('[data-play]').hidden = false;
-      }
-      updateHeroPlayback();
-    });
-  }
-  registerPlayback(expanded);
-  function expandChapter(chapter) {
-    expandedChapter = chapter;
-    const video = chapter.querySelector('video');
-    const level = chapter.querySelector('select').value;
-    const asset = data[chapter.dataset.task][level];
-    const time = video.currentTime;
-    video.pause();
-    document.getElementById('expanded-meta').textContent = `${chapter.dataset.task} / ${level[0].toUpperCase() + level.slice(1)} demonstration`;
-    document.getElementById('expanded-title').textContent = chapter.querySelector('h3').getAttribute('title');
-    document.getElementById('expanded-instruction').textContent = asset.instruction;
-    dialog.querySelector('.bo-expanded-detail').href = chapter.querySelector('.bo-task-detail').href;
-    expanded.poster = asset.poster;
-    expanded.setAttribute('aria-label', chapter.querySelector('h3').getAttribute('title'));
-    expanded.onloadedmetadata = () => { if (time > 0) expanded.currentTime = Math.min(time, expanded.duration); };
-    expanded.src = asset.video;
-    expanded.load();
-    oldOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
-    dialog.showModal();
-    expanded.play().catch(() => { /* Native controls provide a manual playback fallback. */ });
-  }
-  dialog.querySelector('.bo-dialog-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', event => {
-    if (event.target !== dialog) return;
-    const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
-  });
-  dialog.addEventListener('close', () => {
-    const time = expanded.currentTime;
-    expanded.pause();
-    const original = expandedChapter?.querySelector('video');
-    if (original?.readyState >= 1) original.currentTime = time;
-    expanded.removeAttribute('src');
-    expanded.load();
-    document.documentElement.style.overflow = oldOverflow;
-  });
-
-  const mediaObserver = new IntersectionObserver(entries => {
-    entries.forEach(({target:video, isIntersecting}) => {
-      if (isIntersecting && !video.closest('[hidden]')) load(video);
-    });
-  }, {rootMargin:'200px 0px'});
-  const playbackObserver = new IntersectionObserver(entries => {
-    entries.forEach(({target:video, isIntersecting}) => { if (!isIntersecting) video.pause(); });
-  });
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(({target, isIntersecting}) => {
       if (!isIntersecting) return;
@@ -237,55 +139,31 @@
   }, {rootMargin:'-90px 0px 0px 0px', threshold: .05});
 
   chapters.forEach(chapter => {
-    const video = chapter.querySelector('video');
-    const error = chapter.querySelector('.bo-media-error');
+    const poster = chapter.querySelector('.bo-task-poster');
     const select = chapter.querySelector('select');
-    const detail = chapter.querySelector('.bo-task-detail');
+    const link = chapter.querySelector('.bo-task-link');
     const choices = data[chapter.dataset.task];
-    registerPlayback(video);
     if (!reduced.matches) chapter.classList.add('is-waiting');
     revealObserver.observe(chapter);
-    mediaObserver.observe(video);
-    playbackObserver.observe(video);
     indexObserver.observe(chapter);
-    video.addEventListener('error', () => { error.hidden = false; });
-    video.addEventListener('loadeddata', () => { error.hidden = true; });
-    chapter.querySelector('[data-play]').addEventListener('click', () => {
-      load(video);
-      video.play().catch(() => { error.hidden = false; });
-    });
-    chapter.querySelector('[data-expand]').addEventListener('click', () => expandChapter(chapter));
-    chapter.querySelector('[data-retry]').addEventListener('click', () => {
-      error.hidden = true;
-      video.src = video.dataset.src;
-      video.load();
-    });
-    function selectLevel(level, hydrate = true) {
+    function selectLevel(level) {
       const asset = choices[level];
       if (!asset) return;
-      video.pause();
-      video.controls = false;
-      video.poster = asset.poster;
-      video.dataset.src = asset.video;
-      video.setAttribute('aria-label', `${chapter.querySelector('h3').getAttribute('title')}: ${level} demonstration`);
-      if (hydrate) { video.src = asset.video; video.load(); }
+      poster.src = asset.poster;
       select.value = level;
-      detail.hash = level;
-      error.querySelector('a').hash = level;
-      error.hidden = true;
+      link.hash = level;
       savedLevels[chapter.dataset.task] = level;
       try { sessionStorage.setItem(levelKey, JSON.stringify(savedLevels)); } catch { /* Storage is optional. */ }
     }
     select.addEventListener('change', () => selectLevel(select.value));
     const restored = savedLevels[chapter.dataset.task];
-    if (choices[restored]) selectLevel(restored, false);
+    if (choices[restored]) selectLevel(restored);
   });
 
   readHash();
   updateHeroPlayback();
   window.addEventListener('pagehide', () => {
     clearInterval(rotation);
-    if (dialog.open) dialog.close();
     document.querySelectorAll('video').forEach(video => video.pause());
   });
   window.addEventListener('pageshow', event => {

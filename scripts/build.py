@@ -120,6 +120,7 @@ def main():
     assert not re.search(r'__[A-Z_]+__', page)
     page = apply_previews(page)
     page = apply_homepage(page)
+    page = page.replace('</body>', '<link rel="stylesheet" href="scripts/home-reveal.css?v=3"><script src="scripts/home-reveal.js?v=3" defer></script></body>')
     (ROOT / 'index.html').write_text(page, newline='\n')
     build_home_leaderboard_entry()
     build_benchmark()

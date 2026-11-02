@@ -1,5 +1,5 @@
 /* Benchmark navigation and layout. Card appearance and hover live in benchmark-catalog.css. */
-.benchmark-workspace{--workspace-header:88px;background:#ffffff;color:#203447}
+.benchmark-workspace{--workspace-header:76px;background:#ffffff;color:#203447}
 body.benchmark-workspace .header .header-inner{flex-direction:row!important}
 .workspace-layout{display:grid;grid-template-columns:258px minmax(0,1fr);max-width:1600px;margin:0 auto;align-items:start}
 .workspace-sidebar{position:sticky;top:var(--workspace-header);height:calc(100dvh - var(--workspace-header));overflow:auto;overscroll-behavior:contain;padding:32px 18px 40px 24px;border-right:1px solid #d7ded8;scrollbar-width:thin;scrollbar-color:#c2cecb transparent}
@@ -71,6 +71,6 @@ body.benchmark-workspace.task-detail .task-footer a{max-width:36%}
 .workspace-drawer-head button:hover,.workspace-mobile-bar button:hover{background:#e3ebe5}
 [hidden]{display:none!important}
 @media(max-width:1200px){.workspace-layout{grid-template-columns:236px minmax(0,1fr)}body.benchmark-workspace main.workspace-content{padding:32px 28px 60px}.workspace-sidebar{padding-left:16px;padding-right:12px}.workspace-content .task-explanations{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-suites{gap:18px}.workspace-suite-link h3{font-size:23px}body.benchmark-workspace.task-detail .demo-layout{grid-template-columns:minmax(0,1fr)}body.benchmark-workspace.task-detail .brief{border-left:0;border-top:1px solid #d6dfd9}.workspace-task-index{grid-template-columns:110px minmax(0,1fr);gap:14px}}
-@media(max-width:1040px){.benchmark-workspace{--workspace-header:76px}}
+@media(max-width:1040px){.benchmark-workspace{--workspace-header:68px}}
 @media(max-width:850px){.workspace-layout{display:block}.workspace-sidebar{display:none}.workspace-mobile-bar{display:flex;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid #d7ded8;background:#ffffff}.workspace-mobile-bar>span{font-size:13px;line-height:1.4;color:#63737a;min-width:0}.workspace-mobile-bar button{flex-shrink:0}body.benchmark-workspace main.workspace-content{padding:28px 24px 50px}.workspace-suites{gap:24px}}
 @media(max-width:560px){body.benchmark-workspace main.workspace-content{padding:24px 20px 44px}.workspace-content .task-explanations{grid-template-columns:1fr}.workspace-suites{grid-template-columns:1fr;gap:14px}.workspace-suite-link{padding-bottom:20px}.workspace-suite-link .workspace-suite-label{min-height:0;margin-bottom:8px}.workspace-task-index{grid-template-columns:1fr;gap:0}.workspace-comparison>div{grid-template-columns:1fr;gap:5px}.workspace-content h2{font-size:21px}.workspace-page-head{margin-bottom:28px}.workspace-question p{font-size:17px}.workspace-mobile-bar{padding-inline:20px}body.benchmark-workspace.task-detail .task-footer a{max-width:100%}}

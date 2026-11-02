@@ -27,6 +27,13 @@
    else{blocked=true;updateButton();}
   });
  }
+ // Media engines may pause a running video without rejecting play(). Only
+ // recover while the scene should run; explicit user pauses remain authoritative.
+ video.addEventListener('pause',()=>{
+  if(failed||reduced.matches||userPaused||blocked||!inView||document.hidden)return;
+  clearTimeout(retryTimer);
+  retryTimer=setTimeout(sync,250);
+ });
  video.addEventListener('playing',()=>{if(reduced.matches||failed||userPaused||!inView||document.hidden){video.pause();return;}blocked=false;retries=0;root.dataset.motionReady='true';updateButton();});
  function fallback(){clearTimeout(retryTimer);++playAttempt;failed=true;video.pause();delete root.dataset.motionReady;button.hidden=true;}
  video.addEventListener('error',fallback);
@@ -38,6 +45,7 @@
  reduced.addEventListener('change',recover);
  document.addEventListener('visibilitychange',recover);
  window.addEventListener('pageshow',recover);
+ window.addEventListener('focus',recover);
  video.addEventListener('canplay',()=>{if(video.paused)sync();});
  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;recover();},{threshold:.1}).observe(root.querySelector('.lb-stage-world'));
  updateButton();

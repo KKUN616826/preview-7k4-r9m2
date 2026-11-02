@@ -35,6 +35,17 @@ def number(value, metric):
     return '—' if value is None else f'{value:.{2 if metric == "score" else 1}f}'
 
 
+def result_cell(value, metric):
+    label = number(value, metric)
+    if value is None:
+        return '<span class="lb-value-label">—</span>'
+    if metric == 'success':
+        return f'<span class="lb-value-label">{label}%</span>'
+    return (f'<span class="lb-score-display"><span class="lb-score-track" aria-hidden="true">'
+            f'<span class="lb-score-fill" style="width:{value}%"></span></span>'
+            f'<span class="lb-value-label">{label}</span></span>')
+
+
 def table(data):
     views = data['views']
     group_head = ''.join(f'<th colspan="2" scope="colgroup" data-group="{v["key"]}"><span>'
@@ -47,7 +58,7 @@ def table(data):
     for model in data['models']:
         mid = e(model['id'])
         icon = f'<img src="{model["icon"]}" width="23" height="23" alt="">' if model['icon'] else '<span class="lb-icon-fallback" aria-hidden="true">'+e(model['name'][:2])+'</span>'
-        values = ''.join(f'<td data-group="{v["key"]}" data-value="{metric}" class="lb-number">{number(model["results"][v["key"]][metric], metric)}</td>' for v in views for metric in ['score', 'success'])
+        values = ''.join(f'<td data-group="{v["key"]}" data-value="{metric}" class="lb-number">{result_cell(model["results"][v["key"]][metric], metric)}</td>' for v in views for metric in ['score', 'success'])
         rows.append(f'<tr class="lb-result" data-model="{mid}"><td class="lb-rank">—</td>'
                     f'<th scope="row" class="lb-model-cell"><button type="button" class="lb-model-button" data-details="{mid}" aria-expanded="false" aria-controls="detail-{mid}">'
                     f'{icon}<span>{e(model["name"])}</span><span class="lb-expand" aria-hidden="true">+</span></button></th>'
@@ -66,8 +77,8 @@ def table(data):
                     '<p class="lb-detail-note">Demo links show model-family examples; they are not evidence for the reported scores.</p></section></td></tr>')
     return ('<div class="lb-table-scroll" role="region" aria-label="Model results; scroll to view all metrics" tabindex="0">'
             '<table class="lb-table"><caption class="lb-sr-only">Mind2Act World results across Mind, Act and Mind2Act</caption>'
-            '<thead><tr><th scope="col" rowspan="2" class="lb-rank-heading">Rank</th><th scope="col" rowspan="2" class="lb-model-heading">Model</th>'
-            f'<th scope="col" rowspan="2">Paradigm</th>{group_head}</tr><tr>{metrics}</tr></thead>'
+            '<thead><tr><th scope="col" class="lb-rank-heading">Rank</th><th scope="col" class="lb-model-heading">Model</th>'
+            f'<th scope="col">Paradigm</th>{metrics}</tr></thead>'
             f'<tbody id="lb-rows">{"".join(rows)}</tbody></table></div>')
 
 

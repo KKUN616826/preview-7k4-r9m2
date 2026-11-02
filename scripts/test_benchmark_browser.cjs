@@ -18,23 +18,30 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     await page.goto(new URL('benchmark.html', base).href);
     await page.evaluate(() => document.fonts.ready);
     assert.equal(await page.locator('.bo-chapter').count(), taskCount);
-    assert.equal(await page.locator('.bo-suite:not([hidden])').getAttribute('id'), 'suite-mind2act');
+    assert.equal(await page.locator('.bo-suite:visible').count(), 3);
+    assert.equal(await page.locator('.bo-chapter:visible').count(), taskCount);
     await page.locator('#task-CP01 select').selectOption('medium');
-    assert.match(await page.locator('#video-CP01').getAttribute('src'), /CP01\/medium.mp4$/);
-    assert.match(await page.locator('#task-CP01 .bo-task-detail').getAttribute('href'), /#medium$/);
+    assert.match(await page.locator('#task-CP01 .bo-task-poster').getAttribute('src'), /CP01-medium.jpg$/);
+    assert.match(await page.locator('#task-CP01 .bo-task-link').getAttribute('href'), /CP01.html#medium$/);
+    assert.ok(page.url().endsWith('/benchmark.html'));
+    assert.equal(await page.getByText('View task', {exact:true}).count(), 0);
     await page.locator('#tab-mind').click();
     assert.equal(await page.locator('#task-E2 option[value=hard]').isDisabled(), true);
-    await page.locator('#tab-mind').press('ArrowRight');
-    assert.equal(await page.locator('#tab-act').getAttribute('aria-selected'), 'true');
+    await page.locator('#tab-act').click();
+    await page.waitForFunction(() => { const el = document.querySelector('#suite-act'); return Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).scrollMarginTop)) < 5; });
+    assert.equal(await page.locator('.bo-chapter:visible').count(), taskCount);
     await page.locator('.bo-index [data-index-task=CP05]').click();
     assert.equal(await page.locator('.bo-index [data-index-task=CP05]').getAttribute('aria-current'), 'location');
     await page.locator('#task-CP05 select').selectOption('medium');
-    await page.locator('#task-CP05 [data-expand]').click();
-    await page.locator('.bo-video-dialog').waitFor({state:'visible'});
-    assert.match(await page.locator('.bo-expanded-video').getAttribute('src'), /CP05\/medium.mp4$/);
-    await page.getByRole('button', {name:'Close expanded video'}).press('Escape');
-    await page.locator('.bo-video-dialog').waitFor({state:'hidden'});
-    assert.equal(await page.locator('#task-CP05 [data-expand]').evaluate(el=>el===document.activeElement), true);
+    // Clicking task copy follows the full-card link with the selected difficulty.
+    await page.locator('#task-CP05 .bo-task-link').click({position:{x:270,y:75}});
+    assert.ok(page.url().endsWith('/tasks/CP05.html#medium'));
+    assert.equal(await page.locator('[data-panel="medium"]').isVisible(), true);
+    await page.goBack();
+    assert.equal(await page.locator('#task-CP05 select').inputValue(), 'medium');
+    // The preview area is the same native link, including keyboard and new-tab behavior.
+    await page.locator('#task-CP05 .bo-task-link').click({position:{x:80,y:65}});
+    assert.ok(page.url().endsWith('/tasks/CP05.html#medium'));
     await page.goto(new URL('benchmark/mind.html', base).href);
 
     // Collapsing a group must not navigate. Clicking its name must navigate.
@@ -73,7 +80,8 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     for (const relative of paths) {
       const response = await page.goto(new URL(relative, base).href);
       assert.equal(response.status(), 200, relative);
-      assert.equal(await page.locator(relative === 'benchmark.html' ? '.bo-suite-tabs [aria-selected=true]' : '.workspace-sidebar a[aria-current=page]').count(), 1, relative);
+      if (relative === 'benchmark.html') assert.equal(await page.locator('.bo-suite:visible').count(), 3);
+      else assert.equal(await page.locator('.workspace-sidebar a[aria-current=page]').count(), 1, relative);
       const assets = await page.locator('link[rel=stylesheet],img,video source').evaluateAll(elements =>
         elements.map(el => el.href || el.src).filter(url => url.startsWith(location.origin)));
       for (const asset of new Set(assets)) {

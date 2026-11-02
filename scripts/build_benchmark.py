@@ -102,7 +102,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
                     lambda m: f'{m[1]}="{prefix}{m[2]}"', header)
     nav = navigation(suites, current, prefix)
     styles = ''.join(f'<link rel="stylesheet" href="{prefix}{name}">' for name in [
-        'tasks/task-pages.css', 'media/site-shell.css?v=white-canvas-1',
+        'tasks/task-pages.css', 'media/site-shell.css?v=compact-header-1',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
         'tasks/benchmark-workspace.css?v=1',
@@ -128,7 +128,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
 def main(overview_only=False):
     suites = json.loads((ROOT / 'data/benchmark-navigation.json').read_text())
     (ROOT / 'benchmark').mkdir(exist_ok=True)
-    (ROOT / 'benchmark.html').write_text(page(suites, 'overview', 'Benchmark', overview(suites)))
+    (ROOT / 'benchmark.html').write_text(page(suites, 'overview', 'Benchmark', overview(suites)).replace('</body>', '<link rel="stylesheet" href="scripts/home-reveal.css?v=3"><script src="scripts/home-reveal.js?v=3" defer></script></body>'))
     if overview_only:
         print('Built Benchmark landing page only.')
         return

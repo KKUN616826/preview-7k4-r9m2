@@ -34,6 +34,7 @@
   function render() {
     const focusedResultControl = tbody.contains(document.activeElement) ? document.activeElement : null;
     const selectedView = views.get(state.view);
+    document.getElementById('lb-view-description').textContent = {mind:'Memory and reasoning performance.', act:'Physical execution performance.', coupling:'Mind–act coordination performance.'}[state.view];
     const ranked = data.models.filter(model => value(model) != null).sort((a, b) => value(b) - value(a));
     const ranks = new Map(ranked.map(model => [model.id, ranked.findIndex(other => value(other) === value(model)) + 1]));
     const ordered = [...data.models].sort((a, b) => {
@@ -81,7 +82,7 @@
     const pendingButton = document.getElementById('lb-pending');
     pendingButton.hidden = pendingCount === 0;
     pendingButton.setAttribute('aria-expanded', String(state.pending));
-    pendingButton.textContent = `${state.pending ? 'Hide' : 'Show'} ${pendingCount} models without ${selectedView.label} ${state.metric === 'score' ? 'Score' : 'Success'} results ${state.pending ? '−' : '+'}`;
+    pendingButton.textContent = `${state.pending ? 'Hide' : 'Show'} ${pendingCount} unreported models ${state.pending ? '−' : '+'}`;
     document.getElementById('lb-status-line').textContent = `${ranked.length} models with reported results`;
     document.querySelectorAll('.lb-detail-row > td').forEach(cell => cell.colSpan = matchMedia('(max-width:760px)').matches ? 4 : 5);
     document.getElementById('lb-empty').hidden = count !== 0;

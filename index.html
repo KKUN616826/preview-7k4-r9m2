@@ -1271,7 +1271,7 @@ body .rd-hero .mind-reference-hero{height:calc(100svh - 90px)!important;min-heig
 
 </style>
 
-<link rel="stylesheet" href="media/site-shell.css?v=white-canvas-1"></head>
+<link rel="stylesheet" href="media/site-shell.css?v=compact-header-1"></head>
 
 <body class="dark-hero">
 
@@ -1445,7 +1445,7 @@ body .rd-hero .mind-reference-hero{height:calc(100svh - 90px)!important;min-heig
 
 </section>
 
-<figure class="intro-film"><video controls playsinline preload="metadata" poster="intro_video_hyperframes/renders/mind2act-world-poster-20261025.jpg" aria-label="Mind2Act World promotional video"><source src="intro_video_hyperframes/renders/mind2act-world-promo-20261025.mp4" type="video/mp4"></video><figcaption>Mind2Act World</figcaption></figure>
+<figure class="intro-film"><div class="intro-film-player"><video controls playsinline preload="metadata" poster="media/video-covers/mind2act-overview.png" aria-label="Mind2Act World promotional video"><source src="intro_video_hyperframes/renders/mind2act-world-promo-20261025.mp4" type="video/mp4"></video></div><figcaption>Mind2Act World</figcaption></figure><script src="scripts/intro-film.js?v=poster-light-4" defer></script>
 
 
 
@@ -1618,7 +1618,7 @@ body .rd-hero .mind-reference-hero{height:calc(100svh - 90px)!important;min-heig
 
 
 
-<section class="academic-section compact-resources" id="resources-overview"><h2>Resources</h2><div class="resource-pills"><a href="docs/PhysCo_Technical_Report_v0.1.pdf">Technical Report</a><a href="docs/PhysCo_Cases.md">Task Specifications</a><a href="docs/PhysCo_Media.md">Media Index</a><a href="https://github.com/yu2hi13/physco-bench">Repository</a><a href="data/showcase-cases.json">Structured Data</a></div></section>
+<section class="academic-section compact-resources" id="resources-overview"><link rel="stylesheet" href="scripts/resources-cards.css?v=2"><h2>Resources</h2><p class="resource-intro">Research materials, task specifications, and tools.</p><div class="resource-card-grid"><a class="resource-card" href="docs/PhysCo_Technical_Report_v0.1.pdf"><div class="resource-preview"><img class="resource-paper" src="media/resource-previews/technical-report.png" alt="First page of the technical report" loading="lazy"></div><h3>Technical Report</h3><p>Original PhysCo benchmark design draft</p><span class="resource-card-foot"><small>PDF · Draft v0.1</small><span aria-hidden="true">↗</span></span></a><a class="resource-card" href="benchmark.html"><div class="resource-preview"><div class="resource-suite-list"><div class="resource-suite"><span><b>Mind</b><small>10 tasks</small></span><img src="media/benchmark-covers/E.jpg" alt="E demonstration" loading="lazy"><img src="media/benchmark-covers/F.jpg" alt="F demonstration" loading="lazy"></div><div class="resource-suite"><span><b>Act</b><small>10 tasks</small></span><img src="media/benchmark-covers/FR1.jpg" alt="FR1 demonstration" loading="lazy"><img src="media/benchmark-covers/FR2.jpg" alt="FR2 demonstration" loading="lazy"></div><div class="resource-suite"><span><b>Mind2Act</b><small>10 tasks</small></span><img src="media/benchmark-covers/CP01.jpg" alt="CP01 demonstration" loading="lazy"><img src="media/benchmark-covers/CP02.jpg" alt="CP02 demonstration" loading="lazy"></div></div></div><h3>Task Specifications</h3><p>Goals and descriptions for all 30 tasks</p><span class="resource-card-foot"><small>Task guide</small><span aria-hidden="true">↗</span></span></a><a class="resource-card" href="docs/PhysCo_Media.md"><div class="resource-preview"><div class="resource-media"><img src="media/benchmark-covers/CP04.jpg" alt="CP04 cooking simulation: ingredients and cooking station" loading="lazy"><img src="media/benchmark-covers/PR3.jpg" alt="PR3 simulation demonstration" loading="lazy"><img src="media/benchmark-covers/CP05.jpg" alt="CP05 simulation demonstration" loading="lazy"></div></div><h3>Media Index</h3><p>39 demonstrations in the existing media index</p><span class="resource-card-foot"><small>Media</small><span aria-hidden="true">↗</span></span></a></div><div class="resource-tool-grid"><a class="resource-tool" href="https://github.com/KKUN616826/preview-7k4-r9m2"><span class="resource-symbol" aria-hidden="true">⌘</span><span><h3>Repository</h3><p>Browse the website source code</p></span><span aria-hidden="true">↗</span></a><a class="resource-tool" href="data/benchmark-navigation.json"><span class="resource-symbol" aria-hidden="true">{ }</span><span><h3>Structured Data</h3><p>Access metadata for all 30 tasks</p></span><span aria-hidden="true">↗</span></a></div></section>
 
 
 
@@ -3272,6 +3272,7 @@ body .project-institution .lab-website-link:hover,body .project-institution .lab
 </style>
 <!-- Homepage leaderboard sections are temporarily hidden. -->
 <style id="home-leaderboards-hidden">html body #research-overview{display:none!important}</style>
+<link rel="stylesheet" href="scripts/home-reveal.css?v=3"><script src="scripts/home-reveal.js?v=3" defer></script>
 </body></html>
 
 <style id="project-polish-20261013">/* October 2026 project presentation. Task suites and hero keep their own grids. */
