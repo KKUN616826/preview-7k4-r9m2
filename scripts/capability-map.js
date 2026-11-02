@@ -95,6 +95,7 @@
     activeSuite=suite.slug;root.dataset.suite=activeSuite;
     choices.forEach(choice=>{
       const active=choice.dataset.suite===suite.slug;
+      choice.closest('.cm-suite').classList.toggle('is-active',active);
       choice.setAttribute('aria-pressed',String(active));
       choice.setAttribute('aria-expanded',String(active));
       root.querySelector(`#${choice.getAttribute('aria-controls')}`).hidden=!active;

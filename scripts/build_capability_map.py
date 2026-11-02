@@ -7,9 +7,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 EXPLORER_COPY = {
-    'mind': {'description': 'Memory and operation selection', 'coverage': 'Memory retention · Rule inference · Spatial and sequence tracking'},
-    'act': {'description': 'Precision, timing and stability', 'coverage': 'Contact precision · Action timing · Motion stability'},
-    'mind2act': {'description': 'Decision-execution coordination', 'coverage': 'Multi-stage goals · Dynamic conditions · Feedback'}
+    'mind': {'description': 'Remember and choose.', 'coverage': 'Memory retention · Rule inference · Spatial and sequence tracking'},
+    'act': {'description': 'Move with precision and timing.', 'coverage': 'Contact precision · Action timing · Motion stability'},
+    'mind2act': {'description': 'Decide, act, and adapt.', 'coverage': 'Multi-stage goals · Dynamic conditions · Feedback'}
 }
 
 def render():
@@ -21,9 +21,9 @@ def render():
     for i, suite in enumerate(suites):
         slug, name = suite['slug'], suite['name']
         selected = slug == 'mind2act'
-        rows.append(f'''<div class="cm-suite cm-{slug}">
+        rows.append(f'''<div class="cm-suite cm-{slug}{" is-active" if selected else ""}">
 <button type="button" class="cm-suite-choice" data-suite="{slug}" aria-pressed="{str(selected).lower()}" aria-expanded="{str(selected).lower()}" aria-controls="cm-coverage-{slug}"><span class="cm-suite-heading"><strong>{name}</strong><small>{len(suite['cases'])}</small></span><span class="cm-suite-goal">{html.escape(suite['explorer']['description'])}</span></button>
-<div class="cm-detail" id="cm-coverage-{slug}"{'' if selected else ' hidden'}><a class="cm-detail-link" href="benchmark/{slug}.html" aria-label="View {name} tasks">View tasks ↗</a></div></div>''')
+<div class="cm-detail" id="cm-coverage-{slug}"{'' if selected else ' hidden'}><a class="cm-detail-link" href="benchmark/{slug}.html" aria-label="Explore {name} tasks">Explore {name} tasks ↗</a></div></div>''')
         for j, task in enumerate(suite['cases']):
             links.append(f'<a href="tasks/{task["id"]}.html">{task["id"]} · {html.escape(task["title"])}</a>')
     cards = []
@@ -33,7 +33,7 @@ def render():
     payload = json.dumps(suites,ensure_ascii=False).replace('<','\\u003c')
     markup = '''<section id="capability-explorer" class="academic-section capability-map" aria-labelledby="cm-heading">
 <link rel="stylesheet" href="scripts/capability-map.css">
-<div class="cm-layout"><div class="cm-copy"><div class="cm-overview"><h2 id="cm-heading"><span>__TASK_COUNT__</span><span class="cm-sr-only"> tasks</span></h2><p>Tasks across reasoning, execution,<br>and coordination.</p><div class="cm-metrics"><div><strong>3</strong><span>Evaluation suites</span></div><div><strong>3</strong><span>Difficulty levels</span><small>Easy / Medium / Hard</small></div></div><div class="cm-composition" aria-hidden="true">'''+''.join(f'<span class="cm-{suite["slug"]}">'+ '<i></i>'*len(suite['cases'])+'</span>' for suite in suites)+'''</div><p class="cm-composition-caption">10 tasks in each suite</p></div><div class="cm-choices" role="group" aria-label="Evaluation suites">'''+''.join(rows)+'''</div></div>
+<div class="cm-layout"><div class="cm-copy"><div class="cm-overview"><h2 id="cm-heading"><span class="cm-task-count">__TASK_COUNT__</span> <span class="cm-task-unit">Tasks</span></h2><p class="cm-overview-meta">3 suites · 3 difficulty levels</p><p class="cm-overview-levels">Easy / Medium / Hard</p></div><div class="cm-choices" role="group" aria-label="Evaluation suites">'''+''.join(rows)+'''</div></div>
 <div class="cm-visual"><div class="cm-orbit" tabindex="0" role="group" aria-label="Three-dimensional task sphere. Drag to rotate or select a task.">
 <canvas class="cm-particles" aria-hidden="true"></canvas><div class="cm-moon-fallback" aria-hidden="true"></div>
 <svg class="cm-regions" aria-hidden="true"><g class="cm-corridor"><path data-band-edge="-0.30"></path><path data-band-edge="0.30"></path></g><g class="cm-region-leaders"><path data-region-line="mind"></path><circle data-region-dot="mind" r="3"></circle><path data-region-line="act"></path><circle data-region-dot="act" r="3"></circle><path data-region-line="mind2act"></path><circle data-region-dot="mind2act" r="3"></circle></g></svg>
