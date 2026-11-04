@@ -1,0 +1,6 @@
+[
+  {"date": "2026-10-25", "type": "Release", "html": "Released the 75-second <a href=\"index.html#overview\">Mind2Act World overview video</a>, covering all three suites."},
+  {"date": "2026-10-13", "type": "Tasks", "html": "Task pages now show Easy, Medium and Hard demonstrations side by side, with written instructions. <a href=\"tasks/CP01.html\">Open an example task</a>."},
+  {"date": "2026-10-12", "type": "Tasks", "html": "Opened the task catalogue across the Mind, Act and Mind2Act suites. <a href=\"benchmark.html\">Browse the tasks</a>."},
+  {"date": "2026-10-11", "type": "Leaderboard", "html": "Published the first Mind, Act and Mind2Act results for coding agents and VLA policies. <a href=\"leaderboard.html\">See the leaderboard</a>."}
+]

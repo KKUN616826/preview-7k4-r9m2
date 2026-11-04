@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mind2Act World: Benchmarking Robot Mind, Physical Act, and Mind–Act Coordination</title>
+<meta name="description" content="Mind2Act World is a simulation benchmark of __TASK_COUNT__ robotic manipulation tasks that separates task reasoning (Mind), physical execution (Act) and their coordination (Mind2Act).">
+<link rel="icon" type="image/png" sizes="128x128" href="media/images/mind2act-favicon-v2.png">
+<link rel="stylesheet" href="scripts/hero-demo.css?v=scene-dips-11">
+<script src="scripts/hero-demo-data.js?v=scene-dips-11" defer></script>
+<script src="scripts/hero-demo.js?v=scene-dips-11" defer></script>
+<link rel="stylesheet" href="scripts/home.css?v=ds-20261104">
+</head>
+<body class="ds ds-overlay-nav home">
+<main id="main">
+
+<section class="rd-hero home-hero" aria-labelledby="home-title">
+__HERO_DEMO__
+<div class="hero-intro">
+  <p class="eyebrow">A simulation benchmark for embodied intelligence</p>
+  <h1 id="home-title">Mind2Act World</h1>
+  <p class="hero-sub">Benchmarking robot mind, physical act, and their coordination in manipulation.</p>
+  <div class="btn-row">
+    <a class="btn hero-btn-primary" href="leaderboard.html">See the leaderboard <span aria-hidden="true">→</span></a>
+    <a class="btn hero-btn-secondary" href="benchmark.html">Browse __TASK_COUNT__ tasks</a>
+    <a class="btn hero-btn-secondary" href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div>
+</section>
+
+<section class="section" id="paper" aria-labelledby="paper-title">
+  <div class="container">
+    <h2 class="paper-title" id="paper-title">Mind2Act World: Benchmarking Robot Mind, Physical Act, and Mind–Act Coordination in Robotic Manipulation</h2>
+    <dl class="meta-grid">
+      <dt>Authors</dt>
+      <dd class="authors">Yuzhi Huang<sup>*§</sup>, Junchao Lin<sup>*</sup>, Jiazhen Huang<sup>*</sup>, Ziyi Xiong<sup>*</sup>, Yuankun Lü<sup>*</sup><span class="author-note"><sup>*</sup> Co-first authors · <sup>§</sup> Project lead</span></dd>
+      <dt>Affiliation</dt>
+      <dd class="affiliation"><a href="https://www.sigs.tsinghua.edu.cn/" target="_blank" rel="noopener"><img src="media/images/tsinghua-sigs.png" width="151" height="28" alt="Tsinghua Shenzhen International Graduate School"></a><span><a href="https://mmlab-sigs.github.io/groups/zwang/" target="_blank" rel="noopener">mmlab@SIGS</a>, Tsinghua Shenzhen International Graduate School</span></dd>
+      <dt>Published</dt>
+      <dd>October 2026 · project preview</dd>
+      <dt>Code</dt>
+      <dd><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener">KKUN616826/preview-7k4-r9m2</a></dd>
+      <dt>Leaderboard</dt>
+      <dd><a href="leaderboard.html">View leaderboard →</a></dd>
+      <dt>Share</dt>
+      <dd class="share"><a href="https://twitter.com/intent/tweet?text=Mind2Act%20World&amp;url=https%3A%2F%2Fkkun616826.github.io%2Fpreview-7k4-r9m2%2F" target="_blank" rel="noopener">X</a><span class="sep">·</span><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fkkun616826.github.io%2Fpreview-7k4-r9m2%2F" target="_blank" rel="noopener">LinkedIn</a><span class="sep">·</span><button type="button" class="link-button" data-copy="https://kkun616826.github.io/preview-7k4-r9m2/" data-copied="Link copied">Copy link</button></dd>
+    </dl>
+  </div>
+</section>
+
+<section class="section section--tint" id="overview" aria-labelledby="overview-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">Overview</p><h2 id="overview-title">Remember. Execute. Adapt.</h2><p class="lead">A robot must remember task state, act under physical constraints, and use execution feedback to decide what comes next.</p></header>
+    <figure class="intro-film"><video controls playsinline preload="metadata" poster="media/video-covers/mind2act-overview-mosaic.webp" aria-label="Mind2Act World overview video"><source src="intro_video_hyperframes/renders/mind2act-world-promo-20261025.mp4" type="video/mp4"></video></figure>
+    <div class="stats" aria-label="Benchmark at a glance">
+      <div class="stat">__ICON_TASKS__<span class="stat-value">__TASK_COUNT__</span><span class="stat-label">tasks</span><span class="stat-note">ten per capability suite</span></div>
+      <div class="stat">__ICON_LEVELS__<span class="stat-value">__CONFIG_COUNT__</span><span class="stat-label">task configurations</span><span class="stat-note">Easy · Medium · Hard</span></div>
+      <div class="stat">__ICON_SUITES__<span class="stat-value">__SUITE_COUNT__</span><span class="stat-label">capability suites</span><span class="stat-note">Mind · Act · Mind2Act</span></div>
+      <div class="stat">__ICON_MODELS__<span class="stat-value">__MODEL_COUNT__</span><span class="stat-label">models evaluated</span><span class="stat-note">coding agents and VLAs</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="introduction" aria-labelledby="intro-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">Why Mind2Act</p><h2 id="intro-title">Final success alone hides where a task breaks down</h2></header>
+    <div class="prose">
+      <p>Robotic manipulation requires more than choosing the right goal or executing an isolated skill. Over a long horizon, a robot must remember task state, act under physical constraints, and use execution feedback to decide what comes next.</p>
+      <p>Mind2Act World separates these demands into three complementary suites. Each of the __TASK_COUNT__ tasks has Easy, Medium and Hard configurations that vary memory load, planning dependencies, precision and timing pressure. Evaluation combines task success with stage progress and event-level evidence, so errors in goal selection, physical execution and the use of feedback can be told apart.</p>
+    </div>
+    <div class="suite-cards">__SUITE_CARDS__</div>
+  </div>
+</section>
+
+<section class="section section--tint home-explore" id="explore" aria-labelledby="explore-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">Benchmark</p><h2 id="explore-title">Three suites, __TASK_COUNT__ tasks</h2><p class="lead">Each dot is a task. Choose a suite or a task to see what it asks of the robot.</p></header>
+  </div>
+__CAPABILITY_MAP__
+  <div class="container"><p class="credit">Moon imagery: <a href="https://svs.gsfc.nasa.gov/4720" target="_blank" rel="noopener">NASA’s Scientific Visualization Studio</a>. Task regions are a conceptual layout.</p></div>
+</section>
+
+<section class="section" id="leaderboard-preview" aria-labelledby="lbp-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">Leaderboard</p><h2 id="lbp-title">See how models perform</h2><p class="lead">Top models in each suite. Coding agents lead on Mind, VLA policies do better on Act, and no model reaches 20 on Mind2Act.</p></header>
+    __LB_PREVIEW__
+  </div>
+</section>
+
+<section class="section section--tint" id="tasks" aria-labelledby="tasks-title">
+  <div class="container">
+    <header class="section-head section-head--row"><div><p class="eyebrow">Tasks</p><h2 id="tasks-title">__TASK_COUNT__ benchmark tasks</h2><p class="lead">Every task has Easy, Medium and Hard demonstrations.</p></div><a class="btn btn-secondary" href="benchmark.html">Browse all __TASK_COUNT__ tasks →</a></header>
+  </div>
+  <div class="marquees">__MARQUEE__</div>
+  __TASK_INDEX__
+</section>
+
+<section class="section" id="news" aria-labelledby="news-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">News</p><h2 id="news-title">Latest updates</h2></header>
+    __NEWS__
+  </div>
+</section>
+
+<section class="section section--tint" id="resources" aria-labelledby="resources-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">Resources</p><h2 id="resources-title">Code, tasks and data</h2></header>
+    <div class="resource-grid">
+      <a class="card card-body resource" href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener"><span class="icon-disc">__ICON_CODE__</span><h3>Code</h3><p>Website source, task assets and build scripts.</p><span class="badge badge--plain">GitHub</span></a>
+      <a class="card card-body resource" href="benchmark.html"><span class="icon-disc">__ICON_SPEC__</span><h3>Task specifications</h3><p>Goals, instructions and demonstrations for all __TASK_COUNT__ tasks.</p><span class="badge badge--plain">__TASK_COUNT__ tasks</span></a>
+      <a class="card card-body resource" href="protocol.html"><span class="icon-disc">__ICON_BOARD__</span><h3>Evaluation protocol</h3><p>How Score and Success are measured and how to submit a model.</p><span class="badge badge--plain">Protocol</span></a>
+      <a class="card card-body resource" href="data/benchmark-navigation.json"><span class="icon-disc">__ICON_DATA__</span><h3>Structured data</h3><p>Machine-readable metadata for every task and suite.</p><span class="badge badge--plain">JSON</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cite" aria-labelledby="cite-title">
+  <div class="container">
+    <header class="section-head"><p class="eyebrow">Citation</p><h2 id="cite-title">Cite Mind2Act World</h2></header>
+    <div class="card cite-card"><div class="cite-head"><strong>Mind2Act World</strong><button type="button" class="btn btn-secondary btn-sm" data-copy-target="bibtex" data-copied="Copied">__ICON_COPY__<span>Copy</span></button></div><pre id="bibtex">__BIBTEX__</pre></div>
+  </div>
+</section>
+
+</main>
+<script src="scripts/home.js?v=ds-20261104" defer></script>
+</body>
+</html>
