@@ -1,0 +1,29 @@
+/* benchmark.html task catalogue (2026-11 redesign). Tokens only. */
+.catalog{padding-top:var(--sp-6)}
+.catalog-tools{display:grid;gap:var(--sp-4);margin-bottom:var(--sp-3)}
+.catalog-tools .tabs{justify-self:start}
+.search{display:flex;align-items:center;gap:var(--sp-3);height:52px;padding:0 var(--sp-3) 0 var(--sp-5);border:1px solid var(--line-strong);border-radius:var(--r-pill);background:var(--surface);box-shadow:var(--shadow-1)}
+.search:focus-within{border-color:var(--ink)}
+.search svg{width:18px;height:18px;color:var(--muted);flex:none}
+.search input{flex:1;min-width:0;height:100%;border:0;outline:0;background:none;font:400 16px var(--font-body);color:var(--ink)}
+.search kbd{display:inline-grid;place-items:center;min-width:26px;height:26px;border:1px solid var(--line);border-radius:6px;font:500 12px var(--font-mono);color:var(--muted)}
+.catalog-status{min-height:1.5em;margin-bottom:var(--sp-5)}
+.tc-group{margin-bottom:var(--sp-8)}
+.tc-group[hidden]{display:none}
+.tc-group-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:var(--sp-2) var(--sp-3);margin-bottom:var(--sp-5)}
+.tc-group-head .dot{align-self:center}
+.tc-group-head h2{font:700 28px/1.2 var(--font-display);letter-spacing:-.02em}
+.tc-group-head p{flex-basis:100%;color:var(--muted);font-size:15px}
+.tc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--sp-5)}
+.task-card2{display:flex;flex-direction:column}
+.task-card2[hidden]{display:none}
+.tc-media{position:relative;display:block;aspect-ratio:4/3;background:var(--surface-3);overflow:hidden}
+.tc-media img,.tc-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tc-media .code-tag{position:absolute;left:10px;top:10px}
+.tc-media .badge{position:absolute;right:10px;top:10px}
+.tc-body{display:flex;flex-direction:column;gap:6px;padding:var(--sp-4);flex:1}
+.tc-body b{font-size:15px;font-weight:600;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tc-goal{font-size:13px;line-height:1.5;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.tc-levels{display:flex;gap:4px;margin-top:var(--sp-2)}
+.tc-levels span{display:inline-grid;place-items:center;width:24px;height:22px;border-radius:6px;background:var(--surface-3);font:500 11px/1 var(--font-mono);color:var(--ink-2)}
+.catalog-empty{padding:var(--sp-8) 0;text-align:center;color:var(--muted)}

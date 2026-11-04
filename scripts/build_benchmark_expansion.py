@@ -10,11 +10,11 @@ def load():return json.loads((ROOT/'data/benchmark-expansion.json').read_text())
 def task_content(case):
     cid=case['id'];levels=case['media'];initial=next(l for l in LEVELS if l in levels)
     title=escape(case['title']);brief=escape(case['instruction']);tags=''.join(f'<span>{escape(t)}</span>' for t in case['focus'])
-    out=[f'<div class="breadcrumb"><a href="index.html">All tasks</a> / {cid}</div><div class="task-head"><h1>{title}</h1><p>{escape(case["summary"])}</p><p class="task-original-title" lang="zh-CN">{escape(case["title_zh"])}</p></div>',
+    out=[f'<div class="breadcrumb"><a href="index.html">All tasks</a> / {cid}</div><div class="task-head"><h1>{title}</h1><p>{escape(case["summary"])}</p></div>',
          f'<div class="demo-toolbar"><nav class="difficulty" aria-label="Difficulty" data-default="{initial}">']
     for level in LEVELS:
-        pending='' if level in levels else '<small class="difficulty-status">Pending</small>'
-        out.append(f'<a href="#{level}" data-level="{level}" aria-current="{str(level==initial).lower()}">{level.title()}{pending}</a>')
+        missing='' if level in levels else ' class="is-unavailable" title="No demonstration for this level yet"'
+        out.append(f'<a href="#{level}" data-level="{level}" aria-current="{str(level==initial).lower()}"{missing}>{level.title()}</a>')
     out.append('</nav></div>')
     for level in LEVELS:
         hidden='' if level==initial else ' hidden'
@@ -24,7 +24,7 @@ def task_content(case):
             out.append(f'<figure class="expansion-demo"><div class="video-shell"><video controls playsinline preload="none" poster="../media/benchmark-expansion/{cid}/{level}.jpg" aria-label="{cid} {level.title()} demonstration"><source src="../media/task-demos/{cid}/{level}.mp4" type="video/mp4"></video></div><figcaption>{level.title()} · {view} demonstration</figcaption></figure>')
         else:
             available=' · '.join(l.title() for l in LEVELS if l in levels)
-            out.append(f'<div class="demo-pending" role="status"><h2>{level.title()} demonstration pending</h2><p>A video for this level has not been supplied yet.</p><p>Available demonstrations: {available}.</p><a href="#{initial}">Watch {initial.title()} instead →</a></div>')
+            out.append(f'<div class="demo-pending" role="status"><h2>No {level.title()} demonstration yet</h2><p>Available demonstrations: {available}.</p><a href="#{initial}">Watch {initial.title()} instead →</a></div>')
         out.append(f'</div><aside class="brief"><div class="instruction"><h2>Instruction</h2><p>{brief}</p></div><section class="dimensions"><h2>Task focus</h2><div class="dimension-list">{tags}</div></section></aside></div></section>')
     out.append('<nav class="task-footer" aria-label="Adjacent tasks"></nav><script src="../scripts/task-difficulty.js" defer></script>')
     return ''.join(out)
