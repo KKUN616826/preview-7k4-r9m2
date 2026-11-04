@@ -1,3 +1,4 @@
+@import url("./typography.css?v=manrope-1");
 /* Shared navigation, used on the home page and its linked pages. */
 body .header{position:sticky!important;top:0!important;z-index:100!important;display:block!important;background:#ffffff!important;border:0!important;border-bottom:1px solid #d7ded8!important;backdrop-filter:none!important;padding:0!important;margin:0!important;width:100%!important;max-width:none!important;box-shadow:none!important;color:#203447!important;font-family:Arial,sans-serif!important}
 body .header .header-inner{box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:26px!important;width:100%!important;max-width:none!important;height:76px!important;min-height:76px!important;margin:0!important;padding:0 24px!important}

@@ -1,0 +1,26 @@
+/* One local text family across pages, including generated pages with legacy inline styles. */
+@font-face {
+  font-family: Manrope;
+  src: url('./fonts/manrope/Manrope-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* Layered important declarations override the older unlayered font shorthands
+   without replacing their font size, weight, line height, or responsive rules. */
+@layer m2a-typography {
+  :root { --m2a-font-sans: Manrope, Arial, sans-serif; }
+  :where(body, body *) { font-family: var(--m2a-font-sans) !important; }
+
+  /* The pixel wordmark is brand artwork; code remains a readable monospace face. */
+  :where(.demo-brand, .demo-brand *) {
+    font-family: LunarPixel, Pixel, monospace !important;
+  }
+  :where(pre, code, kbd, samp, pre *, code *, kbd *, samp *) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  }
+  :where(table, .lb-podium-label, .lb-score-display, .lb-value-label, .cm-node-id) {
+    font-variant-numeric: tabular-nums;
+  }
+}
