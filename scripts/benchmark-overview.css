@@ -36,6 +36,31 @@
 .bo-hero-selector button[aria-pressed=true]{color:var(--bo-accent);font-weight:600}
 .bo-hero-selector button[aria-pressed=true]>span{background:var(--bo-accent);transform:scale(1.15)}
 .bo-hero-controls .bo-motion-toggle{font-size:11px;border:0;border-bottom:1px solid #bccbc4;padding:3px 0;background:none;color:var(--bo-muted);align-self:flex-end;white-space:nowrap}
+/* Search sits between the featured tasks and the complete catalog. */
+.bo-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.bo-search{margin:30px 0 0}
+.bo-search-field{display:flex;align-items:center;gap:17px;padding:0 22px;min-height:62px;border:1px solid #cad4d7;border-radius:999px;background:#fff;box-shadow:0 3px 12px #20344709;transition:border-color .18s,box-shadow .18s}
+.bo-search-field:focus-within{border-color:var(--bo-accent);box-shadow:0 0 0 3px #416b6115,0 3px 12px #20344709}
+.bo-search-icon{position:relative;flex:none;width:18px;height:18px;border:2px solid #71818c;border-radius:50%;margin-right:3px}
+.bo-search-icon:after{content:'';position:absolute;width:8px;height:2px;background:#71818c;transform:rotate(45deg);right:-6px;bottom:-3px;border-radius:1px}
+.bo-search input{flex:1;min-width:0;width:100%;border:0;outline:0;background:transparent;color:var(--bo-ink);font:18px/1.5 Arial,sans-serif;padding:17px 0;border-radius:0;appearance:none}
+.bo-search input::placeholder{color:#7b858b;opacity:1}
+.bo-search input::-webkit-search-cancel-button{display:none}
+.bo-search-shortcut{flex:none;border:1px solid #d8dfe1;border-radius:6px;padding:0 10px;color:var(--bo-muted);font:16px/30px Arial,sans-serif}
+.bo-search-clear{flex:none;background:var(--bo-soft);border:0;border-radius:20px;padding:6px 12px;font-size:13px!important;color:var(--bo-accent)!important}
+.bo-search-status{font:13px/1.5 Arial,sans-serif;color:var(--bo-muted);margin:10px 22px 0}
+.bo-search-status:empty{display:none}
+.bo-search-empty{padding:42px 20px;text-align:center;background:var(--bo-soft);border-radius:8px}
+.bo-search-empty h3{font:600 22px/1.4 Sora,Arial,sans-serif;margin:0 0 8px}
+.bo-search-empty p{font-size:15px;color:var(--bo-muted);margin:0 0 16px}
+.bo-search-empty button{border:1px solid #bac8c1;background:#fff;border-radius:5px;padding:8px 16px;font-size:14px}
+@media(max-width:767px){
+  .bo-search{margin-top:24px}
+  .bo-search-field{min-height:54px;padding-inline:17px;gap:13px}
+  .bo-search input{font-size:15px;padding-block:14px}
+  .bo-search-shortcut{display:none}
+  .bo-search-icon{width:16px;height:16px}
+}
 .bo-explorer{padding-top:44px;scroll-margin-top:calc(var(--bo-header) + 20px)}
 .bo-explorer-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:26px}
 .bo-explorer-heading h2{font:600 clamp(25px,2.3vw,32px)/1.3 Sora,Arial,sans-serif;letter-spacing:-.9px;margin:0}
@@ -166,6 +191,17 @@
   .bo-chapter-layout{grid-template-columns:1fr;gap:12px;min-height:0}
   .bo-media{max-width:240px;width:100%}.bo-task-copy h3{min-height:0}
   .bo-task-actions{justify-content:flex-start;gap:22px}
+}
+/* Reserve room for the search field on shorter desktop and tablet viewports. */
+@media(min-width:768px) and (max-height:760px){
+  .bo-hero{min-height:0;padding-block:22px}
+  .bo-hero-visual{max-width:min(780px,calc((100svh - 310px) * 1.8));padding-top:0}
+  .bo-hero h1{font-size:clamp(44px,5.5vw,74px);margin-bottom:12px}
+  .bo-eyebrow{margin-bottom:14px}
+  .bo-hero-tagline{font-size:clamp(26px,2.5vw,34px);margin-bottom:20px}
+  .bo-hero-meta dd{font-size:28px}
+  .bo-hero-controls{margin-top:12px}
+  .bo-search{margin-top:20px}
 }
 @media(prefers-reduced-motion:reduce){
   .benchmark-overview *, .benchmark-overview *:before,.benchmark-overview *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}

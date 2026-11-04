@@ -226,8 +226,9 @@
   function sync(time = video.currentTime, force = false) {
     if (failed) return;
     const state = presentationAt(data, time);
-    // A single media clock governs the dip, including paused seeks and loops.
-    hero.style.setProperty('--scene-opacity', reduced.matches ? 1 : state.sceneOpacity);
+    // Keep the decoded frame visible during chapter seeks and automatic cuts.
+    // Seeking to an edit boundary must not land on an artificial black frame.
+    hero.style.setProperty('--scene-opacity', 1);
     const signature = [state.phase, state.captured, state.completed, state.released].join(':');
     if (signature !== lastSignature || force) {
       lastSignature = signature;
@@ -309,8 +310,12 @@
   }
   play.addEventListener('click', () => { wantsPlay = video.paused; if (wantsPlay) resume(); else video.pause(); });
   sceneButtons.forEach(button => button.addEventListener('click', () => {
-    video.currentTime = data.presentation.segments.find(segment => segment.phase === button.dataset.demoPhase).start;
-    sync(video.currentTime, true);
+    // Retire the previous phase's queued frame before seeking to the new one.
+    // The seeked event schedules the next callback once that frame is decoded.
+    cancelFrame();
+    const time = data.presentation.segments.find(segment => segment.phase === button.dataset.demoPhase).start;
+    video.currentTime = time;
+    sync(time, true);
   }));
   video.addEventListener('loadedmetadata', initialize);
   video.addEventListener('seeking', () => { cancelFrame(); sync(video.currentTime, true); });

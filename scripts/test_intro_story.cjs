@@ -23,7 +23,7 @@ const plain=s=>s.replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
   assert.equal(await page.locator('link[href*="intro-story.css"],script[src*="intro-story.js"],.story-loop-video,.story-view-grid').count(),0,'experimental narrative layout is not loaded');
   assert.equal(await root.locator('details').count(),0);
   assert.equal(await root.locator('figure').count(),1);
-  assert.ok((await root.locator('figure a').getAttribute('href')).includes('mind2act-overview-v3.pdf'));
+  assert.ok((await root.locator('figure a').getAttribute('href')).includes('mind2act-overview-v36.pdf'));
   const image=root.locator('figure img');await image.scrollIntoViewIfNeeded();await image.evaluate(i=>i.decode());
   const naturalRatio=await image.evaluate(i=>i.naturalWidth/i.naturalHeight);
   for(const width of [320,390,820,1440,1920]){

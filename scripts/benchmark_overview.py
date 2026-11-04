@@ -88,7 +88,8 @@ def chapter(case, index, total):
         f'{" disabled" if level not in levels else ""}>{level.title()}'
         f'{" (not available)" if level not in levels else ""}</option>'
         for level in LEVELS)
-    return f'''<article class="bo-chapter" id="task-{case['id']}" data-task="{case['id']}" aria-labelledby="title-{case['id']}">
+    search_text = ' '.join(str(case.get(key, '')) for key in ('id', 'title', 'nav_title', 'summary', 'suite')) + ' ' + CATALOG_GOALS.get(case['id'], '')
+    return f'''<article data-search="{e(search_text)}" class="bo-chapter" id="task-{case['id']}" data-task="{case['id']}" aria-labelledby="title-{case['id']}">
       <div class="bo-chapter-layout">
         <a class="bo-task-link" href="tasks/{case['id']}.html#{initial}" aria-labelledby="title-{case['id']}"></a>
         <div class="bo-media">
@@ -115,7 +116,7 @@ def quick_index(suites):
 
 
 def render(suites):
-    records = {c['id']: task_data(c) for s in suites for c in s['cases']}
+    records = {c['id']: {**task_data(c), 'suite': s['name']} for s in suites for c in s['cases']}
     default = 'mind2act'
     # A representative task from each suite. Only the front frame plays.
     featured = [('mind', 'E2'), ('act', 'PR3'), ('mind2act', 'CP05')]
@@ -146,10 +147,19 @@ def render(suites):
         <button type="button" class="bo-motion-toggle" aria-pressed="false">Pause preview</button></div>
       </div>
     </section>
+    <form class="bo-search" role="search" aria-label="Search benchmark tasks">
+      <div class="bo-search-field"><span class="bo-search-icon" aria-hidden="true"></span>
+        <label class="bo-sr-only" for="benchmark-search">Search tasks by name, ID, or keyword</label>
+        <input id="benchmark-search" type="search" enterkeyhint="search" placeholder="Search {len(records)} tasks — conveyor, keypad, cloth, balance…" autocomplete="off" spellcheck="false" aria-controls="explore" aria-describedby="benchmark-search-status">
+        <button class="bo-search-clear" type="button" hidden>Clear</button><kbd class="bo-search-shortcut" aria-hidden="true">/</kbd>
+      </div>
+      <p id="benchmark-search-status" class="bo-search-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    </form>
     <section class="bo-explorer" id="explore" aria-labelledby="explorer-title">
       <div class="bo-explorer-layout"><aside class="bo-index"><p class="bo-index-title">Quick index</p>{quick_index(suites)}</aside><div class="bo-explorer-body">
       <div class="bo-explorer-heading"><h2 id="explorer-title">Explore the benchmark</h2><nav class="bo-suite-tabs" aria-label="Jump to capability suite">{tabs}</nav></div>
       <details class="bo-mobile-index"><summary>Browse tasks</summary>{quick_index(suites)}</details>
+      <div class="bo-search-empty" hidden><h3>No tasks found</h3><p>Try a task name, ID, or a different keyword.</p><button type="button" data-clear-search>Clear search</button></div>
       {''.join(panels)}
       </div></div>
     </section>
@@ -164,9 +174,9 @@ def document(content):
 <meta name="description" content="Explore 30 robotic manipulation tasks across Mind, Act, and Mind2Act. Watch demonstrations and compare available difficulty levels.">
 <link rel="icon" href="media/images/mind2act-favicon-v2.png">
 <link rel="preload" href="media/fonts/Sora-variable.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=compact-header-1">
-<link rel="stylesheet" href="scripts/benchmark-overview.css?v=3">
+<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-4">
+<link rel="stylesheet" href="scripts/benchmark-overview.css?v=search-visible-5">
 </head><body class="benchmark-overview"><a class="bo-skip" href="#explore">Skip to tasks</a>{header}
 <main class="bo-main" id="benchmark-content">{content}</main>
-<script src="scripts/benchmark-overview.js?v=3" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>
+<script src="scripts/benchmark-overview.js?v=4" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>
 </body></html>\n'''

@@ -32,7 +32,53 @@
   });
   drawerNavigation.append(mobileNav);
 
+  // Both the desktop directory and mobile drawer search the same complete catalog.
+  let searchQuery = '';
+  let groupsBeforeSearch = null;
+  const navigationSurfaces = [sidebar, mobileNav];
+  const normalize = value => value.normalize('NFKC').toLowerCase();
+  function searchTasks(value) {
+    const terms = normalize(value.trim()).split(/\s+/).filter(Boolean);
+    if (terms.length && !searchQuery) {
+      groupsBeforeSearch = Object.fromEntries([...sidebar.querySelectorAll('[data-group]')].map(group =>
+        [group.dataset.group, group.querySelector('button').getAttribute('aria-expanded') === 'true']));
+    }
+    searchQuery = terms.join(' ');
+    navigationSurfaces.forEach(surface => {
+      const input = surface.querySelector('[data-task-search]');
+      if (!input) return;
+      input.value = value;
+      let count = 0;
+      surface.querySelectorAll('[data-group]').forEach(group => {
+        let matches = 0;
+        group.querySelectorAll('li').forEach(item => {
+          const link = item.querySelector('a');
+          const text = normalize(`${group.dataset.group} ${link.textContent} ${link.title}`);
+          item.hidden = !terms.every(term => text.includes(term));
+          if (!item.hidden) matches++;
+        });
+        count += matches;
+        group.hidden = matches === 0;
+        const open = terms.length ? matches > 0 : groupsBeforeSearch?.[group.dataset.group] !== false;
+        group.querySelector('button').setAttribute('aria-expanded', String(open));
+        group.querySelector('ul').hidden = !open;
+      });
+      const status = surface.querySelector('[data-task-search-status]');
+      status.hidden = !terms.length;
+      status.textContent = count ? `${count} ${count === 1 ? 'task' : 'tasks'} found` : 'No tasks found. Try another keyword.';
+    });
+  }
+  navigationSurfaces.forEach(surface => {
+    const input = surface.querySelector('[data-task-search]');
+    if (!input) return;
+    input.addEventListener('input', () => searchTasks(input.value));
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && input.value) { event.preventDefault(); event.stopPropagation(); searchTasks(''); }
+    });
+  });
+
   function persist() {
+    if (searchQuery) return;
     const groups = {};
     sidebar.querySelectorAll('[data-group]').forEach(group => {
       groups[group.dataset.group] = group.querySelector('button').getAttribute('aria-expanded') === 'true';
@@ -63,7 +109,8 @@
     const active = sidebar.querySelector('a[aria-current="page"]');
     if (active) {
       const bounds = sidebar.getBoundingClientRect(), item = active.getBoundingClientRect();
-      if (item.bottom > bounds.bottom || item.top < bounds.top) {
+      const toolsHeight = sidebar.querySelector('.workspace-nav-tools')?.getBoundingClientRect().height || 0;
+      if (item.bottom > bounds.bottom || item.top < bounds.top + toolsHeight) {
         sidebar.scrollTop += item.top - bounds.top - bounds.height / 2;
       }
     }
@@ -73,7 +120,7 @@
     dialog.showModal();
     document.documentElement.style.overflow = 'hidden';
     // Focus the current location rather than making users rediscover it.
-    const current = mobileNav.querySelector('a[aria-current="page"]');
+    const current = searchQuery ? mobileNav.querySelector('[data-task-search]') : mobileNav.querySelector('a[aria-current="page"]');
     if (current) { current.focus(); current.scrollIntoView({block: 'nearest'}); }
   });
   const close = () => dialog.close();

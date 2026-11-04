@@ -1,5 +1,6 @@
 """Render static hero assets and embed the same event data used by the player."""
 import html
+import hashlib
 import json
 from pathlib import Path
 
@@ -27,4 +28,5 @@ def render():
     for char, escaped in [('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026')]:
         payload = payload.replace(char, escaped)
     template = (ROOT / 'scripts/hero-demo.html').read_text()
-    return template.replace('__HERO_CARDS__', '\n'.join(cards)).replace('__HERO_DATA__', payload).replace('__HERO_VIDEO__', data['presentation']['path'])
+    version = hashlib.sha256((ROOT / 'scripts/hero-intro.css').read_bytes()).hexdigest()[:10]
+    return template.replace('__HERO_CARDS__', '\n'.join(cards)).replace('__HERO_DATA__', payload).replace('__HERO_VIDEO__', data['presentation']['path']).replace('__HERO_INTRO_VERSION__', version)

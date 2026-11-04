@@ -1,0 +1,44 @@
+/* One shared column aligns the homepage text, media and task sections. */
+html body {
+  --home-content-width: min(1024px, calc(100% - 64px));
+}
+html body .project-identity,
+html body .academic-project-meta,
+html body .intro-film,
+html body #overview .home-stats,
+html body #introduction.research-abstract.intro-readable,
+html body .version-status,
+html body #research-motivation.facet-motivation,
+html body #research-overview,
+html body #capability-explorer,
+html body main #top-ten.academic-section,
+html body main #benchmark.academic-section,
+html body main #tasks.academic-section,
+html body main #news.academic-section,
+html body main #resources-overview.academic-section {
+  width: var(--home-content-width) !important;
+  max-width: 1024px !important;
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
+html body #introduction .intro-copy,
+html body #introduction .intro-overview,
+html body #introduction .intro-suite-cards {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+html body #introduction .intro-suite-cards { transform: none; }
+html body #tasks .task-gallery-header {
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
+  box-sizing: border-box;
+}
+html body #tasks .difficulty-row { width: 100%; margin-inline: 0; }
+/* The explorer retains its slightly wider desktop composition; its smaller
+   layout uses the same column variable as the introduction and video. */
+html body #capability-explorer { --unified-column: var(--home-content-width); }
+@media (max-width: 700px) {
+  html body { --home-content-width: calc(100% - 32px); }
+}

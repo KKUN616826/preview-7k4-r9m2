@@ -10,46 +10,76 @@
         "id": "E",
         "title": "Duplicate Item Identification",
         "summary": "Identify previously observed items across successive batches and place each repeated item in the submission tray.",
-        "cover": "media/task-previews/E/easy.webp",
+        "cover": "media/benchmark-covers/E.jpg",
         "nav_title": "Duplicate Identification",
-        "row_cover": "media/benchmark-covers/E.jpg"
+        "row_cover": "media/benchmark-covers/E.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "F",
         "title": "Unknown Button Mapping and Slider Navigation",
         "summary": "Infer an unknown button-to-motion mapping from feedback, retain it after reset, and navigate to the target.",
-        "cover": "media/task-previews/F/easy.webp",
+        "cover": "media/benchmark-covers/F.jpg",
         "nav_title": "Button Mapping",
-        "row_cover": "media/benchmark-covers/F.jpg"
+        "row_cover": "media/benchmark-covers/F.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "P",
         "title": "Order-Based Meal Assembly",
         "summary": "Remember initial and additional orders and deliver the requested ingredients to the correct containers.",
-        "cover": "media/task-previews/P/easy.webp",
+        "cover": "media/benchmark-covers/P.jpg",
         "nav_title": "Meal Assembly",
-        "row_cover": "media/benchmark-covers/P.jpg"
+        "row_cover": "media/benchmark-covers/P.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "S",
         "title": "Rotating Tray Layout Reconstruction",
         "summary": "Remember a colored-slot arrangement and restore it after the tray rotates.",
-        "cover": "media/task-previews/S/easy.webp",
+        "cover": "media/benchmark-covers/S.jpg",
         "nav_title": "Layout Reconstruction",
-        "row_cover": "media/benchmark-covers/S.jpg"
+        "row_cover": "media/benchmark-covers/S.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "M",
         "title": "Workpiece Tracking and Route Reproduction",
         "summary": "Track a hidden target through cover exchanges and reproduce its required station route.",
-        "cover": "media/task-previews/M/easy.webp",
+        "cover": "media/benchmark-covers/M.jpg",
         "nav_title": "Workpiece Tracking",
-        "row_cover": "media/benchmark-covers/M.jpg"
+        "row_cover": "media/benchmark-covers/M.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "E2",
         "title": "Object-Code Keypad Entry",
-        "summary": "Remember object–digit associations, decode a visible object sequence, and enter the corresponding code.",
+        "summary": "Remember entity–value associations, decode the physical expression, and enter its exact result on the keypad.",
         "nav_title": "Object-Code Keypad",
         "title_zh": "实物密码键盘",
         "cover": "media/benchmark-covers/E2.jpg",
@@ -57,7 +87,8 @@
         "initial_level": "easy",
         "available_levels": [
           "easy",
-          "medium"
+          "medium",
+          "hard"
         ],
         "expansion": true
       },
@@ -138,41 +169,71 @@
         "id": "FR1",
         "title": "Continuous Conveyor Picking",
         "summary": "Pick moving packages from a conveyor and place them in the collection tray.",
-        "cover": "media/task-previews/FR1/easy.webp",
+        "cover": "media/benchmark-covers/FR1.jpg",
         "nav_title": "Conveyor Picking",
-        "row_cover": "media/benchmark-covers/FR1.jpg"
+        "row_cover": "media/benchmark-covers/FR1.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "FR2",
         "title": "Light-Guided Button Response",
         "summary": "Respond to illuminated button cues with timely, correct presses and releases.",
-        "cover": "media/task-previews/FR2/easy.webp",
+        "cover": "media/benchmark-covers/FR2.jpg",
         "nav_title": "Button Response",
-        "row_cover": "media/benchmark-covers/FR2.jpg"
+        "row_cover": "media/benchmark-covers/FR2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "PR1",
         "title": "Linear Resistor Adjustment",
         "summary": "Adjust a linear resistor to the target reading and maintain it after release.",
-        "cover": "media/task-previews/PR1/easy.webp",
+        "cover": "media/benchmark-covers/PR1.jpg",
         "nav_title": "Linear Adjustment",
-        "row_cover": "media/benchmark-covers/PR1.jpg"
+        "row_cover": "media/benchmark-covers/PR1.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "PR2",
         "title": "Rotary Voltage Regulator Setting",
         "summary": "Adjust a rotary voltage regulator to the target reading and maintain it after release.",
-        "cover": "media/task-previews/PR2/easy.webp",
+        "cover": "media/benchmark-covers/PR2.jpg",
         "nav_title": "Rotary Adjustment",
-        "row_cover": "media/benchmark-covers/PR2.jpg"
+        "row_cover": "media/benchmark-covers/PR2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "PR3",
         "title": "Marker Line Tracing",
         "summary": "Grasp a marker and trace a visible path with controlled contact and precision.",
-        "cover": "media/task-previews/PR3/easy.webp",
+        "cover": "media/benchmark-covers/PR3.jpg",
         "nav_title": "Line Tracing",
-        "row_cover": "media/benchmark-covers/PR3.jpg"
+        "row_cover": "media/benchmark-covers/PR3.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "PR4",
@@ -267,41 +328,71 @@
         "id": "CP01",
         "title": "Conveyor Meal Assembly",
         "summary": "Remember reference orders and assemble meals from a continuously moving food supply.",
-        "cover": "media/task-previews/CP01/easy.webp",
+        "cover": "media/benchmark-covers/CP01.jpg",
         "nav_title": "Conveyor Meal Assembly",
-        "row_cover": "media/benchmark-covers/CP01.jpg"
+        "row_cover": "media/benchmark-covers/CP01.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "CP02",
         "title": "Rotating Cake Decoration",
         "summary": "Remember a decoration layout and reproduce it on a rotating cake while completing the required stages.",
-        "cover": "media/task-previews/CP02/easy.webp",
+        "cover": "media/benchmark-covers/CP02.jpg",
         "nav_title": "Cake Decoration",
-        "row_cover": "media/benchmark-covers/CP02.jpg"
+        "row_cover": "media/benchmark-covers/CP02.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "CP03",
         "title": "Dynamic Rack Loading",
         "summary": "Load upright plates into moving empty rack slots without disturbing other plates.",
-        "cover": "media/task-previews/CP03/easy.webp",
+        "cover": "media/benchmark-covers/CP03.jpg",
         "nav_title": "Rack Loading",
-        "row_cover": "media/benchmark-covers/CP03.jpg"
+        "row_cover": "media/benchmark-covers/CP03.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "CP04",
         "title": "Dual-Arm Cooking",
         "summary": "Remember a recipe and coordinate preparation, cooking, temperature control, and cleanup.",
-        "cover": "media/task-previews/CP04/easy.webp",
+        "cover": "media/benchmark-covers/CP04.jpg",
         "nav_title": "Dual-Arm Cooking",
-        "row_cover": "media/benchmark-covers/CP04.jpg"
+        "row_cover": "media/benchmark-covers/CP04.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "CP05",
         "title": "Keyboard Sequence Reproduction",
         "summary": "Remember a demonstrated key sequence, reproduce it with mallets, and return the tools.",
-        "cover": "media/task-previews/CP05/easy.webp",
+        "cover": "media/benchmark-covers/CP05.jpg",
         "nav_title": "Keyboard Sequence",
-        "row_cover": "media/benchmark-covers/CP05.jpg"
+        "row_cover": "media/benchmark-covers/CP05.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "CP06",

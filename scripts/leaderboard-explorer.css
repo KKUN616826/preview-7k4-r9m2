@@ -1,7 +1,6 @@
 @font-face{font-family:Sora;src:url('../media/fonts/Sora-variable.ttf');font-weight:100 800;font-display:swap}
 *{box-sizing:border-box}
 body.leaderboard-explorer{--lb-header:76px;margin:0;background:#ffffff;color:#203447;font:16px/1.65 Arial,sans-serif}
-body.leaderboard-explorer .header .header-inner{flex-direction:row!important}
 .lb-page{max-width:1600px;margin:0 auto;padding:48px 40px 36px}
 .lb-page a{color:#315f72;text-underline-offset:4px}
 .lb-page button,.lb-page input,.lb-page select{font:inherit;color:inherit}
@@ -350,3 +349,49 @@ body.leaderboard-explorer .lb-page>.lb-protocol{--guide-surface:#edf3f1;--guide-
 .lb-results #lb-pending:hover{background:#3b6471;border-color:#3b6471;color:#fff}
 .lb-results #lb-pending:active{background:#203f4f}
 @media(max-width:760px){.lb-results .lb-results-heading{flex-direction:column;gap:14px}.lb-results .lb-result-legend{margin:0;gap:4px;font-size:13px}.lb-results .lb-result-legend strong{min-width:88px}.lb-table-actions{margin-top:16px}.lb-results #lb-pending{font-size:13px;padding:10px 14px}}
+
+/* The reading guide ends with a direct documentation link. */
+.lb-protocol .lb-documentation-link{margin:16px 0 0;padding-top:16px;border-top:1px solid #cbdcdb;font-size:15px}
+.lb-protocol .lb-documentation-link a{color:#355d69;text-underline-offset:4px}
+.lb-protocol .lb-documentation-link a:hover{color:#203f4f}
+
+/* Original source text and inline documentation link, without diagram treatment. */
+.lb-original-sources{border-top:1px solid #cfdad7;margin-top:24px;padding-top:24px}
+.lb-protocol .lb-original-sources h3{font:600 17px/1.4 Sora,Arial,sans-serif;margin:0 0 12px}
+.lb-protocol .lb-original-sources p{font-size:14px;line-height:1.75;color:#63737a;margin:0 0 10px;max-width:76ch}
+.lb-original-sources a{font-size:13px;color:#315f72;text-underline-offset:4px}
+
+/* Reference palette: ink on white, with muted suite accents. Scoped to this page. */
+body.leaderboard-explorer{--lb-header:68px;color:#17232e}
+.lb-results{--suite-accent:#819f96;--suite-soft:#eef3f1;color:#17232e;background:#fff;border-color:#e0e5e8;box-shadow:none}
+.lb-results h2,.lb-results .lb-model-button,.lb-results .lb-model-cell{color:#17232e}
+.lb-results .lb-view-description,.lb-results .lb-number{color:#43515f}
+.lb-results .lb-table-scroll{border-color:#dfe4e8;border-radius:14px;background:#fff}
+.lb-results .lb-table thead th,.lb-results .lb-table thead th[data-sort-cell],.lb-results .lb-table thead th[aria-sort=ascending],.lb-results .lb-table thead th[aria-sort=descending]{background:#fff;color:#586775;border-color:#dfe4e8}
+.lb-results .lb-table thead tr:first-child th{border-bottom-color:#cfd7dd}
+.lb-results .lb-table thead button{font-weight:600;color:#43515f}
+.lb-results .lb-table thead button small,.lb-results .lb-sort-arrow{color:#74818c}
+.lb-results .lb-result,.lb-results .lb-result:nth-of-type(4n+3),.lb-results .lb-result[data-stripe=true]{background:#fff}
+.lb-results .lb-table td{border-color:#e1e6e9}
+.lb-results .lb-result:hover,.lb-results .lb-selected{background:#f5f7f8!important}
+.lb-results .lb-result[data-top=true] .lb-rank,.lb-results .lb-score-display .lb-value-label,.lb-results .lb-result>td[data-sorted=true]{color:#17232e}
+.lb-results .lb-paradigm[data-family]{background:#edf1f3;border-color:transparent;color:#43515f;border-radius:999px;font-weight:500}
+.lb-results [data-group=mind]{--suite-accent:#819f96;--suite-soft:#edf3f0}
+.lb-results [data-group=act]{--suite-accent:#88a3b3;--suite-soft:#edf2f5}
+.lb-results [data-group=coupling]{--suite-accent:#ac9e78;--suite-soft:#f3f1eb}
+.lb-results .lb-score-track{height:14px;background:var(--suite-soft);border-radius:4px}
+.lb-results .lb-score-fill{background:var(--suite-accent);border-radius:4px}
+.lb-results .lb-view-buttons{width:min(100%,510px);padding:5px;gap:6px;border:1px solid #dfe4e8;box-shadow:0 4px 16px #17232e08;background:#fff}
+.lb-results .lb-view-buttons button{flex:1;min-width:0;padding:12px 24px;color:#43515f}
+.lb-results .lb-view-buttons button[aria-pressed=true]{background:#17232e;color:#fff;box-shadow:0 2px 4px #17232e12}
+.lb-results .lb-view-buttons button:not([aria-pressed=true]):hover{background:#edf1f3;color:#17232e}
+.lb-results .lb-result-legend,.lb-results .lb-result-legend strong{color:#586775}
+.lb-results #lb-pending{background:#203447;border-color:#203447;border-radius:999px}
+.lb-results #lb-pending:hover{background:#344b60;border-color:#344b60}
+@media(max-width:1040px){
+}
+@media(max-width:760px){
+ .lb-results .lb-view-buttons{width:100%}.lb-results .lb-ranking{width:100%}
+ .lb-results .lb-view-buttons button{padding:10px 16px}
+ .lb-results .lb-score-track{height:7px}
+}

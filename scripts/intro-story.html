@@ -9,15 +9,17 @@
 
 <div class="intro-copy intro-framework">
   <p>Mind2Act World is a simulation benchmark for studying task reasoning, physical execution, and their coordination. Its three complementary views separate these demands:</p>
-  <dl class="intro-views">
-    <div><dt>Mind</dt><dd>Evaluates maintaining task information and selecting the required operations.</dd></div>
-    <div><dt>Act</dt><dd>Evaluates timely, precise, and stable execution under geometric, contact, and dynamic constraints.</dd></div>
-    <div><dt>Mind2Act</dt><dd>Brings them together: task intent guides physically valid actions, while execution outcomes update remaining goals, action timing, and phase progression.</dd></div>
-  </dl>
+  <div class="intro-suite-cards"><article class="intro-suite-card intro-suite-card--mind">
+<img src="media/benchmark-covers/S.jpg" alt="Rotating tray layout reconstruction simulation experiment" width="640" height="480" loading="lazy">
+<div class="intro-suite-body"><span class="intro-suite-badge">Mind · 10 tasks</span><h3>What must the robot remember or infer before it acts?</h3><p>Retain task information, learn from feedback, and choose the next operation.</p><a href="benchmark/mind.html">Explore Mind <span aria-hidden="true">→</span></a></div></article><article class="intro-suite-card intro-suite-card--act">
+<img src="media/benchmark-covers/PR3.jpg" alt="Contact-rich tracing simulation experiment" width="640" height="480" loading="lazy">
+<div class="intro-suite-body"><span class="intro-suite-badge">Act · 10 tasks</span><h3>Can the robot turn the intended action into a valid physical outcome?</h3><p>Respond to dynamic cues and execute precise, stable actions under physical constraints.</p><a href="benchmark/act.html">Explore Act <span aria-hidden="true">→</span></a></div></article><article class="intro-suite-card intro-suite-card--mind2act">
+<img src="media/benchmark-covers/CP04.jpg" alt="Dual-arm cooking simulation experiment" width="640" height="480" loading="lazy">
+<div class="intro-suite-body"><span class="intro-suite-badge">Mind2Act · 10 tasks</span><h3>How does execution feedback change what happens next?</h3><p>Coordinate task decisions and physical execution across multiple stages.</p><a href="benchmark/mind2act.html">Explore Mind2Act <span aria-hidden="true">→</span></a></div></article></div><link rel="stylesheet" href="scripts/intro-suite-cards.css?v=4">
   <p>This makes coordination an ongoing interaction throughout a task.</p>
 </div>
 
-<figure class="intro-overview"><a href="media/overview/mind2act-overview-v3.pdf?v=3907d3d160" target="_blank" rel="noopener" aria-label="Open full-resolution Mind2Act World overview"><picture><source srcset="media/images/mind2act-overview-v3.webp?v=3907d3d160" type="image/webp"><img src="media/images/mind2act-overview-v3.png?v=3907d3d160" width="2600" height="2113" loading="eager" fetchpriority="high" decoding="async" alt="Mind2Act World overview: Mind, Act, and Mind2Act task tracks, robotic manipulation demonstrations, benchmark highlights, policy ecosystem, and preliminary leaderboard."></picture></a><figcaption>Original task-set overview · Explore the expanded 30-task catalog below.</figcaption></figure>
+<figure class="intro-overview"><a href="media/overview/mind2act-overview-v36.pdf?v=36" target="_blank" rel="noopener" aria-label="Open full-resolution Mind2Act World overview"><picture><source srcset="media/images/mind2act-overview-v36.webp?v=36" type="image/webp"><img src="media/images/mind2act-overview-v36.png?v=36" width="2600" height="2454" loading="eager" fetchpriority="high" decoding="async" alt="Mind2Act World overview: Mind, Act, and Mind2Act task tracks, robotic manipulation demonstrations, benchmark highlights, policy ecosystem, and preliminary leaderboard."></picture></a><figcaption>Mind2Act World overview · Explore the expanded 30-task catalog below.</figcaption></figure>
 
 <div class="intro-copy intro-scope">
   <p>The benchmark comprises 30 tasks, each with Easy, Medium, and Hard configurations that vary memory load, planning dependencies, precision requirements, and timing pressure.</p>

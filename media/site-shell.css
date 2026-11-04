@@ -1,20 +1,49 @@
 @import url("./typography.css?v=manrope-1");
-/* Shared navigation, used on the home page and its linked pages. */
-body .header{position:sticky!important;top:0!important;z-index:100!important;display:block!important;background:#ffffff!important;border:0!important;border-bottom:1px solid #d7ded8!important;backdrop-filter:none!important;padding:0!important;margin:0!important;width:100%!important;max-width:none!important;box-shadow:none!important;color:#203447!important;font-family:Arial,sans-serif!important}
-body .header .header-inner{box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:26px!important;width:100%!important;max-width:none!important;height:76px!important;min-height:76px!important;margin:0!important;padding:0 24px!important}
-body .header .official-nav-logo{display:flex!important;align-items:center!important;flex:0 0 184px!important;width:184px!important;height:60px!important;margin:0!important;padding:0!important;border:0!important;background:none!important}
-body .header .official-nav-logo img{display:block!important;width:184px!important;height:auto!important;max-height:60px!important;object-fit:contain!important;margin:0!important}
-body .header .nav{display:flex!important;align-items:center!important;justify-content:space-between!important;flex:1!important;gap:20px!important;width:auto!important;max-width:none!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;position:static!important;border:0!important;background:none!important;overflow:visible!important}
-body .header .nav-left,body .header .nav-right{display:flex!important;align-items:center!important;gap:12px!important;margin:0!important;padding:0!important;flex-wrap:nowrap!important}
-body .header .nav a{display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;min-height:44px!important;padding:10px 12px!important;margin:0!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:none!important;color:#203447!important;text-decoration:none!important;white-space:nowrap!important;font:500 16px/1.3 Arial,sans-serif!important;letter-spacing:0!important}
-body .header .nav a:hover,body .header .nav a[aria-current=page]{border-bottom-color:#376b80!important}
-body .header .nav a.paper-link{background:#dfe8e2!important;border-bottom-color:#376b80!important}
-body .header #menuToggle{display:none!important}
-body .header a:focus-visible,body .header button:focus-visible{outline:2px solid #376b80!important;outline-offset:4px!important}
-@media(max-width:1040px){body .header .header-inner{height:68px!important;min-height:68px!important;padding-inline:20px!important}body .header #menuToggle{display:block!important;margin-left:auto!important;padding:9px 14px!important;background:transparent!important;border:1px solid #b9c9c5!important;border-radius:5px!important;color:#203447!important;font:16px Arial,sans-serif!important}body .header .nav{display:none!important;position:absolute!important;left:0!important;right:0!important;top:68px!important;padding:16px 20px!important;background:#ffffff!important;border-bottom:1px solid #d7ded8!important;box-shadow:0 6px 12px #2034470c!important}body .header .nav.open{display:flex!important;align-items:stretch!important;flex-direction:column!important;gap:10px!important}body .header .nav-left,body .header .nav-right{flex-wrap:wrap!important;gap:8px!important;justify-content:flex-start!important}}
-
+/* Shared wide, shallow capsule floats over hero imagery. */
+html body .header{position:fixed!important;top:22px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;z-index:100!important;display:block!important;width:82%!important;max-width:1600px!important;height:auto!important;margin:0!important;padding:0!important;border:1px solid #dfe4e8!important;border-radius:999px!important;background:#fff!important;box-shadow:0 5.333px 17.333px #17232e0b,0 1.333px 2.667px #17232e08!important;backdrop-filter:none!important;color:#17232e!important;font-family:Arial,sans-serif!important}
+html body .header .header-inner{box-sizing:border-box!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:28px!important;width:100%!important;max-width:none!important;height:54px!important;min-height:54px!important;margin:0!important;padding:0 10px 0 24px!important}
+html body .header .official-nav-logo{display:flex!important;align-items:center!important;flex:0 0 132px!important;width:132px!important;height:40px!important;margin:0!important;padding:0!important;border:0!important;background:none!important}
+html body .header .official-nav-logo img{display:block!important;width:132px!important;height:auto!important;max-height:40px!important;object-fit:contain!important;margin:0!important}
+html body .header .nav{display:flex!important;align-items:center!important;justify-content:space-between!important;flex:1!important;gap:13.333px!important;width:auto!important;max-width:none!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;position:static!important;border:0!important;background:none!important;overflow:visible!important}
+html body .header .nav-left,html body .header .nav-right{display:flex!important;align-items:center!important;gap:4px!important;margin:0!important;padding:0!important;flex-wrap:nowrap!important}
+html body .header .nav a{display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;min-height:34px!important;padding:8px 14px!important;margin:0!important;border:0!important;border-radius:999px!important;background:none!important;color:#43515f!important;text-decoration:none!important;white-space:nowrap!important;font:500 14px/1.3 Arial,sans-serif!important;letter-spacing:0!important}
+html body .header .nav a:hover{background:#edf1f3!important}
+html body .header .nav a[aria-current=page]{background:#17232e!important;color:#fff!important}
+html body .header .nav a.paper-link{background:#203447!important;color:#fff!important;padding-inline:14.667px!important}
+html body .header #menuToggle{display:none!important}
+html body .header a:focus-visible,html body .header button:focus-visible{outline:2px solid #376b80!important;outline-offset:4px!important}
+/* Small screens keep a viewport-width capsule and a usable expanded menu. */
+@media(max-width:1040px){
+ html body .header{top:8px!important;width:calc(100% - 24px)!important;max-width:840px!important;margin:0!important}
+ html body .header .header-inner{height:48px!important;min-height:48px!important;padding-inline:12px!important}
+ html body .header .official-nav-logo,html body .header .official-nav-logo img{width:100px!important;flex-basis:100px!important}
+ html body .header #menuToggle{display:block!important;margin-left:auto!important;padding:6px 10px!important;background:transparent!important;border:1px solid #d5dfe0!important;border-radius:999px!important;color:#203447!important;font:12px Arial,sans-serif!important}
+ html body .header .nav{display:none!important;position:absolute!important;left:0!important;right:0!important;top:58px!important;padding:14px!important;border:1px solid #dfe4e8!important;border-radius:16px!important;background:#fff!important;box-shadow:0 8px 24px #17232e10!important}
+ html body .header .nav.open{display:flex!important;align-items:stretch!important;flex-direction:column!important;gap:8px!important}
+ html body .header .nav-left,html body .header .nav-right{flex-wrap:wrap!important;gap:6px!important;justify-content:flex-start!important}
+ html body .header .nav a{min-height:40px!important;font-size:14px!important}
+}
 /* Shared white page canvas; media and interactive state colors keep their own palettes. */
 html:root,html body{--bg:#ffffff!important;--paper:#ffffff!important;--research-paper:#ffffff!important;background-color:#ffffff!important}
 html body .header,html body[class] .header,html body .header .nav,html body[class] .header .nav{background:#ffffff!important}
 html body #overview.rd-hero,html body .project-identity,html body #resources-overview,html body #research-overview .lunar-worlds-frame{background:#ffffff!important}
 html body .demo-toolbar,html body .demo-panel,html body #task-drawer,html body .workspace-drawer-head,html body .workspace-mobile-bar{background-color:#ffffff!important}
+
+/* Pages without a hero reserve space for the fixed navigation. */
+html body{padding-top:90px!important}
+html body.dark-hero{padding-top:0!important}
+html body.dark-hero .article-layout,html body.dark-hero .article-body,html body.dark-hero #overview.rd-hero{margin-top:0!important;padding-top:0!important}
+html body.dark-hero .rd-hero .demo-hero{height:100svh;min-height:730px}
+html body.dark-hero .header{background:rgba(255,255,255,.91)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important}
+@media(max-width:1040px){html body{padding-top:74px!important}html body.dark-hero{padding-top:0!important}}
+@media(max-width:760px){html body.dark-hero .rd-hero .demo-hero{height:auto;min-height:100svh;padding-top:86px}}
+
+/* One translucent white surface, including legacy homepage navigation wrappers. */
+html:root body header.header{background:rgba(255,255,255,.88)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;border-color:rgba(255,255,255,.68)!important}
+html:root body header.header .header-inner,
+html:root body header.header #siteNav,
+html:root body header.header .nav-left,
+html:root body header.header .nav-right{background:transparent!important;box-shadow:none!important}
+html:root body header.header #siteNav a.paper-link{background:#203447!important;color:#fff!important;border:0!important}
+html:root body header.header #siteNav a.paper-link:hover{background:#2e465b!important;color:#fff!important}
+@media(max-width:1040px){html:root body header.header #siteNav{background:rgba(255,255,255,.96)!important}}

@@ -58,6 +58,51 @@
   let rotation = setInterval(rotateHero, 8000);
 
   const indexLinks = [...document.querySelectorAll('[data-index-task]')];
+  const searchForm = document.querySelector('.bo-search');
+  const searchInput = document.getElementById('benchmark-search');
+  const searchStatus = document.getElementById('benchmark-search-status');
+  const clearButton = document.querySelector('.bo-search-clear');
+  const emptySearch = document.querySelector('.bo-search-empty');
+  const suites = [...document.querySelectorAll('[data-suite-section]')];
+  const normalize = value => value.normalize('NFKC').toLowerCase().replace(/[–—-]/g, ' ');
+  const searchText = new Map(chapters.map(chapter => [chapter, normalize(chapter.dataset.search)]));
+  function filterTasks() {
+    const terms = normalize(searchInput.value.trim()).split(/\s+/).filter(Boolean);
+    let count = 0;
+    chapters.forEach(chapter => {
+      chapter.hidden = !terms.every(term => searchText.get(chapter).includes(term));
+      if (!chapter.hidden) count++;
+    });
+    suites.forEach(suite => { suite.hidden = ![...suite.querySelectorAll('.bo-chapter')].some(task => !task.hidden); });
+    clearButton.hidden = !searchInput.value;
+    document.querySelector('.bo-search-shortcut').hidden = !!searchInput.value;
+    emptySearch.hidden = count > 0;
+    searchStatus.textContent = terms.length ? `${count} ${count === 1 ? 'task' : 'tasks'} found` : '';
+    markIndex(null);
+    highlightSuite(null);
+  }
+  function clearSearch() {
+    if (!searchInput.value) return;
+    searchInput.value = '';
+    filterTasks();
+  }
+  searchInput.addEventListener('input', filterTasks);
+  clearButton.addEventListener('click', () => { clearSearch(); searchInput.focus(); });
+  document.querySelector('[data-clear-search]').addEventListener('click', () => { clearSearch(); searchInput.focus(); });
+  searchForm.addEventListener('submit', event => {
+    event.preventDefault();
+    document.getElementById('explore').scrollIntoView({block:'start'});
+  });
+  document.addEventListener('keydown', event => {
+    if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.key === '/' && !event.target.closest('input, textarea, select, [contenteditable]')) {
+      event.preventDefault();
+      searchInput.focus();
+    } else if (event.key === 'Escape' && event.target === searchInput) {
+      event.preventDefault();
+      clearSearch();
+    }
+  });
   let indexedTask = null;
   function markIndex(id) {
     indexedTask = id;
@@ -85,6 +130,7 @@
     // Old #mind / #act / #mind2act bookmarks also remain valid.
     const target = document.getElementById(hash) || document.getElementById('suite-' + hash);
     if (!target?.matches('.bo-chapter, .bo-suite')) return;
+    clearSearch();
     const suite = target.closest('[data-suite-section]');
     markIndex(target.matches('.bo-chapter') ? target.dataset.task : null);
     highlightSuite(suite.dataset.suiteSection);

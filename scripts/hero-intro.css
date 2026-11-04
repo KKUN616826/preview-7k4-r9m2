@@ -1,0 +1,266 @@
+@font-face {
+  font-family: Sora;
+  src: url('../media/fonts/Sora-variable.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  src: url('../media/fonts/inter/Inter-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../media/fonts/jetbrains-mono/JetBrainsMono-Variable.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+/* Scoped exceptions to the shared Manrope family; use its existing priority layer. */
+@layer m2a-typography {
+  body #overview .hero-intro h1.hero-intro-title { font-family: Sora, Arial, sans-serif !important; }
+  body #overview .hero-intro-description { font-family: Inter, Arial, sans-serif !important; }
+  body #overview .hero-intro-kicker { font-family: 'JetBrains Mono', monospace !important; }
+}
+
+/* One immersive scene: project entry at left, synchronized evidence at right. */
+html body.dark-hero #overview .demo-hero.hero-intro {
+  --demo-font: var(--m2a-font-sans, Manrope, Arial, sans-serif);
+  height: 100svh;
+  min-height: 680px;
+  max-height: 1080px;
+  padding: 0;
+  background: #101c2b;
+}
+body #overview .hero-intro .demo-video { object-position: 50% 28%; }
+body #overview .hero-intro .demo-shade,
+body #overview .hero-intro[data-phase=focus] .demo-shade {
+  /* Match website-redesign-20261104/scripts/home.css: protect left text,
+     with a lighter bottom fade and a clear right-hand demonstration. */
+  background: linear-gradient(90deg, rgba(8,12,16,.86) 0%, rgba(8,12,16,.62) 34%, rgba(8,12,16,.12) 62%, rgba(8,12,16,0) 75%),
+    linear-gradient(0deg, rgba(8,12,16,.65) 0%, rgba(8,12,16,0) 40%);
+}
+body #overview .hero-intro-copy {
+  position: absolute;
+  z-index: 4;
+  top: clamp(132px, 17svh, 188px);
+  left: clamp(28px, 6vw, 116px);
+  width: min(43%, 610px);
+  text-align: left;
+  color: #f8f8f3;
+}
+body #overview .hero-intro-kicker {
+  margin: 0 0 20px;
+  color: #d1dedf;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: .12em !important;
+  text-transform: uppercase;
+}
+body #overview .hero-intro h1.hero-intro-title {
+  margin: 0;
+  color: #fafbf7;
+  font-size: clamp(62px, 6.7vw, 106px);
+  font-weight: 700;
+  letter-spacing: -.035em !important;
+  line-height: 1.04;
+  text-align: left;
+}
+body #overview .hero-intro-description {
+  max-width: 450px;
+  margin: 26px 0 0;
+  color: #dde5e6;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+body #overview .hero-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 30px 0 0;
+}
+body #overview .hero-intro-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid #e6efef80;
+  border-radius: 999px;
+  background: transparent;
+  color: #f7f9f5;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+body #overview .hero-intro-actions .hero-intro-primary { background: #f2f6ee; color: #203749; border-color: #f2f6ee; }
+body #overview .hero-intro-actions .hero-intro-repository { padding-inline: 18px; gap: 8px; font-weight: 500; }
+body #overview .hero-intro-actions a:hover { border-color: #c3e3d6; background: #ffffff16; transform: translateY(-2px); }
+body #overview .hero-intro-actions .hero-intro-primary:hover { background: #dcece3; border-color: #dcece3; }
+body #overview .hero-intro a:focus-visible,
+body #overview .hero-intro button:focus-visible { outline: 2px solid #b9e8d5; outline-offset: 5px; }
+
+/* A translucent frame groups the evidence while retaining the scene beneath it. */
+body #overview .hero-intro-story {
+  position: absolute;
+  z-index: 3;
+  right: clamp(28px, 5vw, 96px);
+  bottom: 30px;
+  width: min(44%, 640px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 76px 184px 48px;
+  gap: 14px;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 22px;
+  /* Match website-redesign-20261104/scripts/home.css, .demo-hero::after. */
+  background: rgba(10, 18, 28, .52);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: none;
+  text-align: left;
+}
+body #overview .hero-intro .demo-copy,
+body #overview .hero-intro[data-phase=focus] .demo-copy {
+  position: relative;
+  inset: auto;
+  grid-row: 1;
+  align-self: start;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+body #overview .hero-intro .demo-title {
+  font-size: clamp(20px, 1.7vw, 25px) !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -.025em !important;
+  text-wrap: balance;
+  color: #f6f8f3 !important;
+  text-shadow: none !important;
+}
+body #overview .hero-intro .demo-act-caption { margin: 8px 0 0; font-size: 12px; color: #bdccd5; }
+body #overview .hero-intro .demo-workspace,
+body #overview .hero-intro .demo-act-workspace {
+  position: relative;
+  inset: auto;
+  grid-row: 2;
+  width: 100%;
+  height: 184px;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  gap: 16px;
+  align-items: start;
+}
+body #overview .hero-intro[data-phase=reproduce] .demo-workspace { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+body #overview .hero-intro .demo-memory-window { height: 112px; max-width: none; }
+body #overview .hero-intro .demo-memory-strip { gap: 8px; padding-inline: 20px !important; }
+body #overview .hero-intro .demo-card { flex-basis: 104px; width: 104px; border-radius: 4px; padding: 5px; box-shadow: none; }
+body #overview .hero-intro .demo-card-caption { font-size: 12px; padding-top: 5px; }
+body #overview .hero-intro .demo-memory-footer { margin-left: 20px; min-height: 42px; font-size: 12px; gap: 4px; }
+body #overview .hero-intro .demo-motion { height: 184px; padding-left: 14px; border-left: 1px solid #d4e3e02c; }
+body #overview .hero-intro .demo-motion .demo-panel-heading h2 { font-size: 11px !important; }
+body #overview .hero-intro .demo-chart { height: 145px; }
+body #overview .hero-intro .demo-chart-grid line { stroke-opacity: .5; }
+body #overview .hero-intro .demo-act-workspace { grid-template-columns: minmax(0, 1fr) 155px; }
+body #overview .hero-intro .demo-act-chart { height: 140px; }
+body #overview .hero-intro .demo-act-plot .demo-panel-heading h2,
+body #overview .hero-intro .demo-joints .demo-panel-heading h2 { font-size: 11px !important; }
+body #overview .hero-intro .demo-joints { padding-left: 12px; }
+body #overview .hero-intro .demo-joints dl { font-size: 11px; gap: 7px; margin-top: 9px; }
+body #overview .hero-intro .demo-joints .demo-panel-heading>span { font-size: 10px; }
+body #overview .hero-intro .demo-act-legend { font-size: 10px; }
+body #overview .hero-intro .demo-controls {
+  position: relative;
+  inset: auto;
+  grid-row: 3;
+  align-self: end;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+}
+body #overview .hero-intro .demo-scene-nav { gap: 2px; padding: 4px; border: 1px solid #dde9ed4d; border-radius: 999px; background: #0f17211f; }
+body #overview .hero-intro .demo-scene-nav button {
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-size: 14px;
+  color: #c2d1d6;
+}
+body #overview .hero-intro .demo-scene-nav button[aria-current=true] { color: #203749; background: #f2f6ee; }
+body #overview .hero-intro .demo-play { width: 40px; height: 40px; background: #101c2b38; border-color: #e1ecec59; }
+body #overview .hero-intro .demo-no-script { bottom: 24px; left: 6%; }
+
+@media (min-width: 761px) and (max-width: 1100px) {
+  body #overview .hero-intro-copy { left: 4%; width: 42%; top: 136px; }
+  body #overview .hero-intro-story { right: 4%; width: 46%; padding: 20px; grid-template-rows: 88px 184px 48px; }
+  body #overview .hero-intro-kicker { font-size: 10px; max-width: 340px; }
+  body #overview .hero-intro-actions { gap: 10px; }
+  body #overview .hero-intro-actions a { font-size: 12px; gap: 10px; padding-inline: 12px; }
+  body #overview .hero-intro .demo-act-workspace { grid-template-columns: minmax(0, 1fr); }
+  body #overview .hero-intro .demo-joints { display: none; }
+  body #overview .hero-intro .demo-motion { padding-left: 8px; }
+  body #overview .hero-intro .demo-card { flex-basis: 92px; width: 92px; }
+}
+@media (max-width: 760px) {
+  html body.dark-hero #overview .demo-hero.hero-intro { height: auto; min-height: 100svh; max-height: none; padding: 112px 20px 28px; gap: 0; }
+  body #overview .hero-intro-copy { position: relative; inset: auto; order: 0; width: 100%; margin: 0 0 28px; }
+  body #overview .hero-intro-kicker { font-size: 10px; margin-bottom: 16px; letter-spacing: .1em !important; }
+  body #overview .hero-intro h1.hero-intro-title { font-size: clamp(52px, 13vw, 80px); }
+  body #overview .hero-intro-description { font-size: 16px; margin-top: 20px; max-width: 450px; }
+  body #overview .hero-intro-actions { margin-top: 24px; gap: 10px; }
+  body #overview .hero-intro-actions a { font-size: 12px; min-height: 44px; padding: 11px 13px; gap: 12px; }
+  body #overview .hero-intro .demo-scene { position: relative; inset: auto; z-index: 0; order: 1; margin: 0 -20px; width: calc(100% + 40px); aspect-ratio: 16/9; }
+  body #overview .hero-intro .demo-video { object-fit: contain; object-position: 50% 50%; }
+  body #overview .hero-intro .demo-shade,
+  body #overview .hero-intro[data-phase=focus] .demo-shade { background: linear-gradient(0deg, #101c2b, transparent 28%, transparent 83%, #101c2b); }
+  body #overview .hero-intro-story { position: relative; inset: auto; order: 2; width: 100%; margin-top: 12px; padding: 18px 16px; border-radius: 18px; grid-template-rows: 128px 290px 48px; gap: 14px; }
+  body #overview .hero-intro .demo-copy { align-self: start; }
+  body #overview .hero-intro .demo-title { font-size: 22px !important; }
+  body #overview .hero-intro .demo-workspace,
+  body #overview .hero-intro[data-phase=reproduce] .demo-workspace { height: 290px; grid-template-columns: minmax(0, 1fr); grid-template-rows: 144px 132px; gap: 14px; }
+  body #overview .hero-intro .demo-workspace:not([hidden]) { display: grid !important; }
+  body #overview .hero-intro .demo-workspace .demo-memory { height: auto; }
+  body #overview .hero-intro .demo-workspace .demo-motion { height: 132px; border-left: 0; border-top: 1px solid #d4e3e02c; padding: 6px 0 0; }
+  body #overview .hero-intro .demo-chart { height: 112px; }
+  body #overview .hero-intro .demo-act-workspace { height: 290px; grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr; }
+  body #overview .hero-intro .demo-act-chart { height: 218px; }
+  body #overview .hero-intro .demo-joints { display: none; }
+  body #overview .hero-intro .demo-act-plot .demo-panel-heading { flex-direction: row; }
+  body #overview .hero-intro .demo-scene-nav { gap: 0; }
+  body #overview .hero-intro .demo-scene-nav button { font-size: 12px; padding-inline: 10px; }
+  body #overview .hero-intro .demo-controls { gap: 8px; }
+}
+@media (min-width: 761px) and (max-height: 760px) {
+  body #overview .hero-intro-story { bottom: 8px; }
+}
+@media (max-width: 360px) {
+  body #overview .hero-intro-story { padding-inline: 12px; }
+  body #overview .hero-intro .demo-scene-nav button { font-size: 11px; padding-inline: 7px; }
+  body #overview .hero-intro .demo-play { width: 34px; height: 34px; flex: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body #overview .hero-intro-actions a { transition: none; }
+  body #overview .hero-intro-actions a:hover { transform: none; }
+}

@@ -18,8 +18,13 @@ def e(value):
 
 def navigation(suites, current, prefix):
     active = ' aria-current="page"' if current == 'overview' else ''
-    parts = [f'<nav aria-label="Benchmark navigation"><p class="workspace-nav-title">Benchmark</p>'
-             f'<a class="workspace-overview" href="{prefix}benchmark.html"{active}>Overview</a>']
+    overview_link = f'<a class="workspace-overview" href="{prefix}benchmark.html"{active}>Overview</a>'
+    if any(c['id'] == current for group in suites for c in group['cases']):
+        overview_link = ('<div class="workspace-nav-tools">' + overview_link +
+                         '<div class="workspace-task-search"><input type="search" data-task-search '
+                         'aria-label="Search benchmark tasks" placeholder="Search 30 tasks…" autocomplete="off" spellcheck="false">'
+                         '<p data-task-search-status role="status" aria-live="polite" hidden></p></div></div>')
+    parts = [f'<nav aria-label="Benchmark navigation"><p class="workspace-nav-title">Benchmark</p>{overview_link}']
     for suite in suites:
         slug = suite['slug']
         selected = current == slug
@@ -79,16 +84,35 @@ def category(suite):
 
 def detail(suite, case):
     content = (ROOT / f'scripts/benchmark/{case["id"]}.html').read_text()
-    breadcrumb = (f'<div class="workspace-breadcrumb"><a href="../benchmark.html">Benchmark</a> / '
-                  f'<a href="../benchmark/{suite["slug"]}.html">{suite["name"]}</a> / {case["id"]}</div>')
-    content = re.sub(r'<div class="breadcrumb">.*?</div>', breadcrumb, content, count=1)
+    def normalize_panel(match):
+        panel = match[0]
+        if '<figure' not in panel and '<video' in panel:
+            level = re.search(r'data-panel="([^"]+)"', panel)[1]
+            panel = re.sub(r'(<div class="video-shell">.*?</video></div>)',
+                           lambda video: '<figure class="expansion-demo">' + video[0] +
+                           f'<figcaption>{level.title()} · Multi-view demonstration</figcaption></figure>',
+                           panel, count=1, flags=re.S)
+        return panel
+    content = re.sub(r'<section class="demo-panel".*?</aside></div></section>',
+                     normalize_panel, content, flags=re.S)
+    content = re.sub(r'<div class="breadcrumb">.*?</div>', '', content, count=1)
+    content = content.replace('<div class="task-head">', '<div class="task-head"><a class="task-back-home" href="../benchmark.html" aria-label="Back to benchmark overview"><span aria-hidden="true">←</span> Benchmark overview</a>', 1)
+    content += '<script src="../scripts/task-viewport.js?v=1" defer></script>'
     content = content.replace('href="index.html">Browse all 15 tasks',
                               f'href="../benchmark/{suite["slug"]}.html">Back to {suite["name"]}')
-    order = [c['id'] for s in json.loads((ROOT / 'data/benchmark-navigation.json').read_text()) for c in s['cases']]
-    index = order.index(case['id'])
-    previous = f'<a href="{order[index-1]}.html">← Previous task · {order[index-1]}</a>' if index else '<span></span>'
-    following = f'<a href="{order[index+1]}.html">Next task · {order[index+1]} →</a>' if index+1 < len(order) else '<span></span>'
-    footer = f'<nav class="task-footer" aria-label="Adjacent tasks">{previous}<a href="../benchmark/{suite["slug"]}.html">Back to {suite["name"]}</a>{following}</nav>'
+    catalog = [(c, group) for group in json.loads((ROOT / 'data/benchmark-navigation.json').read_text()) for c in group['cases']]
+    index = next(i for i, (c, _) in enumerate(catalog) if c['id'] == case['id'])
+    def adjacent(offset):
+        position = index + offset
+        if not 0 <= position < len(catalog):
+            return '<span class="task-adjacent-empty"></span>'
+        target, group = catalog[position]
+        label = f'← Previous · {target["id"]}' if offset < 0 else f'{target["id"]} · Next →'
+        direction = 'previous' if offset < 0 else 'next'
+        accessible = ('Previous task: ' if offset < 0 else 'Next task: ') + target['title']
+        return (f'<a class="task-adjacent task-adjacent-{direction}" href="{target["id"]}.html" aria-label="{e(accessible)}">'
+                f'<span class="task-adjacent-label">{label}</span><strong title="{e(target["title"])}">{e(target.get("nav_title", target["title"]))}</strong></a>')
+    footer = f'<nav class="task-footer" aria-label="Adjacent tasks">{adjacent(-1)}{adjacent(1)}</nav>'
     content = re.sub(r'<nav class="task-footer".*?</nav>', lambda _: footer, content, count=1)
     return content
 
@@ -101,11 +125,13 @@ def page(suites, current, title, content, prefix='', is_detail=False):
     header = re.sub(r'(href|src)="(?!https?:|#)([^"]+)"',
                     lambda m: f'{m[1]}="{prefix}{m[2]}"', header)
     nav = navigation(suites, current, prefix)
+    if is_detail:
+        nav = nav.replace('>Overview</a>', '><span aria-hidden="true">←</span> Benchmark overview</a>')
     styles = ''.join(f'<link rel="stylesheet" href="{prefix}{name}">' for name in [
-        'tasks/task-pages.css', 'media/site-shell.css?v=compact-header-1',
+        'tasks/task-pages.css', 'media/site-shell.css?v=floating-white-4',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
-        'tasks/benchmark-workspace.css?v=1',
+        'tasks/benchmark-workspace.css?v=task-search-6',
         *(['tasks/benchmark-task-rows.css?v=1'] if current in {s['slug'] for s in suites} else [])])
     body_class = 'benchmark-workspace' + (' task-detail' if is_detail else '')
     if current in {suite['slug'] for suite in suites}:
@@ -121,7 +147,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
             '<dialog id="task-drawer" aria-labelledby="drawer-title"><div class="workspace-drawer-head">'
             '<h2 id="drawer-title">Browse tasks</h2><button type="button" id="close-task-drawer">Close</button></div>'
             '<div id="drawer-navigation"></div></dialog>'
-            f'<script src="{prefix}scripts/benchmark-workspace.js?v=1" defer></script>'
+            f'<script src="{prefix}scripts/benchmark-workspace.js?v=2" defer></script>'
             f'<script src="{prefix}scripts/site-shell.js?v=unified-1" defer></script></body></html>\n')
 
 

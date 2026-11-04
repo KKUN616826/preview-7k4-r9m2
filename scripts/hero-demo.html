@@ -1,4 +1,5 @@
-<div class="demo-hero" data-phase="observe" aria-label="Keyboard sequence: remember, act, confirm">
+<link rel="stylesheet" href="scripts/hero-intro.css?v=__HERO_INTRO_VERSION__">
+<div class="demo-hero hero-intro" data-phase="observe" aria-label="Keyboard sequence: remember, act, confirm">
   <div class="demo-scene">
     <video class="demo-video" id="hero-demo-video" muted loop playsinline preload="auto" poster="media/posters/CP05_hero_hard_1080p.jpg" aria-label="Robot observes and reproduces a keyboard sequence">
       <source src="__HERO_VIDEO__" type="video/mp4">
@@ -27,7 +28,17 @@
     <g class="demo-outcome-link" data-active="false"><path class="demo-outcome-line" marker-end="url(#demo-outcome-arrow)"/><circle class="demo-outcome-pulse" r="3"/><text class="demo-link-label">Registered</text></g>
   </svg>
   <img class="demo-capture" alt="" aria-hidden="true" hidden>
-  <aside class="demo-moon-panel">
+  <section class="hero-intro-copy" aria-labelledby="hero-intro-title">
+    <p class="hero-intro-kicker">A simulation benchmark for embodied intelligence</p>
+    <h1 class="hero-intro-title" id="hero-intro-title">Mind2Act<br>World</h1>
+    <p class="hero-intro-description">Benchmarking robot reasoning, physical action, and their coordination.</p>
+    <nav class="hero-intro-actions" aria-label="Explore Mind2Act World">
+      <a class="hero-intro-primary" href="benchmark.html">Explore 30 tasks <span aria-hidden="true">↗</span></a>
+      <a class="hero-intro-secondary" href="leaderboard.html">View leaderboard <span aria-hidden="true">→</span></a>
+      <a class="hero-intro-repository" href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </section>
+  <aside class="demo-moon-panel" hidden aria-hidden="true">
     <div class="demo-moon" role="img" aria-label="Mind2Act moon: illumination follows the demonstration">
       <img class="demo-moon-upper" src="media/images/moon-upper-extracted.png" alt="">
       <img class="demo-moon-lower" src="media/images/moon-lower-extracted.png" alt="">
@@ -39,9 +50,10 @@
       <span>Mind</span><span class="demo-bidirectional" aria-hidden="true">↔</span><span>Act</span>
     </div>
   </aside>
+  <div class="hero-intro-story" role="group" aria-label="Synchronized memory, action, and feedback demonstration">
   <section class="demo-copy">
     <p class="demo-stage" hidden>MIND <span class="demo-speed">2.25× source speed</span></p>
-    <h1 class="demo-title">Remember the order.</h1>
+    <h2 class="demo-title">Remember the order.</h2>
     <p class="demo-act-caption" hidden>Single-action focus · Right arm</p>
   </section>
   <div class="demo-workspace">
@@ -91,6 +103,7 @@
       <svg class="demo-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
       <svg class="demo-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
     </button>
+  </div>
   </div>
   <noscript><p class="demo-no-script">Enable JavaScript for synchronized memory and motion. <a href="media/videos/CP05_hero_hard_1080p.mp4">Watch the demonstration</a>.</p></noscript>
 </div>

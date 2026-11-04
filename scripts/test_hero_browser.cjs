@@ -272,8 +272,8 @@ async function inspect(page, time) {
           controls: getComputedStyle(document.querySelector('.demo-controls')).opacity,
           completed: document.querySelectorAll('.demo-card[data-completed="true"]').length,
         }));
-        assert.ok(Math.abs(actual.opacity - presentationAt(data, actual.time).sceneOpacity) < 0.00001);
-        assert.equal(actual.information, actual.opacity);
+        assert.equal(actual.opacity, 1, 'The background stays visible at every edit boundary');
+        assert.equal(actual.information, 1, 'Evidence stays visible through the cut');
         assert.equal(actual.brand, '1'); assert.equal(actual.controls, '1'); assert.equal(actual.completed, 0);
       }
       const pausedDip = await fallback.locator('.demo-scene').evaluate(e => getComputedStyle(e).opacity);
@@ -287,11 +287,11 @@ async function inspect(page, time) {
       await fallback.emulateMedia({reducedMotion: 'reduce'});
       await fallback.waitForFunction(() => getComputedStyle(document.querySelector('.demo-scene')).opacity === '1');
       await fallback.emulateMedia({reducedMotion: 'no-preference'});
-      await fallback.waitForFunction(() => Number(getComputedStyle(document.querySelector('.demo-scene')).opacity) < 0.6);
+      await fallback.waitForFunction(() => getComputedStyle(document.querySelector('.demo-scene')).opacity === '1');
       await seekPresentation(fallback, 0);
       assert.equal(await fallback.locator('.demo-scene').evaluate(e => getComputedStyle(e).opacity), '1');
     }
-    console.log('PASS: media-timed dip, paused and reverse seeks, resume, loop reset and live reduced-motion changes');
+    console.log('PASS: visible edit boundaries, paused and reverse seeks, resume, loop reset and live reduced-motion changes');
     assert.deepEqual(fallback.errors, []); await fallback.close();
     console.log('PASS: muted autoplay and requestAnimationFrame fallback');
   } finally {
