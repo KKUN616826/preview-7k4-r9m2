@@ -83,7 +83,11 @@ _FOOTER_RE = re.compile(r'<footer class="(?:footer|workspace-footer|docs-footer|
 def apply_shell(page, current='', prefix='', body_class='ds'):
     """Insert tokens/components CSS, replace the legacy header and footer."""
     if 'media/tokens.css' not in page:
-        page = page.replace('</head>', head_links(prefix) + '</head>', 1)
+        # Shared styles go before the page's own stylesheets so pages can refine them.
+        first = re.search(r'<link[^>]+rel="stylesheet"|<style', page)
+        head_end = page.find('</head>')
+        at = first.start() if first and first.start() < head_end else head_end
+        page = page[:at] + head_links(prefix) + page[at:]
     if '<header class="site-header"' not in page:
         page, n = _HEADER_RE.subn(lambda _m: header(current, prefix), page, count=1)
         if not n:

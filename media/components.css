@@ -97,10 +97,10 @@ a.card:hover,.card--link:hover{box-shadow:var(--shadow-2);transform:translateY(-
 /* ---------- Data table ---------- */
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface)}
 .data-table{width:100%;border-collapse:collapse;font-size:var(--fs-small)}
-.data-table th{font:500 11px/1.2 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line-strong);white-space:nowrap;background:var(--surface)}
-.data-table td{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:middle}
-.data-table tbody tr:last-child td{border-bottom:0}
-.data-table tbody tr:hover td{background:var(--surface-2)}
+.data-table thead th{font:500 11px/1.2 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line-strong);white-space:nowrap;background:var(--surface)}
+.data-table td,.data-table tbody th{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:middle;text-align:left;font-weight:400}
+.data-table tbody tr:last-child td,.data-table tbody tr:last-child th{border-bottom:0}
+.data-table tbody tr:hover td,.data-table tbody tr:hover th{background:var(--surface-2)}
 .data-table .num,.data-table th.num{text-align:right;font-family:var(--font-mono)}
 
 /* ---------- Page hero (all sub-pages) ---------- */
@@ -113,7 +113,7 @@ a.card:hover,.card--link:hover{box-shadow:var(--shadow-2);transform:translateY(-
 .page-hero-mosaic{position:absolute;top:-60px;right:-120px;width:min(760px,58vw);display:grid;grid-template-columns:repeat(4,1fr);gap:14px;transform:rotate(-8deg);pointer-events:none;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 38%),linear-gradient(180deg,#000 55%,transparent 100%);-webkit-mask-composite:source-in;
   mask-image:linear-gradient(90deg,transparent 0,#000 38%),linear-gradient(180deg,#000 55%,transparent 100%);mask-composite:intersect}
-.page-hero-mosaic img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-md);box-shadow:var(--shadow-1)}
+.page-hero-mosaic img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-md);box-shadow:var(--shadow-1)}
 .page-hero-mosaic img:nth-child(4n+2){transform:translateY(28px)}
 .page-hero-mosaic img:nth-child(4n+4){transform:translateY(28px)}
 .page-hero--plain{background:var(--surface)}
