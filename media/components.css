@@ -116,7 +116,7 @@ a.card:hover,.card--link:hover{box-shadow:var(--shadow-2);transform:translateY(-
 .page-hero-mosaic img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-md);box-shadow:var(--shadow-1)}
 .page-hero-mosaic img:nth-child(4n+2){transform:translateY(28px)}
 .page-hero-mosaic img:nth-child(4n+4){transform:translateY(28px)}
-.page-hero--plain{background:var(--surface)}
+.page-hero--plain{background:var(--surface);padding-bottom:0}
 @media (max-width:820px){.page-hero-mosaic{display:none}.page-hero{padding:var(--sp-8) 0 var(--sp-6)}}
 
 /* ---------- Site header ---------- */

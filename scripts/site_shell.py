@@ -28,14 +28,14 @@ def head_links(prefix=''):
     )
 
 
-def header(current='', prefix=''):
+def header(current='', prefix='', main_id='main'):
     links = ''.join(
         f'<a href="{prefix}{href}"' + (' aria-current="page"' if key == current else '') + f'>{label}</a>'
         for key, href, label in NAV
     )
     links += f'<a class="site-links-submit" href="{prefix}leaderboard.html#submit">Submit a model</a>'
     return (
-        '<a class="skip-link" href="#main">Skip to content</a>'
+        f'<a class="skip-link" href="#{main_id}">Skip to content</a>'
         '<header class="site-header"><nav class="site-nav" aria-label="Main">'
         f'<a class="site-logo" href="{prefix}index.html" aria-label="Mind2Act World home">'
         f'<img src="{prefix}media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="132" height="40"></a>'
@@ -88,10 +88,12 @@ def apply_shell(page, current='', prefix='', body_class='ds'):
         head_end = page.find('</head>')
         at = first.start() if first and first.start() < head_end else head_end
         page = page[:at] + head_links(prefix) + page[at:]
+    found = re.search(r'<main[^>]*\bid="([^"]+)"', page)
+    main_id = found.group(1) if found else 'main'
     if '<header class="site-header"' not in page:
-        page, n = _HEADER_RE.subn(lambda _m: header(current, prefix), page, count=1)
+        page, n = _HEADER_RE.subn(lambda _m: header(current, prefix, main_id), page, count=1)
         if not n:
-            page = re.sub(r'(<body[^>]*>)', lambda m: m.group(1) + header(current, prefix), page, count=1)
+            page = re.sub(r'(<body[^>]*>)', lambda m: m.group(1) + header(current, prefix, main_id), page, count=1)
     if '<footer class="site-footer"' not in page:
         page, n = _FOOTER_RE.subn(lambda _m: footer(prefix), page, count=1)
         if not n:

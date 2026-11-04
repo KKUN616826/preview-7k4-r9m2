@@ -80,8 +80,15 @@ def category(suite):
             f'<dl class="workspace-comparison">{rows}</dl></section>')
 
 
+# rollouts/*.html are still placeholders ("XX%", "model results pending"); keep them
+# unlinked until real per-task results exist, then set this to True.
+SHOW_MODEL_DEMOS = False
+
+
 def model_demos(case_id):
     """Model-family demo pages that exist for this task (rollouts/<model>-<ID>.html)."""
+    if not SHOW_MODEL_DEMOS:
+        return ''
     models = json.loads((ROOT / 'data/leaderboard-results.json').read_text())['models']
     links = []
     for m in models:

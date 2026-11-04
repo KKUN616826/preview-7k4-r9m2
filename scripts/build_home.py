@@ -7,6 +7,7 @@ from data files, so the template holds no copied numbers.
 """
 import html
 import json
+import re
 from pathlib import Path
 
 from hero_demo import render as render_hero
@@ -160,7 +161,8 @@ def main():
     task_count = sum(len(s['cases']) for s in nav)
     page = (ROOT / 'scripts/home.html').read_text()
     values = {
-        'HERO_DEMO': render_hero(),
+        # The page has one h1 (the project name); the player's rotating caption becomes a paragraph.
+        'HERO_DEMO': re.sub(r'<h1 class="demo-title">(.*?)</h1>', r'<p class="demo-title">\1</p>', render_hero(), count=1, flags=re.S),
         'CAPABILITY_MAP': render_capability_map(),
         'LB_PREVIEW': render_leaderboard_preview(lb),
         'SUITE_CARDS': render_suite_cards(nav),

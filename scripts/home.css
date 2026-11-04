@@ -84,9 +84,9 @@
 .home .capability-map .cm-layout{grid-template-columns:320px minmax(0,1fr);gap:var(--sp-7);align-items:center}
 .home .capability-map .cm-visual{max-width:600px;justify-self:center}
 .home .capability-map,.home .capability-map *{font-family:var(--font-body)}
-.home .cm-overview-meta{font:500 var(--fs-xs)/1.4 var(--font-mono)!important;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)!important}
-.home .cm-detail-title{font:600 22px/1.25 var(--font-display)!important;letter-spacing:-.015em;color:var(--ink)!important}
-.home .cm-suite-label{font:500 var(--fs-xs)/1.4 var(--font-mono)!important;letter-spacing:.1em;text-transform:uppercase;color:var(--cm-color)!important}
+body.home #capability-explorer.capability-map .cm-overview-meta{font:500 var(--fs-xs)/1.4 var(--font-mono)!important;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)!important}
+body.home #capability-explorer.capability-map .cm-detail-title{font:600 22px/1.25 var(--font-display)!important;letter-spacing:-.015em;color:var(--ink)!important}
+body.home #capability-explorer.capability-map .cm-suite-label{font:500 var(--fs-xs)/1.4 var(--font-mono)!important;letter-spacing:.1em;text-transform:uppercase;color:var(--cm-color)!important}
 .home .cm-suite-goal,.home .cm-case-demands{color:var(--ink-2)!important}
 .home .cm-mind{--cm-color:var(--mind);--node-color:var(--mind)}
 .home .cm-act{--cm-color:var(--act);--node-color:var(--act)}
@@ -151,3 +151,11 @@
 .resource .badge{align-self:flex-start}
 @media (max-width:1000px){.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.resource-grid{grid-template-columns:1fr}}
+
+/* Act-phase read-outs in the hero player use literal Helvetica; bring them onto the scale. */
+.home .demo-hero :is(.demo-act-workspace,.demo-act-target,.demo-memory,.demo-motion) :is(span,dt,dd,p,text){font-family:var(--font-body)}
+.home .demo-hero .demo-joints dd,.home .demo-hero .demo-count,.home .demo-hero .demo-card-status{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+/* capability-map.css sets Helvetica with !important; match it, keeping the mono labels. */
+body.home #capability-explorer.capability-map :is(p,h3,span,button,a,dt,dd,summary):not(.cm-overview-meta,.cm-suite-label,.cm-example-label){font-family:var(--font-body)!important}
+body.home #capability-explorer.capability-map .cm-example-label{font:500 11px/1.4 var(--font-mono)!important;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)!important}
+.home .demo-hero .demo-phase-status{font-family:var(--font-body)}

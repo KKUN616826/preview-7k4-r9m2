@@ -19,6 +19,20 @@
 
 本展示包含任务定义与演示，不包含模型评测成绩。暂定参数和待补素材在具体任务中标注。
 
+## 2026-11 改版（设计系统）
+
+全站改为同一套设计规范，修改前先读这一节。
+
+- **设计变量**：`media/tokens.css`（字体、颜色、字号、间距、圆角，唯一来源）；`media/components.css`（按钮、标签、Tab、卡片、表格、页头、导航、页脚）。新代码只用这里的变量，不写字面颜色、不加 `!important`。字体全部本地提供：Inter、JetBrains Mono、Sora（OFL，见 `media/fonts/`）。
+- **共享导航和页脚**：`scripts/site_shell.py` 的 `apply_shell()`，每个生成器最后都会调用它。
+- **首页**：`scripts/home.html` + `scripts/build_home.py` + `scripts/home.css` / `home.js`。复用 CP05 Hero 播放器和任务月球；新闻在 `data/news.json`。原 `scripts/showcase.html` 保留作参考，不再参与构建。
+- **Leaderboard / Protocol**：`scripts/build_leaderboard_ds.py`、`scripts/leaderboard-ds.css/js`。
+- **Benchmark / 任务页**：`scripts/build_benchmark.py`、`scripts/benchmark-catalog-ds.css/js`、`tasks/task-ds.css`。`benchmark/{mind,act,mind2act}.html` 现为跳转页，指向 `benchmark.html?suite=…`。
+- **Docs / News**：`scripts/build_pages.py`、`scripts/pages-ds.css`。
+- **任务缩略图**：`media/thumbs/<ID>.webp`，由 `media/benchmark-covers/` 居中裁剪 68% 得到。
+- **构建与检查**：`python3 scripts/build.py`，然后 `python3 scripts/validate.py`。旧的首页检查移到了 `scripts/validate_legacy.py`。`scripts/test_*.cjs` 浏览器测试断言的是旧 DOM，需要按新结构更新。
+- **模型示例页**：`rollouts/*.html` 仍是占位内容（XX%），目前没有链接入口；有真实逐任务结果后，把 `SHOW_MODEL_DEMOS` 设为 True。
+
 ## 同事获取与运行优化版本
 
 请阅读 [优化分支预览教程](docs/Preview_Guide.md)，包含首次下载、macOS / Windows 启动、更新、评审入口和常见问题。

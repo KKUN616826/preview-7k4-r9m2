@@ -8,6 +8,7 @@ from build_rollouts import build_rollouts
 from build_benchmark import main as build_benchmark
 from build_leaderboard import main as build_leaderboard
 from build_home import main as build_home
+from build_pages import main as build_pages
 from build_benchmark_expansion import main as prepare_expansion
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,6 +74,7 @@ def main():
     build_home()
     build_benchmark()
     build_leaderboard()
+    build_pages()
     print(f'Built {len(records)} cases, {videos} videos, {images} images.')
 
 if __name__ == '__main__':

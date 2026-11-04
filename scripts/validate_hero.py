@@ -8,6 +8,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _file_digest(handle):
+    """hashlib.file_digest needs Python 3.11; fall back to chunked reads."""
+    if hasattr(hashlib, 'file_digest'):
+        return hashlib.file_digest(handle, 'sha256')
+    digest = hashlib.sha256()
+    for chunk in iter(lambda: handle.read(1 << 20), b''):
+        digest.update(chunk)
+    return digest
+
+
 def validate_hero(content=None):
     data = json.loads((ROOT / 'data/hero-demo.json').read_text())
     if content is None:
@@ -46,14 +56,14 @@ def validate_hero(content=None):
         if index:
             assert abs(sample[0] - samples[index - 1][0] - 1 / 120) < 2e-6
     with (ROOT / data['media']['path']).open('rb') as video:
-        assert hashlib.file_digest(video, 'sha256').hexdigest() == data['media']['sha256']
+        assert _file_digest(video).hexdigest() == data['media']['sha256']
     presentation, detail = data['presentation'], data['actDetail']
     assert data['version'] == 3
     assert presentation['fps'] == 30 and presentation['playbackRate'] == 0.75
     assert abs(presentation['duration'] - 569 / 30) < 1e-6
     assert presentation['path'] in content
     with (ROOT / presentation['path']).open('rb') as video:
-        assert hashlib.file_digest(video, 'sha256').hexdigest() == presentation['sha256']
+        assert _file_digest(video).hexdigest() == presentation['sha256']
     segments = presentation['segments']
     assert [s['phase'] for s in segments] == ['observe', 'focus', 'reproduce']
     for i, segment in enumerate(segments):

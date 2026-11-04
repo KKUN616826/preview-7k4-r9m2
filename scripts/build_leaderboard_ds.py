@@ -11,6 +11,8 @@ from site_shell import apply_shell, REPO
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE = {'mind': 'mind', 'act': 'act', 'coupling': 'm2a'}
+# rollouts/*.html are placeholders ("XX%"); link them once real results exist.
+SHOW_MODEL_DEMOS = False
 ISSUE = REPO + '/issues/new?title=Leaderboard%20submission%3A%20'
 
 
@@ -85,7 +87,7 @@ def ranking(data, models):
             f'data-{v["key"]}-score="{m["results"][v["key"]]["score"] if m["results"][v["key"]]["score"] is not None else -1}" '
             f'data-{v["key"]}-success="{m["results"][v["key"]]["success"] if m["results"][v["key"]]["success"] is not None else -1}"'
             for v in views)
-        demo = f'<a class="icon-btn" href="{e(m["cases"])}" aria-label="{e(m["name"])} model-family demos"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></a>' if m.get('cases') else ''
+        demo = f'<a class="icon-btn" href="{e(m["cases"])}" aria-label="{e(m["name"])} model-family demos"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></a>' if m.get('cases') and SHOW_MODEL_DEMOS else ''
         rows.append(
             f'<tr data-type="{e(m["paradigm"])}" {attrs}><td class="rk"><span class="rank"></span></td>'
             f'<th scope="row"><span class="mx-model">{logo(m)}{e(m["name"])}</span></th>'

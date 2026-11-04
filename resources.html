@@ -1,51 +1,33 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Resources · Mind2Act World</title><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=compact-header-1"><link rel="stylesheet" href="media/documentation.css?v=green-buttons-1"></head><body class="documentation-page">
-<header class="header"><div class="wrap header-inner"><a class="brand official-nav-logo" href="index.html" aria-label="Mind2Act World home"><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="1330" height="400"></a><button id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">Menu</button><nav class="nav" id="siteNav" aria-label="Main navigation"><div class="nav-left"><a href="index.html">Home</a><a href="leaderboard.html">Leaderboard</a><a href="benchmark.html">Benchmark</a><a href="resources.html" aria-current="page">Documents</a></div><div class="nav-right"><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noreferrer">Code ↗</a><a class="paper-link" href="index.html#contributors">Contributors</a></div></nav></div></header>
-<main class="documentation">
-<aside aria-label="Documentation contents"><strong>Documents</strong><a href="#overview" aria-current="location">Overview</a><a href="#tasks">Task suites</a><a href="#instructions">Instructions &amp; difficulty</a><a href="#evaluation">Evaluation</a><a href="#downloads">Reference material</a></aside>
-<article>
-<section id="overview">
-<h1>Documentation</h1><p class="doc-lead">A guide to the tasks, demonstrations, and evaluation material in Mind2Act World.</p></section>
-<section id="tasks">
-<h2>Task suites</h2><p>The benchmark comprises 30 tasks in three suites. Each task includes Easy, Medium, and Hard configurations.</p><div class="doc-table-wrap"><table class="doc-suite-table"><caption>Task suites at a glance</caption>
-<thead>
-<tr><th scope="col">Suite</th><th scope="col">Focus</th><th scope="col">Tasks</th><th scope="col">Levels</th></tr></thead>
-<tbody>
-<tr><th scope="row">Mind</th><td>Memory, goal selection, and task-level planning.</td><td>10</td><td>Easy · Medium · Hard</td></tr>
-<tr><th scope="row">Act</th><td>Timely, precise, and stable physical execution.</td><td>10</td><td>Easy · Medium · Hard</td></tr>
-<tr><th scope="row">Mind2Act</th><td>Reasoning and execution coordinated through feedback.</td><td>10</td><td>Easy · Medium · Hard</td></tr></tbody>
-<tfoot>
-<tr><th scope="row">Total</th><td>Three complementary suites</td><td>30</td><td>90 task–level configurations</td></tr></tfoot></table></div><a class="doc-button" href="benchmark.html">Browse the 30 tasks ↗</a></section>
-<section id="instructions">
-<h2>Instructions and demonstrations</h2>
-<div class="doc-instruction-layout">
-<div class="doc-instruction-copy">
-<ol class="doc-steps">
-<li><p>Select a task from the catalog to open its demonstration page.</p></li>
-<li><p>Switch between Easy, Medium, and Hard to view the corresponding video and instruction.</p></li>
-<li><p>The instruction panel describes the task operation.</p></li>
-</ol>
-<p class="doc-notice">Only the E2 Hard demonstration is pending; all other added task levels have videos available.</p>
-<a class="doc-button" href="tasks/E.html#easy">Open an example task ↗</a>
-</div>
-<figure class="doc-example" aria-label="Example task page layout: difficulty selection, demonstration image, and instruction panel">
-<div class="doc-preview-tabs" aria-hidden="true"><span>Easy</span><span>Medium</span><span>Hard</span></div>
-<div class="doc-preview-body">
-<div class="doc-preview-image"><img src="media/task-web/E/easy.jpg" alt="Still from the Duplicate Item Identification Easy demonstration" loading="lazy" width="640" height="480"></div>
-<div class="doc-preview-instruction"><strong>Instruction</strong><p>Observe each batch of items. In each batch after the first, place the one item that appeared in an earlier batch into the submission tray.</p></div>
-</div>
-<span class="doc-preview-marker preview-difficulty" aria-hidden="true">1</span><span class="doc-preview-marker preview-image" aria-hidden="true">2</span><span class="doc-preview-marker preview-instruction" aria-hidden="true">3</span>
-</figure>
-</div>
-</section>
-<section id="evaluation">
-<h2>Evaluation material</h2><p>Task specifications describe the evaluation requirements.</p><p class="doc-evaluation-note">The leaderboard preserves the original 15-task result snapshot; results for the added tasks are not yet reported. Unreported results are marked with a dash.</p><a class="doc-button" href="docs/PhysCo_Cases.md">Read task specifications ↗</a> <a class="doc-button" href="leaderboard.html">View leaderboard ↗</a></section>
-<section id="downloads">
-<h2>Reference material</h2>
-<ul class="doc-resources">
-<li><a href="docs/PhysCo_Technical_Report_v0.1.pdf">Technical report ↗</a></li>
-<li><a href="docs/PhysCo_Media.md">Demonstration media index ↗</a></li>
-<li><a href="https://github.com/KKUN616826/preview-7k4-r9m2">Source repository ↗</a></li></ul></section></article></main>
-<footer class="page-footer">Mind2Act World · Robot Mind, Physical Act, and Mind–Act Coordination</footer>
-<script src="scripts/site-shell.js?v=oct19-1" defer></script>
-<script src="scripts/documentation.js?v=blue-docs-3" defer></script><link rel="stylesheet" href="scripts/home-reveal.css?v=3"><script src="scripts/home-reveal.js?v=3" defer></script>
-</body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Docs · Mind2Act World</title><meta name="description" content="Documentation for Mind2Act World: task suites, demonstrations, evaluation and reference material."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="preload" href="media/fonts/inter/Inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="media/tokens.css?v=ds-20261104"><link rel="stylesheet" href="media/components.css?v=ds-20261104"><link rel="stylesheet" href="scripts/pages-ds.css?v=ds-20261104"></head>
+<body class="ds"><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><nav class="site-nav" aria-label="Main"><a class="site-logo" href="index.html" aria-label="Mind2Act World home"><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="132" height="40"></a><div class="site-links" id="siteLinks"><a href="leaderboard.html">Leaderboard</a><a href="benchmark.html">Benchmark</a><a href="resources.html" aria-current="page">Docs</a><a class="site-links-submit" href="leaderboard.html#submit">Submit a model</a></div><div class="site-actions"><a class="icon-btn" href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener" aria-label="Source code on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a><a class="btn btn-primary btn-sm" href="leaderboard.html#submit">Submit</a><button class="icon-btn site-menu" type="button" aria-expanded="false" aria-controls="siteLinks" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></nav></header><script>(()=>{const b=document.querySelector(".site-menu"),l=document.getElementById("siteLinks");if(!b||!l)return;b.addEventListener("click",()=>{const o=l.classList.toggle("is-open");b.setAttribute("aria-expanded",o);b.setAttribute("aria-label",o?"Close menu":"Open menu")});})();</script>
+<main id="main">
+<section class="page-hero page-hero--plain"><div class="container"><p class="eyebrow">Docs</p><h1>Documentation</h1>
+<p class="lead">A guide to the tasks, demonstrations and evaluation material in Mind2Act World.</p></div></section>
+<section class="section"><div class="container docs">
+<nav class="docs-toc" aria-label="On this page"><p class="eyebrow">On this page</p><a href="#overview">Overview</a><a href="#suites">Task suites</a><a href="#instructions">Instructions and difficulty</a><a href="#evaluation">Evaluation</a><a href="#reference">Reference material</a></nav>
+<div class="prose">
+<h2 id="overview">Overview</h2>
+<p>Robotic manipulation requires more than choosing the right goal or executing an isolated skill. Over a long horizon, a robot must remember task state, act under physical constraints, and use execution feedback to decide what comes next. Final success alone offers limited insight into where this process breaks down.</p>
+<p>Mind2Act World is a simulation benchmark for studying task reasoning, physical execution, and their coordination. Shared observation and action interfaces, explicit timing conditions, and disclosure of execution assistance support comparisons across VLA and world-action policies, coding agents, and hybrid systems.</p>
+<figure class="docs-figure"><a href="media/overview/mind2act-overview-v3.pdf" target="_blank" rel="noopener"><picture><source srcset="media/images/mind2act-overview-v3.webp" type="image/webp"><img src="media/images/mind2act-overview-v3.png" width="2600" height="2113" loading="lazy" alt="Mind2Act World overview: the Mind, Act and Mind2Act suites, task highlights, open-source ecosystem and leaderboard."></picture></a>
+<figcaption>Overview figure from the original task design; its task counts predate the current 30-task catalogue. Open the PDF for full resolution.</figcaption></figure>
+<h2 id="suites">Task suites</h2>
+<p>The benchmark comprises 30 tasks in three suites. Each task has Easy, Medium and Hard configurations that vary memory load, planning dependencies, precision requirements and timing pressure.</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>Suite</th><th>Focus</th><th class="num">Tasks</th><th>Levels</th></tr></thead><tbody><tr><td><span class="badge" data-suite="mind">Mind</span></td><td>Memory, goal selection and task-level planning.</td><td class="num">10</td><td>Easy · Medium · Hard</td></tr><tr><td><span class="badge" data-suite="act">Act</span></td><td>Timely, precise and stable physical execution.</td><td class="num">10</td><td>Easy · Medium · Hard</td></tr><tr><td><span class="badge" data-suite="m2a">Mind2Act</span></td><td>Reasoning and execution coordinated through feedback.</td><td class="num">10</td><td>Easy · Medium · Hard</td></tr><tr class="total"><td>Total</td><td>Three complementary suites</td><td class="num">30</td><td>90 task configurations</td></tr></tbody></table></div>
+<p><a class="btn btn-secondary" href="benchmark.html">Browse the 30 tasks →</a></p>
+<h2 id="instructions">Instructions and difficulty</h2>
+<ol class="steps"><li>Open a task from the <a href="benchmark.html">catalogue</a>.</li><li>Switch between Easy, Medium and Hard to see the matching demonstration video.</li><li>Read the instruction panel next to the video for the exact task operation and what is evaluated.</li></ol>
+<p><a class="btn btn-secondary" href="tasks/E.html">Open an example task →</a></p>
+<h2 id="evaluation">Evaluation</h2>
+<p>Every run reports a <strong>Score</strong> (0–100, combining task success with stage progress) and a <strong>Success</strong> rate (%). The <a href="protocol.html">evaluation protocol</a> defines both, lists the tasks the current results cover, and explains how to submit a model.</p>
+<p class="btn-row"><a class="btn btn-secondary" href="protocol.html">Read the protocol →</a><a class="btn btn-secondary" href="leaderboard.html">View the leaderboard →</a></p>
+<h2 id="reference">Reference material</h2>
+<ul class="ref-list">
+<li><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener"><span class="icon-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></svg></span><span><b>Source repository</b><small>Website, task assets and build scripts on GitHub</small></span></a></li>
+<li><a href="data/benchmark-navigation.json"><span class="icon-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H7a3 3 0 0 0-3 3v2a2 2 0 0 1-2 2 2 2 0 0 1 2 2v2a3 3 0 0 0 3 3h1M16 4h1a3 3 0 0 1 3 3v2a2 2 0 0 0 2 2 2 2 0 0 0-2 2v2a3 3 0 0 1-3 3h-1"/></svg></span><span><b>Task metadata</b><small>Suites, task titles and summaries as JSON</small></span></a></li>
+<li><a href="media/overview/mind2act-overview-v3.pdf" target="_blank" rel="noopener"><span class="icon-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg></span><span><b>Benchmark overview</b><small>One-page summary figure, PDF</small></span></a></li>
+</ul>
+</div></div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-grid"><div><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="150" height="45"><p>A simulation benchmark for robot mind, physical act, and their coordination in manipulation.</p></div><div><h2>Explore</h2><ul><li><a href="leaderboard.html">Leaderboard</a></li><li><a href="benchmark.html">Benchmark tasks</a></li><li><a href="resources.html">Docs</a></li><li><a href="protocol.html">Evaluation protocol</a></li><li><a href="news.html">News</a></li><li><a href="leaderboard.html#submit">Submit a model</a></li></ul></div><div><h2>Project</h2><ul><li><a href="https://mmlab-sigs.github.io/groups/zwang/" target="_blank" rel="noopener">mmlab@SIGS</a></li><li><a href="https://www.sigs.tsinghua.edu.cn/" target="_blank" rel="noopener">Tsinghua Shenzhen International Graduate School</a></li><li><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noopener">GitHub repository</a></li><li><a href="index.html#cite">Cite Mind2Act World</a></li></ul></div></div><div class="footer-bottom"><span>© 2026 mmlab@SIGS · Mind2Act World</span><span>Simulation demonstrations; scores are reported on the leaderboard.</span></div></div></footer></body></html>
