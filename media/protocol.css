@@ -1,8 +1,7 @@
 .protocol-page { margin:0; }
-/* Evaluation protocol page (protocol.html). Layout follows the long-form protocol
-   pages of robodojo-benchmark.com (narrow article, numbered rule cards, callouts)
-   and the process strip of embodied-first-exam.ai/contribute. Type comes from
-   media/typography.css; colours reuse the benchmark-overview palette. */
+/* Evaluation protocol page (protocol.html). The article shares Benchmark's
+   1440px shell and sidebar grid. Type comes from media/typography.css;
+   colours reuse the benchmark-overview palette. */
 .pr-page {
   --pr-ink: #203447;
   --pr-text: #34424f;
@@ -57,82 +56,84 @@
 
 
 /* ---- Two-column body: sticky contents + article */
-.pr-layout { display:grid; grid-template-columns:200px minmax(0,800px); justify-content:center; gap:64px; max-width:1160px; padding-inline:48px; margin:48px auto 0; }
+.pr-layout { display:grid; grid-template-columns:200px minmax(0,1fr); gap:30px; max-width:1440px; padding-inline:48px; margin:64px auto 0; }
+.pr-article { min-width:0; }
 .pr-toc { position: sticky; top: 110px; align-self: start; }
 .pr-toc p { margin: 0 0 12px; color: var(--pr-muted); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .pr-toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--pr-line); }
-.pr-toc a { display: block; margin-left: -1px; padding: 7px 0 7px 16px; border-left: 2px solid transparent; color: var(--pr-muted); font-size: 15px; line-height: 1.4; text-decoration: none; }
+.pr-toc a { display: block; margin-left: -1px; padding: 10px 12px 10px 16px; border-left: 2px solid transparent; color: var(--pr-muted); font-size: 15px; line-height: 1.55; text-decoration: none; }
 .pr-toc a:hover { color: var(--pr-ink); }
 .pr-toc a[aria-current=true] { border-left-color: var(--pr-accent); color: var(--pr-ink); font-weight: 600; }
 
-.pr-article > section { padding: 0 0 56px; scroll-margin-top: 110px; }
-.pr-article > section + section { padding-top: 48px; border-top: 1px solid var(--pr-line); }
-.pr-article h2 { margin: 0 0 14px; color: var(--pr-ink); font-size: 32px; line-height: 1.15; font-weight: 650; letter-spacing: -.02em; }
-.pr-article h3 { margin: 0 0 8px; color: var(--pr-ink); font-size: 18px; line-height: 1.35; font-weight: 600; letter-spacing: -.01em; }
-.pr-article p { margin: 0 0 16px; font-size: 16.5px; line-height: 1.7; }
-.pr-article p.pr-section-lead { color: var(--pr-muted); font-size: 18px; line-height: 1.6; }
+.pr-article > section { padding: 0 0 72px; scroll-margin-top: 110px; }
+.pr-article > section + section { padding-top: 64px; border-top: 1px solid var(--pr-line); }
+.pr-article h2 { margin: 0 0 22px; color: var(--pr-ink); font-size: 32px; line-height: 1.3; font-weight: 650; letter-spacing: -.02em; }
+.pr-article h3 { margin: 0 0 14px; color: var(--pr-ink); font-size: 20px; line-height: 1.45; font-weight: 600; letter-spacing: -.01em; }
+.pr-article p { margin: 0 0 24px; font-size: 17px; line-height: 1.85; }
+.pr-article > section > p { max-width:76ch; }
+.pr-article p.pr-section-lead { color: var(--pr-muted); font-size: 19px; line-height: 1.8; }
 .pr-article code { padding: .1em .35em; border-radius: 5px; background: var(--pr-soft); color: var(--pr-ink); font-size: .88em; }
 
 /* Callouts (RoboDojo: left-ruled notice box) */
-.pr-callout { margin: 0 0 48px; padding: 18px 22px; border: 1px solid #cfdcd7; border-left: 4px solid var(--pr-accent); border-radius: 10px; background: var(--pr-accent-soft); }
-.pr-callout p { margin: 0; font-size: 15.5px; line-height: 1.65; }
+.pr-callout { margin: 0 0 64px; padding: 26px 30px; border: 1px solid #cfdcd7; border-left: 4px solid var(--pr-accent); border-radius: 10px; background: var(--pr-accent-soft); }
+.pr-callout p { margin: 0; font-size: 17px; line-height: 1.85; }
 .pr-callout strong { color: var(--pr-ink); }
 
 /* Track cards */
-.pr-tracks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 24px 0 20px; }
-.pr-track { display: flex; flex-direction: column; padding: 24px; border: 1px solid var(--pr-line); border-radius: 14px; background: #fff; }
+.pr-tracks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 32px 0 28px; }
+.pr-track { display: flex; flex-direction: column; padding: 30px; border: 1px solid var(--pr-line); border-radius: 14px; background: #fff; }
 .pr-track-tag { align-self: flex-start; margin: 0 0 14px; padding: 4px 10px; border-radius: 999px; background: var(--pr-soft); color: var(--pr-accent); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-.pr-track p { font-size: 15.5px; line-height: 1.6; }
+.pr-track p { font-size: 17px; line-height: 1.85; }
+.pr-track p.pr-track-tag { margin-bottom:22px; font-size:12px; line-height:1.6; }
 .pr-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: auto 0 0; padding: 14px 0 0; border-top: 1px dashed var(--pr-line); list-style: none; }
 .pr-flow li { padding: 5px 9px; border-radius: 6px; background: var(--pr-soft); color: var(--pr-ink); font-family: var(--m2a-font-mono); font-size: 13px; }
 .pr-flow li.pr-arrow { padding: 0 2px; background: none; color: #9aa9a3; font-family: var(--m2a-font-sans); }
 
 /* Chip grid: what an instance fixes, what a result discloses */
-.pr-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0 8px; padding: 0; list-style: none; }
-.pr-chips li { padding: 14px 16px; border: 1px solid var(--pr-line); border-radius: 10px; background: #fff; }
+.pr-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 28px 0 24px; padding: 0; list-style: none; }
+.pr-chips li { padding: 20px; border: 1px solid var(--pr-line); border-radius: 10px; background: #fff; }
 .pr-chips b { display: block; color: var(--pr-ink); font-size: 15.5px; font-weight: 600; }
-.pr-chips span { display: block; margin-top: 4px; color: var(--pr-muted); font-size: 14px; line-height: 1.5; }
+.pr-chips span { display: block; margin-top: 10px; color: var(--pr-muted); font-size: 15px; line-height: 1.75; }
 
 /* Numbered rules (RoboDojo requirement cards) */
-.pr-rules { margin: 20px 0 8px; padding: 0; list-style: none; counter-reset: pr-rule; display: grid; gap: 10px; }
-.pr-rules li { counter-increment: pr-rule; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px 20px; border: 1px solid var(--pr-line); border-radius: 12px; background: #fff; font-size: 16px; line-height: 1.6; }
+.pr-rules { margin: 28px 0 24px; padding: 0; list-style: none; counter-reset: pr-rule; display: grid; gap: 16px; }
+.pr-rules li { counter-increment: pr-rule; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 18px; align-items: start; padding: 22px 24px; border: 1px solid var(--pr-line); border-radius: 12px; background: #fff; font-size: 17px; line-height: 1.85; }
 .pr-rules li::before { content: counter(pr-rule); display: grid; place-items: center; width: 26px; height: 26px; margin-top: 1px; border-radius: 50%; background: var(--pr-accent-soft); color: var(--pr-accent); font-size: 13px; font-weight: 700; }
 .pr-rules strong { color: var(--pr-ink); }
 
 /* Clock comparison */
 .pr-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 22px 0 18px; border: 1px solid var(--pr-line); border-radius: 14px; overflow: hidden; }
-.pr-compare > div { padding: 22px 24px; }
+.pr-compare > div { padding: 30px; }
 .pr-compare > div + div { border-left: 1px solid var(--pr-line); background: var(--pr-soft); }
-.pr-compare p { font-size: 15.5px; line-height: 1.6; }
+.pr-compare p { font-size: 17px; line-height: 1.85; }
 .pr-compare dl { margin: 14px 0 0; display: grid; gap: 8px; font-size: 15px; }
 .pr-compare dl div { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
 .pr-compare dt { color: var(--pr-muted); }
 .pr-compare dd { margin: 0; color: var(--pr-ink); font-weight: 500; }
 
 /* Metric cards and formula */
-.pr-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }
-.pr-metric { padding: 20px; border: 1px solid var(--pr-line); border-radius: 12px; }
+.pr-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin: 28px 0; }
+.pr-metric { padding: 26px; border: 1px solid var(--pr-line); border-radius: 12px; }
 .pr-metric-value { display: block; margin: 0 0 10px; color: var(--pr-ink); font-family: var(--m2a-font-mono); font-size: 22px; font-weight: 600; }
-.pr-metric p { margin: 0; font-size: 15px; line-height: 1.55; }
+.pr-metric p { margin: 0; font-size: 16px; line-height: 1.8; }
 .pr-formula { margin: 8px 0 20px; padding: 18px 22px; border-radius: 12px; background: #17232e; color: #e8efec; font-family: var(--m2a-font-mono); font-size: 15px; line-height: 1.9; overflow-x: auto; }
 .pr-formula span { color: #9fb7b0; }
 
 /* Diagnostic table */
 .pr-table-wrap { margin: 20px 0 8px; border: 1px solid var(--pr-line); border-radius: 12px; overflow-x: auto; }
 .pr-table { width: 100%; border-collapse: collapse; font-size: 15px; }
-.pr-table th, .pr-table td { padding: 13px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--pr-line); }
+.pr-table th, .pr-table td { padding: 18px 22px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--pr-line); }
 .pr-table tr:last-child td { border-bottom: 0; }
 .pr-table thead th { background: var(--pr-soft); color: var(--pr-muted); font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
 .pr-table tbody th { width: 32%; color: var(--pr-ink); font-weight: 600; }
-.pr-table td { color: var(--pr-text); line-height: 1.55; }
+.pr-table td { color: var(--pr-text); line-height: 1.8; }
 
 /* Submission steps (embodied-first-exam.ai: "From proposal to leaderboard") */
-.pr-steps { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; margin: 28px 0 12px; padding: 0; list-style: none; counter-reset: pr-step; }
-.pr-steps::before { content: ""; position: absolute; top: 14px; left: 14px; right: 14px; height: 1px; background: var(--pr-line); }
+.pr-steps { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 32px 0 12px; padding: 0; list-style: none; counter-reset: pr-step; }
 .pr-steps li { position: relative; counter-increment: pr-step; }
 .pr-steps li::before { content: "0" counter(pr-step); display: grid; place-items: center; width: 30px; height: 30px; margin-bottom: 14px; border-radius: 50%; background: var(--pr-ink); color: #fff; font-family: var(--m2a-font-mono); font-size: 12px; font-weight: 600; }
 .pr-steps h3 { font-size: 17px; margin-bottom: 6px; }
-.pr-steps p { margin: 0; color: var(--pr-muted); font-size: 14.5px; line-height: 1.55; }
+.pr-steps p { margin: 0; color: var(--pr-muted); font-size: 16px; line-height: 1.8; }
 
 /* Closing call to action */
 .pr-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; margin-top: 8px; padding: 36px 40px; border-radius: 20px; background: #17232e; color: #e8efec; }
@@ -143,7 +144,14 @@
 .pr-cta-actions a:first-child { background: #f2f6ee; border-color: #f2f6ee; color: #203447; }
 .pr-cta-actions a:hover { border-color: #c3e3d6; }
 
-.pr-footer { max-width: 1160px; margin: 0 auto; padding: 28px 32px 48px; border-top: 1px solid var(--pr-line, #dfe5e3); color: #5b6b77; font-size: 14px; }
+.pr-footer { max-width: 1440px; margin: 0 auto; padding: 28px 48px 48px; border-top: 1px solid var(--pr-line, #dfe5e3); color: #5b6b77; font-size: 14px; }
+
+@media (max-width:1180px) and (min-width:1041px) {
+  .pr-layout { grid-template-columns:180px minmax(0,1fr); gap:24px; }
+}
+@media (max-width:1100px) and (min-width:1041px) {
+  .pr-layout { padding-inline:32px; }
+}
 
 @media (max-width: 1040px) {
   .pr-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
@@ -161,6 +169,10 @@
   .pr-eyebrow span::before { display: none; }
   .pr-lead { font-size: 17px; }
   .pr-article h2 { font-size: 27px; }
+  .pr-article > section { padding-bottom:48px; }
+  .pr-article > section + section { padding-top:40px; }
+  .pr-callout { margin-bottom:40px; padding:22px; }
+  .pr-track, .pr-compare > div { padding:24px; }
   .pr-tracks, .pr-compare, .pr-metrics { grid-template-columns: minmax(0, 1fr); }
   .pr-compare > div + div { border-left: 0; border-top: 1px solid var(--pr-line); }
   .pr-chips { grid-template-columns: minmax(0, 1fr); }

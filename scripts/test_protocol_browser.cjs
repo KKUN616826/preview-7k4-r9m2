@@ -15,6 +15,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.goto(new URL('protocol.html', base).href);
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await page.locator('.pr-toc a').count(), 7);
+      assert.equal(await page.locator('.home-reveal-pending').count(), 0, 'Reduced motion leaves all content readable');
       assert.equal(await page.locator('.pr-head h1').textContent(), 'How Mind2Act World evaluates a system');
       assert.equal(await page.locator('.pr-head h1').evaluate(el => getComputedStyle(el).fontFamily), await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily), 'Protocol shares the site typography');
       await page.locator('.pr-hero-artwork').evaluate(el => el.decode());
@@ -75,12 +76,35 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       if (process.env.PROTOCOL_SCREENSHOTS) await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `clock-link-${width}-${height}.png`)});
       await page.close();
     }
+    const motion = await browser.newPage({viewport: {width:1440, height:1000}, reducedMotion:'no-preference'});
+    await motion.addInitScript(() => {
+      window.protocolEntrances = [];
+      const animate = Element.prototype.animate;
+      Element.prototype.animate = function(frames, options) {
+        if (this.matches('.pr-hero, .pr-article > *')) window.protocolEntrances.push(this.id || this.className);
+        return animate.call(this, frames, options);
+      };
+    });
+    await motion.goto(new URL('protocol.html', base).href);
+    await motion.waitForFunction(() => window.protocolEntrances.includes('pr-hero'));
+    assert.ok(await motion.locator('#episodes').evaluate(el => el.classList.contains('home-reveal-pending')), 'Below-fold content waits for scroll');
+    for (const id of sections) {
+      await motion.locator(`.pr-toc a[href="#${id}"]`).click();
+      await motion.waitForFunction(id => window.protocolEntrances.includes(id), id);
+      await motion.waitForFunction(id => getComputedStyle(document.getElementById(id)).opacity === '1', id);
+      assert.equal(await motion.locator(`#${id}`).evaluate(el => el.classList.contains('home-reveal-pending')), false, `${id}: scroll reveals the destination`);
+    }
+    await motion.emulateMedia({reducedMotion:'reduce'});
+    await motion.waitForFunction(() => !document.querySelector('.home-reveal-pending') && document.getAnimations().length === 0);
+    assert.equal(await motion.locator('.home-reveal-pending').count(), 0, 'Changing reduced motion reveals remaining content');
+    assert.equal(await motion.evaluate(() => document.getAnimations().length), 0, 'Reduced motion cancels ongoing entrances');
+    await motion.close();
     const page = await browser.newPage({viewport: {width: 1440, height: 1000}, reducedMotion: 'reduce'});
     await page.goto(new URL('leaderboard.html#protocol', base).href);
     await page.locator('.lb-protocol-link').click();
     assert.equal(new URL(page.url()).pathname, '/protocol.html');
     await page.locator('#disclosure a').click();
     assert.equal(new URL(page.url()).pathname + new URL(page.url()).hash, '/leaderboard.html#protocol');
-    console.log('Protocol: seven viewport sizes, all sections, scroll state, mobile menu and leaderboard round trip passed.');
+    console.log('Protocol: seven viewport sizes, all sections, scroll entrances, reduced motion, mobile menu and leaderboard round trip passed.');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

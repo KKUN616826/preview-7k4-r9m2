@@ -137,7 +137,12 @@ version and uses a 1300×1210 source image with no CSS enlargement beyond its na
 width. On desktop, the title has two lines
 and the four data values use the reference's two-by-two layout. The overview fills
 the first viewport. Section navigation is available in the article sidebar. The complete protocol
-article begins below the fold and is preserved.
+article begins below the fold and is preserved. Its 1440px outer width, 200px
+sidebar and 30px column gap follow the Benchmark explorer. Larger line spacing,
+card padding and section spacing keep the protocol readable. Scroll entrances use
+the existing `scripts/home-reveal.js` / `.css` shared by Home, Benchmark and other
+pages, including their reduced-motion, print and keyboard-focus handling; the
+sticky contents stays outside the animated targets.
 
 Navigation entries are maintained in `scripts/showcase.html` and
 `scripts/benchmark/header.html`. The leaderboard's full-protocol link is maintained

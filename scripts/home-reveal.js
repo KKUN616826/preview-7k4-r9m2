@@ -1,7 +1,7 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   if (reduced.matches || !('IntersectionObserver' in window)) return;
-  const targets = [...document.querySelectorAll('.lb-stage, .lb-results, .lb-protocol, .lb-scope, .lb-comparison, .lb-evidence, .bo-hero, .bo-explorer-heading, .bo-chapter, .documentation article > section, .project-identity, .academic-project-meta > *, .intro-film, #introduction > *, .intro-overview, #capability-explorer, #news, #top-ten, #tasks, #contributors, #resources-overview')].filter(el => !el.closest('[hidden]')).filter((el, _, all) => !all.some(parent => parent !== el && parent.contains(el)));
+  const targets = [...document.querySelectorAll('.lb-stage, .lb-results, .lb-protocol, .lb-scope, .lb-comparison, .lb-evidence, .bo-hero, .bo-explorer-heading, .bo-chapter, .pr-hero, .pr-article > .pr-callout, .pr-article > section, .pr-article > .pr-cta, .documentation article > section, .project-identity, .academic-project-meta > *, .intro-film, #introduction > *, .intro-overview, #capability-explorer, #news, #top-ten, #tasks, #contributors, #resources-overview')].filter(el => !el.closest('[hidden]')).filter((el, _, all) => !all.some(parent => parent !== el && parent.contains(el)));
   const animations = new Set();
   const observer = new IntersectionObserver(entries => {
     entries.forEach(({target, isIntersecting}) => {
