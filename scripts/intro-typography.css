@@ -32,7 +32,7 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     align-items: start;
     gap: 56px;
-    padding-block: 24px;
+    padding-block: 32px;
   }
   #introduction .intro-motivation h2.intro-lead {
     margin: 0 !important;
@@ -54,7 +54,7 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
   #introduction .intro-context p:last-child { margin-bottom: 0 !important; }
   #introduction .intro-copy.intro-framework {
     margin-top: 0 !important;
-    padding-top: 24px;
+    padding-top: 32px;
     border-top: 1px solid #dfe5e3;
   }
   #introduction h2.intro-framework-title {
@@ -120,12 +120,12 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
     #introduction .intro-copy.intro-motivation {
       grid-template-columns: minmax(0, 1fr);
       gap: 20px;
-      padding-block: 20px;
+      padding-block: 24px;
     }
     #introduction .intro-motivation h2.intro-lead { max-width: 24ch; }
     #introduction .intro-motivation h2.intro-lead br { display: none; }
     #introduction .intro-context p { font-size: 18px !important; }
-    #introduction .intro-copy.intro-framework { padding-top: 20px; }
+    #introduction .intro-copy.intro-framework { padding-top: 24px; }
   }
   @media (max-width: 700px) {
     #introduction h2.intro-framework-title { font-size: 26px !important; }
