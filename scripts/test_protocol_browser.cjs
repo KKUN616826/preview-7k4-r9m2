@@ -71,8 +71,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.evaluate(() => document.fonts.ready);
       const bottom = await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom);
       assert.ok(bottom >= height - 1 && (width <= 1040 || Math.abs(bottom - height) < 2), `${width}×${height}: overview fills the first screen without clipping mobile content`);
-      await page.locator('.pr-hero-links a[href="#clock"]').click();
-      await page.waitForFunction(() => document.querySelector('.pr-toc a[href="#clock"]').getAttribute('aria-current') === 'true');
+      assert.equal(await page.locator('.pr-hero-links').count(), 0, 'Hero quick links are removed');
       if (process.env.PROTOCOL_SCREENSHOTS) await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `clock-link-${width}-${height}.png`)});
       await page.close();
     }

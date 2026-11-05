@@ -136,7 +136,7 @@ so neither is blurred by bitmap scaling. The scene is 12% larger than the previo
 version and uses a 1300×1210 source image with no CSS enlargement beyond its native
 width. On desktop, the title has two lines
 and the four data values use the reference's two-by-two layout. The overview fills
-the first viewport, with quick links along the bottom. The complete protocol
+the first viewport. Section navigation is available in the article sidebar. The complete protocol
 article begins below the fold and is preserved.
 
 Navigation entries are maintained in `scripts/showcase.html` and
