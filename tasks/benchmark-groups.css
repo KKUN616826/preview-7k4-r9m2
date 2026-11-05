@@ -1,0 +1,59 @@
+/* Capability categories inside each suite (data/benchmark-navigation.json "families"):
+   Mind — Entity, Rule, Process, Spatial, Integrated; Act — Dynamic, Precision.
+   Used by benchmark.html, benchmark/<suite>.html and tasks/<id>.html. */
+
+/* Quick index (benchmark.html) */
+.bo-index li.bo-index-family, .bo-mobile-index li.bo-index-family {
+  margin: 14px 0 4px; padding: 0 7px; color: #8a9a96;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+}
+.bo-index li.bo-index-family:first-child, .bo-mobile-index li.bo-index-family:first-child { margin-top: 4px; }
+.bo-index li a, .bo-mobile-index li a { font-size: 14px; line-height: 1.4; padding: 7px 8px; }
+.bo-index li a > span, .bo-mobile-index li a > span {
+  flex: 0 0 38px; color: #6f817c; font-family: var(--m2a-font-mono); font-size: 12px; font-weight: 500;
+}
+.bo-index-title { font-size: 12px; }
+
+/* Category heads in the task grid */
+.bo-family + .bo-family { margin-top: 12px; }
+.bo-family-head {
+  display: flex; align-items: baseline; gap: 12px; margin: 0 0 4px; padding: 10px 0 8px;
+  border-bottom: 1px solid var(--bo-line, #d7ded8);
+}
+.bo-family-head h3 { margin: 0; color: var(--bo-ink, #203447); font-size: 15px; font-weight: 600; letter-spacing: .02em; }
+.bo-family-head span { color: var(--bo-muted, #536d78); font-family: var(--m2a-font-mono); font-size: 12.5px; }
+.bo-family:not(:has(.bo-chapter:not([hidden]))) { display: none; }
+.bo-task-id { font-family: var(--m2a-font-mono); font-size: 12.5px; font-weight: 600; color: var(--bo-accent, #416b61); letter-spacing: .02em; }
+.bo-task-id span { margin-left: 6px; color: var(--bo-muted, #536d78); font-family: var(--m2a-font-sans); font-weight: 500; letter-spacing: .06em; text-transform: uppercase; font-size: 11px; }
+
+/* Sidebar on suite and task pages */
+.workspace-case-list li.workspace-case-family {
+  margin: 12px 0 2px; padding: 0 8px; color: #8a9a96;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+}
+.workspace-case-list li.workspace-case-family:first-child { margin-top: 4px; }
+.workspace-case-list a { font-size: 14px; }
+.workspace-case-id { flex: 0 0 38px; font-family: var(--m2a-font-mono); font-size: 12px; }
+
+/* Task page kicker: "Mind · Entity · E1", its own row above the title. */
+body.benchmark-workspace.task-detail .task-head > .task-kicker {
+  grid-row: 1; margin: 0; color: #416b61;
+  font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+}
+body.benchmark-workspace.task-detail .task-head > h1 { grid-row: 2; }
+body.benchmark-workspace.task-detail .task-head > p { grid-row: 3; }
+body.benchmark-workspace.task-detail .task-head > .task-kicker ~ h1 { min-height: 0; }
+
+/* Suite colours (as on the homepage cards): Mind green, Act blue, Mind2Act gold. */
+.bo-suite[data-suite-section=mind] { --suite-c: #3f7a69; }
+.bo-suite[data-suite-section=act] { --suite-c: #3d6a86; }
+.bo-suite[data-suite-section=mind2act] { --suite-c: #8a6d2c; }
+.bo-suite .bo-family-head { border-bottom-color: color-mix(in srgb, var(--suite-c) 35%, #fff); }
+.bo-suite .bo-family-head h3, .bo-suite .bo-task-id { color: var(--suite-c); }
+.bo-suite .bo-family-head h3::before {
+  content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 9px; border-radius: 50%;
+  background: var(--suite-c); vertical-align: 1px;
+}
+details[data-index-group=mind] li a > span { color: #3f7a69; }
+details[data-index-group=act] li a > span { color: #3d6a86; }
+details[data-index-group=mind2act] li a > span { color: #8a6d2c; }

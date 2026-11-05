@@ -16,6 +16,15 @@ def e(value):
     return escape(str(value), quote=True)
 
 
+def code(case):
+    """Displayed task code (E1, FR1, CP01); the id stays the URL and file name."""
+    return case.get('code', case['id'])
+
+
+def family_name(suite, case):
+    return next((f['name'] for f in suite.get('families', []) if f['key'] == case.get('family')), '')
+
+
 def navigation(suites, current, prefix):
     active = ' aria-current="page"' if current == 'overview' else ''
     overview_link = f'<a class="workspace-overview" href="{prefix}benchmark.html"{active}>Overview</a>'
@@ -37,10 +46,15 @@ def navigation(suites, current, prefix):
                      f'<button type="button" aria-label="Toggle {suite["name"]} tasks"'
                      f' aria-expanded="true" aria-controls="nav-{slug}"><span aria-hidden="true">⌄</span></button></div>'
                      f'<ul id="nav-{slug}" class="workspace-case-list">')
+        previous = None
         for case in suite['cases']:
+            family = family_name(suite, case)
+            if family and family != previous:
+                parts.append(f'<li class="workspace-case-family" aria-hidden="true">{e(family)}</li>')
+            previous = family
             active = ' aria-current="page"' if current == case['id'] else ''
             parts.append(f'<li><a href="{prefix}tasks/{case["id"]}.html" title="{e(case["title"])}"{active}>'
-                         f'<span class="workspace-case-id">{case["id"]}</span><span>{e(case.get("nav_title", case["title"]))}</span></a></li>')
+                         f'<span class="workspace-case-id">{code(case)}</span><span>{e(case.get("nav_title", case["title"]))}</span></a></li>')
         parts.append('</ul></section>')
     parts.append('</nav>')
     return ''.join(parts)
@@ -51,7 +65,7 @@ def card(case, prefix):
     return (f'<article class="task-card"><a class="task-card-link" href="{prefix}tasks/{case["id"]}.html#easy">'
             f'<div class="task-cover"><img src="{prefix}{e(case["cover"])}" loading="lazy" alt="Task demonstration">'
             f'<div class="task-hover"><p>{e(case["summary"])}</p><span>View task <span aria-hidden="true">↗</span>'
-            f'</span></div></div><h4><b>{case["id"]}</b> {e(case["title"])}</h4></a></article>')
+            f'</span></div></div><h4><b>{code(case)}</b> {e(case["title"])}</h4></a></article>')
 
 
 def overview(suites):
@@ -64,12 +78,12 @@ def category(suite):
         f'<article class="benchmark-task-row"><a class="benchmark-task-link" href="../tasks/{c["id"]}.html#{c.get("initial_level", "easy")}">'
         f'<div class="benchmark-task-image"><img src="../{e(c.get("row_cover", c["cover"]))}" loading="lazy" '
         f'alt="{e(c["title"])} demonstration"></div>'
-        f'<div class="benchmark-task-copy"><p class="benchmark-task-meta">{c["id"]} · {suite["name"]}</p>'
+        f'<div class="benchmark-task-copy"><p class="benchmark-task-meta">{code(c)} · {suite["name"]}{(" · " + family_name(suite, c)) if family_name(suite, c) else ""}</p>'
         f'<h3>{e(c["title"])}</h3><p class="benchmark-task-summary">{e(c["summary"])}</p>'
         '<span class="benchmark-task-entry">View task <span aria-hidden="true">→</span></span></div></a></article>'
         for c in suite['cases'])
     rows = ''.join(
-        f'<div><dt><a href="../tasks/{c["id"]}.html">{c["id"]} · {e(c["title"])}</a></dt>'
+        f'<div><dt><a href="../tasks/{c["id"]}.html">{code(c)} · {e(c["title"])}</a></dt>'
         f'<dd>{e(c["summary"])}</dd></div>' for c in suite['cases'])
     return (f'<div class="workspace-page-head"><div class="workspace-breadcrumb"><a href="../benchmark.html">Benchmark</a> / {suite["name"]}</div>'
             f'<h1>{suite["name"]}</h1><p class="workspace-suite-subtitle">{suite["label"]}</p>'
@@ -96,7 +110,9 @@ def detail(suite, case):
     content = re.sub(r'<section class="demo-panel".*?</aside></div></section>',
                      normalize_panel, content, flags=re.S)
     content = re.sub(r'<div class="breadcrumb">.*?</div>', '', content, count=1)
-    content = content.replace('<div class="task-head">', '<div class="task-head"><a class="task-back-home" href="../benchmark.html" aria-label="Back to benchmark overview"><span aria-hidden="true">←</span> Benchmark overview</a>', 1)
+    kicker = ' · '.join(part for part in (suite['name'], family_name(suite, case), code(case)) if part)
+    content = content.replace('<div class="task-head">', '<div class="task-head"><a class="task-back-home" href="../benchmark.html" aria-label="Back to benchmark overview"><span aria-hidden="true">←</span> Benchmark overview</a>'
+                              f'<div class="task-kicker">{e(kicker)}</div>', 1)
     content += '<script src="../scripts/task-viewport.js?v=1" defer></script>'
     content = content.replace('href="index.html">Browse all 15 tasks',
                               f'href="../benchmark/{suite["slug"]}.html">Back to {suite["name"]}')
@@ -107,7 +123,7 @@ def detail(suite, case):
         if not 0 <= position < len(catalog):
             return '<span class="task-adjacent-empty"></span>'
         target, group = catalog[position]
-        label = f'← Previous · {target["id"]}' if offset < 0 else f'{target["id"]} · Next →'
+        label = f'← Previous · {code(target)}' if offset < 0 else f'{code(target)} · Next →'
         direction = 'previous' if offset < 0 else 'next'
         accessible = ('Previous task: ' if offset < 0 else 'Next task: ') + target['title']
         return (f'<a class="task-adjacent task-adjacent-{direction}" href="{target["id"]}.html" aria-label="{e(accessible)}">'
@@ -132,7 +148,8 @@ def page(suites, current, title, content, prefix='', is_detail=False):
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
         'tasks/benchmark-workspace.css?v=task-search-6',
-        *(['tasks/benchmark-task-rows.css?v=1'] if current in {s['slug'] for s in suites} else [])])
+        *(['tasks/benchmark-task-rows.css?v=1'] if current in {s['slug'] for s in suites} else []),
+        'tasks/benchmark-groups.css?v=4'])
     body_class = 'benchmark-workspace' + (' task-detail' if is_detail else '')
     if current in {suite['slug'] for suite in suites}:
         body_class += ' benchmark-category'

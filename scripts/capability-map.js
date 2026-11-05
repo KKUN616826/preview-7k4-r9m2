@@ -114,7 +114,7 @@
     cards.forEach(c=>{c.setAttribute('aria-pressed',String(pinned&&c===point.card));c.classList.toggle('is-previewed',c===point.card)});
     preview.className=`cm-task-preview cm-${point.suite.slug}`;preview.hidden=false;
     const image=preview.querySelector('img');image.src=point.task.row_cover;image.alt=point.task.title+' demonstration';
-    preview.querySelector('.cm-preview-meta').textContent=`${point.suite.name} · ${point.task.id}`;
+    preview.querySelector('.cm-preview-meta').textContent=`${point.suite.name} · ${point.task.code||point.task.id}`;
     preview.querySelector('h3').textContent=point.task.title;
     preview.querySelector('.cm-preview-summary').textContent=point.task.summary;
     preview.querySelector('a').href=`tasks/${point.task.id}.html`;

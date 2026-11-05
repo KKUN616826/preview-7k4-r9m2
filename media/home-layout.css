@@ -1,0 +1,71 @@
+/* Homepage introduction laid out on the same 1024px measure as the film, the
+   statistics and the suite cards above and below it. Text fills that width in
+   columns instead of a narrow, indented 760px block. Suite colours match the
+   capability cards: Mind green, Act blue, Mind2Act gold. */
+@layer m2a-typography {
+  #introduction.intro-readable {
+    --intro-ink: #1f3244;
+    --intro-text: #3e5060;
+    --intro-mind: #3f7a69;
+    --intro-act: #3d6a86;
+    --intro-coupling: #8a6d2c;
+    --intro-line: #dfe5e3;
+  }
+
+  /* 1. Opening: statement left, explanation right. */
+  #introduction .intro-copy.intro-motivation {
+    display: grid !important; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) !important;
+    column-gap: 56px !important; align-items: start !important;
+    padding: 44px 0 40px !important; border-top: 1px solid var(--intro-line) !important;
+  }
+  #introduction .intro-copy > p { max-width: none !important; margin-inline: 0 !important; }
+  #introduction .intro-copy.intro-motivation p.intro-lead {
+    margin: 0 !important; color: var(--intro-ink) !important;
+    font-size: clamp(26px, 2.6vw, 34px) !important; line-height: 1.22 !important;
+    font-weight: 600 !important; letter-spacing: -0.022em !important; text-wrap: balance !important;
+  }
+  #introduction .intro-copy.intro-motivation p:not(.intro-lead) {
+    margin: 4px 0 0 !important; color: var(--intro-text) !important;
+    font-size: 19px !important; line-height: 1.65 !important;
+  }
+  #introduction .intro-k { font-weight: 600; }
+  #introduction .intro-k--mind { color: var(--intro-mind); }
+  #introduction .intro-k--act { color: var(--intro-act); }
+  #introduction .intro-k--coupling { color: var(--intro-coupling); }
+
+  /* 2. Framework sentence and closing line span the full measure. */
+  #introduction .intro-copy.intro-framework { margin-top: 8px !important; }
+  #introduction .intro-copy.intro-framework > p {
+    color: var(--intro-text) !important; font-size: 19px !important; line-height: 1.6 !important;
+  }
+  #introduction .intro-copy.intro-framework > p:first-child { margin-bottom: 22px !important; }
+  #introduction .intro-copy.intro-framework > p:last-child {
+    margin-top: 22px !important; color: var(--intro-ink) !important; font-weight: 500 !important;
+  }
+
+  /* 3. Scope: three columns under the overview figure. */
+  #introduction .intro-copy.intro-scope {
+    display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 32px !important;
+  }
+  #introduction .intro-copy.intro-scope p {
+    margin: 0 !important; padding-top: 16px !important; border-top: 2px solid var(--intro-line) !important;
+    font-size: 16.5px !important; line-height: 1.65 !important;
+  }
+  #introduction .intro-copy.intro-scope p:nth-child(1) { border-top-color: var(--intro-mind) !important; }
+  #introduction .intro-copy.intro-scope p:nth-child(2) { border-top-color: var(--intro-act) !important; }
+  #introduction .intro-copy.intro-scope p:nth-child(3) { border-top-color: var(--intro-coupling) !important; }
+  #introduction .intro-overview figcaption { font-size: 14px !important; }
+
+  /* Task map uses the same 1024px measure as the rest of the page (was 1040px). */
+  #capability-explorer.capability-map { width: min(1024px, calc(100% - 48px)) !important; max-width: 1024px !important; }
+
+  /* Statistics: labels sized to the numbers above them. */
+  .home-stat dt { font-size: 17px !important; }
+  .home-stat dd.home-stat-detail, .home-stat dd.home-stat-scope { font-size: 14.5px !important; line-height: 1.5 !important; }
+
+  @media (max-width: 860px) {
+    #introduction .intro-copy.intro-motivation { grid-template-columns: minmax(0, 1fr) !important; row-gap: 16px !important; padding-top: 32px !important; }
+    #introduction .intro-copy.intro-scope { grid-template-columns: minmax(0, 1fr) !important; gap: 18px !important; }
+    #introduction .intro-copy.intro-motivation p:not(.intro-lead), #introduction .intro-copy.intro-framework > p { font-size: 17px !important; }
+  }
+}

@@ -128,8 +128,7 @@
     font-size: 16.5px !important; line-height: 1.7 !important;
   }
   #introduction .intro-copy p.intro-lead { font-size: 20px !important; line-height: 1.5 !important; font-weight: 500 !important; letter-spacing: -0.01em !important; }
-  /* Running text keeps a readable column inside the wider page. */
-  #introduction .intro-copy > p { max-width: 760px !important; margin-inline: auto !important; }
+  /* Homepage introduction layout: media/home-layout.css. */
   /* Card descriptions. */
   .intro-suite-body p, .resource-card p, .resource-tool p, .bo-task-goal,
   .lb-original-sources p, .lb-metric-caveat, .lb-scope-list dd, main.documentation .doc-notice, main.documentation .doc-evaluation-note {

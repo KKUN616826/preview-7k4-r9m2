@@ -50,6 +50,31 @@ def e(value):
     return escape(str(value), quote=True)
 
 
+def code(case):
+    """Displayed task code (E1, FR1, CP01); the id stays the URL and file name."""
+    return case.get('code', case['id'])
+
+
+def families(suite):
+    """Cases grouped by capability category, in catalog order; one unnamed group if none."""
+    names = {f['key']: f['name'] for f in suite.get('families', [])}
+    groups = []
+    for case in suite['cases']:
+        key = case.get('family')
+        if not groups or groups[-1][0] != key:
+            groups.append((key, names.get(key), []))
+        groups[-1][2].append(case)
+    return groups
+
+
+def code_range(cases):
+    codes = [code(c) for c in cases]
+    prefixes = {c.rstrip('0123456789') for c in codes}
+    if len(codes) > 2 and len(prefixes) == 1:
+        return f'{codes[0]}–{codes[-1]}'
+    return ' · '.join(codes)
+
+
 def task_data(case):
     """Use the same media and instructions as the existing task detail page."""
     source = (ROOT / f'scripts/benchmark/{case["id"]}.html').read_text()
@@ -88,7 +113,7 @@ def chapter(case, index, total):
         f'{" disabled" if level not in levels else ""}>{level.title()}'
         f'{" (not available)" if level not in levels else ""}</option>'
         for level in LEVELS)
-    search_text = ' '.join(str(case.get(key, '')) for key in ('id', 'title', 'nav_title', 'summary', 'suite')) + ' ' + CATALOG_GOALS.get(case['id'], '')
+    search_text = ' '.join(str(case.get(key, '')) for key in ('id', 'code', 'title', 'nav_title', 'summary', 'suite', 'family_name')) + ' ' + CATALOG_GOALS.get(case['id'], '')
     return f'''<article data-search="{e(search_text)}" class="bo-chapter" id="task-{case['id']}" data-task="{case['id']}" aria-labelledby="title-{case['id']}">
       <div class="bo-chapter-layout">
         <a class="bo-task-link" href="tasks/{case['id']}.html#{initial}" aria-labelledby="title-{case['id']}"></a>
@@ -97,7 +122,7 @@ def chapter(case, index, total):
           <span class="bo-play" aria-hidden="true"><span>▶</span></span>
         </div>
         <div class="bo-task-copy">
-          <p class="bo-task-id">{case['id']}</p>
+          <p class="bo-task-id">{code(case)}{f' <span>{e(case["family_name"])}</span>' if case.get('family_name') else ''}</p>
           <h3 id="title-{case['id']}" title="{e(case['title'])}">{e(case.get('nav_title', case['title']))}</h3>
           <p class="bo-task-goal" title="{e(case['summary'])}">{e(CATALOG_GOALS.get(case['id'], case['summary']))}</p>
           <div class="bo-task-actions"><select class="bo-level-select" aria-label="Demonstration difficulty for {e(case['title'])}" aria-controls="task-{case['id']}">{choices}</select>
@@ -110,13 +135,19 @@ def chapter(case, index, total):
 def quick_index(suites):
     groups = []
     for suite in suites:
-        links = ''.join(f'<li><a href="#task-{c["id"]}" data-index-task="{c["id"]}"><span>{c["id"]}</span>{e(c.get("nav_title", c["title"]))}</a></li>' for c in suite['cases'])
+        links = ''
+        for key, name, cases in families(suite):
+            if name:
+                links += f'<li class="bo-index-family" aria-hidden="true">{e(name)}</li>'
+            links += ''.join(f'<li><a href="#task-{c["id"]}" data-index-task="{c["id"]}"><span>{code(c)}</span>{e(c.get("nav_title", c["title"]))}</a></li>' for c in cases)
         groups.append(f'<details data-index-group="{suite["slug"]}" open><summary><a href="#suite-{suite["slug"]}" data-index-suite="{suite["slug"]}">{suite["name"]}<span>{len(suite["cases"])}</span></a></summary><ul>{links}</ul></details>')
     return '<nav aria-label="Task quick index">' + ''.join(groups) + '</nav>'
 
 
 def render(suites):
-    records = {c['id']: {**task_data(c), 'suite': s['name']} for s in suites for c in s['cases']}
+    records = {c['id']: {**task_data(c), 'suite': s['name'],
+                         'family_name': next((f['name'] for f in s.get('families', []) if f['key'] == c.get('family')), '')}
+               for s in suites for c in s['cases']}
     default = 'mind2act'
     # A representative task from each suite. Only the front frame plays.
     featured = [('mind', 'E2'), ('act', 'PR3'), ('mind2act', 'CP05')]
@@ -127,15 +158,19 @@ def render(suites):
         preview = f'media/benchmark-overview/hero-{task_id}.mp4'
         frames.append(f'''<figure class="bo-hero-frame" data-hero-frame="{slug}" data-position="{'front' if slug == default else 'left' if slug == 'mind' else 'right'}">
           <video muted playsinline loop preload="none" poster="{e(asset['poster'])}" data-preview="{preview}" aria-hidden="true" tabindex="-1"></video>
-          <figcaption>{task_id} <span>{e(c.get('nav_title', c['title']))}</span></figcaption>
+          <figcaption>{code(c)} <span>{e(c.get('nav_title', c['title']))}</span></figcaption>
         </figure>''')
     hero_buttons = ''.join(f'<button type="button" data-hero-select="{s["slug"]}" aria-pressed="{str(s["slug"] == default).lower()}"><span aria-hidden="true"></span>{s["name"]}</button>' for s in suites)
     tabs = ''.join(f'<a id="tab-{s["slug"]}" href="#suite-{s["slug"]}" data-suite="{s["slug"]}">{s["name"]}<span>{len(s["cases"])}</span></a>' for s in suites)
     panels = []
     for s in suites:
-        chapters = ''.join(chapter(records[c['id']], i + 1, len(s['cases'])) for i, c in enumerate(s['cases']))
+        blocks = []
+        for key, name, cases in families(s):
+            chapters = ''.join(chapter(records[c['id']], 0, len(s['cases'])) for c in cases)
+            head = (f'<div class="bo-family-head"><h3>{e(name)}</h3><span>{code_range(cases)}</span></div>' if name else '')
+            blocks.append(f'<div class="bo-family"{f" data-family={chr(34)}{key}{chr(34)}" if key else ""}>{head}<div class="bo-task-grid">{chapters}</div></div>')
         panels.append(f'''<section class="bo-suite" id="suite-{s['slug']}" data-suite-section="{s['slug']}" aria-labelledby="suite-heading-{s['slug']}">
-          <div class="bo-suite-intro"><h2 id="suite-heading-{s['slug']}">{s['name']}</h2><p>{e(s['description'])}</p></div><div class="bo-task-grid">{chapters}</div>
+          <div class="bo-suite-intro"><h2 id="suite-heading-{s['slug']}">{s['name']}</h2><p>{e(s['description'])}</p></div>{''.join(blocks)}
         </section>''')
     payload = {k: v['levels'] for k, v in records.items()}
     return f'''<section class="bo-hero" aria-labelledby="benchmark-title">
@@ -175,7 +210,7 @@ def document(content):
 <link rel="icon" href="media/images/mind2act-favicon-v2.png">
 <link rel="preload" href="media/fonts/Sora-variable.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-6-gsf">
-<link rel="stylesheet" href="scripts/benchmark-overview.css?v=search-visible-5">
+<link rel="stylesheet" href="scripts/benchmark-overview.css?v=search-visible-5"><link rel="stylesheet" href="tasks/benchmark-groups.css?v=4">
 </head><body class="benchmark-overview"><a class="bo-skip" href="#explore">Skip to tasks</a>{header}
 <main class="bo-main" id="benchmark-content">{content}</main>
 <script src="scripts/benchmark-overview.js?v=4" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>

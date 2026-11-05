@@ -5,6 +5,28 @@
     "label": "Memory and task decisions",
     "description": "Retain task information, learn from feedback, and choose the next operation.",
     "question": "What must the robot remember or infer before it acts?",
+    "families": [
+      {
+        "key": "entity",
+        "name": "Entity"
+      },
+      {
+        "key": "rule",
+        "name": "Rule"
+      },
+      {
+        "key": "process",
+        "name": "Process"
+      },
+      {
+        "key": "spatial",
+        "name": "Spatial"
+      },
+      {
+        "key": "integrated",
+        "name": "Integrated"
+      }
+    ],
     "cases": [
       {
         "id": "E",
@@ -18,63 +40,9 @@
           "easy",
           "medium",
           "hard"
-        ]
-      },
-      {
-        "id": "F",
-        "title": "Unknown Button Mapping and Slider Navigation",
-        "summary": "Infer an unknown button-to-motion mapping from feedback, retain it after reset, and navigate to the target.",
-        "cover": "media/benchmark-covers/F.jpg",
-        "nav_title": "Button Mapping",
-        "row_cover": "media/benchmark-covers/F.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "P",
-        "title": "Order-Based Meal Assembly",
-        "summary": "Remember initial and additional orders and deliver the requested ingredients to the correct containers.",
-        "cover": "media/benchmark-covers/P.jpg",
-        "nav_title": "Meal Assembly",
-        "row_cover": "media/benchmark-covers/P.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "S",
-        "title": "Rotating Tray Layout Reconstruction",
-        "summary": "Remember a colored-slot arrangement and restore it after the tray rotates.",
-        "cover": "media/benchmark-covers/S.jpg",
-        "nav_title": "Layout Reconstruction",
-        "row_cover": "media/benchmark-covers/S.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "M",
-        "title": "Workpiece Tracking and Route Reproduction",
-        "summary": "Track a hidden target through cover exchanges and reproduce its required station route.",
-        "cover": "media/benchmark-covers/M.jpg",
-        "nav_title": "Workpiece Tracking",
-        "row_cover": "media/benchmark-covers/M.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
+        ],
+        "code": "E1",
+        "family": "entity"
       },
       {
         "id": "E2",
@@ -90,7 +58,24 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "entity"
+      },
+      {
+        "id": "F",
+        "title": "Unknown Button Mapping and Slider Navigation",
+        "summary": "Infer an unknown button-to-motion mapping from feedback, retain it after reset, and navigate to the target.",
+        "cover": "media/benchmark-covers/F.jpg",
+        "nav_title": "Button Mapping",
+        "row_cover": "media/benchmark-covers/F.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "code": "F1",
+        "family": "rule"
       },
       {
         "id": "F2",
@@ -106,7 +91,24 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "rule"
+      },
+      {
+        "id": "P",
+        "title": "Order-Based Meal Assembly",
+        "summary": "Remember initial and additional orders and deliver the requested ingredients to the correct containers.",
+        "cover": "media/benchmark-covers/P.jpg",
+        "nav_title": "Meal Assembly",
+        "row_cover": "media/benchmark-covers/P.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "code": "P1",
+        "family": "process"
       },
       {
         "id": "P2",
@@ -122,7 +124,24 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "process"
+      },
+      {
+        "id": "S",
+        "title": "Rotating Tray Layout Reconstruction",
+        "summary": "Remember a colored-slot arrangement and restore it after the tray rotates.",
+        "cover": "media/benchmark-covers/S.jpg",
+        "nav_title": "Layout Reconstruction",
+        "row_cover": "media/benchmark-covers/S.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "code": "S1",
+        "family": "spatial"
       },
       {
         "id": "S2",
@@ -138,7 +157,24 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "spatial"
+      },
+      {
+        "id": "M",
+        "title": "Workpiece Tracking and Route Reproduction",
+        "summary": "Track a hidden target through cover exchanges and reproduce its required station route.",
+        "cover": "media/benchmark-covers/M.jpg",
+        "nav_title": "Workpiece Tracking",
+        "row_cover": "media/benchmark-covers/M.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "code": "M1",
+        "family": "integrated"
       },
       {
         "id": "M2",
@@ -154,7 +190,8 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "integrated"
       }
     ]
   },
@@ -164,6 +201,16 @@
     "label": "Physical execution",
     "description": "Respond to dynamic cues and execute precise, stable actions under physical constraints.",
     "question": "Can the robot turn the intended action into a valid physical outcome?",
+    "families": [
+      {
+        "key": "dynamic",
+        "name": "Dynamic"
+      },
+      {
+        "key": "precision",
+        "name": "Precision"
+      }
+    ],
     "cases": [
       {
         "id": "FR1",
@@ -177,7 +224,8 @@
           "easy",
           "medium",
           "hard"
-        ]
+        ],
+        "family": "dynamic"
       },
       {
         "id": "FR2",
@@ -191,97 +239,8 @@
           "easy",
           "medium",
           "hard"
-        ]
-      },
-      {
-        "id": "PR1",
-        "title": "Linear Resistor Adjustment",
-        "summary": "Adjust a linear resistor to the target reading and maintain it after release.",
-        "cover": "media/benchmark-covers/PR1.jpg",
-        "nav_title": "Linear Adjustment",
-        "row_cover": "media/benchmark-covers/PR1.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "PR2",
-        "title": "Rotary Voltage Regulator Setting",
-        "summary": "Adjust a rotary voltage regulator to the target reading and maintain it after release.",
-        "cover": "media/benchmark-covers/PR2.jpg",
-        "nav_title": "Rotary Adjustment",
-        "row_cover": "media/benchmark-covers/PR2.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "PR3",
-        "title": "Marker Line Tracing",
-        "summary": "Grasp a marker and trace a visible path with controlled contact and precision.",
-        "cover": "media/benchmark-covers/PR3.jpg",
-        "nav_title": "Line Tracing",
-        "row_cover": "media/benchmark-covers/PR3.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "PR4",
-        "title": "Cloth Edge Alignment and Placement",
-        "summary": "Fold and align a cloth edge, then release it in a stable placement.",
-        "nav_title": "Cloth Edge Alignment",
-        "title_zh": "方巾折边对齐与稳定落放",
-        "cover": "media/benchmark-covers/PR4.jpg",
-        "row_cover": "media/benchmark-covers/PR4.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
         ],
-        "expansion": true
-      },
-      {
-        "id": "PR5",
-        "title": "Oriented Stamp Placement",
-        "summary": "Orient a stamp and press it onto the designated area.",
-        "nav_title": "Oriented Stamping",
-        "title_zh": "印章定向盖印",
-        "cover": "media/benchmark-covers/PR5.jpg",
-        "row_cover": "media/benchmark-covers/PR5.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ],
-        "expansion": true
-      },
-      {
-        "id": "PR6",
-        "title": "Domino Chain Bell Ringing",
-        "summary": "Arrange dominoes into a chain that carries a falling motion to the bell.",
-        "nav_title": "Domino Chain",
-        "title_zh": "多米诺连锁敲铃",
-        "cover": "media/benchmark-covers/PR6.jpg",
-        "row_cover": "media/benchmark-covers/PR6.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ],
-        "expansion": true
+        "family": "dynamic"
       },
       {
         "id": "DR3",
@@ -297,7 +256,8 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "dynamic"
       },
       {
         "id": "DR7",
@@ -313,7 +273,104 @@
           "medium",
           "hard"
         ],
-        "expansion": true
+        "expansion": true,
+        "family": "dynamic"
+      },
+      {
+        "id": "PR1",
+        "title": "Linear Resistor Adjustment",
+        "summary": "Adjust a linear resistor to the target reading and maintain it after release.",
+        "cover": "media/benchmark-covers/PR1.jpg",
+        "nav_title": "Linear Adjustment",
+        "row_cover": "media/benchmark-covers/PR1.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "family": "precision"
+      },
+      {
+        "id": "PR2",
+        "title": "Rotary Voltage Regulator Setting",
+        "summary": "Adjust a rotary voltage regulator to the target reading and maintain it after release.",
+        "cover": "media/benchmark-covers/PR2.jpg",
+        "nav_title": "Rotary Adjustment",
+        "row_cover": "media/benchmark-covers/PR2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "family": "precision"
+      },
+      {
+        "id": "PR3",
+        "title": "Marker Line Tracing",
+        "summary": "Grasp a marker and trace a visible path with controlled contact and precision.",
+        "cover": "media/benchmark-covers/PR3.jpg",
+        "nav_title": "Line Tracing",
+        "row_cover": "media/benchmark-covers/PR3.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "family": "precision"
+      },
+      {
+        "id": "PR4",
+        "title": "Cloth Edge Alignment and Placement",
+        "summary": "Fold and align a cloth edge, then release it in a stable placement.",
+        "nav_title": "Cloth Edge Alignment",
+        "title_zh": "方巾折边对齐与稳定落放",
+        "cover": "media/benchmark-covers/PR4.jpg",
+        "row_cover": "media/benchmark-covers/PR4.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true,
+        "family": "precision"
+      },
+      {
+        "id": "PR5",
+        "title": "Oriented Stamp Placement",
+        "summary": "Orient a stamp and press it onto the designated area.",
+        "nav_title": "Oriented Stamping",
+        "title_zh": "印章定向盖印",
+        "cover": "media/benchmark-covers/PR5.jpg",
+        "row_cover": "media/benchmark-covers/PR5.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true,
+        "family": "precision"
+      },
+      {
+        "id": "PR6",
+        "title": "Domino Chain Bell Ringing",
+        "summary": "Arrange dominoes into a chain that carries a falling motion to the bell.",
+        "nav_title": "Domino Chain",
+        "title_zh": "多米诺连锁敲铃",
+        "cover": "media/benchmark-covers/PR6.jpg",
+        "row_cover": "media/benchmark-covers/PR6.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true,
+        "family": "precision"
       }
     ]
   },
