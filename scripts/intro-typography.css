@@ -76,7 +76,7 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
   }
   /* Match the card grid, with the reference page's fine coloured rules. */
   #introduction .intro-copy.intro-scope {
-    margin-block: 24px 36px !important;
+    margin-block: 40px 48px !important;
   }
   #introduction .intro-scope-grid {
     display: grid;
@@ -86,13 +86,13 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
   }
   #introduction .intro-scope-note {
     min-width: 0;
-    padding-top: 12px;
+    padding-top: 20px;
     border-top: 2px solid #3f7a69;
   }
   #introduction .intro-scope-note:nth-child(2) { border-top-color: #3d6a86; }
   #introduction .intro-scope-note:nth-child(3) { border-top-color: #8a6d2c; }
   #introduction .intro-scope-note dt {
-    margin: 0 0 8px;
+    margin: 0 0 12px;
     font-size: 18px;
     font-weight: 600;
     line-height: 1.5;
@@ -102,15 +102,15 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
     margin: 0;
     font-size: 18px;
     font-weight: 450;
-    line-height: 1.6;
+    line-height: 1.75;
     color: #2b3d49;
     text-wrap: pretty;
   }
   #introduction .intro-scope-summary {
-    margin: 18px 0 0 !important;
+    margin: 32px 0 0 !important;
     font-size: 18px !important;
     font-weight: 450 !important;
-    line-height: 1.6 !important;
+    line-height: 1.75 !important;
     color: #2b3d49 !important;
   }
   @media (max-width: 900px) {
@@ -129,7 +129,7 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
   }
   @media (max-width: 700px) {
     #introduction h2.intro-framework-title { font-size: 26px !important; }
-    #introduction .intro-scope-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-    #introduction .intro-copy.intro-scope { margin-block: 24px 32px !important; }
+    #introduction .intro-scope-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    #introduction .intro-copy.intro-scope { margin-block: 32px 40px !important; }
   }
 }
