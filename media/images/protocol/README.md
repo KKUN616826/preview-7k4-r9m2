@@ -1,4 +1,14 @@
-# Current approved hero artwork
+# Current hero: independent artwork with native annotations
+
+`evaluation-artwork-hd.png` (1300×1210) was regenerated with the built-in imagegen tool on 2026-11-06 using the approved reference and the earlier isolated keyboard asset. The illustration contains no text or green process arrows. All labels, event marks, curves, arrowheads, and the caption are native HTML/SVG, retaining sharp rendering on high-density screens. The full scene is proportionally 12% larger than the previous version. Its maximum CSS width is 1120px; the source is never enlarged beyond its intrinsic CSS pixel width.
+
+The image remains an explanatory concept, not measured evaluation evidence. `approved-reference.png` is retained for design provenance and is no longer displayed.
+
+Generation prompt summary: faithfully rebuild only the reference's right-hand composition as a high-definition standalone illustration on white. Keep the upper lunar dome with its lower fade, gray/gold meridians, small ghosted target keyboard, sharp central keyboard, approaching mallet with ghosted positions, and circular contact enlargement with dashed leaders. Remove all labels, process arrows, dots, webpage text, tabletop, terrain, and frames. Keep space for separately rendered HTML labels and SVG arrows.
+
+## Prior iterations
+
+### Approved reference
 
 `approved-reference.png` is the user-supplied visual reference from 2026-11-06, copied without raster alteration. The webpage shows only its right-hand illustration via a CSS cropping window (source x=965..1914, y=0..882); the upper-left notch excludes text from the original reference. This preserves the moon shading, orbital lines, curved arrows, target keyboard, execution view, and contact enlargement exactly as supplied. The image's annotations are illustrative, not measured episode evidence. The left-hand heading, paragraph, data, and navigation remain native HTML.
 
