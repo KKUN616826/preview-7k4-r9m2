@@ -26,12 +26,13 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
 /* Approved introduction: aligned opening, existing image cards, compact benchmark notes.
    Use the site's typography layer so these sizes override legacy inline rules. */
 @layer m2a-typography {
+  #introduction.research-abstract.intro-readable { margin-top: 0 !important; }
   #introduction .intro-copy.intro-motivation {
     display: grid !important;
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     align-items: start;
     gap: 56px;
-    padding-block: 44px 48px;
+    padding-block: 24px;
   }
   #introduction .intro-motivation h2.intro-lead {
     margin: 0 !important;
@@ -45,15 +46,15 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
     text-wrap: balance;
   }
   #introduction .intro-context p {
-    margin: 0 0 18px !important;
+    margin: 0 0 12px !important;
     font-size: 19px !important;
     font-weight: 400 !important;
     line-height: 1.65 !important;
   }
   #introduction .intro-context p:last-child { margin-bottom: 0 !important; }
   #introduction .intro-copy.intro-framework {
-    margin-top: 0;
-    padding-top: 36px;
+    margin-top: 0 !important;
+    padding-top: 24px;
     border-top: 1px solid #dfe5e3;
   }
   #introduction h2.intro-framework-title {
@@ -116,13 +117,13 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
   @media (max-width: 860px) {
     #introduction .intro-copy.intro-motivation {
       grid-template-columns: minmax(0, 1fr);
-      gap: 24px;
-      padding-block: 32px;
+      gap: 20px;
+      padding-block: 20px;
     }
     #introduction .intro-motivation h2.intro-lead { max-width: 24ch; }
     #introduction .intro-motivation h2.intro-lead br { display: none; }
     #introduction .intro-context p { font-size: 18px !important; }
-    #introduction .intro-copy.intro-framework { padding-top: 28px; }
+    #introduction .intro-copy.intro-framework { padding-top: 20px; }
   }
   @media (max-width: 700px) {
     #introduction h2.intro-framework-title { font-size: 26px !important; }

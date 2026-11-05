@@ -22,7 +22,7 @@ body #capability-explorer .cm-header .cm-stats{font-size:14px!important;margin:0
 .cm-detail{padding-top:16px}.cm-detail[hidden]{display:none!important}
 body #capability-explorer .cm-coverage-label{font:600 11px/1.5 Helvetica,Arial,sans-serif!important;letter-spacing:.06em;color:#687d84!important;margin:0 0 6px!important;text-align:left!important}
 body #capability-explorer .cm-coverage{font:400 16px/1.6 Helvetica,Arial,sans-serif!important;color:#536b78!important;margin:0 0 12px!important;text-align:left!important}
-.cm-detail-link,.cm-browse-all{font:500 15px/1.6 Helvetica,Arial,sans-serif;color:#326478;text-decoration:underline;text-underline-offset:4px;display:inline-block;padding:3px 0}
+.cm-detail-link{font:500 15px/1.6 Helvetica,Arial,sans-serif;color:#326478;text-decoration:underline;text-underline-offset:4px;display:inline-block;padding:3px 0}
 .cm-detail-link{display:flex;align-items:center;justify-content:center;width:fit-content;max-width:100%;min-height:44px;padding:10px 14px;border:1px solid #203749;border-radius:5px;background:#203749;color:#fff;font-weight:600;white-space:nowrap;text-decoration:none;transition:background .18s,border-color .18s}
 .cm-detail-link:hover{background:#31566b;border-color:#31566b}
 .cm-detail-link:active{transform:translateY(1px)}
@@ -45,9 +45,6 @@ body #capability-explorer .cm-preview-meta{font:600 11px/1.4 Helvetica,Arial,san
 body #capability-explorer #cm-preview-title{font:600 18px/1.3 Helvetica,Arial,sans-serif!important;color:#203749!important;margin:0 0 8px!important;text-align:left!important}
 body #capability-explorer .cm-preview-summary{font:400 14px/1.5 Helvetica,Arial,sans-serif!important;color:#526a76!important;margin:0 0 10px!important;text-align:left!important}
 .cm-preview-link{font:500 14px/1.5 Helvetica,Arial,sans-serif;color:#326478;text-decoration:underline;text-underline-offset:3px}
-.cm-catalog-footer{margin-top:28px;border-top:1px solid #d4dfda;padding-top:14px}
-.cm-text-index{margin-top:12px;font:400 12px/1.6 Helvetica,Arial,sans-serif;color:#687d84}.cm-text-index summary{cursor:pointer;width:fit-content}
-.cm-text-index nav{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;padding:20px 0}.cm-text-index a{color:#326478;text-decoration:none;line-height:1.5}.cm-text-index a:hover{text-decoration:underline}
 body #capability-explorer .cm-credit{font:400 11px/1.6 Helvetica,Arial,sans-serif!important;color:#687d84!important;text-align:left!important;margin:12px 0!important}
 .capability-map button:focus-visible,.capability-map a:focus-visible,.capability-map summary:focus-visible,.cm-orbit:focus-visible{outline:2px solid #326478;outline-offset:4px}
 @media(min-width:1024px){
@@ -63,7 +60,7 @@ body #capability-explorer .cm-credit{font:400 11px/1.6 Helvetica,Arial,sans-seri
  .cm-map-hint{width:100%}.cm-map-footer>div{margin-left:auto}
 }
 @media(max-width:700px){
- .cm-layout{grid-template-columns:1fr;gap:32px}.cm-copy{align-self:auto;margin-bottom:0}.cm-visual{max-width:540px;justify-self:center}.cm-text-index nav{grid-template-columns:1fr}
+ .cm-layout{grid-template-columns:1fr;gap:32px}.cm-copy{align-self:auto;margin-bottom:0}.cm-visual{max-width:540px;justify-self:center}
  .cm-suite{padding:14px 0}.cm-suite-goal{font-size:18px}.cm-header{margin-bottom:16px}
  body #capability-explorer .cm-header>p{font-size:18px!important}
 }
@@ -122,3 +119,5 @@ body #capability-explorer.capability-map .cm-example-copy p{font:400 15px/1.5 He
 @media(max-width:850px){.cm-layout{grid-template-columns:1fr;gap:32px}.cm-copy{max-width:420px;width:100%;justify-self:center}.cm-visual{max-width:540px;justify-self:center}.cm-panels{min-height:0}}
 @media(max-width:380px){.cm-suite-choice{font-size:15px;padding-inline:2px;gap:4px}.cm-suite-choice small{font-size:12px}.cm-example-layout{grid-template-columns:90px minmax(0,1fr);gap:12px}body #capability-explorer.capability-map .cm-detail-title{font-size:26px!important}}
 @media(prefers-reduced-motion:reduce){.cm-detail,.cm-suite-choice,.cm-example-link img{animation:none!important;transition:none!important}}
+
+.cm-credit a{color:inherit;text-underline-offset:3px}

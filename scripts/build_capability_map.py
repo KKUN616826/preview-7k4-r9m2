@@ -32,7 +32,7 @@ def render():
     for suite in suites:
         suite['explorer'] = EXPLORER_COPY[suite['slug']]
     total = sum(len(s['cases']) for s in suites)
-    tabs, panels, links = [], [], []
+    tabs, panels = [], []
     for suite in suites:
         slug, name = suite['slug'], suite['name']
         selected = slug == 'mind2act'
@@ -45,8 +45,6 @@ def render():
 <div class="cm-example"><p class="cm-example-label">A task in practice</p><div class="cm-example-layout"><a class="cm-example-link" data-example="{example['id']}" href="tasks/{example['id']}.html" aria-label="Preview {html.escape(example['title'])}"><img src="{example['row_cover']}" alt="{html.escape(example['title'])} simulation" loading="lazy" width="160" height="120"></a><div class="cm-example-copy"><h4><a data-example="{example['id']}" href="tasks/{example['id']}.html">{example['id']} · {html.escape(example['title'])}</a></h4><p>{html.escape(example['summary'])}</p></div></div></div>
 <dl class="cm-case-demands" aria-label="Example task requirements">{demands}</dl>
 <a class="cm-detail-link" href="benchmark/{slug}.html">Explore {len(suite['cases'])} {name} tasks ↗</a></div>''')
-        for task in suite['cases']:
-            links.append(f'<a href="tasks/{task["id"]}.html">{task["id"]} · {html.escape(task["title"])}</a>')
     cards = []
     for suite in suites:
         for task in suite['cases']:
@@ -63,8 +61,7 @@ def render():
 <svg class="cm-connector" aria-hidden="true" hidden><path></path><circle r="4"></circle></svg>
 <div class="cm-task-preview" aria-labelledby="cm-preview-title" hidden><button type="button" class="cm-preview-close" aria-label="Close task preview">×</button><img class="cm-preview-image" alt=""><div class="cm-preview-caption"><p class="cm-preview-meta"></p><h3 id="cm-preview-title"></h3><p class="cm-preview-summary"></p><a class="cm-preview-link" href="benchmark.html">View task ↗</a></div></div>
 <div class="cm-map-footer"><p class="cm-map-hint">Select a task to view its goal.</p><div><button type="button" class="cm-motion" aria-pressed="false">Play motion</button><button type="button" class="cm-reset">Reset view</button></div></div></div></div>
-<div class="cm-catalog-footer"><a class="cm-browse-all" href="benchmark.html">Browse all __TASK_COUNT__ tasks ↗</a></div>
-<details class="cm-text-index"><summary>Browse tasks as a list</summary><p class="cm-credit">Moon imagery: <a href="https://svs.gsfc.nasa.gov/4720">NASA’s Scientific Visualization Studio</a>. Task regions are a conceptual map.</p><nav aria-label="All benchmark tasks">'''+''.join(links)+'''</nav></details>
+<p class="cm-credit">Moon imagery: <a href="https://svs.gsfc.nasa.gov/4720">NASA’s Scientific Visualization Studio</a>. Task regions are a conceptual map.</p>
 <script type="application/json" id="cm-data">'''+payload+'''</script><script src="scripts/capability-map.js" defer></script></section>'''
 
     markup = markup.replace('__TASK_COUNT__', str(total)).replace('__SUITE_COUNT__', str(len(suites)))
