@@ -126,13 +126,14 @@ Act 的 GT 指真实下发的控制器参考目标，不是通过完整验收的
 `protocol.html` contains the complete draft evaluation protocol, imported from
 `codex/website-redesign-20261104` at `0af9500701a0acb478b4b77aa10f7f08dae6135d`.
 Edit this standalone page directly; its layout is in `media/protocol.css`.
-The hero uses the same Manrope typography as the rest of the site via the shared
-site shell. Its transparent keyboard illustration is documented in
-`media/images/protocol/README.md`; the target, execution, and check labels are
-HTML, not baked into the bitmap. On desktop, the title has two lines and all
-four data values share one row. The overview fills the first viewport, with a
-upper lunar hemisphere fading behind the keyboard flow and quick links along the bottom. The
-complete protocol article begins below the fold and is preserved.
+The hero uses the same shared typography as the rest of the site via the shared
+site shell. Its approved reference artwork is documented in
+`media/images/protocol/README.md`. The title and introduction remain native HTML;
+the right-hand moon, arrows, labels, and keyboard illustration retain the exact
+composition of the supplied reference image. On desktop, the title has two lines
+and the four data values use the reference's two-by-two layout. The overview fills
+the first viewport, with quick links along the bottom. The complete protocol
+article begins below the fold and is preserved.
 
 Navigation entries are maintained in `scripts/showcase.html` and
 `scripts/benchmark/header.html`. The leaderboard's full-protocol link is maintained

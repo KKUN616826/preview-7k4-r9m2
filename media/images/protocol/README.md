@@ -1,4 +1,14 @@
-# Protocol hero illustration
+# Current approved hero artwork
+
+`approved-reference.png` is the user-supplied visual reference from 2026-11-06, copied without raster alteration. The webpage shows only its right-hand illustration via a CSS cropping window (source x=965..1914, y=0..882); the upper-left notch excludes text from the original reference. This preserves the moon shading, orbital lines, curved arrows, target keyboard, execution view, and contact enlargement exactly as supplied. The image's annotations are illustrative, not measured episode evidence. The left-hand heading, paragraph, data, and navigation remain native HTML.
+
+The full source is 1914×900. Cropping and responsive placement are maintained in `media/protocol.css`. The reference is not used as a full-page screenshot.
+
+## Earlier generated asset
+
+The unused `keyboard-evaluation.png` asset below is retained from the prior iteration.
+
+### Generation details
 
 `keyboard-evaluation.png` is an AI-generated explanatory illustration, not a screenshot of an evaluated episode or evidence for a model result. It has a transparent background; no wooden table, terrain, or floor is included. All process labels and links are native webpage content.
 
