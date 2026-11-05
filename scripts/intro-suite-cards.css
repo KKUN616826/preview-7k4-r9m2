@@ -1,26 +1,35 @@
+/* Three type levels: 30px section heading, 20px card headings, 16px reading text.
+   Keep the shared font family and use weight and spacing for supporting roles. */
 body #introduction .intro-suite-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 26px;
-  width: min(1280px, calc(100vw - 64px));
-  margin: 32px 0 32px 50%;
-  transform: translateX(-50%);
-  font-family: Helvetica, Arial, sans-serif;
+  gap: 24px;
+  width: 100%;
+  margin: 28px 0 0;
 }
 body #introduction .intro-suite-card {
   --suite-accent: #49796b;
+  --suite-ink: #315f50;
   --suite-tint: #e8efe9;
   display: flex;
   flex-direction: column;
   min-width: 0;
   border: 1px solid #dfe3e6;
-  border-top: 3px solid var(--suite-accent);
-  border-radius: 16px;
+  border-top: 2px solid var(--suite-accent);
+  border-radius: 14px;
   overflow: hidden;
   background: #fff;
 }
-body #introduction .intro-suite-card--act { --suite-accent: #446f86; --suite-tint: #e6edf2; }
-body #introduction .intro-suite-card--mind2act { --suite-accent: #91793d; --suite-tint: #f0ecdf; }
+body #introduction .intro-suite-card--act {
+  --suite-accent: #446f86;
+  --suite-ink: #325f78;
+  --suite-tint: #e6edf2;
+}
+body #introduction .intro-suite-card--mind2act {
+  --suite-accent: #91793d;
+  --suite-ink: #756025;
+  --suite-tint: #f0ecdf;
+}
 body #introduction .intro-suite-card > img {
   display: block;
   width: 100%;
@@ -34,99 +43,69 @@ body #introduction .intro-suite-body {
   flex: 1;
   flex-direction: column;
   align-items: start;
-  padding: 26px;
+  padding: 24px;
 }
 body #introduction .intro-suite-badge {
   display: inline-block;
   border-radius: 20px;
-  padding: 4px 9px;
-  color: var(--suite-accent);
+  padding: 3px 10px;
+  color: var(--suite-ink);
   background: var(--suite-tint);
-  font: 500 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
-  letter-spacing: .04em;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
 }
 body #introduction .intro-suite-card h3 {
-  font: 700 22px/1.28 Helvetica, Arial, sans-serif !important;
-  letter-spacing: -.025em !important;
-  color: #17232e;
-  margin: 15px 0 18px !important;
+  min-block-size: 4.05em;
+  margin: 16px 0 12px !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -.015em !important;
+  color: #203749;
 }
 html body #introduction.intro-readable .intro-copy .intro-suite-card p {
-  font: 400 15px/1.65 Helvetica, Arial, sans-serif !important;
-  color: #77838e !important;
-  margin: 0 0 20px !important;
   width: 100%;
   max-width: none;
+  margin: 0 0 24px !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
   letter-spacing: 0 !important;
+  color: #425563 !important;
 }
 body #introduction .intro-suite-card a {
   margin-top: auto;
-  padding-top: 0;
+  color: var(--suite-ink);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
   text-decoration: none;
-  color: var(--suite-accent);
-  font: 600 17px/1.5 Helvetica, Arial, sans-serif;
 }
 body #introduction .intro-suite-card a:hover { text-decoration: underline; }
-body #introduction .intro-suite-card a:focus-visible { outline: 2px solid var(--suite-accent); outline-offset: 5px; }
-@media (max-width: 950px) {
-  body #introduction .intro-suite-cards { gap: 16px; }
-  body #introduction .intro-suite-body { padding: 20px; }
-  body #introduction .intro-suite-card h3 { font-size: 20px !important; }
-}
-@media (max-width: 700px) {
-  body #introduction .intro-suite-cards { grid-template-columns: 1fr; width: 100%; }
-  body #introduction .intro-suite-body { padding: 24px; }
-  body #introduction .intro-suite-card h3 { font-size: 22px !important; }
-}
-/* Scale the complete desktop card group to 80% of the reference layout. */
-@media (min-width: 951px) {
-  body #introduction .intro-suite-cards {
-    width: min(1024px, calc(80vw - 51.2px));
-    gap: 20.8px;
-    margin-block: 25.6px;
-  }
-  body #introduction .intro-suite-card {
-    border-radius: 12.8px;
-    border-top-width: 2.4px;
-  }
-  body #introduction .intro-suite-body { padding: 20.8px; }
-  body #introduction .intro-suite-badge {
-    border-radius: 16px;
-    padding: 3.2px 7.2px;
-    font-size: 10.4px;
-  }
-  body #introduction .intro-suite-card h3 {
-    font-size: 17.6px !important;
-    margin: 12px 0 14.4px !important;
-  }
-  html body #introduction.intro-readable .intro-copy .intro-suite-card p {
-    font-size: 12px !important;
-    margin-bottom: 16px !important;
-  }
-  body #introduction .intro-suite-card a { font-size: 13.6px; }
+body #introduction .intro-suite-card a:focus-visible {
+  outline: 2px solid var(--suite-accent);
+  outline-offset: 5px;
 }
 body #introduction .intro-suite-card {
-  transition: transform 280ms cubic-bezier(.2,.7,.25,1), box-shadow 280ms ease;
-}
-body #introduction .intro-suite-card > img {
-  transition: scale 400ms cubic-bezier(.2,.7,.25,1);
-  transform-origin: center;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 @media (hover: hover) and (pointer: fine) {
   body #introduction .intro-suite-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 30px -12px rgba(30,53,67,.22);
+    border-color: var(--suite-accent);
+    box-shadow: 0 6px 20px -12px rgba(30, 53, 67, .2);
   }
-  body #introduction .intro-suite-card:hover > img { scale: 1.025; }
 }
-body #introduction .intro-suite-card:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 30px -12px rgba(30,53,67,.22);
+body #introduction .intro-suite-card:focus-within { border-color: var(--suite-accent); }
+@media (min-width: 901px) and (max-width: 1100px) {
+  body #introduction .intro-suite-body { padding: 20px; }
+  body #introduction .intro-suite-card h3 { min-block-size: 5.4em; }
+}
+@media (max-width: 900px) {
+  body #introduction .intro-suite-cards { grid-template-columns: minmax(0, 1fr); }
+  body #introduction .intro-suite-card h3 { min-block-size: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body #introduction .intro-suite-card,
-  body #introduction .intro-suite-card > img { transition: none; }
-  body #introduction .intro-suite-card:hover,
-  body #introduction .intro-suite-card:focus-within { transform: none; }
-  body #introduction .intro-suite-card:hover > img { scale: 1; }
+  body #introduction .intro-suite-card { transition: none; }
 }
