@@ -3,7 +3,7 @@ body #overview .home-stats {
   box-sizing: border-box;
   width: var(--unified-column, calc(100% - 48px));
   max-width: 920px;
-  margin: 44px auto 64px;
+  margin: 44px auto 32px;
   color: #203749;
   text-align: left;
   scroll-margin-top: 100px;
@@ -51,7 +51,7 @@ body #overview .home-stat-scope {
 }
 body #overview .home-stat-scope { order: 4; margin-top: 3px; font-size: 11px; }
 @media (max-width: 760px) {
-  body #overview .home-stats { margin-block: 32px 48px; }
+  body #overview .home-stats { margin-block: 32px 24px; }
   body #overview .home-stats dl { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
   body #overview .home-stat { padding-inline: 16px; }
   body #overview .home-stat-value { font-size: 52px; margin-block: 18px 10px; }
