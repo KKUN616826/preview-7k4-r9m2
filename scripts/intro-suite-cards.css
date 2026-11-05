@@ -1,4 +1,4 @@
-/* Three type levels: 30px section heading, 20px card headings, 16px reading text.
+/* Three type levels: 30px section heading, 22px card headings, 18px reading text.
    Keep the shared font family and use weight and spacing for supporting roles. */
 body #introduction .intro-suite-cards {
   display: grid;
@@ -51,7 +51,7 @@ body #introduction .intro-suite-badge {
   padding: 3px 10px;
   color: var(--suite-ink);
   background: var(--suite-tint);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: 0;
@@ -59,7 +59,7 @@ body #introduction .intro-suite-badge {
 body #introduction .intro-suite-card h3 {
   min-block-size: 4.05em;
   margin: 16px 0 12px !important;
-  font-size: 20px !important;
+  font-size: 22px !important;
   font-weight: 600 !important;
   line-height: 1.35 !important;
   letter-spacing: -.015em !important;
@@ -69,16 +69,16 @@ html body #introduction.intro-readable .intro-copy .intro-suite-card p {
   width: 100%;
   max-width: none;
   margin: 0 0 24px !important;
-  font-size: 16px !important;
-  font-weight: 400 !important;
+  font-size: 18px !important;
+  font-weight: 450 !important;
   line-height: 1.6 !important;
   letter-spacing: 0 !important;
-  color: #425563 !important;
+  color: #2b3d49 !important;
 }
 body #introduction .intro-suite-card a {
   margin-top: auto;
   color: var(--suite-ink);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.6;
   text-decoration: none;
