@@ -7,7 +7,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
 (async () => {
   const browser = await chromium.launch({headless: true, ...(process.env.CHROMIUM_EXECUTABLE ? {executablePath: process.env.CHROMIUM_EXECUTABLE} : {})});
   try {
-    for (const width of [320, 390, 820, 1040, 1100, 1440]) {
+    for (const width of [320, 390, 820, 1040, 1100, 1440, 1920]) {
       const page = await browser.newPage({viewport: {width, height: 1000}, reducedMotion: 'reduce'});
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
@@ -15,8 +15,21 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.goto(new URL('protocol.html', base).href);
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await page.locator('.pr-toc a').count(), 7);
+      assert.equal(await page.locator('.pr-head h1').textContent(), 'How Mind2Act World evaluates a system');
+      assert.match(await page.locator('.pr-head h1').evaluate(el => getComputedStyle(el).fontFamily), /Manrope/);
+      assert.ok(await page.locator('.pr-hero-keyboard').evaluate(el => el.complete && el.naturalWidth > 0));
+      const dataY = await page.locator('.pr-facts dd').evaluateAll(els => els.map(el => Math.round(el.getBoundingClientRect().top)));
+      assert.equal(new Set(dataY).size, 1, `${width}: all four data values share one row`);
+      if (width > 1040) {
+        const heading = await page.locator('h1').evaluate(el => ({height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight)}));
+        assert.ok(Math.abs(heading.height - heading.line * 2) < 2, `${width}: exactly two heading lines`);
+        const boxes = await page.locator('.pr-head-copy, .pr-hero-keyboard').evaluateAll(els => els.map(el => ({left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
+        assert.ok(boxes[1].left >= boxes[0].right, `${width}: illustration stays to the right of the copy`);
+      }
       assert.equal(await page.locator('#siteNav a[aria-current="page"]').textContent(), 'Protocol');
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${width}: no horizontal overflow`);
+      assert.ok(await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom >= innerHeight - 1), `${width}: overview fills the first screen`);
+      assert.ok(await page.locator('.pr-layout').evaluate(el => el.getBoundingClientRect().top >= innerHeight), `${width}: article begins after the first screen`);
       for (const id of sections) {
         await page.locator(`.pr-toc a[href="#${id}"]`).click();
         await page.waitForFunction(id => document.querySelector(`.pr-toc a[href="#${id}"]`).getAttribute('aria-current') === 'true', id);
@@ -41,10 +54,22 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       const issue = page.locator('.pr-cta-actions a').first();
       assert.equal(await issue.getAttribute('href'), 'https://github.com/KKUN616826/preview-7k4-r9m2/issues');
       assert.deepEqual(errors, [], `${width}: no script or resource errors`);
-      if (process.env.PROTOCOL_SCREENSHOTS && [390, 1440].includes(width)) {
+      if (process.env.PROTOCOL_SCREENSHOTS && [390, 1440, 1920].includes(width)) {
         fs.mkdirSync(process.env.PROTOCOL_SCREENSHOTS, {recursive: true});
         await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `protocol-${width}.png`), fullPage: true});
+        await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `hero-${width}.png`)});
       }
+      await page.close();
+    }
+    for (const [width, height] of [[1280, 720], [1440, 900], [1920, 1080], [390, 844]]) {
+      const page = await browser.newPage({viewport: {width, height}, reducedMotion: 'reduce'});
+      await page.goto(new URL('protocol.html', base).href);
+      await page.evaluate(() => document.fonts.ready);
+      const bottom = await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom);
+      assert.ok(Math.abs(bottom - height) < 2, `${width}×${height}: overview ends at the viewport bottom`);
+      await page.locator('.pr-hero-links a[href="#clock"]').click();
+      await page.waitForFunction(() => document.querySelector('.pr-toc a[href="#clock"]').getAttribute('aria-current') === 'true');
+      if (process.env.PROTOCOL_SCREENSHOTS) await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `clock-link-${width}-${height}.png`)});
       await page.close();
     }
     const page = await browser.newPage({viewport: {width: 1440, height: 1000}, reducedMotion: 'reduce'});
@@ -53,6 +78,6 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
     assert.equal(new URL(page.url()).pathname, '/protocol.html');
     await page.locator('#disclosure a').click();
     assert.equal(new URL(page.url()).pathname + new URL(page.url()).hash, '/leaderboard.html#protocol');
-    console.log('Protocol: six viewport sizes, all sections, scroll state, mobile menu and leaderboard round trip passed.');
+    console.log('Protocol: seven viewport sizes, all sections, scroll state, mobile menu and leaderboard round trip passed.');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

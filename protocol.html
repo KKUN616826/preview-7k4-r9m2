@@ -1,10 +1,13 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=protocol-nav-1"><link rel="stylesheet" href="media/protocol-typography.css?v=1"><link rel="stylesheet" href="media/protocol.css?v=2"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=protocol-nav-1"><link rel="stylesheet" href="media/protocol.css?v=keyboard-hero-2"></head>
 <body class="protocol-page"><header class="header"><div class="wrap header-inner"><a class="brand official-nav-logo" href="index.html" aria-label="Mind2Act World home"><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="1330" height="400"></a><button id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">Menu</button><nav class="nav" id="siteNav" aria-label="Main navigation"><div class="nav-left"><a href="index.html">Home</a><a href="leaderboard.html">Leaderboard</a><a href="protocol.html" aria-current="page">Protocol</a><a href="benchmark.html">Benchmark</a><a href="resources.html">Documents</a></div><div class="nav-right"><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noreferrer">Code ↗</a><a class="paper-link" href="index.html#contributors">Contributors</a></div></nav></div></header>
 <main class="pr-page" id="main">
+<section class="pr-hero" aria-label="Evaluation protocol overview">
+<div class="pr-hero-backdrop" aria-hidden="true"><div class="pr-hero-moon"></div><div class="pr-hero-orbit"></div></div>
 <header class="pr-head">
+<div class="pr-head-copy">
   <p class="pr-eyebrow">Evaluation protocol <span>Draft v0.1 · Nov 5, 2026</span></p>
-  <h1>How Mind2Act World evaluates a system</h1>
+  <h1><span>How Mind2Act World</span> <span>evaluates a system</span></h1>
   <p class="pr-lead">Every system is run on the same task configurations, scored by the environment rather than by itself, and reported together with the conditions it ran under.</p>
   <dl class="pr-facts">
     <div><dt>tasks</dt><dd>30</dd></div>
@@ -12,7 +15,20 @@
     <div><dt>evaluation tracks</dt><dd>2</dd></div>
     <div><dt>clock conditions</dt><dd>2</dd></div>
   </dl>
+</div>
+<figure class="pr-hero-visual" aria-labelledby="pr-hero-caption">
+  <ol class="pr-hero-stages" aria-label="Illustrative evaluation sequence">
+    <li><strong>Target</strong><span>Instruction</span></li>
+    <li><strong>Execution</strong><span>Physical action</span></li>
+    <li><strong>Environment check</strong><span>Observed outcome</span></li>
+  </ol>
+  <div class="pr-hero-connector" aria-hidden="true"><span></span><span></span><span></span></div>
+  <img class="pr-hero-keyboard" src="media/images/protocol/keyboard-evaluation.png" width="1774" height="887" alt="Concept illustration: a target key, a mallet approaching the keyboard, and a magnified contact view." fetchpriority="high" decoding="async">
+  <figcaption id="pr-hero-caption">Illustrative episode · Not an evaluation result</figcaption>
+</figure>
 </header>
+<nav class="pr-hero-links" aria-label="Evaluation protocol quick links"><a href="#tracks">Two evaluation tracks <span aria-hidden="true">↓</span></a><a href="#clock">Clock conditions <span aria-hidden="true">↓</span></a><a href="#metrics">Metrics &amp; reporting <span aria-hidden="true">↓</span></a><a href="#tracks">Read full protocol <span aria-hidden="true">↓</span></a></nav>
+</section>
 
 <div class="pr-layout">
 <nav class="pr-toc" aria-label="On this page">
