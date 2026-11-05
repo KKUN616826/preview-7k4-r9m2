@@ -25,6 +25,24 @@
 
 ## 修改与构建
 
+### 当前版本发布检查
+
+GitHub Pages 从 `main` 分支根目录发布已生成的静态页面。
+当前首页已替换旧任务预览结构；`scripts/build.py` 和 `scripts/validate.py` 仍包含旧结构假设，不作为当前版本的发布入口，直接运行可能覆盖已维护的任务模板。
+
+本次涉及的首页任务球与榜单使用对应构建器：
+
+```sh
+python3 scripts/build_capability_map.py
+python3 scripts/build_leaderboard.py
+python3 scripts/validate_release.py
+python3 scripts/preview.py --port 8767
+```
+
+浏览器测试需安装 Playwright，并设置 `NODE_PATH`、`CHROMIUM_EXECUTABLE`、`HERO_PREVIEW_URL=http://127.0.0.1:8767/`；任务球测试还使用 `PREVIEW_URL` 指定同一地址。
+发布前检查共享导航、首页动画、任务球、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_capability_map.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_stage.cjs`、`test_leaderboard_explorer.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
+
+
 ### 独立 Leaderboard 页面
 
 - 数据：`data/leaderboard-results.json`，保留原页面转录的 Table 6 数值与来源信息；不与首页的旧候选名单文件混用。

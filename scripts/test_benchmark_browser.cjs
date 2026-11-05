@@ -26,7 +26,7 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     assert.ok(page.url().endsWith('/benchmark.html'));
     assert.equal(await page.getByText('View task', {exact:true}).count(), 0);
     await page.locator('#tab-mind').click();
-    assert.equal(await page.locator('#task-E2 option[value=hard]').isDisabled(), true);
+    assert.equal(await page.locator('#task-E2 option[value=hard]').isDisabled(), false);
     await page.locator('#tab-act').click();
     await page.waitForFunction(() => { const el = document.querySelector('#suite-act'); return Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).scrollMarginTop)) < 5; });
     assert.equal(await page.locator('.bo-chapter:visible').count(), taskCount);

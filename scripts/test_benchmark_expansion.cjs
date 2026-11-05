@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict');
 const {chromium}=require('playwright');
 const {cases}=require('../data/benchmark-expansion.json');
-const imports=require('../data/benchmark-video-imports.json');
+const imports=require('../data/benchmark-video-imports.json').filter(item=>cases.some(task=>task.id===item.task));
 const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE});
@@ -40,7 +40,7 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
     await p.goto(new URL(`tasks/${id}.html`,base).href);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${id} overflow ${width}`);
    }
   }
-  await p.goto(new URL('tasks/E2.html#hard',base).href);await p.reload();assert.equal(await p.locator('[data-panel="hard"] .demo-pending').isVisible(),true);
+  await p.goto(new URL('tasks/E2.html#hard',base).href);await p.reload();assert.equal(await p.locator('[data-panel="hard"] video').isVisible(),true);
   assert.deepEqual(errors,[]);console.log(`PASS: ${cases.length} new task pages; ${played} videos played at native dimensions; ${missing} honest pending panels; byte-range playback; difficulty/history and responsive layout`);
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});
