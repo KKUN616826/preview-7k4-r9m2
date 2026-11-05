@@ -1,4 +1,9 @@
 @import url("./typography.css?v=google-sans-flex-1");
+/* Include the rim in the capsule width on every page, including pages without
+   a global border-box reset. Otherwise switching to Home shifts each edge 1px. */
+html body header.header{box-sizing:border-box!important}
+/* Do not inherit the homepage's general button minimums in the mobile menu. */
+html body .header #menuToggle{min-width:0!important;min-height:0!important}
 /* Shared wide, shallow capsule floats over hero imagery. */
 html body .header{position:fixed!important;top:22px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;z-index:100!important;display:block!important;width:82%!important;max-width:1600px!important;height:auto!important;margin:0!important;padding:0!important;border:1px solid #dfe4e8!important;border-radius:999px!important;background:#fff!important;box-shadow:0 5.333px 17.333px #17232e0b,0 1.333px 2.667px #17232e08!important;backdrop-filter:none!important;color:#17232e!important;font-family:Arial,sans-serif!important}
 html body .header .header-inner{box-sizing:border-box!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:28px!important;width:100%!important;max-width:none!important;height:54px!important;min-height:54px!important;margin:0!important;padding:0 10px 0 24px!important}
@@ -34,16 +39,140 @@ html body{padding-top:90px!important}
 html body.dark-hero{padding-top:0!important}
 html body.dark-hero .article-layout,html body.dark-hero .article-body,html body.dark-hero #overview.rd-hero{margin-top:0!important;padding-top:0!important}
 html body.dark-hero .rd-hero .demo-hero{height:100svh;min-height:730px}
-html body.dark-hero .header{background:rgba(255,255,255,.91)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important}
 @media(max-width:1040px){html body{padding-top:74px!important}html body.dark-hero{padding-top:0!important}}
 @media(max-width:760px){html body.dark-hero .rd-hero .demo-hero{height:auto;min-height:100svh;padding-top:86px}}
 
-/* One translucent white surface, including legacy homepage navigation wrappers. */
-html:root body header.header{background:rgba(255,255,255,.88)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;border-color:rgba(255,255,255,.68)!important}
+/* Shared web glass material, inspired by the supplied reference. One parameter set is used on every page and at every scroll position.
+   Geometry above remains unchanged; this is a CSS approximation rather than a native iOS API. */
+:root {
+ --m2a-glass-surface:linear-gradient(115deg,#ffffff4d,#ffffff0d 35%,#ffffff08 65%,#ffffff33),#ffffff85;
+ --m2a-glass-edge:#ffffffe0;
+ /* White rim catches light; the fine outer line defines it on white pages. */
+ --m2a-glass-shadow:inset 0 1px 0 #ffffff,inset 0 -1px 0 #ffffff73,0 0 0 1px #2228322b,0 6px 22px #20242a1a;
+ --m2a-glass-filter:blur(10px) saturate(100%);
+ --m2a-glass-hover:linear-gradient(180deg,#ffffff47,#ffffff1f);
+ --m2a-glass-pressed:linear-gradient(180deg,#b7bec833,#ffffff26);
+ --m2a-glass-ink:#1d2731;
+ --m2a-glass-selected:linear-gradient(180deg,#ffffff14,#ffffff00 70%),#25303b;
+}
+html:root body header.header {
+ background:var(--m2a-glass-surface)!important;
+ border-color:var(--m2a-glass-edge)!important;
+ box-shadow:var(--m2a-glass-shadow)!important;
+ backdrop-filter:var(--m2a-glass-filter)!important;
+ -webkit-backdrop-filter:var(--m2a-glass-filter)!important;
+}
 html:root body header.header .header-inner,
 html:root body header.header #siteNav,
 html:root body header.header .nav-left,
-html:root body header.header .nav-right{background:transparent!important;box-shadow:none!important}
-html:root body header.header #siteNav a.paper-link{background:#203447!important;color:#fff!important;border:0!important}
-html:root body header.header #siteNav a.paper-link:hover{background:#2e465b!important;color:#fff!important}
-@media(max-width:1040px){html:root body header.header #siteNav{background:rgba(255,255,255,.96)!important}}
+html:root body header.header .nav-right {background:transparent!important;box-shadow:none!important}
+html:root body header.header #siteNav a {
+ color:var(--m2a-glass-ink)!important;
+ box-shadow:inset 0 1px 0 transparent!important;
+ transition:background .16s ease,box-shadow .16s ease,color .16s ease!important;
+ -webkit-tap-highlight-color:transparent;
+}
+@media(hover:hover){
+ html:root body header.header #siteNav a:hover {
+  background:var(--m2a-glass-hover)!important;
+  box-shadow:inset 0 1px 0 #ffffff47!important;
+ }
+}
+html:root body header.header #siteNav a[aria-current=page],
+html:root body header.header #siteNav a.paper-link {
+ background:var(--m2a-glass-selected)!important;
+ color:#fff!important;
+ box-shadow:inset 0 1px 0 #ffffff1f,0 1px 3px #203f4f0d!important;
+}
+@media(hover:hover){
+ html:root body header.header #siteNav a[aria-current=page]:hover,
+ html:root body header.header #siteNav a.paper-link:hover {background:linear-gradient(180deg,#ffffff0d,#ffffff00),#333d48!important}
+}
+html:root body header.header #siteNav a:active {
+ background:var(--m2a-glass-pressed)!important;
+ box-shadow:inset 0 1px 4px #29465326,inset 0 -1px 0 #ffffff99!important;
+ transition-duration:.06s!important;
+}
+html:root body header.header #siteNav a[aria-current=page]:active,
+html:root body header.header #siteNav a.paper-link:active {background:#202832!important;color:#fff!important}
+html:root body header.header #menuToggle {
+ background:linear-gradient(180deg,#ffffff80,#ffffff26)!important;
+ border-color:#ffffffc9!important;
+ box-shadow:inset 0 1px 0 #ffffffe6,0 1px 4px #203f4f0d!important;
+ color:var(--m2a-glass-ink)!important;
+}
+html:root body header.header #menuToggle:active,
+html:root body header.header #menuToggle[aria-expanded=true] {background:var(--m2a-glass-pressed)!important}
+@media(max-width:1040px){
+ /* A filtered parent clips the dropdown's backdrop sampling. Move only the
+    capsule's material to a sibling layer while its menu is open. */
+ html:root body header.header:has(#siteNav.open) {
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+ }
+ html:root body header.header:has(#siteNav.open)::before {
+  content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
+  background:var(--m2a-glass-surface);
+  backdrop-filter:var(--m2a-glass-filter);
+  -webkit-backdrop-filter:var(--m2a-glass-filter);
+ }
+ html:root body header.header #siteNav {
+  background:linear-gradient(125deg,#ffffff52,#ffffff14),#ffffffb3!important;
+  border-color:var(--m2a-glass-edge)!important;
+  box-shadow:var(--m2a-glass-shadow)!important;
+  backdrop-filter:blur(16px) saturate(100%)!important;
+  -webkit-backdrop-filter:blur(16px) saturate(100%)!important;
+ }
+}
+/* Reuse the material on floating leaderboard controls, never on result cells. */
+.lb-stage .lb-stage-tabs,
+.lb-stage .lb-stage-caption,
+.lb-stage .lb-stage-head .lb-stage-metric,
+.lb-stage .lb-stage-full,
+.lb-stage .lb-stage-motion-toggle,
+.lb-stage .lb-stage-footer p {
+ background:var(--m2a-glass-surface);
+ border-color:var(--m2a-glass-edge);
+ box-shadow:var(--m2a-glass-shadow);
+ backdrop-filter:var(--m2a-glass-filter);
+ -webkit-backdrop-filter:var(--m2a-glass-filter);
+}
+.lb-stage .lb-stage-tabs::before {
+ background:var(--m2a-glass-selected);
+ box-shadow:inset 0 1px 0 #ffffff59,inset 0 -1px 0 #20283233,0 2px 6px #20283226;
+}
+.lb-stage .lb-stage-tabs button {color:var(--m2a-glass-ink)}
+.lb-stage .lb-stage-caption,.lb-stage .lb-stage-caption strong,.lb-stage .lb-stage-head .lb-stage-metric,.lb-stage .lb-stage-full,.lb-stage .lb-stage-motion-toggle,.lb-stage .lb-stage-footer p {color:var(--m2a-glass-ink)}
+.lb-stage .lb-stage-tabs button[aria-pressed=true] {color:#fff}
+@media(hover:hover){
+ .lb-stage .lb-stage-tabs button:not([aria-pressed=true]):hover {background:#ffffff52;box-shadow:inset 0 1px 0 #ffffffb3}
+ .lb-stage .lb-stage-full:hover,.lb-stage .lb-stage-motion-toggle:hover {background:var(--m2a-glass-hover)}
+}
+.lb-stage .lb-stage-tabs button:active,.lb-stage .lb-stage-full:active,.lb-stage .lb-stage-motion-toggle:active {box-shadow:inset 0 1px 4px #29465326}
+.lb-stage .lb-stage-tabs button:active {background:#ffffff33}
+.lb-stage .lb-stage-motion-toggle:disabled {background:#ffffffb3;color:#59616b;box-shadow:inset 0 1px 0 #ffffff99}
+.lb-results .lb-ranking {justify-content:flex-end}
+body.leaderboard-explorer .lb-results .lb-view-buttons {margin-left:auto;background:var(--m2a-glass-surface);border-color:#d7dbe0;box-shadow:var(--m2a-glass-shadow)}
+body.leaderboard-explorer .lb-results .lb-view-buttons button[aria-pressed=true] {background:var(--m2a-glass-selected);box-shadow:inset 0 1px 0 #ffffff38,0 2px 5px #203f4f14}
+body.leaderboard-explorer .lb-results .lb-view-buttons button:not([aria-pressed=true]):hover {background:var(--m2a-glass-hover)}
+body.leaderboard-explorer .lb-results .lb-view-buttons button:active {box-shadow:inset 0 1px 4px #29465326}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ :root {--m2a-glass-surface:linear-gradient(115deg,#ffffff,#f3f4f6);--m2a-glass-filter:none}
+ @media(max-width:1040px){html:root body header.header #siteNav {background:#f8f8fa!important}}
+}
+@media(prefers-reduced-motion:reduce){
+ html:root body header.header #siteNav a {transition:none!important}
+}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){
+ :root {--m2a-glass-surface:#f8f8fa;--m2a-glass-filter:none;--m2a-glass-edge:#718c94;--m2a-glass-selected:#25303b}
+ html:root body header.header #siteNav {backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ html:root body header.header #siteNav a[aria-current=page],html:root body header.header #siteNav a.paper-link {background:#25303b!important}
+ .lb-stage .lb-stage-tabs::before {background:#25303b}
+}
+@media(prefers-contrast:more){
+ html:root body header.header #siteNav {background:#f8f8fa!important;border-color:#718c94!important}
+}
+@media(max-width:1040px) and (prefers-reduced-transparency:reduce){
+ html:root body header.header #siteNav {background:#f8f8fa!important}
+}

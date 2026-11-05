@@ -1,42 +1,74 @@
-const assert=require('node:assert/strict');const{chromium}=require('playwright');
-(async()=>{const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});try{
- const p=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
- const url='http://127.0.0.1:8765/?preview=lunar-grid#capability-explorer';await p.goto(url);const root=p.locator('.capability-map');await p.waitForFunction(()=>document.querySelector('.capability-map').dataset.renderer==='webgl');
- assert.equal(await root.locator('[data-task]').count(),30);assert.equal(await root.locator('.cm-text-index').count(),0);assert.equal(await root.locator('[data-suite="mind2act"]').getAttribute('aria-pressed'),'true');assert.match(await root.locator('#cm-coverage-mind2act .cm-suite-goal').innerText(),/Keep track of the goal/);assert.equal(await root.locator('.cm-process').count(),0);assert.equal(await root.locator('.cm-example').count(),3);assert.deepEqual(await root.locator('#cm-coverage-mind2act .cm-case-demands dt').allTextContents(),['Memory','Action','Goal']);assert.deepEqual(await root.locator('#cm-coverage-mind2act .cm-case-demands dd').allTextContents(),['Remember each order.','Pick food from the moving conveyor.','Complete each meal correctly.']);assert.equal(await root.locator('.cm-detail:visible').count(),1);assert.equal(await root.locator('.cm-browse-all').count(),0);assert.equal(await root.locator('.cm-detail-link').count(),3);
- await p.waitForFunction(()=>document.querySelector('.capability-map').dataset.texture==='loaded');
- assert.deepEqual(await root.locator('[data-region-label]').allTextContents(),['Mind','Act','Mind2Act']);
- const bandBefore=await root.locator('[data-band-edge]').first().getAttribute('d');assert.match(bandBefore,/^M/);
- for(const slug of ['mind','act','mind2act']){
-  await root.locator(`[data-region-label="${slug}"]`).click();await p.waitForTimeout(150);
-  assert.equal(await root.getAttribute('data-suite'),slug);
-  assert.equal(await root.locator(`[data-region-label="${slug}"]`).getAttribute('aria-pressed'),'true');
-  const orbitBox=await root.locator('.cm-orbit').boundingBox();
-  for(const label of await root.locator('[data-region-label]').all()){const b=await label.boundingBox();assert.ok(b.x>=orbitBox.x-1&&b.x+b.width<=orbitBox.x+orbitBox.width+1,'region labels stay within figure');}
-  if(slug==='act')assert.notEqual(await root.locator('[data-band-edge]').first().getAttribute('d'),bandBefore,'corridor rotates with sphere');
- }
-
- const aligned=await root.evaluate(e=>{const b=e.querySelector('.cm-detail:not([hidden]) .cm-detail-link').getBoundingClientRect(),o=e.querySelector('.cm-orbit'),g=o.getBoundingClientRect(),inset=parseFloat(getComputedStyle(o).getPropertyValue('--cm-sphere-inset'))/100;return {delta:Math.abs(b.bottom-(g.top+g.height*(1-inset))),height:b.height,bg:getComputedStyle(e.querySelector('.cm-detail:not([hidden]) .cm-detail-link')).backgroundColor}});
- assert.ok(aligned.height>=36);assert.equal(aligned.bg,'rgb(255, 255, 255)','outlined navigation button');assert.equal(await root.locator('.cm-composition').count(),0);assert.equal((await root.locator('#cm-heading').innerText()).replace(/\s+/g,' '),'Explore 30 tasks');assert.equal(await root.locator('.cm-suite-choice.is-active').count(),1);
- const hoverNode=root.locator('[data-task="CP04"]'),hoverPanel=root.locator('.cm-task-preview');await hoverNode.hover();await p.waitForTimeout(150);
- const popupBox=await hoverPanel.boundingBox(),visualBox=await root.locator('.cm-visual').boundingBox();assert.ok(popupBox.x+popupBox.width>visualBox.x+visualBox.width,'preview shifted right');assert.ok(popupBox.x+popupBox.width<=1440-15,'preview stays in viewport');
- assert.equal(await hoverPanel.isVisible(),true);assert.equal(await root.locator('.cm-connector').isVisible(),true);assert.match(await root.locator('.cm-connector path').getAttribute('d'),/^M /);
- await hoverPanel.hover();await p.waitForTimeout(450);assert.equal(await hoverPanel.isVisible(),true,'pointer can enter preview');
- assert.equal(await root.locator('.cm-preview-link').getAttribute('href'),'tasks/CP04.html');await p.screenshot({path:'../../outputs/lunar-cards-hover.png'});
- await root.locator('.cm-choices').hover();await p.waitForTimeout(400);assert.equal(await hoverPanel.isVisible(),false,'unlocked preview closes after leaving');
- await hoverNode.click();await root.locator('.cm-choices').hover();await p.waitForTimeout(400);assert.equal(await hoverPanel.isVisible(),true,'clicked preview stays pinned');await p.keyboard.press('Escape');assert.equal(await hoverPanel.isVisible(),false);assert.equal(await hoverNode.evaluate(e=>document.activeElement===e),true);
- const suiteData=await root.locator('#cm-data').textContent();const suites=JSON.parse(suiteData);
- for(const suite of suites){await root.locator(`[data-suite="${suite.slug}"]`).click();await p.waitForTimeout(130);assert.equal(await root.locator(`#cm-coverage-${suite.slug} .cm-suite-goal`).innerText(),suite.explorer.description);assert.equal(await root.locator('.cm-detail:visible .cm-detail-link').getAttribute('href'),`benchmark/${suite.slug}.html`);assert.equal(await root.locator(`[data-suite="${suite.slug}"]`).getAttribute('aria-expanded'),'true');assert.equal(await root.locator('.cm-suite-choice.is-active').getAttribute('data-suite'),suite.slug);const example=root.locator('.cm-detail:visible .cm-example-link');assert.equal(await example.getAttribute('href'),`tasks/${suite.explorer.example}.html`);await example.click();await p.waitForTimeout(150);assert.equal(await root.locator('.cm-preview-link').getAttribute('href'),`tasks/${suite.explorer.example}.html`);await p.keyboard.press('Escape');assert.equal(await example.evaluate(el=>el===document.activeElement),true,'close returns focus to example');assert.equal(await root.locator('.cm-detail:visible .cm-detail-link').innerText(),`Explore ${suite.cases.length} ${suite.name} tasks ↗`);}
-
-
- let checked=0;for(const suite of suites){await root.locator(`[data-suite="${suite.slug}"]`).click();await p.waitForTimeout(130);for(const task of suite.cases){const button=root.locator(`[data-task="${task.id}"]`);if(await button.isVisible()){await button.focus();await p.keyboard.press('Enter');checked++;await p.waitForTimeout(150);assert.equal(await root.locator('.cm-task-preview').isVisible(),true);assert.equal(await root.locator('.cm-preview-link').getAttribute('href'),`tasks/${task.id}.html`);assert.equal(await root.locator('.cm-preview-image').evaluate(i=>i.complete&&i.naturalWidth>0),true);assert.equal(await root.getAttribute('data-suite'),suite.slug);assert.equal(await root.locator('.cm-detail:visible .cm-detail-link').getAttribute('href'),`benchmark/${suite.slug}.html`);await p.keyboard.press('Escape');await p.waitForTimeout(100);assert.equal(await root.locator('.cm-task-preview').isVisible(),false);}}}
- assert.equal(checked,30,'all task nodes tested through their category');await root.locator('.cm-reset').click();await p.waitForTimeout(150);const initial=await root.locator('[data-task="CP04"]').getAttribute('style');const orbit=root.locator('.cm-orbit');await orbit.focus();await p.keyboard.press('ArrowRight');await p.waitForTimeout(130);assert.notEqual(await root.locator('[data-task="CP04"]').getAttribute('style'),initial,'keyboard rotates');await root.locator('.cm-reset').click();await p.waitForTimeout(150);
- await orbit.scrollIntoViewIfNeeded();await p.screenshot({path:'../../outputs/lunar-grid-desktop.png'});
- await p.emulateMedia({reducedMotion:'no-preference'});const box=await orbit.boundingBox();await p.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await p.mouse.down();await p.mouse.move(box.x+box.width*.7,box.y+box.height*.6,{steps:12});await p.mouse.up();assert.notEqual(await root.locator('[data-task="CP04"]').getAttribute('style'),initial,'drag rotates');await root.locator('.cm-motion').click();assert.equal(await root.locator('.cm-motion').innerText(),'Pause motion');await root.locator('.cm-motion').click();assert.equal(await root.locator('.cm-motion').innerText(),'Play motion');
- for(const width of[320,390,820,1024,1440,1920]){await p.setViewportSize({width,height:900});await p.waitForTimeout(100);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no overflow '+width);const mapBox=await root.boundingBox(),introBox=await p.locator('#introduction').boundingBox();assert.ok(Math.abs(mapBox.x+mapBox.width/2-introBox.x-introBox.width/2)<1,'shared page center '+width);if(width>=1024){assert.ok(mapBox.width>introBox.width&&mapBox.width-introBox.width<=121,'restrained desktop width expansion');const copy=await root.locator('.cm-copy').boundingBox(),sphere=await root.locator('.cm-orbit').boundingBox();assert.ok(sphere.x-copy.x-copy.width>=24,'breathing room between copy and sphere');assert.ok(sphere.width<=633,'sphere stays within existing visual size');assert.equal(Math.round(copy.width),400,'wider reading column');assert.equal(await root.locator('.cm-suite-goal').first().evaluate(el=>parseFloat(getComputedStyle(el).fontSize)),17,'readable description scale')}else assert.ok(Math.abs(mapBox.width-introBox.width)<1,'standard smaller-screen column')}
- await p.setViewportSize({width:1440,height:1000});await root.locator('[data-suite="mind2act"]').click();await p.waitForTimeout(150);await root.locator('[data-task="CP04"]').click();
- for(const width of[1024,1440,390]){await p.setViewportSize({width,height:1000});await p.waitForTimeout(100);const box=await root.locator('.cm-task-preview').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=width-1,'open preview stays on screen after resize');assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no resize overflow')}
- await p.keyboard.press('Escape');
- await root.screenshot({path:'../../outputs/explorer-case-demands-desktop.png'});const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});await mobile.goto(url);await mobile.waitForFunction(()=>document.querySelector('.capability-map').dataset.renderer==='webgl');await mobile.locator('.cm-orbit').scrollIntoViewIfNeeded();await mobile.locator('[data-task="CP04"]').click();await mobile.waitForTimeout(200);assert.equal(await mobile.locator('.cm-task-preview').isVisible(),true);const preview=await mobile.locator('.cm-task-preview').boundingBox();assert.ok(preview.width<390);await mobile.locator('.cm-task-preview').scrollIntoViewIfNeeded();await mobile.screenshot({path:'../../outputs/lunar-grid-mobile.png'});
- const fallback=await browser.newPage();await fallback.route('**/vendor/three/**',r=>r.abort());await fallback.goto(url);await fallback.waitForFunction(()=>document.querySelector('.capability-map').dataset.renderer==='fallback');assert.equal(await fallback.locator('.cm-moon-fallback').isVisible(),true);await fallback.locator('[data-task="CP04"]').click();assert.equal(await fallback.locator('.cm-task-preview').isVisible(),true);assert.equal(await fallback.locator('.cm-motion').isDisabled(),true);
- await mobile.close();await fallback.close();console.log('Interactive checks passed');const nojs=await browser.newPage({javaScriptEnabled:false,reducedMotion:'reduce'});await nojs.route('**/*',r=>['media','image','font'].includes(r.request().resourceType())?r.abort():r.continue());await nojs.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});assert.equal(await nojs.locator('.cm-text-index').count(),0);assert.equal(await nojs.locator('.cm-credit a').getAttribute('href'),'https://svs.gsfc.nasa.gov/4720');assert.equal(await nojs.locator('.header .nav a[href="benchmark.html"]').getAttribute('href'),'benchmark.html');assert.deepEqual(errors,[]);console.log('PASS: WebGL moon, all 30 tasks, category selection, real previews, keyboard/drag rotation, reset/motion, six widths, mobile, import-failure fallback and no-script navigation.');
- }finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+const url = process.env.PREVIEW_URL || 'http://127.0.0.1:8766/';
+(async () => {
+  const browser = await chromium.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+    const errors = [];
+    page.on('pageerror', e => errors.push(e.message));
+    await page.goto(url);
+    const root = page.locator('#capability-explorer');
+    await page.waitForFunction(() => document.querySelector('.capability-map').dataset.texture === 'loaded');
+    assert.deepEqual(await root.locator('.cm-suite-title').allTextContents(), ['Mind', 'Act', 'Mind2Act']);
+    assert.equal(await root.locator('.cm-choices,.cm-example,.cm-case-demands').count(), 0);
+    assert.equal(await root.locator('[data-task]').count(), 30);
+    assert.match(await root.locator('.cm-suite-title').first().evaluate(e => getComputedStyle(e).fontFamily), /^Sora/);
+    const suites = JSON.parse(await root.locator('#cm-data').textContent());
+    let checked = 0;
+    for (const suite of suites) {
+      await root.locator(`[data-region-label="${suite.slug}"]`).click();
+      await page.waitForTimeout(150);
+      assert.equal(await root.locator('.cm-suite-intro:visible').count(), 3);
+      for (const task of suite.cases) {
+        const card = root.locator(`[data-task="${task.id}"]`);
+        assert.equal(await card.isVisible(), true);
+        assert.equal(await card.evaluate(e => getComputedStyle(e).borderTopWidth), '0px');
+        await card.focus();
+        await page.keyboard.press('Enter');
+        assert.equal(await root.locator('.cm-preview-link').getAttribute('href'), `tasks/${task.id}.html`);
+        await page.keyboard.press('Escape');
+        assert.equal(await root.locator('.cm-task-preview').isVisible(), false);
+        assert.equal(await card.evaluate(e => e === document.activeElement), true);
+        checked++;
+      }
+    }
+    assert.equal(checked, 30);
+    await root.locator('.cm-reset').click();
+    await page.waitForTimeout(150);
+    const orbit = root.locator('.cm-orbit');
+    const before = await root.locator('[data-task="CP04"]').getAttribute('style');
+    await orbit.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(150);
+    assert.notEqual(await root.locator('[data-task="CP04"]').getAttribute('style'), before);
+    for (const width of [320,390,820,1024,1440,1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.waitForTimeout(100);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `overflow at ${width}`);
+      const blocks = await root.locator('.cm-suite-intro').all();
+      const bounds = await Promise.all(blocks.map(b => b.boundingBox()));
+      assert.ok(bounds[0].y + bounds[0].height <= bounds[1].y + 1);
+      assert.ok(bounds[1].y + bounds[1].height <= bounds[2].y + 1);
+      if (width >= 1024) {
+        const copy = await root.locator('.cm-copy').boundingBox(), globe = await orbit.boundingBox();
+        assert.ok(copy.x + copy.width + 23 <= globe.x);
+      }
+    }
+    await page.setViewportSize({ width:1440,height:1000 });
+    await root.locator('.cm-reset').click();
+    await page.waitForTimeout(150);
+    await root.screenshot({path:'/tmp/capability-stacked-desktop.png'});
+    await page.setViewportSize({width:390,height:844});
+    await root.screenshot({path:'/tmp/capability-stacked-mobile.png'});
+    const fallback = await browser.newPage();
+    await fallback.route('**/vendor/three/**', r => r.abort());
+    await fallback.goto(url);
+    await fallback.waitForFunction(() => document.querySelector('.capability-map').dataset.renderer === 'fallback');
+    await fallback.locator('[data-task="CP04"]').click();
+    assert.equal(await fallback.locator('.cm-task-preview').isVisible(), true);
+    assert.equal(await fallback.locator('.cm-motion').isDisabled(), true);
+    assert.deepEqual(errors, []);
+    console.log('PASS: stacked introductions, 30 task previews, neutral borders, keyboard rotation/focus, six viewport sizes and WebGL fallback.');
+  } finally { await browser.close(); }
+})().catch(e => { console.error(e); process.exit(1); });
