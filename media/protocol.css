@@ -21,10 +21,11 @@
 .pr-page a { color: var(--pr-accent); text-underline-offset: 3px; }
 
 /* The overview occupies the first viewport; a cropped moon extends to its right edge. */
-.pr-hero { --pr-moon-size:clamp(900px,90vw,1600px); position:relative; isolation:isolate; overflow:clip; display:grid; grid-template-rows:1fr auto; min-height:calc(100svh - 90px); }
+.pr-hero { --pr-moon-size:clamp(650px,52vw,1000px); position:relative; isolation:isolate; overflow:clip; display:grid; grid-template-rows:1fr auto; min-height:calc(100svh - 90px); }
 .pr-hero-backdrop { position:absolute; z-index:-1; inset:0; overflow:hidden; pointer-events:none; }
-.pr-hero-moon { position:absolute; width:var(--pr-moon-size); aspect-ratio:1; top:50%; right:calc(var(--pr-moon-size) * -.43); transform:translateY(-50%); border-radius:50%; background:radial-gradient(ellipse at 18% 35%,#ffffff30 25%,#253039b5 100%),url('moon/lroc-color-2k.jpg') center/cover; filter:grayscale(1); opacity:.65; mask-image:linear-gradient(90deg,transparent,#000b 22%,#000 48%); }
-.pr-hero-orbit { position:absolute; width:calc(var(--pr-moon-size) * .83); height:calc(var(--pr-moon-size) * 1.12); top:50%; right:calc(var(--pr-moon-size) * -.34); border:1px solid #b29c694f; border-radius:50%; transform:translateY(-50%) rotate(-25deg); }
+/* Only the upper hemisphere exists here; the lower half is not rendered. */
+.pr-hero-moon { position:absolute; width:var(--pr-moon-size); aspect-ratio:2 / 1; top:max(24px,calc(50% - var(--pr-moon-size) * .5 - 20px)); right:-3vw; border-radius:50% 50% 0 0 / 100% 100% 0 0; background:radial-gradient(ellipse at 18% 35%,#ffffff30 25%,#253039b5 100%),url('moon/lroc-color-2k.jpg') center top / 100% 200%; filter:grayscale(1); opacity:.65; mask-image:linear-gradient(180deg,#000 32%,#000b 60%,transparent 100%); }
+.pr-hero-orbit { position:absolute; width:calc(var(--pr-moon-size) * .8); aspect-ratio:2 / 1; top:max(38px,calc(50% - var(--pr-moon-size) * .5)); right:-1vw; border:1px solid #b29c694f; border-bottom:0; border-radius:50% 50% 0 0 / 100% 100% 0 0; transform:rotate(-12deg); mask-image:linear-gradient(#000 25%,transparent 95%); }
 .pr-head { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); align-items:center; gap:12px; width:100%; max-width:1600px; margin:0 auto; padding:60px 48px; }
 .pr-head-copy { position:relative; z-index:2; min-width:0; transform:translateY(-28px); }
 .pr-eyebrow { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:0 0 28px; color:var(--pr-accent); font-size:13px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; }
@@ -199,8 +200,8 @@
  .pr-facts dd { font-size:26px; }
  .pr-facts dt { font-size:11px; }
  .pr-hero-backdrop { top:32%; mask-image:linear-gradient(transparent,#000 25%); }
- .pr-hero-moon { width:760px; right:-480px; opacity:.4; }
- .pr-hero-orbit { width:650px; height:820px; right:-410px; }
+ .pr-hero-moon { width:min(100vw,620px); top:28%; right:-6%; opacity:.4; }
+ .pr-hero-orbit { width:min(90vw,560px); top:29%; right:-2%; }
  .pr-hero-visual { max-width:620px; padding-top:38px; margin:18px auto 0; }
  .pr-hero-stages strong { font-size:11px; padding:4px 6px; }
  .pr-hero-stages span { font-size:10px; }

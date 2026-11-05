@@ -131,7 +131,7 @@ site shell. Its transparent keyboard illustration is documented in
 `media/images/protocol/README.md`; the target, execution, and check labels are
 HTML, not baked into the bitmap. On desktop, the title has two lines and all
 four data values share one row. The overview fills the first viewport, with a
-cropped moon at the right screen edge and quick links along the bottom. The
+upper lunar hemisphere fading behind the keyboard flow and quick links along the bottom. The
 complete protocol article begins below the fold and is preserved.
 
 Navigation entries are maintained in `scripts/showcase.html` and

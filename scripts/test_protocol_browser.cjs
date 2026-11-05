@@ -18,6 +18,8 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       assert.equal(await page.locator('.pr-head h1').textContent(), 'How Mind2Act World evaluates a system');
       assert.match(await page.locator('.pr-head h1').evaluate(el => getComputedStyle(el).fontFamily), /Manrope/);
       assert.ok(await page.locator('.pr-hero-keyboard').evaluate(el => el.complete && el.naturalWidth > 0));
+      const moon = await page.locator('.pr-hero-moon').evaluate(el => ({width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height}));
+      assert.ok(Math.abs(moon.width / moon.height - 2) < .02, `${width}: moon is an upper hemisphere, not a full disk`);
       const dataY = await page.locator('.pr-facts dd').evaluateAll(els => els.map(el => Math.round(el.getBoundingClientRect().top)));
       assert.equal(new Set(dataY).size, 1, `${width}: all four data values share one row`);
       if (width > 1040) {
