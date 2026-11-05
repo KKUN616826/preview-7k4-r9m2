@@ -1,26 +1,36 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=protocol-nav-1"><link rel="stylesheet" href="media/protocol-typography.css?v=1"><link rel="stylesheet" href="media/protocol.css?v=2"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=protocol-nav-1"><link rel="stylesheet" href="media/protocol-typography.css?v=1"><link rel="stylesheet" href="media/protocol.css?v=focus-3"></head>
 <body class="protocol-page"><header class="header"><div class="wrap header-inner"><a class="brand official-nav-logo" href="index.html" aria-label="Mind2Act World home"><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="1330" height="400"></a><button id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">Menu</button><nav class="nav" id="siteNav" aria-label="Main navigation"><div class="nav-left"><a href="index.html">Home</a><a href="leaderboard.html">Leaderboard</a><a href="protocol.html" aria-current="page">Protocol</a><a href="benchmark.html">Benchmark</a><a href="resources.html">Documents</a></div><div class="nav-right"><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noreferrer">Code ↗</a><a class="paper-link" href="index.html#contributors">Contributors</a></div></nav></div></header>
 <main class="pr-page" id="main">
 <header class="pr-head">
-  <p class="pr-eyebrow">Evaluation protocol <span>Draft v0.1 · Nov 5, 2026</span></p>
-  <h1>How Mind2Act World evaluates a system</h1>
-  <p class="pr-lead">Every system is run on the same task configurations, scored by the environment rather than by itself, and reported together with the conditions it ran under.</p>
-  <dl class="pr-facts">
-    <div><dt>tasks</dt><dd>30</dd></div>
-    <div><dt>task configurations</dt><dd>90</dd></div>
-    <div><dt>evaluation tracks</dt><dd>2</dd></div>
-    <div><dt>clock conditions</dt><dd>2</dd></div>
-  </dl>
+  <div class="pr-heading-meta"><p class="pr-eyebrow">Evaluation protocol</p><span>Draft v0.1 · Nov 5, 2026</span></div>
+  <h1>Does the world wait <br>while the model thinks?</h1>
+  <p class="pr-lead">The same reasoning can lead to a different outcome when the world keeps moving. Clock conditions are recorded and reported separately.</p>
+  <figure class="pr-clock-figure" aria-labelledby="clock-figure-title" aria-describedby="clock-figure-note">
+    <figcaption id="clock-figure-title">One distinction that changes how you read a result</figcaption>
+    <div class="pr-clock-phases" aria-hidden="true"><span></span><div><span>Observe</span><span>Model thinks</span><span>Act</span></div></div>
+    <div class="pr-clock-row">
+      <div class="pr-clock-label"><h2>Continuous clock</h2><p>The world keeps moving.</p></div>
+      <div class="pr-clock-lane" role="img" aria-label="Continuous clock: world time advances through observation, model inference and action."><div class="pr-world-running"><span>World time advances</span><i aria-hidden="true">→</i></div></div>
+    </div>
+    <div class="pr-clock-row">
+      <div class="pr-clock-label"><h2>Paused inference</h2><p>The world waits for inference.</p></div>
+      <div class="pr-clock-lane pr-clock-paused" role="img" aria-label="Paused inference: world time advances, stops while the model computes, then resumes for action."><div class="pr-world-running"><i aria-hidden="true">→</i></div><div class="pr-world-held"><span>World time paused</span></div><div class="pr-world-running"><i aria-hidden="true">→</i></div></div>
+    </div>
+    <p class="pr-clock-conclusion">Continuous clock supports real-time control claims.<br><span>Paused inference isolates reasoning from latency.</span></p>
+    <p id="clock-figure-note" class="pr-figure-note">Conceptual timing only. Segment widths do not represent measured durations.</p>
+  </figure>
+  <div class="pr-head-links"><a href="#clock">Read the full protocol <span aria-hidden="true">↓</span></a><a href="leaderboard.html">View leaderboard <span aria-hidden="true">↗</span></a></div>
 </header>
+<div class="pr-document-meta"><p><strong>Protocol scope</strong> 30 tasks · 90 task configurations · 2 evaluation tracks · 2 clock conditions</p><p><strong>Current leaderboard</strong> Original 15 tasks · All-level results</p></div>
 
 <div class="pr-layout">
 <nav class="pr-toc" aria-label="On this page">
-  <p>On this page</p>
+  <p>Full protocol</p>
   <ol>
+    <li><a href="#clock">Clock conditions</a></li>
     <li><a href="#tracks">Evaluation tracks</a></li>
     <li><a href="#episodes">Episodes</a></li>
-    <li><a href="#clock">Clock conditions</a></li>
     <li><a href="#metrics">Metrics</a></li>
     <li><a href="#diagnostics">Diagnostics</a></li>
     <li><a href="#disclosure">Reporting conditions</a></li>
@@ -29,11 +39,29 @@
 </nav>
 
 <article class="pr-article">
+<section id="clock" aria-labelledby="clock-title">
+  <h2 id="clock-title">Clock conditions</h2>
+  <p class="pr-section-lead">Dynamic tasks depend on whether the world waits while the model thinks. The two conditions are recorded and tabulated separately.</p>
+  <div class="pr-compare">
+    <div>
+      <h3>Continuous clock</h3>
+      <p>The environment and external events keep advancing while the model reasons or waits for an API response. The robot follows a declared hold policy until a new command arrives.</p>
+      <dl><div><dt>Supports</dt><dd>Real-time control claims</dd></div><div><dt>Matters for</dt><dd>Moving targets, timing windows</dd></div></dl>
+    </div>
+    <div>
+      <h3>Paused inference</h3>
+      <p>Simulated time stops while the model computes. This isolates task reasoning from latency, but it does not support a real-time-control claim.</p>
+      <dl><div><dt>Supports</dt><dd>Reasoning diagnosis</dd></div><div><dt>Not for</dt><dd>Claims about control speed</dd></div></dl>
+    </div>
+  </div>
+  <p>No effective action rate is inferred from simulator throughput or from controller interpolation inside a chunk.</p>
+</section>
 <div class="pr-callout"><p><strong>Status.</strong> Budgets, episode counts, seeds and tolerances are fixed for each evaluation round before any system is run, and are published with that round's results. Until then they are listed as pending; they are never chosen after seeing model rankings.</p></div>
 
 <section id="tracks" aria-labelledby="tracks-title">
-  <h2 id="tracks-title">Two evaluation tracks</h2>
-  <p class="pr-section-lead">Coding agents and end-to-end robot policies act through different interfaces. Both tracks share the same tasks, initial conditions and environment-side success checker.</p>
+  <h2 id="tracks-title">Different interfaces. Same scoring standard.</h2>
+  <p class="pr-section-lead">Every system is run on the same task configurations, scored by the environment rather than by itself, and reported together with the conditions it ran under.</p>
+  <p>Coding agents and end-to-end robot policies act through different interfaces. Both tracks share the same tasks, initial conditions and environment-side success checker.</p>
   <div class="pr-tracks">
     <div class="pr-track">
       <p class="pr-track-tag">Coding-agent track</p>
@@ -71,23 +99,6 @@
   </ol>
 </section>
 
-<section id="clock" aria-labelledby="clock-title">
-  <h2 id="clock-title">Clock conditions</h2>
-  <p class="pr-section-lead">Dynamic tasks depend on whether the world waits while the model thinks. The two conditions are recorded and tabulated separately.</p>
-  <div class="pr-compare">
-    <div>
-      <h3>Continuous clock</h3>
-      <p>The environment and external events keep advancing while the model reasons or waits for an API response. The robot follows a declared hold policy until a new command arrives.</p>
-      <dl><div><dt>Supports</dt><dd>Real-time control claims</dd></div><div><dt>Matters for</dt><dd>Moving targets, timing windows</dd></div></dl>
-    </div>
-    <div>
-      <h3>Paused inference</h3>
-      <p>Simulated time stops while the model computes. This isolates task reasoning from latency, but it does not support a real-time-control claim.</p>
-      <dl><div><dt>Supports</dt><dd>Reasoning diagnosis</dd></div><div><dt>Not for</dt><dd>Claims about control speed</dd></div></dl>
-    </div>
-  </div>
-  <p>No effective action rate is inferred from simulator throughput or from controller interpolation inside a chunk.</p>
-</section>
 
 <section id="metrics" aria-labelledby="metrics-title">
   <h2 id="metrics-title">Metrics</h2>
@@ -95,8 +106,9 @@
   <div class="pr-metrics">
     <div class="pr-metric"><span class="pr-metric-value">Score 0–100</span><p>Task performance, combining final success with verified stage progress.</p></div>
     <div class="pr-metric"><span class="pr-metric-value">Success %</span><p>Successful episodes divided by valid started episodes.</p></div>
-    <div class="pr-metric"><span class="pr-metric-value">0 vs —</span><p>A measured zero is a result. A dash means not yet evaluated; it is neither zero nor an estimate.</p></div>
+
   </div>
+  <p class="pr-missing-note"><strong>0 vs —</strong> A measured zero is a result. A dash means not yet evaluated; it is neither zero nor an estimate.</p>
   <div class="pr-formula" role="math" aria-label="Success rate definitions">SR<sub>t</sub> = (1 / N<sub>t</sub>) · Σ s<sub>t,i</sub> &nbsp;<span>// task t, N valid started episodes</span><br>SR<sub>suite</sub> = mean of SR<sub>t</sub> over the suite's tasks<br>SR<sub>macro</sub> = (SR<sub>Mind</sub> + SR<sub>Act</sub> + SR<sub>Mind2Act</sub>) / 3</div>
   <p>Task results are computed for a fixed difficulty first; any aggregate over difficulty uses a weighting fixed in advance. A suite or overall value stays empty until its coverage is complete, and a task that carries several capability tags is counted once.</p>
   <p>Progress is credited at task-defined checkpoints whose effect has been verified and is still valid at the end of the episode. A later disturbance can revoke a checkpoint, so progress is not the number of commands sent or the best stage ever reached.</p>
@@ -135,7 +147,8 @@
 
 <section id="submit" aria-labelledby="submit-title">
   <h2 id="submit-title">From submission to leaderboard</h2>
-  <p class="pr-section-lead">Coding agents, harnesses, VLA and world-action policies are all welcome.</p>
+  <p class="pr-section-lead">Every system is run on the same task configurations, scored by the environment rather than by itself, and reported together with the conditions it ran under.</p>
+  <p>Coding agents, harnesses, VLA and world-action policies are all welcome.</p>
   <ol class="pr-steps">
     <li><h3>Get in touch</h3><p>Open an issue with the system, its track and the conditions it needs.</p></li>
     <li><h3>Integrate</h3><p>Connect a harness, or an adapter for the XPolicyLab lifecycle.</p></li>
@@ -166,6 +179,9 @@
   };
   let queued = false;
   addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; update(); }); } }, { passive: true });
+  addEventListener('resize', update);
+  addEventListener('hashchange', update);
+  document.fonts?.ready.then(update);
   update();
 })();
 </script>

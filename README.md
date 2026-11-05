@@ -125,6 +125,9 @@ Act 的 GT 指真实下发的控制器参考目标，不是通过完整验收的
 
 `protocol.html` contains the complete draft evaluation protocol, imported from
 `codex/website-redesign-20261104` at `0af9500701a0acb478b4b77aa10f7f08dae6135d`.
+The first screen explains the two clock conditions; the complete seven-section
+protocol follows as a compact document. Timing diagrams are conceptual, with no
+measured durations implied. All original evaluation rules remain available.
 Edit this standalone page directly; its layout is in `media/protocol.css`, and its
 local fonts are loaded only on this page by `media/protocol-typography.css`.
 The existing leaderboard-motion site typography and layout stay in use elsewhere.

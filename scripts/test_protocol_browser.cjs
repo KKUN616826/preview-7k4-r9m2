@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 const base = process.env.HERO_PREVIEW_URL || 'http://127.0.0.1:8765/';
-const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disclosure', 'submit'];
+const sections = ['clock', 'tracks', 'episodes', 'metrics', 'diagnostics', 'disclosure', 'submit'];
 (async () => {
   const browser = await chromium.launch({headless: true, ...(process.env.CHROMIUM_EXECUTABLE ? {executablePath: process.env.CHROMIUM_EXECUTABLE} : {})});
   try {
@@ -15,6 +15,14 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.goto(new URL('protocol.html', base).href);
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await page.locator('.pr-toc a').count(), 7);
+      assert.match(await page.locator('h1').textContent(), /Does the world wait while the model thinks/);
+      assert.ok(await page.locator('.pr-clock-figure').evaluate(el => el.getBoundingClientRect().top < 500), `${width}: clock comparison appears in the first screen`);
+      assert.ok(await page.locator('.pr-clock-figure').evaluate(el => el.getBoundingClientRect().bottom < document.querySelector('.pr-layout').getBoundingClientRect().top), 'Clock comparison precedes the document');
+      assert.equal(await page.locator('.pr-clock-row').count(), 2);
+      assert.equal(await page.locator('.pr-world-held').count(), 1);
+      assert.equal(await page.locator('.pr-metric').count(), 2);
+      assert.equal(await page.locator('.pr-rules li').count(), 5);
+      assert.equal(await page.locator('.pr-table tbody tr').count(), 6);
       assert.equal(await page.locator('#siteNav a[aria-current="page"]').textContent(), 'Protocol');
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${width}: no horizontal overflow`);
       for (const id of sections) {
@@ -27,7 +35,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
       await page.waitForFunction(() => document.querySelector('.pr-toc a[href="#submit"]').getAttribute('aria-current') === 'true');
       await page.evaluate(() => scrollTo(0, 0));
-      await page.waitForFunction(() => document.querySelector('.pr-toc a[href="#tracks"]').getAttribute('aria-current') === 'true');
+      await page.waitForFunction(() => document.querySelector('.pr-toc a[href="#clock"]').getAttribute('aria-current') === 'true');
       if (width <= 1040) {
         const button = page.locator('#menuToggle');
         await button.click();
@@ -44,6 +52,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       if (process.env.PROTOCOL_SCREENSHOTS && [390, 1440].includes(width)) {
         fs.mkdirSync(process.env.PROTOCOL_SCREENSHOTS, {recursive: true});
         await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `protocol-${width}.png`), fullPage: true});
+        await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `protocol-top-${width}.png`)});
       }
       await page.close();
     }
