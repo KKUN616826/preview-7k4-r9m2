@@ -357,7 +357,7 @@ body.leaderboard-explorer .lb-page>.lb-protocol{--guide-surface:#edf3f1;--guide-
 
 /* Original source text and inline documentation link, without diagram treatment. */
 .lb-original-sources{border-top:1px solid #cfdad7;margin-top:24px;padding-top:24px}
-.lb-protocol .lb-original-sources h3{font:600 17px/1.4 Sora,Arial,sans-serif;margin:0 0 12px}
+.lb-protocol .lb-original-sources h3{font:600 20px/1.4 Sora,Arial,sans-serif;margin:0 0 16px}
 .lb-protocol .lb-original-sources p{font-size:14px;line-height:1.75;color:#63737a;margin:0 0 10px;max-width:76ch}
 .lb-original-sources a{font-size:13px;color:#315f72;text-underline-offset:4px}
 
@@ -395,3 +395,9 @@ body.leaderboard-explorer{--lb-header:68px;color:#17232e}
  .lb-results .lb-view-buttons button{padding:10px 16px}
  .lb-results .lb-score-track{height:7px}
 }
+
+/* Shared heading spacing aligns the scope rows and comparison conditions. */
+.lb-context-grid > section > h3{margin-bottom:16px}
+.lb-scope-list > div{align-items:start}
+.lb-comparison-factors{padding:12px 0 0}
+.lb-comparison-factors li{align-items:flex-start}
