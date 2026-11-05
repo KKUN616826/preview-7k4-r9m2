@@ -23,7 +23,7 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
  body #introduction.intro-readable .intro-views>div{grid-template-columns:1fr;gap:4px;padding:10px 0}
 }
 
-/* Approved introduction: aligned opening, existing image cards, continuous prose.
+/* Approved introduction: aligned opening, existing image cards, compact benchmark notes.
    Use the site's typography layer so these sizes override legacy inline rules. */
 @layer m2a-typography {
   #introduction .intro-copy.intro-motivation {
@@ -71,24 +71,47 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
     font-size: 19px !important;
     line-height: 1.65 !important;
   }
+  /* Match the card grid, with the reference page's fine coloured rules. */
   #introduction .intro-copy.intro-scope {
-    display: block !important;
-    margin-block: 36px 44px !important;
+    margin-block: 24px 36px !important;
   }
-  #introduction .intro-scope > p {
-    margin: 0 0 24px !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font-size: 18px !important;
-    font-weight: 400 !important;
-    line-height: 1.75 !important;
+  #introduction .intro-scope-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20.8px;
+    margin: 0;
+  }
+  #introduction .intro-scope-note {
+    min-width: 0;
+    padding-top: 12px;
+    border-top: 2px solid #3f7a69;
+  }
+  #introduction .intro-scope-note:nth-child(2) { border-top-color: #3d6a86; }
+  #introduction .intro-scope-note:nth-child(3) { border-top-color: #8a6d2c; }
+  #introduction .intro-scope-note dt {
+    margin: 0 0 5px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #536b78;
+  }
+  #introduction .intro-scope-note dd {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #657785;
     text-wrap: pretty;
   }
-  #introduction .intro-scope > p:last-child { margin-bottom: 0 !important; }
-  #introduction .intro-scope strong {
-    font-weight: 650 !important;
-    color: #203749 !important;
-    background: none !important;
+  #introduction .intro-scope-summary {
+    margin: 18px 0 0 !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+    color: #657785 !important;
+  }
+  @media (max-width: 950px) {
+    #introduction .intro-scope-grid { gap: 16px; }
   }
   @media (max-width: 860px) {
     #introduction .intro-copy.intro-motivation {
@@ -103,7 +126,7 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
     #introduction .intro-copy.intro-framework { padding-top: 28px; }
   }
   @media (max-width: 700px) {
-    #introduction .intro-scope > p { font-size: 17px !important; line-height: 1.7 !important; }
-    #introduction .intro-copy.intro-scope { margin-block: 28px 32px !important; }
+    #introduction .intro-scope-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    #introduction .intro-copy.intro-scope { margin-block: 24px 32px !important; }
   }
 }
