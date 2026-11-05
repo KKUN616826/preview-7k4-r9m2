@@ -20,8 +20,7 @@
 .pr-page *, .pr-page *::before, .pr-page *::after { box-sizing: border-box; }
 .pr-page a { color: var(--pr-accent); text-underline-offset: 3px; }
 
-/* Use the approved reference's actual artwork, rather than approximate its moon,
-   arrows or composition. The text is still selectable native page content. */
+/* Preserve the approved composition with native text and a rebuilt illustration. */
 .pr-hero { position:relative; isolation:isolate; overflow:clip; display:grid; grid-template-rows:1fr auto; min-height:calc(100svh - 90px); }
 .pr-head { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:12px; width:100%; max-width:none; margin:0 auto; padding:60px 4vw; }
 .pr-head-copy { position:relative; z-index:2; min-width:0; transform:translateY(-24px); }
@@ -35,11 +34,21 @@
 .pr-facts div { display:flex; align-items:baseline; gap:7px; white-space:nowrap; }
 .pr-facts dt { order:2; color:var(--pr-muted); font-size:clamp(14px,1.1vw,21px); }
 .pr-facts dd { order:1; margin:0; color:var(--pr-ink); font-size:clamp(32px,2.6vw,50px); line-height:1; font-weight:700; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
-/* Window into x=965..1914, y=0..882 of the supplied reference. The small
-   upper-left notch excludes the original heading that extends into the crop. */
-.pr-hero-visual { position:absolute; z-index:1; width:50vw; max-width:1000px; top:0; right:0; margin:0; }
-.pr-hero-reference { position:relative; width:100%; aspect-ratio:949 / 882; overflow:hidden; clip-path:polygon(12% 0,100% 0,100% 100%,0 100%,0 35%,12% 35%); }
-.pr-hero-reference-image { position:absolute; display:block; width:201.685985%; max-width:none; height:auto; left:-101.685985%; top:0; }
+/* Rebuilt illustration has no baked-in labels. Text and curves remain sharp
+   at every device pixel ratio; the whole scene is 12% larger than before. */
+.pr-hero-visual { position:absolute; z-index:1; width:56vw; max-width:1120px; top:0; right:0; margin:0; }
+.pr-hero-scene { position:relative; width:100%; aspect-ratio:1300 / 1210; }
+.pr-hero-artwork { display:block; width:100%; height:auto; }
+.pr-scene-labels { position:absolute; inset:39% 0 auto; margin:0; padding:0; list-style:none; }
+.pr-scene-labels li { position:absolute; display:grid; justify-items:center; gap:7px; transform:translateX(-50%); white-space:nowrap; }
+.pr-scene-labels li:nth-child(1) { left:12%; }
+.pr-scene-labels li:nth-child(2) { left:53%; }
+.pr-scene-labels li:nth-child(3) { left:88%; }
+.pr-scene-labels strong { padding:5px 12px; border:1px solid #dce2d9; border-radius:6px; background:#f7f8f1ed; color:var(--pr-accent); font-size:clamp(12px,1.08vw,19px); line-height:1.3; font-weight:650; }
+.pr-scene-labels span { font-size:clamp(11px,.85vw,15px); line-height:1.4; color:var(--pr-ink); }
+.pr-scene-arrows { position:absolute; top:calc(39% + 62px); left:0; width:100%; height:9%; color:var(--pr-accent); overflow:visible; }
+.pr-scene-arrows path,.pr-scene-arrows circle { vector-effect:non-scaling-stroke; }
+.pr-hero-visual figcaption { position:absolute; right:2%; bottom:8%; padding:5px 9px; border:1px solid #e0e4dc; border-radius:5px; background:#f7f8f1ed; color:var(--pr-muted); font-size:11px; line-height:1.4; }
 .pr-visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .pr-hero-links { position:relative; z-index:2; background:#fff; display:flex; justify-content:space-between; gap:20px; width:calc(100% - 96px); max-width:1504px; margin:0 auto; border-block:1px solid var(--pr-line); padding:22px 0; }
 .pr-hero-links a { display:flex; justify-content:space-between; align-items:center; gap:12px; color:var(--pr-accent); text-decoration:none; font-size:13px; }
@@ -190,6 +199,13 @@
  .pr-facts dd { font-size:26px; }
  .pr-facts dt { font-size:11px; }
  .pr-hero-visual { position:relative; width:100%; max-width:620px; margin:22px auto 0; }
+ .pr-scene-labels { top:37%; }
+ .pr-scene-arrows { top:calc(37% + 46px); }
+ .pr-scene-labels strong { font-size:11px; padding:4px 6px; }
+ .pr-scene-labels span { font-size:10px; }
+ .pr-scene-labels li { gap:4px; }
+ .pr-scene-labels li:nth-child(3) { left:86%; }
+ .pr-hero-visual figcaption { font-size:10px; padding:3px 6px; }
  .pr-hero-links { width:calc(100% - 40px); flex-wrap:wrap; gap:14px 20px; padding:18px 0; }
  .pr-hero-links a { font-size:11px; flex:1 1 40%; }
  .pr-hero-links a+a { border-left:0; padding-left:0; }
@@ -203,4 +219,9 @@
  .pr-facts { margin-top:28px; gap:22px 30px; }
  .pr-facts dd { font-size:32px; }
  .pr-facts dt { font-size:12px; }
+}
+
+@media (min-width:1041px) and (max-width:1200px) {
+ .pr-scene-labels strong { font-size:11px; padding:4px 7px; }
+ .pr-scene-labels span { font-size:10px; }
 }

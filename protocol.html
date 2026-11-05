@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=protocol-nav-1"><link rel="stylesheet" href="media/protocol.css?v=keyboard-hero-4"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=protocol-nav-1"><link rel="stylesheet" href="media/protocol.css?v=keyboard-hero-5"></head>
 <body class="protocol-page"><header class="header"><div class="wrap header-inner"><a class="brand official-nav-logo" href="index.html" aria-label="Mind2Act World home"><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="1330" height="400"></a><button id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">Menu</button><nav class="nav" id="siteNav" aria-label="Main navigation"><div class="nav-left"><a href="index.html">Home</a><a href="leaderboard.html">Leaderboard</a><a href="protocol.html" aria-current="page">Protocol</a><a href="benchmark.html">Benchmark</a><a href="resources.html">Documents</a></div><div class="nav-right"><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noreferrer">Code ↗</a><a class="paper-link" href="index.html#contributors">Contributors</a></div></nav></div></header>
 <main class="pr-page" id="main">
 <section class="pr-hero" aria-label="Evaluation protocol overview">
@@ -16,10 +16,25 @@
   </dl>
 </div>
 <figure class="pr-hero-visual" aria-labelledby="pr-hero-caption">
-  <div class="pr-hero-reference">
-    <img class="pr-hero-reference-image" src="media/images/protocol/approved-reference.png" width="1914" height="900" alt="Illustrative target-to-execution sequence with curved arrows, a keyboard contact close-up, and an upper moon fading into white. This is a concept illustration, not an evaluation record." fetchpriority="high" decoding="async">
+  <div class="pr-hero-scene">
+    <img class="pr-hero-artwork" src="media/images/protocol/evaluation-artwork-hd.png" width="1300" height="1210" alt="Concept illustration of a target keyboard, physical mallet action, and a magnified contact view, with an upper moon fading into white." fetchpriority="high" decoding="sync">
+    <ol class="pr-scene-labels" aria-label="Illustrative evaluation sequence">
+      <li><strong>Target</strong><span>Instruction</span></li>
+      <li><strong>Execution</strong><span>Physical action</span></li>
+      <li><strong>Environment check</strong><span>Observed outcome</span></li>
+    </ol>
+    <svg class="pr-scene-arrows" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true" fill="none">
+      <defs><marker id="pr-flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L9 5 1 9Z" fill="currentColor" stroke="none"/></marker></defs>
+      <g stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke">
+        <path d="M120 4V32 M530 0V27 M880 0V20"/>
+        <path d="M120 32C195 47 230 39 290 29" marker-end="url(#pr-flow-arrow)"/>
+        <path d="M290 29C390 -1 450 10 530 27C590 46 635 39 695 28" marker-end="url(#pr-flow-arrow)"/>
+        <path d="M695 28C775 6 820 9 880 20"/>
+        <circle cx="120" cy="32" r="4" fill="#fff"/><circle cx="530" cy="27" r="4" fill="#fff"/><circle cx="880" cy="20" r="4" fill="#fff"/>
+      </g>
+    </svg>
   </div>
-  <figcaption id="pr-hero-caption" class="pr-visually-hidden">Target instruction, physical execution, and environment-side checking. Illustrative episode, not an evaluation result.</figcaption>
+  <figcaption id="pr-hero-caption">Illustrative episode<span class="pr-visually-hidden">, not an evaluation result</span></figcaption>
 </figure>
 </header>
 <nav class="pr-hero-links" aria-label="Evaluation protocol quick links"><a href="#tracks">Two evaluation tracks <span aria-hidden="true">↓</span></a><a href="#clock">Clock conditions <span aria-hidden="true">↓</span></a><a href="#metrics">Metrics &amp; reporting <span aria-hidden="true">↓</span></a><a href="#tracks">Read full protocol <span aria-hidden="true">↓</span></a></nav>

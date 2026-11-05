@@ -29,6 +29,7 @@
 
 - 数据：`data/leaderboard-results.json`，保留原页面转录的 Table 6 数值与来源信息；不与首页的旧候选名单文件混用。
 - 页面源：`scripts/leaderboard-page.html`；样式和交互：`scripts/leaderboard-explorer.css`、`scripts/leaderboard-explorer.js`。
+- 首屏结构：`scripts/leaderboard_stage.py`；布局：`scripts/leaderboard-stage.css`。月球场景铺满首屏，导航、分类 Tab 与底部入口悬浮其上；图片、动画与排名标签共用原图坐标，窄屏保留前三名并在顶部延展天空。
 - 单独构建：`python3 scripts/build_leaderboard.py`。完整构建也会调用此构建器；不要直接修改生成的 `leaderboard.html`。
 - 浏览器回归：`node scripts/test_leaderboard_explorer.cjs`；首页与新榜单入口衔接：`node scripts/test_view_leaderboard.cjs`，使用现有 Playwright / `NODE_PATH` 环境。
 - 此轮改版前的已保存版本：提交 `87c6ccf`，标签 `checkpoint-before-leaderboard`。首页、Benchmark 与 Documents 不属于这次独立榜单改版的修改范围。
@@ -129,8 +130,11 @@ Edit this standalone page directly; its layout is in `media/protocol.css`.
 The hero uses the same shared typography as the rest of the site via the shared
 site shell. Its approved reference artwork is documented in
 `media/images/protocol/README.md`. The title and introduction remain native HTML;
-the right-hand moon, arrows, labels, and keyboard illustration retain the exact
-composition of the supplied reference image. On desktop, the title has two lines
+the right-hand illustration is rebuilt from the approved composition rather than
+using a cropped screenshot. Labels are native text and the curved arrows are SVG,
+so neither is blurred by bitmap scaling. The scene is 12% larger than the previous
+version and uses a 1300×1210 source image with no CSS enlargement beyond its native
+width. On desktop, the title has two lines
 and the four data values use the reference's two-by-two layout. The overview fills
 the first viewport, with quick links along the bottom. The complete protocol
 article begins below the fold and is preserved.

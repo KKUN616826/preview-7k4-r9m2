@@ -17,7 +17,10 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       assert.equal(await page.locator('.pr-toc a').count(), 7);
       assert.equal(await page.locator('.pr-head h1').textContent(), 'How Mind2Act World evaluates a system');
       assert.equal(await page.locator('.pr-head h1').evaluate(el => getComputedStyle(el).fontFamily), await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily), 'Protocol shares the site typography');
-      assert.ok(await page.locator('.pr-hero-reference-image').evaluate(el => el.complete && el.naturalWidth === 1914));
+      await page.locator('.pr-hero-artwork').evaluate(el => el.decode());
+      assert.ok(await page.locator('.pr-hero-artwork').evaluate(el => el.naturalWidth === 1300 && el.naturalWidth >= el.getBoundingClientRect().width), 'Artwork uses a standalone source without enlarging a screenshot crop');
+      assert.deepEqual(await page.locator('.pr-scene-labels strong').allTextContents(), ['Target', 'Execution', 'Environment check']);
+      assert.equal(await page.locator('.pr-scene-arrows').count(), 1);
       const dataY = await page.locator('.pr-facts dd').evaluateAll(els => els.map(el => Math.round(el.getBoundingClientRect().top)));
       assert.equal(new Set(dataY).size, 2, `${width}: four data values use the reference's two rows`);
       assert.equal(dataY[0], dataY[1]);
@@ -25,7 +28,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       if (width > 1040) {
         const heading = await page.locator('h1').evaluate(el => ({height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight)}));
         assert.ok(Math.abs(heading.height - heading.line * 2) < 2, `${width}: exactly two heading lines`);
-        assert.ok(await page.locator('.pr-hero-visual').evaluate(el => el.getBoundingClientRect().left >= innerWidth * .48), `${width}: reference illustration occupies the right half`);
+        assert.ok(await page.locator('.pr-hero-visual').evaluate(el => el.getBoundingClientRect().left >= innerWidth * .43), `${width}: reference illustration occupies the right half`);
       }
       assert.equal(await page.locator('#siteNav a[aria-current="page"]').textContent(), 'Protocol');
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${width}: no horizontal overflow`);
