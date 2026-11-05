@@ -3,12 +3,16 @@
 <link rel="stylesheet" href="scripts/intro-typography.css">
 
 <div class="intro-copy intro-motivation">
-  <p class="intro-lead">Robotic manipulation requires more than choosing the right goal or executing an isolated skill.</p>
-  <p>Over a long horizon, a robot must remember task state, act under physical constraints, and use execution feedback to decide what comes next. Final success alone offers limited insight into where this process breaks down.</p>
+  <h2 class="intro-lead">Reasoning and action,<br> in continuous<br> coordination.</h2>
+  <div class="intro-context">
+    <p>Over a long horizon, a robot must remember task state, act under physical constraints, and use execution feedback to decide what comes next.</p>
+    <p>Final success alone offers limited insight into where this process breaks down.</p>
+  </div>
 </div>
 
 <div class="intro-copy intro-framework">
-  <p>Mind2Act World is a simulation benchmark for studying task reasoning, physical execution, and their coordination. Its three complementary views separate these demands:</p>
+  <h2 class="intro-framework-title">One benchmark. Three complementary views.</h2>
+  <p>Mind2Act World is a simulation benchmark for studying task reasoning, physical execution, and their coordination.</p>
   <div class="intro-suite-cards"><article class="intro-suite-card intro-suite-card--mind">
 <img src="media/benchmark-covers/S.jpg" alt="Rotating tray layout reconstruction simulation experiment" width="640" height="480" loading="lazy">
 <div class="intro-suite-body"><span class="intro-suite-badge">Mind · 10 tasks</span><h3>What must the robot remember or infer before it acts?</h3><p>Retain task information, learn from feedback, and choose the next operation.</p><a href="benchmark/mind.html">Explore Mind <span aria-hidden="true">→</span></a></div></article><article class="intro-suite-card intro-suite-card--act">
@@ -16,16 +20,15 @@
 <div class="intro-suite-body"><span class="intro-suite-badge">Act · 10 tasks</span><h3>Can the robot turn the intended action into a valid physical outcome?</h3><p>Respond to dynamic cues and execute precise, stable actions under physical constraints.</p><a href="benchmark/act.html">Explore Act <span aria-hidden="true">→</span></a></div></article><article class="intro-suite-card intro-suite-card--mind2act">
 <img src="media/benchmark-covers/CP04.jpg" alt="Dual-arm cooking simulation experiment" width="640" height="480" loading="lazy">
 <div class="intro-suite-body"><span class="intro-suite-badge">Mind2Act · 10 tasks</span><h3>How does execution feedback change what happens next?</h3><p>Coordinate task decisions and physical execution across multiple stages.</p><a href="benchmark/mind2act.html">Explore Mind2Act <span aria-hidden="true">→</span></a></div></article></div><link rel="stylesheet" href="scripts/intro-suite-cards.css?v=4">
-  <p>This makes coordination an ongoing interaction throughout a task.</p>
+</div>
+
+<div class="intro-copy intro-scope">
+  <p>The benchmark comprises <strong>30 tasks</strong>, each with Easy, Medium, and Hard configurations that vary memory load, planning dependencies, precision requirements, and timing pressure.</p>
+  <p>Evaluation combines task success with <strong>stage progress and event-level evidence</strong>, helping distinguish errors in goal selection, physical execution, and the use of feedback.</p>
+  <p><strong>Shared observation and action interfaces</strong>, explicit timing conditions, and disclosure of execution assistance support comparisons across VLA/WAM policies, coding agents, and hybrid systems. Together, these views connect focused capabilities to sustained task completion and make failures easier to investigate.</p>
 </div>
 
 <figure class="intro-overview"><a href="media/overview/mind2act-overview-v36.pdf?v=36" target="_blank" rel="noopener" aria-label="Open full-resolution Mind2Act World overview"><picture><source srcset="media/images/mind2act-overview-v36.webp?v=36" type="image/webp"><img src="media/images/mind2act-overview-v36.png?v=36" width="2600" height="2454" loading="eager" fetchpriority="high" decoding="async" alt="Mind2Act World overview: Mind, Act, and Mind2Act task tracks, robotic manipulation demonstrations, benchmark highlights, policy ecosystem, and preliminary leaderboard."></picture></a><figcaption>Mind2Act World overview · Explore the expanded 30-task catalog below.</figcaption></figure>
-
-<div class="intro-copy intro-scope">
-  <p>The benchmark comprises 30 tasks, each with Easy, Medium, and Hard configurations that vary memory load, planning dependencies, precision requirements, and timing pressure.</p>
-  <p>Evaluation combines task success with stage progress and event-level evidence, helping distinguish errors in goal selection, physical execution, and the use of feedback.</p>
-  <p>Shared observation and action interfaces, explicit timing conditions, and disclosure of execution assistance support comparisons across VLA/WAM policies, coding agents, and hybrid systems. Together, these views connect focused capabilities to sustained task completion and make failures easier to investigate.</p>
-</div>
 
 </div>
 <!-- INTRO_STORY_END -->

@@ -22,3 +22,88 @@ body #introduction.intro-readable .intro-overview figcaption{font:400 12px/1.6 H
 @media(max-width:420px){
  body #introduction.intro-readable .intro-views>div{grid-template-columns:1fr;gap:4px;padding:10px 0}
 }
+
+/* Approved introduction: aligned opening, existing image cards, continuous prose.
+   Use the site's typography layer so these sizes override legacy inline rules. */
+@layer m2a-typography {
+  #introduction .intro-copy.intro-motivation {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 56px;
+    padding-block: 44px 48px;
+  }
+  #introduction .intro-motivation h2.intro-lead {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: clamp(28px, 2.65vw, 38px) !important;
+    font-weight: 650 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.035em !important;
+    color: #203749 !important;
+    text-align: left !important;
+    text-wrap: balance;
+  }
+  #introduction .intro-context p {
+    margin: 0 0 18px !important;
+    font-size: 19px !important;
+    font-weight: 400 !important;
+    line-height: 1.65 !important;
+  }
+  #introduction .intro-context p:last-child { margin-bottom: 0 !important; }
+  #introduction .intro-copy.intro-framework {
+    margin-top: 0;
+    padding-top: 36px;
+    border-top: 1px solid #dfe5e3;
+  }
+  #introduction h2.intro-framework-title {
+    margin: 0 0 16px !important;
+    font-size: clamp(25px, 2.35vw, 32px) !important;
+    font-weight: 650 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.025em !important;
+    color: #203749 !important;
+    text-align: left !important;
+    text-wrap: balance;
+  }
+  #introduction .intro-framework > p {
+    margin: 0 !important;
+    font-size: 19px !important;
+    line-height: 1.65 !important;
+  }
+  #introduction .intro-copy.intro-scope {
+    display: block !important;
+    margin-block: 36px 44px !important;
+  }
+  #introduction .intro-scope > p {
+    margin: 0 0 24px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    line-height: 1.75 !important;
+    text-wrap: pretty;
+  }
+  #introduction .intro-scope > p:last-child { margin-bottom: 0 !important; }
+  #introduction .intro-scope strong {
+    font-weight: 650 !important;
+    color: #203749 !important;
+    background: none !important;
+  }
+  @media (max-width: 860px) {
+    #introduction .intro-copy.intro-motivation {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+      padding-block: 32px;
+    }
+    #introduction .intro-motivation h2.intro-lead { max-width: 24ch; }
+    #introduction .intro-motivation h2.intro-lead br { display: none; }
+    #introduction .intro-context p,
+    #introduction .intro-framework > p { font-size: 18px !important; }
+    #introduction .intro-copy.intro-framework { padding-top: 28px; }
+  }
+  @media (max-width: 700px) {
+    #introduction .intro-scope > p { font-size: 17px !important; line-height: 1.7 !important; }
+    #introduction .intro-copy.intro-scope { margin-block: 28px 32px !important; }
+  }
+}
