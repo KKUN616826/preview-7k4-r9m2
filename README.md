@@ -120,3 +120,20 @@ Act 的 GT 指真实下发的控制器参考目标，不是通过完整验收的
 当前首页只展示 15 个 Medium 视频预览，完整 benchmark 说明已迁移到独立页面。导出器仍维护全部 30 个 Easy / Medium 预览资源，构建按模板中实际使用的预览绑定。已回填最新首页的 Feishu、News、独立 benchmark 入口、920px 样式及地月排行榜引用。正常构建只生成缺失的 rollout 页面，保留已单独更新的页面；只有显式调用 `build_rollouts(..., overwrite=True)` 才会覆盖它们。
 
 `test_project_browser.cjs` 覆盖 320、390、820、1440、1920px 下的版心、标题、作者标记、社区图标、按需视频加载、分享及字体加载失败回退。字体和图标均本地提供，不依赖外部 CDN。
+
+### Evaluation Protocol
+
+`protocol.html` contains the complete draft evaluation protocol, imported from
+`codex/website-redesign-20261104` at `0af9500701a0acb478b4b77aa10f7f08dae6135d`.
+Edit this standalone page directly; its layout is in `media/protocol.css`, and its
+local fonts are loaded only on this page by `media/protocol-typography.css`.
+The existing leaderboard-motion site typography and layout stay in use elsewhere.
+
+Navigation entries are maintained in `scripts/showcase.html` and
+`scripts/benchmark/header.html`. The leaderboard's full-protocol link is maintained
+in `scripts/leaderboard-page.html`; run `python3 scripts/build_leaderboard.py` after
+editing that template. The page retains the draft status and pending round parameters.
+
+With the preview running and the existing Playwright environment configured, run
+`node scripts/test_protocol_browser.cjs` to check responsive layout, all seven anchors,
+scroll highlighting, the mobile menu, and the leaderboard round trip.
