@@ -174,7 +174,7 @@ def document(content):
 <meta name="description" content="Explore 30 robotic manipulation tasks across Mind, Act, and Mind2Act. Watch demonstrations and compare available difficulty levels.">
 <link rel="icon" href="media/images/mind2act-favicon-v2.png">
 <link rel="preload" href="media/fonts/Sora-variable.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-4">
+<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-6-gsf">
 <link rel="stylesheet" href="scripts/benchmark-overview.css?v=search-visible-5">
 </head><body class="benchmark-overview"><a class="bo-skip" href="#explore">Skip to tasks</a>{header}
 <main class="bo-main" id="benchmark-content">{content}</main>

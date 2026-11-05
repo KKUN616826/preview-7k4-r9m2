@@ -19,19 +19,20 @@
   font-style: normal;
   font-display: swap;
 }
-/* Scoped exceptions to the shared Manrope family; use its existing priority layer. */
+/* The hero follows the shared family (media/typography.css), as on RoboDojo. */
 @layer m2a-typography {
-  body #overview .hero-intro h1.hero-intro-title { font-family: Sora, Arial, sans-serif !important; }
-  body #overview .hero-intro-description { font-family: Inter, Arial, sans-serif !important; }
-  body #overview .hero-intro-kicker { font-family: 'JetBrains Mono', monospace !important; }
+  body #overview .hero-intro h1.hero-intro-title,
+  body #overview .hero-intro-description,
+  body #overview .hero-intro-kicker { font-family: var(--m2a-font-sans) !important; }
 }
 
 /* One immersive scene: project entry at left, synchronized evidence at right. */
 html body.dark-hero #overview .demo-hero.hero-intro {
   --demo-font: var(--m2a-font-sans, Manrope, Arial, sans-serif);
-  height: 100svh;
-  min-height: 680px;
-  max-height: 1080px;
+  /* Shorter than the viewport so the project block below is visible (was 100svh). */
+  height: min(86svh, 800px);
+  min-height: 620px;
+  max-height: none;
   padding: 0;
   background: #101c2b;
 }
@@ -46,16 +47,16 @@ body #overview .hero-intro[data-phase=focus] .demo-shade {
 body #overview .hero-intro-copy {
   position: absolute;
   z-index: 4;
-  top: clamp(132px, 17svh, 188px);
+  top: clamp(124px, 16svh, 164px);
   left: clamp(28px, 6vw, 116px);
   width: min(43%, 610px);
   text-align: left;
   color: #f8f8f3;
 }
 body #overview .hero-intro-kicker {
-  margin: 0 0 20px;
+  margin: 0 0 18px;
   color: #d1dedf;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.7;
   letter-spacing: .12em !important;
@@ -64,19 +65,19 @@ body #overview .hero-intro-kicker {
 body #overview .hero-intro h1.hero-intro-title {
   margin: 0;
   color: #fafbf7;
-  font-size: clamp(62px, 6.7vw, 106px);
+  font-size: clamp(52px, 5.3vw, 80px);
   font-weight: 700;
-  letter-spacing: -.035em !important;
-  line-height: 1.04;
+  letter-spacing: -.03em !important;
+  line-height: 1;
   text-align: left;
 }
 body #overview .hero-intro-description {
-  max-width: 450px;
-  margin: 26px 0 0;
+  max-width: 470px;
+  margin: 22px 0 0;
   color: #dde5e6;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.55;
   text-wrap: pretty;
 }
 body #overview .hero-intro-actions {
@@ -84,21 +85,21 @@ body #overview .hero-intro-actions {
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  margin: 30px 0 0;
+  margin: 28px 0 0;
 }
 body #overview .hero-intro-actions a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 14px;
   box-sizing: border-box;
-  min-height: 48px;
-  padding: 12px 20px;
+  min-height: 46px;
+  padding: 11px 20px;
   border: 1px solid #e6efef80;
   border-radius: 999px;
   background: transparent;
   color: #f7f9f5;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
   white-space: nowrap;
@@ -117,14 +118,14 @@ body #overview .hero-intro-story {
   position: absolute;
   z-index: 3;
   right: clamp(28px, 5vw, 96px);
-  bottom: 30px;
-  width: min(44%, 640px);
+  bottom: 28px;
+  width: min(41%, 590px);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: 76px 184px 48px;
-  gap: 14px;
+  grid-template-rows: 84px 176px 44px;
+  gap: 12px;
   box-sizing: border-box;
-  padding: 24px;
+  padding: 22px 24px;
   border: 1px solid rgba(255, 255, 255, .14);
   border-radius: 22px;
   /* Match website-redesign-20261104/scripts/home.css, .demo-hero::after. */
@@ -146,7 +147,7 @@ body #overview .hero-intro[data-phase=focus] .demo-copy {
   padding: 0;
 }
 body #overview .hero-intro .demo-title {
-  font-size: clamp(20px, 1.7vw, 25px) !important;
+  font-size: clamp(20px, 1.6vw, 24px) !important;
   font-weight: 600 !important;
   line-height: 1.35 !important;
   letter-spacing: -.025em !important;
@@ -154,14 +155,14 @@ body #overview .hero-intro .demo-title {
   color: #f6f8f3 !important;
   text-shadow: none !important;
 }
-body #overview .hero-intro .demo-act-caption { margin: 8px 0 0; font-size: 12px; color: #bdccd5; }
+body #overview .hero-intro .demo-act-caption { margin: 8px 0 0; font-size: 14px; color: #c4d2dc; }
 body #overview .hero-intro .demo-workspace,
 body #overview .hero-intro .demo-act-workspace {
   position: relative;
   inset: auto;
   grid-row: 2;
   width: 100%;
-  height: 184px;
+  height: 176px;
   display: grid;
   min-width: 0;
   min-height: 0;
@@ -174,20 +175,24 @@ body #overview .hero-intro[data-phase=reproduce] .demo-workspace { grid-template
 body #overview .hero-intro .demo-memory-window { height: 112px; max-width: none; }
 body #overview .hero-intro .demo-memory-strip { gap: 8px; padding-inline: 20px !important; }
 body #overview .hero-intro .demo-card { flex-basis: 104px; width: 104px; border-radius: 4px; padding: 5px; box-shadow: none; }
-body #overview .hero-intro .demo-card-caption { font-size: 12px; padding-top: 5px; }
-body #overview .hero-intro .demo-memory-footer { margin-left: 20px; min-height: 42px; font-size: 12px; gap: 4px; }
-body #overview .hero-intro .demo-motion { height: 184px; padding-left: 14px; border-left: 1px solid #d4e3e02c; }
-body #overview .hero-intro .demo-motion .demo-panel-heading h2 { font-size: 11px !important; }
-body #overview .hero-intro .demo-chart { height: 145px; }
+body #overview .hero-intro .demo-card-caption { font-size: 13px; padding-top: 5px; }
+body #overview .hero-intro .demo-memory-footer { margin-left: 20px; min-height: 42px; font-size: 13px; gap: 4px; }
+body #overview .hero-intro .demo-motion { height: 176px; padding-left: 14px; border-left: 1px solid #d4e3e02c; }
+body #overview .hero-intro .demo-motion .demo-panel-heading h2 { font-size: 13px !important; }
+body #overview .hero-intro .demo-chart { height: 138px; }
 body #overview .hero-intro .demo-chart-grid line { stroke-opacity: .5; }
-body #overview .hero-intro .demo-act-workspace { grid-template-columns: minmax(0, 1fr) 155px; }
-body #overview .hero-intro .demo-act-chart { height: 140px; }
+body #overview .hero-intro .demo-act-workspace { grid-template-columns: minmax(0, 1fr) 172px; }
+body #overview .hero-intro .demo-act-chart { height: 134px; }
 body #overview .hero-intro .demo-act-plot .demo-panel-heading h2,
-body #overview .hero-intro .demo-joints .demo-panel-heading h2 { font-size: 11px !important; }
-body #overview .hero-intro .demo-joints { padding-left: 12px; }
-body #overview .hero-intro .demo-joints dl { font-size: 11px; gap: 7px; margin-top: 9px; }
-body #overview .hero-intro .demo-joints .demo-panel-heading>span { font-size: 10px; }
-body #overview .hero-intro .demo-act-legend { font-size: 10px; }
+body #overview .hero-intro .demo-joints .demo-panel-heading h2 { font-size: 13px !important; }
+body #overview .hero-intro .demo-act-status { font-size: 13px; }
+body #overview .hero-intro .demo-act-grid text { font-size: 17px; }
+body #overview .hero-intro .demo-joints .demo-panel-heading { flex-direction: column; align-items: flex-start; gap: 2px; height: auto; }
+body #overview .hero-intro .demo-joints .demo-panel-heading h2 { white-space: nowrap; }
+body #overview .hero-intro .demo-joints { padding-left: 14px; }
+body #overview .hero-intro .demo-joints dl { font-size: 13px; gap: 6px; margin-top: 8px; }
+body #overview .hero-intro .demo-joints .demo-panel-heading>span { font-size: 12px; }
+body #overview .hero-intro .demo-act-legend { font-size: 12px; }
 body #overview .hero-intro .demo-controls {
   position: relative;
   inset: auto;
@@ -201,7 +206,7 @@ body #overview .hero-intro .demo-controls {
 body #overview .hero-intro .demo-scene-nav { gap: 2px; padding: 4px; border: 1px solid #dde9ed4d; border-radius: 999px; background: #0f17211f; }
 body #overview .hero-intro .demo-scene-nav button {
   min-height: 36px;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border: 0;
   border-radius: 999px;
   background: none;
@@ -214,10 +219,10 @@ body #overview .hero-intro .demo-no-script { bottom: 24px; left: 6%; }
 
 @media (min-width: 761px) and (max-width: 1100px) {
   body #overview .hero-intro-copy { left: 4%; width: 42%; top: 136px; }
-  body #overview .hero-intro-story { right: 4%; width: 46%; padding: 20px; grid-template-rows: 88px 184px 48px; }
-  body #overview .hero-intro-kicker { font-size: 10px; max-width: 340px; }
+  body #overview .hero-intro-story { right: 4%; width: 46%; padding: 20px; grid-template-rows: 92px 176px 44px; }
+  body #overview .hero-intro-kicker { font-size: 11px; max-width: 340px; }
   body #overview .hero-intro-actions { gap: 10px; }
-  body #overview .hero-intro-actions a { font-size: 12px; gap: 10px; padding-inline: 12px; }
+  body #overview .hero-intro-actions a { font-size: 13px; gap: 10px; padding-inline: 14px; }
   body #overview .hero-intro .demo-act-workspace { grid-template-columns: minmax(0, 1fr); }
   body #overview .hero-intro .demo-joints { display: none; }
   body #overview .hero-intro .demo-motion { padding-left: 8px; }

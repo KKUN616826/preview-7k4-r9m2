@@ -1,26 +1,188 @@
-/* One local text family across pages, including generated pages with legacy inline styles. */
+/* Shared typography (revised 2026-11-05). One text family, Google Sans Flex, as on
+   robodojo-benchmark.com, and JetBrains Mono for code and figures. The scale sits one
+   step above RoboDojo's, between it and embodied-first-exam.ai, because RoboDojo's
+   15px body read too small here:
+   page title 60/700, section title 40/650, card title 18/600, body 16/1.7,
+   lead 19–20, card text 15, eyebrow 13/600 uppercase, table head 12/600, cell 14. */
 @font-face {
-  font-family: Manrope;
-  src: url('./fonts/manrope/Manrope-Variable.ttf') format('truetype');
+  font-family: 'Google Sans Flex';
+  src: url('./fonts/google-sans-flex/GoogleSansFlex-latin.woff2') format('woff2');
   font-style: normal;
-  font-weight: 200 800;
+  font-weight: 1 1000;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Google Sans Flex';
+  src: url('./fonts/google-sans-flex/GoogleSansFlex-latin-ext.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 1 1000;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Google Sans Flex';
+  src: url('./fonts/google-sans-flex/GoogleSansFlex-symbols.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 1 1000;
+  font-display: swap;
+  unicode-range: U+2190-2199, U+21AF, U+2460-24FF, U+25A0-27BF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('./fonts/jetbrains-mono/JetBrainsMono-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 800;
   font-display: swap;
 }
 
-/* Layered important declarations override the older unlayered font shorthands
-   without replacing their font size, weight, line height, or responsive rules. */
+/* Layered !important declarations win over the older unlayered !important
+   rules, whatever their specificity, so these few rules set the scale for every page. */
 @layer m2a-typography {
-  :root { --m2a-font-sans: Manrope, Arial, sans-serif; }
+  :root {
+    --m2a-font-sans: 'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+    --m2a-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
   :where(body, body *) { font-family: var(--m2a-font-sans) !important; }
+  :where(body) { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
 
-  /* The pixel wordmark is brand artwork; code remains a readable monospace face. */
-  :where(.demo-brand, .demo-brand *) {
-    font-family: LunarPixel, Pixel, monospace !important;
-  }
-  :where(pre, code, kbd, samp, pre *, code *, kbd *, samp *) {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
-  }
-  :where(table, .lb-podium-label, .lb-score-display, .lb-value-label, .cm-node-id) {
+  /* The pixel wordmark is brand artwork; code is monospace. */
+  :where(.demo-brand, .demo-brand *) { font-family: LunarPixel, Pixel, monospace !important; }
+  :where(pre, code, kbd, samp, pre *, code *, kbd *, samp *) { font-family: var(--m2a-font-mono) !important; }
+  :where(table, .lb-podium-label, .lb-score-display, .lb-value-label, .cm-node-id, .home-stat-value, .bo-hero-meta dd) {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Navigation. */
+  html body .header .nav a { font-size: 15px !important; font-weight: 500 !important; }
+
+  /* ---- Homepage hero (sizes in scripts/hero-intro.css). */
+  .hero-intro-title { font-weight: 700 !important; letter-spacing: -0.03em !important; line-height: 1 !important; }
+  .hero-intro-description { font-size: 19px !important; line-height: 1.55 !important; }
+
+  /* ---- Page titles. */
+  #lb-title, #benchmark-title, main.documentation #overview h1, main.news-page > h1 {
+    font-size: clamp(40px, 5vw, 60px) !important; line-height: 1.04 !important;
+    font-weight: 700 !important; letter-spacing: -0.025em !important;
+  }
+  .task-detail .task-head h1, main.workspace-content > .task-head h1 {
+    font-size: clamp(30px, 3.4vw, 42px) !important; line-height: 1.12 !important;
+    font-weight: 700 !important; letter-spacing: -0.02em !important;
+  }
+  .bo-hero-tagline, .bo-hero-tagline strong {
+    font-size: clamp(22px, 2.2vw, 28px) !important; line-height: 1.35 !important;
+    font-weight: 500 !important; letter-spacing: -0.01em !important;
+  }
+  .bo-hero-tagline strong { font-weight: 600 !important; }
+  .lb-stage-head p, main.documentation .doc-lead {
+    font-size: 19px !important; line-height: 1.55 !important;
+  }
+
+  /* ---- Section titles. */
+  .academic-section > .section-copy > h2, #resources-overview > h2, #contributors h2, #news h2,
+  .task-gallery-header h2, #home-leaderboard-title, #explorer-title, #results-title, #protocol-title {
+    font-size: clamp(30px, 3.1vw, 40px) !important; line-height: 1.12 !important;
+    font-weight: 650 !important; letter-spacing: -0.022em !important;
+  }
+  main.documentation article > section > h2 {
+    font-size: 30px !important; line-height: 1.15 !important; font-weight: 650 !important; letter-spacing: -0.02em !important;
+  }
+  /* Group titles inside a section. */
+  .bo-suite-intro h2 {
+    font-size: 22px !important; line-height: 1.4 !important; font-weight: 650 !important; letter-spacing: -0.012em !important;
+  }
+
+  /* ---- Project title block. */
+  .paper-title .paper-brand { font-size: clamp(36px, 4vw, 48px) !important; line-height: 1.1 !important; font-weight: 700 !important; letter-spacing: -0.025em !important; }
+  .paper-title .project-tagline { font-size: clamp(21px, 2.3vw, 28px) !important; line-height: 1.35 !important; font-weight: 500 !important; letter-spacing: -0.012em !important; }
+  .paper-title .project-tagline .title-emphasis { font-size: inherit !important; font-weight: 600 !important; }
+  .academic-project-meta .project-author { font-size: 17px !important; line-height: 1.6 !important; font-weight: 500 !important; }
+  .academic-project-meta .project-affiliation { font-size: 15px !important; line-height: 1.6 !important; font-weight: 400 !important; }
+  .academic-project-meta .project-school, .project-institution .lab-website-link { font-size: 15px !important; }
+  .academic-project-meta .project-resources > a, .academic-project-meta .project-resource-pending { font-size: 14px !important; font-weight: 500 !important; }
+
+  #capability-explorer .cm-detail-title { font-size: 28px !important; line-height: 1.22 !important; font-weight: 650 !important; letter-spacing: -0.02em !important; }
+  #capability-explorer .cm-detail-link { font-size: 15px !important; font-weight: 500 !important; }
+
+  /* Capability map (homepage "Explore 30 tasks"). */
+  #capability-explorer .cm-overview-meta { font-size: 14px !important; }
+  #capability-explorer .cm-suite-label { font-size: 14px !important; font-weight: 600 !important; }
+  #capability-explorer .cm-suite-goal { font-size: 16.5px !important; line-height: 1.6 !important; }
+  #capability-explorer .cm-example-label { font-size: 12px !important; font-weight: 600 !important; letter-spacing: .1em !important; }
+  #capability-explorer .cm-example h4 { font-size: 17px !important; line-height: 1.35 !important; }
+  #capability-explorer .cm-example p:not(.cm-example-label), #capability-explorer .cm-case-demands { font-size: 15px !important; line-height: 1.55 !important; }
+  #capability-explorer .cm-map-hint, #capability-explorer .cm-motion, #capability-explorer .cm-reset, #capability-explorer .cm-text-index summary { font-size: 14px !important; }
+  #capability-explorer .cm-browse-all { font-size: 15px !important; font-weight: 500 !important; }
+
+  /* ---- Card titles. */
+  .intro-suite-body h3, .resource-card h3, .resource-tool h3, .bo-task-copy h3,
+  .lb-metric-item h3, .lb-scope h3, .lb-comparison h3, .lb-original-sources h3 {
+    font-size: 18px !important; line-height: 1.35 !important; font-weight: 600 !important; letter-spacing: -0.01em !important;
+  }
+
+  /* ---- Body copy. */
+  #introduction .intro-copy p, .section-copy > p, .resource-intro, .home-leaderboard-description,
+  .bo-suite-intro p, .lb-view-description, .lb-protocol-heading p, .lb-metric-item p,
+  .lb-scope p, .lb-comparison p, .lb-comparison-factors li span,
+  main.documentation article p, main.documentation .doc-steps p {
+    font-size: 16.5px !important; line-height: 1.7 !important;
+  }
+  #introduction .intro-copy p.intro-lead { font-size: 20px !important; line-height: 1.5 !important; font-weight: 500 !important; letter-spacing: -0.01em !important; }
+  /* Running text keeps a readable column inside the wider page. */
+  #introduction .intro-copy > p { max-width: 760px !important; margin-inline: auto !important; }
+  /* Card descriptions. */
+  .intro-suite-body p, .resource-card p, .resource-tool p, .bo-task-goal,
+  .lb-original-sources p, .lb-metric-caveat, .lb-scope-list dd, main.documentation .doc-notice, main.documentation .doc-evaluation-note {
+    font-size: 15px !important; line-height: 1.6 !important;
+  }
+
+  /* ---- News list. */
+  .news-list time { font-size: 15px !important; line-height: 1.4 !important; font-weight: 600 !important; }
+  .news-list time span { font-size: 13px !important; font-weight: 500 !important; }
+  .news-list li p { font-size: 16.5px !important; line-height: 1.6 !important; }
+
+  /* ---- Eyebrows and labels. */
+  .bo-eyebrow, .home-leaderboard-label, .hero-intro-kicker, .intro-suite-badge {
+    font-size: 13px !important; line-height: 1.5 !important; font-weight: 600 !important;
+    letter-spacing: 0.12em !important; text-transform: uppercase !important;
+  }
+  .intro-suite-badge { font-size: 12px !important; letter-spacing: 0.08em !important; }
+  .task-detail .instruction h2, .task-detail .dimensions h2, .bo-index-title {
+    font-size: 13px !important; line-height: 1.5 !important; font-weight: 600 !important;
+    letter-spacing: 0.12em !important; text-transform: uppercase !important;
+  }
+
+  /* ---- Statistics. */
+  .home-stat-value { font-size: clamp(44px, 4.6vw, 60px) !important; line-height: 1 !important; font-weight: 700 !important; letter-spacing: -0.03em !important; }
+  .home-stat dt { font-size: 16px !important; font-weight: 600 !important; }
+  .home-stat dd:not(.home-stat-value) { font-size: 14px !important; }
+  .bo-hero-meta dd { font-size: 30px !important; font-weight: 700 !important; letter-spacing: -0.02em !important; }
+
+  /* ---- Controls. */
+  .bo-suite-tabs a, .lb-view-buttons button, .lb-stage-tabs button, .task-detail .difficulty a,
+  .home-leaderboard-button, .task-gallery-actions a, .task-gallery-actions button,
+  main.documentation .doc-button, .workspace-group-row > a {
+    font-size: 15px !important; font-weight: 500 !important; letter-spacing: 0 !important;
+  }
+  .bo-suite-tabs a[aria-current], .bo-suite-tabs a[aria-selected=true], .lb-view-buttons button[aria-pressed=true],
+  .task-detail .difficulty a[aria-current=true] { font-weight: 600 !important; }
+
+  /* ---- Tables. */
+  .lb-table thead th, .lb-table thead th > button, main.documentation thead th {
+    font-size: 12px !important; line-height: 1.4 !important; font-weight: 600 !important;
+    letter-spacing: 0.05em !important; text-transform: uppercase !important;
+  }
+  .lb-table thead th > button small { font-size: 11px !important; text-transform: none !important; letter-spacing: 0 !important; }
+  .lb-table .lb-model-button span:not(.lb-icon-fallback), main.documentation tbody td, main.documentation tbody th,
+  main.documentation tfoot td, main.documentation tfoot th { font-size: 14.5px !important; line-height: 1.5 !important; }
+  .lb-table td.lb-number .lb-value-label {
+    font-family: var(--m2a-font-mono) !important; font-size: 14px !important; line-height: 1.5 !important;
+  }
+}
+
+/* Content widths (RoboDojo leaderboard shell: 1088px). */
+@layer m2a-typography {
+  main.lb-page > .lb-results, main.lb-page > .lb-protocol {
+    max-width: 1088px !important; margin-inline: auto !important; box-sizing: border-box !important;
   }
 }

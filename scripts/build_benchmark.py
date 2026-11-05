@@ -128,7 +128,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
     if is_detail:
         nav = nav.replace('>Overview</a>', '><span aria-hidden="true">←</span> Benchmark overview</a>')
     styles = ''.join(f'<link rel="stylesheet" href="{prefix}{name}">' for name in [
-        'tasks/task-pages.css', 'media/site-shell.css?v=floating-white-4',
+        'tasks/task-pages.css', 'media/site-shell.css?v=floating-white-6-gsf',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
         'tasks/benchmark-workspace.css?v=task-search-6',
