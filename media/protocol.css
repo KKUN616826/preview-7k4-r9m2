@@ -51,6 +51,14 @@
 .pr-hero-visual figcaption { position:absolute; right:2%; bottom:max(8%,calc(100% - 100svh + 194px)); padding:5px 9px; border:1px solid #e0e4dc; border-radius:5px; background:#f7f8f1ed; color:var(--pr-muted); font-size:11px; line-height:1.4; }
 .pr-visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 
+/* A Benchmark-style rule finishes the first screen with four section links. */
+.pr-hero-links { position:absolute; z-index:3; inset:auto 4vw 0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; min-height:56px; padding:16px 0; border-top:1px solid var(--pr-line); background:#fff; }
+.pr-hero-links a { display:flex; align-items:center; justify-content:space-between; gap:12px; min-width:0; color:var(--pr-accent); font-size:14px; line-height:1.6; font-weight:500; text-decoration:none; }
+.pr-hero-links a + a { padding-left:24px; border-left:1px solid var(--pr-line); }
+.pr-hero-links a:hover { color:var(--pr-ink); text-decoration:underline; }
+.pr-hero-links a:focus-visible { outline:2px solid var(--pr-accent); outline-offset:5px; }
+.pr-hero-links span { flex:none; }
+
 /* Keep the lunar dome at its approved scale. Place the episode separately so
    its keyboard, contact inset and caption fit inside even a short first screen.
    Both layers reuse the original high-resolution source without resampling. */
@@ -212,7 +220,7 @@
 }
 @media (max-width:1040px) {
  .pr-page { padding:0 0 64px; }
- .pr-hero { min-height:calc(100svh - 74px); }
+ .pr-hero { grid-template-rows:1fr auto; min-height:calc(100svh - 74px); }
  .pr-head { display:block; padding:28px 20px 24px; }
  .pr-head-copy { transform:none; }
  .pr-eyebrow { font-size:10px; gap:5px; margin-bottom:22px; }
@@ -232,6 +240,9 @@
  .pr-scene-labels li { gap:4px; }
  .pr-scene-labels li:nth-child(3) { left:86%; }
  .pr-hero-visual figcaption { bottom:8%; font-size:10px; padding:3px 6px; }
+ .pr-hero-links { position:relative; inset:auto; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 24px; margin:0 20px; padding:12px 0; }
+ .pr-hero-links a { min-height:44px; font-size:12px; }
+ .pr-hero-links a + a { padding-left:0; border-left:0; }
 
 
 

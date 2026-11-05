@@ -72,19 +72,29 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.evaluate(() => document.fonts.ready);
       const bottom = await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom);
       assert.ok(bottom >= height - 1 && (width <= 1040 || Math.abs(bottom - height) < 2), `${width}×${height}: overview fills the first screen without clipping mobile content`);
-      assert.equal(await page.locator('.pr-hero-links').count(), 0, 'Hero quick links are removed');
+      assert.deepEqual(await page.locator('.pr-hero-links a').evaluateAll(els => els.map(el => el.getAttribute('href'))), ['#tracks','#clock','#metrics','#tracks'], 'All four hero guides are restored');
       if (width > 1040) {
+        const guides = await page.locator('.pr-hero-links').boundingBox();
         const episode = await page.locator('.pr-episode-artwork').boundingBox();
         const caption = await page.locator('.pr-hero-visual figcaption').boundingBox();
         const lead = await page.locator('.pr-lead').boundingBox();
         assert.ok(episode.x >= width * .4 && episode.x + episode.width <= width - 20, `${width}×${height}: episode has room at the right edge`);
         assert.ok(episode.y >= 90 && episode.y + episode.height <= height - 40, `${width}×${height}: keyboard and contact inset fit inside the first screen`);
         assert.ok(caption.y + caption.height <= height - 40, `${width}×${height}: caption clears the bottom edge`);
+        assert.ok(caption.y + caption.height + 6 <= guides.y, `${width}×${height}: guides stay below the illustration caption`);
+        assert.ok(Math.abs(guides.y + guides.height - height) < 2, `${width}×${height}: guides finish the first screen`);
         // The target keyboard occupies source pixels x=25..355, y=740..865.
         // The episode crop shows y=650..1210 of the unchanged source image.
         const target = {x:episode.x + episode.width * 25 / 1300, y:episode.y + episode.width * 90 / 1300};
         assert.ok(lead.x + lead.width <= target.x || lead.y + lead.height <= target.y, `${width}×${height}: description clears the target keyboard`);
       }
+      for (const link of await page.locator('.pr-hero-links a').all()) {
+        const hash = await link.getAttribute('href');
+        await link.click();
+        await page.waitForFunction(hash => document.querySelector(`.pr-toc a[href="${hash}"]`).getAttribute('aria-current') === 'true', hash);
+        assert.equal(new URL(page.url()).hash, hash, 'Hero guide reaches its section');
+      }
+      await page.evaluate(() => scrollTo(0,0));
       if (process.env.PROTOCOL_SCREENSHOTS) await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `clock-link-${width}-${height}.png`)});
       await page.close();
     }

@@ -139,7 +139,10 @@ view fits inside the viewport with space around its edges. The caption sits bene
 the keyboard, and the data block is lowered to balance the two columns. Short
 windows use a narrower introduction to keep the target keyboard clear of the text. On desktop, the title has two lines
 and the four data values use the reference's two-by-two layout. The overview fills
-the first viewport. Section navigation is available in the article sidebar. The complete protocol
+the first viewport. A thin rule and four quick links finish the first screen;
+they jump to the tracks, clock conditions, metrics and the start of the full
+protocol. On mobile these links form two rows below the illustration. Section
+navigation is also available in the article sidebar. The complete protocol
 article begins below the fold and is preserved. Its 1440px outer width, 200px
 sidebar and 30px column gap follow the Benchmark explorer. Larger line spacing,
 card padding and section spacing keep the protocol readable. Scroll entrances use
