@@ -16,17 +16,16 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await page.locator('.pr-toc a').count(), 7);
       assert.equal(await page.locator('.pr-head h1').textContent(), 'How Mind2Act World evaluates a system');
-      assert.match(await page.locator('.pr-head h1').evaluate(el => getComputedStyle(el).fontFamily), /Manrope/);
-      assert.ok(await page.locator('.pr-hero-keyboard').evaluate(el => el.complete && el.naturalWidth > 0));
-      const moon = await page.locator('.pr-hero-moon').evaluate(el => ({width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height}));
-      assert.ok(Math.abs(moon.width / moon.height - 2) < .02, `${width}: moon is an upper hemisphere, not a full disk`);
+      assert.equal(await page.locator('.pr-head h1').evaluate(el => getComputedStyle(el).fontFamily), await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily), 'Protocol shares the site typography');
+      assert.ok(await page.locator('.pr-hero-reference-image').evaluate(el => el.complete && el.naturalWidth === 1914));
       const dataY = await page.locator('.pr-facts dd').evaluateAll(els => els.map(el => Math.round(el.getBoundingClientRect().top)));
-      assert.equal(new Set(dataY).size, 1, `${width}: all four data values share one row`);
+      assert.equal(new Set(dataY).size, 2, `${width}: four data values use the reference's two rows`);
+      assert.equal(dataY[0], dataY[1]);
+      assert.equal(dataY[2], dataY[3]);
       if (width > 1040) {
         const heading = await page.locator('h1').evaluate(el => ({height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight)}));
         assert.ok(Math.abs(heading.height - heading.line * 2) < 2, `${width}: exactly two heading lines`);
-        const boxes = await page.locator('.pr-head-copy, .pr-hero-keyboard').evaluateAll(els => els.map(el => ({left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right})));
-        assert.ok(boxes[1].left >= boxes[0].right, `${width}: illustration stays to the right of the copy`);
+        assert.ok(await page.locator('.pr-hero-visual').evaluate(el => el.getBoundingClientRect().left >= innerWidth * .48), `${width}: reference illustration occupies the right half`);
       }
       assert.equal(await page.locator('#siteNav a[aria-current="page"]').textContent(), 'Protocol');
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${width}: no horizontal overflow`);
@@ -68,7 +67,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.goto(new URL('protocol.html', base).href);
       await page.evaluate(() => document.fonts.ready);
       const bottom = await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom);
-      assert.ok(Math.abs(bottom - height) < 2, `${width}×${height}: overview ends at the viewport bottom`);
+      assert.ok(bottom >= height - 1 && (width <= 1040 || Math.abs(bottom - height) < 2), `${width}×${height}: overview fills the first screen without clipping mobile content`);
       await page.locator('.pr-hero-links a[href="#clock"]').click();
       await page.waitForFunction(() => document.querySelector('.pr-toc a[href="#clock"]').getAttribute('aria-current') === 'true');
       if (process.env.PROTOCOL_SCREENSHOTS) await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `clock-link-${width}-${height}.png`)});
