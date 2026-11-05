@@ -66,13 +66,25 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       }
       await page.close();
     }
-    for (const [width, height] of [[1280, 720], [1440, 900], [1920, 1080], [390, 844]]) {
+    for (const [width, height] of [[1280, 720], [1470, 690], [1440, 900], [1920, 900], [1920, 1080], [390, 844]]) {
       const page = await browser.newPage({viewport: {width, height}, reducedMotion: 'reduce'});
       await page.goto(new URL('protocol.html', base).href);
       await page.evaluate(() => document.fonts.ready);
       const bottom = await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom);
       assert.ok(bottom >= height - 1 && (width <= 1040 || Math.abs(bottom - height) < 2), `${width}×${height}: overview fills the first screen without clipping mobile content`);
       assert.equal(await page.locator('.pr-hero-links').count(), 0, 'Hero quick links are removed');
+      if (width > 1040) {
+        const episode = await page.locator('.pr-episode-artwork').boundingBox();
+        const caption = await page.locator('.pr-hero-visual figcaption').boundingBox();
+        const lead = await page.locator('.pr-lead').boundingBox();
+        assert.ok(episode.x >= width * .4 && episode.x + episode.width <= width - 20, `${width}×${height}: episode has room at the right edge`);
+        assert.ok(episode.y >= 90 && episode.y + episode.height <= height - 40, `${width}×${height}: keyboard and contact inset fit inside the first screen`);
+        assert.ok(caption.y + caption.height <= height - 40, `${width}×${height}: caption clears the bottom edge`);
+        // The target keyboard occupies source pixels x=25..355, y=740..865.
+        // The episode crop shows y=650..1210 of the unchanged source image.
+        const target = {x:episode.x + episode.width * 25 / 1300, y:episode.y + episode.width * 90 / 1300};
+        assert.ok(lead.x + lead.width <= target.x || lead.y + lead.height <= target.y, `${width}×${height}: description clears the target keyboard`);
+      }
       if (process.env.PROTOCOL_SCREENSHOTS) await page.screenshot({path: path.join(process.env.PROTOCOL_SCREENSHOTS, `clock-link-${width}-${height}.png`)});
       await page.close();
     }

@@ -132,9 +132,12 @@ site shell. Its approved reference artwork is documented in
 `media/images/protocol/README.md`. The title and introduction remain native HTML;
 the right-hand illustration is rebuilt from the approved composition rather than
 using a cropped screenshot. Labels are native text and the curved arrows are SVG,
-so neither is blurred by bitmap scaling. The scene is 12% larger than the previous
-version and uses a 1300×1210 source image with no CSS enlargement beyond its native
-width. On desktop, the title has two lines
+so neither is blurred by bitmap scaling. The scene uses a 1300×1210 source image with no CSS enlargement beyond its native
+width. On desktop, the lunar dome and the episode are separately positioned views
+of that same source: the dome keeps its approved scale while the keyboard/contact
+view fits inside the viewport with space around its edges. The caption sits beneath
+the keyboard, and the data block is lowered to balance the two columns. Short
+windows use a narrower introduction to keep the target keyboard clear of the text. On desktop, the title has two lines
 and the four data values use the reference's two-by-two layout. The overview fills
 the first viewport. Section navigation is available in the article sidebar. The complete protocol
 article begins below the fold and is preserved. Its 1440px outer width, 200px
