@@ -246,7 +246,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
     content: "";
     position: absolute;
     inset: 0;
-    background: url('../media/images/leaderboard-lunar-campus-v1.png') center top / auto 2400px no-repeat;
+    background: url('../media/images/leaderboard-lunar-campus-v2.webp') center top / auto 2400px no-repeat;
   }
   .lb-stage-scene {
     top: auto;

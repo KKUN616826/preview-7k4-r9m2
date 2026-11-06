@@ -29,9 +29,9 @@ def render(data):
              + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if len(e2e) >= 3 else '')
              + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
              + '<div class="lb-stage-scene">'
-             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v1.png" alt="Lunar robotics campus with three '
+             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v2.webp" alt="Lunar robotics campus with three '
              'demonstration stations and a central first, second and third place podium." width="1983" height="793" fetchpriority="high">'
-             '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v1.png" '
+             '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v2.webp" '
              'aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video>']
     if len(e2e) >= 3:
         parts.append('<div class="lb-podium-labels">')

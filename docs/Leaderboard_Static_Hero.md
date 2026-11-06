@@ -15,7 +15,7 @@
 
 ## 文件
 
-- 场景图片：`media/images/leaderboard-lunar-campus-v1.png`
+- 场景图片：`media/images/leaderboard-lunar-campus-v2.webp`
 - 首屏内容生成：`scripts/leaderboard_stage.py`
 - 样式：`scripts/leaderboard-stage.css`
 - 分类与榜单联动：`scripts/leaderboard-stage-ui.js`、`scripts/leaderboard-explorer.js`
