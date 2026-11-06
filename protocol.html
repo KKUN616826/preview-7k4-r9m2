@@ -1,11 +1,23 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-6-gsf"><link rel="stylesheet" href="media/protocol.css?v=2"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Protocol · Mind2Act World</title><meta name="description" content="How Mind2Act World evaluates coding agents and end-to-end robot policies: tracks, episode rules, clock conditions, metrics, diagnostics and submission."><link rel="icon" href="media/images/mind2act-favicon-v2.png"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-6-gsf"><link rel="stylesheet" href="media/protocol.css?v=editorial-3"></head>
 <body class="protocol-page"><header class="header"><div class="wrap header-inner"><a class="brand official-nav-logo" href="index.html" aria-label="Mind2Act World home"><img src="media/images/mind2act-nav-world.svg?v=33" alt="Mind2Act World" width="1330" height="400"></a><button id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">Menu</button><nav class="nav" id="siteNav" aria-label="Main navigation"><div class="nav-left"><a href="index.html">Home</a><a href="leaderboard.html">Leaderboard</a><a href="protocol.html" aria-current="page">Protocol</a><a href="benchmark.html">Benchmark</a><a href="resources.html">Documents</a></div><div class="nav-right"><a href="https://github.com/KKUN616826/preview-7k4-r9m2" target="_blank" rel="noreferrer">Code ↗</a><a class="paper-link" href="index.html#contributors">Contributors</a></div></nav></div></header>
 <main class="pr-page" id="main">
 <header class="pr-head">
+<div class="pr-head-copy">
   <p class="pr-eyebrow">Evaluation protocol <span>Draft v0.1 · Nov 5, 2026</span></p>
-  <h1>How Mind2Act World evaluates a system</h1>
+  <h1>How Mind2Act World <span>evaluates a system</span></h1>
   <p class="pr-lead">Every system is run on the same task configurations, scored by the environment rather than by itself, and reported together with the conditions it ran under.</p>
+</div>
+<figure class="pr-pathway" aria-label="Both evaluation tracks share task configurations and environment-side scoring">
+  <div class="pr-pathway-label"><span class="pr-live-dot" aria-hidden="true"></span> A shared evaluation</div>
+  <div class="pr-pathway-source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM9 8h6M9 12h6M9 16h3"/></svg><span>Task + configuration</span></div>
+  <div class="pr-pathway-fork" aria-hidden="true"></div>
+  <div class="pr-pathway-tracks"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 16"/></svg>Coding agent</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="14" rx="3"/><path d="M12 2v4M8 12h1m6 0h1m-8 4h8M1 11v4m22-4v4"/></svg>Robot policy</span></div>
+  <div class="pr-pathway-merge" aria-hidden="true"></div>
+  <div class="pr-pathway-environment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10"/></svg><span>Environment</span><i aria-hidden="true"></i></div>
+  <div class="pr-pathway-line" aria-hidden="true"></div>
+  <div class="pr-pathway-results"><span>Score <b>0–100</b></span><span>Success <b>%</b></span></div>
+</figure>
   <dl class="pr-facts">
     <div><dt>tasks</dt><dd>30</dd></div>
     <div><dt>task configurations</dt><dd>90</dd></div>
@@ -77,11 +89,19 @@
   <div class="pr-compare">
     <div>
       <h3>Continuous clock</h3>
+      <div class="pr-clock-visual pr-clock-continuous" role="img" aria-label="Environment time continues through inference">
+        <div><span>Environment</span><i class="pr-time-line"></i></div>
+        <div><span>Inference</span><i class="pr-time-blocks"><b></b><b></b><b></b></i></div>
+      </div>
       <p>The environment and external events keep advancing while the model reasons or waits for an API response. The robot follows a declared hold policy until a new command arrives.</p>
       <dl><div><dt>Supports</dt><dd>Real-time control claims</dd></div><div><dt>Matters for</dt><dd>Moving targets, timing windows</dd></div></dl>
     </div>
     <div>
       <h3>Paused inference</h3>
+      <div class="pr-clock-visual pr-clock-paused" role="img" aria-label="Environment time pauses during inference">
+        <div><span>Environment</span><i class="pr-time-line"></i></div>
+        <div><span>Inference</span><i class="pr-time-blocks"><b></b><b></b><b></b></i></div>
+      </div>
       <p>Simulated time stops while the model computes. This isolates task reasoning from latency, but it does not support a real-time-control claim.</p>
       <dl><div><dt>Supports</dt><dd>Reasoning diagnosis</dd></div><div><dt>Not for</dt><dd>Claims about control speed</dd></div></dl>
     </div>
@@ -93,9 +113,9 @@
   <h2 id="metrics-title">Metrics</h2>
   <p class="pr-section-lead">Every result reports two separate measurements. They are not interchangeable.</p>
   <div class="pr-metrics">
-    <div class="pr-metric"><span class="pr-metric-value">Score 0–100</span><p>Task performance, combining final success with verified stage progress.</p></div>
-    <div class="pr-metric"><span class="pr-metric-value">Success %</span><p>Successful episodes divided by valid started episodes.</p></div>
-    <div class="pr-metric"><span class="pr-metric-value">0 vs —</span><p>A measured zero is a result. A dash means not yet evaluated; it is neither zero nor an estimate.</p></div>
+    <div class="pr-metric"><div class="pr-score-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="pr-metric-value">Score 0–100</span><p>Task performance, combining final success with verified stage progress.</p></div>
+    <div class="pr-metric"><div class="pr-success-art" aria-hidden="true"><span>%</span></div><span class="pr-metric-value">Success %</span><p>Successful episodes divided by valid started episodes.</p></div>
+    <div class="pr-metric"><div class="pr-zero-art" aria-hidden="true"><span>0</span><span>—</span></div><span class="pr-metric-value">0 vs —</span><p>A measured zero is a result. A dash means not yet evaluated; it is neither zero nor an estimate.</p></div>
   </div>
   <div class="pr-formula" role="math" aria-label="Success rate definitions">SR<sub>t</sub> = (1 / N<sub>t</sub>) · Σ s<sub>t,i</sub> &nbsp;<span>// task t, N valid started episodes</span><br>SR<sub>suite</sub> = mean of SR<sub>t</sub> over the suite's tasks<br>SR<sub>macro</sub> = (SR<sub>Mind</sub> + SR<sub>Act</sub> + SR<sub>Mind2Act</sub>) / 3</div>
   <p>Task results are computed for a fixed difficulty first; any aggregate over difficulty uses a weighting fixed in advance. A suite or overall value stays empty until its coverage is complete, and a task that carries several capability tags is counted once.</p>

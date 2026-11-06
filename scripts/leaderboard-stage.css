@@ -122,3 +122,35 @@ body.leaderboard-explorer{background:#ffffff}.leaderboard-explorer .lb-page{padd
  .lb-stage-stations button,.lb-stage-stations button[aria-pressed=true]{min-width:48px;font-size:12px;letter-spacing:0}
 }
 @media(prefers-reduced-motion:reduce){.lb-stage-tabs:before{transition:none}}
+
+/* A quiet, accessible playback control leaves the campus unobstructed. */
+.lb-stage .lb-stage-motion-toggle{display:grid;place-items:center;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:1px solid #ffffffbd;border-radius:50%;color:#2f514f;background:#f8faf3cf;box-shadow:0 4px 18px #233e3e1a,inset 0 1px 0 #fff;transition:background .2s,box-shadow .2s,transform .2s}
+.lb-stage-motion-toggle>svg{grid-area:1/1;width:20px;height:20px;display:block;pointer-events:none}
+.lb-stage-motion-toggle[data-paused=false]>.lb-motion-play,.lb-stage-motion-toggle[data-paused=true]>.lb-motion-pause{display:none}
+.lb-stage .lb-stage-motion-toggle:hover{background:#fff;box-shadow:0 6px 20px #233e3e24;transform:translateY(-1px)}
+.lb-stage-motion-toggle:focus-visible{outline:2px solid #315b60;outline-offset:4px}
+.lb-stage .lb-stage-motion-toggle:disabled{opacity:.6;transform:none;cursor:default}
+.lb-stage-footer{padding-top:14px;padding-bottom:4px}
+@media(max-width:580px){.lb-stage .lb-stage-motion-toggle{right:14px;bottom:12px}}
+@media(prefers-reduced-transparency:reduce){.lb-stage .lb-stage-motion-toggle{background:#f8faf3;backdrop-filter:none}}
+
+/* Keep the title and suite picker clear of the podium at tablet widths. */
+.lb-stage{scroll-margin-top:100px}
+.lb-stage-head .lb-stage-tabs{grid-row:1}
+.lb-stage .lb-stage-caption.lb-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;transform:none}
+@media(max-width:1040px){
+ .leaderboard-explorer .lb-page{padding-top:20px}
+ .lb-stage{margin-inline:0;border:1px solid #e0e5dc;border-radius:12px;scroll-margin-top:84px}
+ .lb-stage-head{position:relative;inset:auto;padding:22px 0 18px;pointer-events:auto}
+ .lb-stage-head>div{display:flex;align-items:center;justify-content:space-between;gap:20px}
+ .lb-stage h1{margin:0}
+ .lb-stage-head .lb-stage-tabs{margin:0;flex-shrink:0}
+ .lb-stage-tabs button,.lb-stage-tabs button[aria-pressed=true]{min-width:74px;padding:7px 12px}
+ .lb-stage-world{margin-top:0}
+}
+@media(max-width:699px){
+ .lb-stage-head>div{align-items:flex-start;flex-direction:column;gap:17px}
+ .lb-stage-head{padding:22px 4px 18px}
+ .lb-stage-head .lb-stage-tabs{width:100%}
+ .lb-stage-tabs button,.lb-stage-tabs button[aria-pressed=true]{min-width:0}
+}

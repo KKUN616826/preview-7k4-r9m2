@@ -19,7 +19,7 @@ body #overview .home-stat {
   flex-direction: column;
   align-items: flex-start;
   min-width: 0;
-  padding: 0 20px;
+  padding: 8px 24px;
   border-left: 1px solid #dce3e5;
 }
 body #overview .home-stat-icon { order: 0; width: 24px; height: 24px; opacity: .6; }
@@ -40,26 +40,14 @@ body #overview .home-stat dt {
   line-height: 1.5;
   color: #425563;
 }
-body #overview .home-stat-detail,
-body #overview .home-stat-scope {
-  order: 3;
-  margin: 7px 0 0;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #617482;
-}
-body #overview .home-stat-scope { order: 4; margin-top: 3px; font-size: 11px; }
 @media (max-width: 760px) {
   body #overview .home-stats { margin-block: 32px 48px; }
   body #overview .home-stats dl { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
   body #overview .home-stat { padding-inline: 16px; }
   body #overview .home-stat-value { font-size: 52px; margin-block: 18px 10px; }
   body #overview .home-stat dt { font-size: 16px; }
-  body #overview .home-stat-detail { font-size: 13px; }
 }
 @media (max-width: 380px) {
   body #overview .home-stat { padding-inline: 10px; }
   body #overview .home-stat dt { font-size: 14px; }
-  body #overview .home-stat-detail { font-size: 12px; }
 }

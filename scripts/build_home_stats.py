@@ -14,17 +14,15 @@ def render():
     reported = sum(any(isinstance(result.get('score'), (int, float))
                        for result in model['results'].values()) for model in models)
     metrics = [
-        (task_count, 'Tasks', 'Ten per capability suite', 'layout-grid'),
-        (task_count * 3, 'Task configurations', 'Easy · Medium · Hard', 'chart-bar'),
-        (len(suites), 'Capability suites', 'Mind · Act · Mind2Act', 'stack'),
-        (reported, 'Models evaluated', 'Coding agents and VLAs', 'robot'),
+        (task_count, 'Tasks', 'layout-grid'),
+        (task_count * 3, 'Task configurations', 'chart-bar'),
+        (len(suites), 'Capability suites', 'stack'),
+        (reported, 'Models evaluated', 'robot'),
     ]
     cards = ''.join(
         f'<div class="home-stat"><img class="home-stat-icon" src="media/icons/benchmark-stats/{icon}.svg" width="24" height="24" alt="">'
         f'<dt>{label}</dt><dd class="home-stat-value">{value}</dd>'
-        f'<dd class="home-stat-detail">{detail}</dd>'
-        + ('<dd class="home-stat-scope">Results on the original 15 tasks</dd>' if icon == 'robot' else '')
-        + '</div>' for value, label, detail, icon in metrics)
+        '</div>' for value, label, icon in metrics)
     version = hashlib.sha256((ROOT / 'scripts/home-stats.css').read_bytes()).hexdigest()[:10]
     return ('<!-- HOME_STATS_START -->\n'
             f'<link rel="stylesheet" href="scripts/home-stats.css?v={version}">\n'

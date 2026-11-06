@@ -185,14 +185,24 @@
   function end(e){if(!drag||drag.id!==e.pointerId)return;if(drag.moved){aim(view);suppress=true;setTimeout(()=>suppress=false,50)}drag=null;orbit.classList.remove('is-dragging');if(orbit.hasPointerCapture(e.pointerId))orbit.releasePointerCapture(e.pointerId)}
   orbit.addEventListener('pointerup',end);orbit.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);
   orbit.addEventListener('keydown',e=>{if(e.target!==orbit||!THREE)return;const axes={ArrowLeft:[0,-.22],ArrowRight:[0,.22],ArrowUp:[-.14,0],ArrowDown:[.14,0]};if(!axes[e.key])return;e.preventDefault();hidePreview();playing=false;const start=target||view;aim({pitch:start.pitch+axes[e.key][0],yaw:start.yaw+axes[e.key][1]});motionState()});
+  const copyLayout=root.querySelector('.cm-layout'),wideCopyLayout=matchMedia('(min-width:851px)');
   function syncCopyAlignment(){
-    const globeBox=orbit.getBoundingClientRect(),visualBox=visual.getBoundingClientRect();
-    const sphereBottom=globeBox.top+globeBox.height*(.5+sphereRadius);
-    root.style.setProperty('--cm-copy-bottom-gap',`${Math.max(0,visualBox.bottom-sphereBottom)}px`);
+    if(!wideCopyLayout.matches){
+      root.style.removeProperty('--cm-copy-top');
+      root.style.removeProperty('--cm-copy-height');
+      return;
+    }
+    // Align the reading column to the visible sphere, excluding orbit padding,
+    // controls and hover previews. Its minimum height still allows text to grow.
+    const globeBox=orbit.getBoundingClientRect(),layoutBox=copyLayout.getBoundingClientRect();
+    const sphereTop=globeBox.top-layoutBox.top+globeBox.height*(.5-sphereRadius);
+    root.style.setProperty('--cm-copy-top',`${Math.max(0,sphereTop)}px`);
+    root.style.setProperty('--cm-copy-height',`${globeBox.height*sphereRadius*2}px`);
   }
   function resize(){size=orbit.clientWidth;visual.style.setProperty('--cm-orbit-size',`${size}px`);if(renderer){renderer.setSize(size,size,false)}syncCopyAlignment();render()}
   new ResizeObserver(resize).observe(orbit);
   new ResizeObserver(syncCopyAlignment).observe(visual);
+  wideCopyLayout.addEventListener('change',syncCopyAlignment);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)wake();else if(frame){cancelAnimationFrame(frame);frame=0}},{threshold:.02}).observe(orbit);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0}else wake()});
   reduced.addEventListener('change',()=>{if(reduced.matches)playing=false;motionState();wake()});

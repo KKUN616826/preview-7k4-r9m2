@@ -25,6 +25,11 @@
 
 ## 修改与构建
 
+### 首页与阅读体验精简（2026-11-06）
+
+首页可编辑模块使用 `python3 scripts/build_home_sections.py` 重建：统计、介绍卡片、任务球说明、榜单入口和资源卡片。此构建器读取对应源模板，保留当前首页首屏和页面外壳。榜单使用 `python3.11 scripts/build_leaderboard.py`，任务总览使用 `python3 scripts/build_benchmark.py --overview-only`。`protocol.html` 与 `media/protocol.css` 为协议页直接维护的源文件。
+
+
 ### 独立 Leaderboard 页面
 
 - 数据：`data/leaderboard-results.json`，保留原页面转录的 Table 6 数值与来源信息；不与首页的旧候选名单文件混用。

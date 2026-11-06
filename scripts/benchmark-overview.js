@@ -57,7 +57,8 @@
   }
   let rotation = setInterval(rotateHero, 8000);
 
-  const indexLinks = [...document.querySelectorAll('[data-index-task]')];
+  const explorer = document.getElementById('explore');
+  const suiteControls = document.querySelector('.bo-suite-tabs');
   const searchForm = document.querySelector('.bo-search');
   const searchInput = document.getElementById('benchmark-search');
   const searchStatus = document.getElementById('benchmark-search-status');
@@ -66,23 +67,30 @@
   const suites = [...document.querySelectorAll('[data-suite-section]')];
   const normalize = value => value.normalize('NFKC').toLowerCase().replace(/[–—-]/g, ' ');
   const searchText = new Map(chapters.map(chapter => [chapter, normalize(chapter.dataset.search)]));
+  let selectedSuite = suites[0].dataset.suiteSection;
+
+  // Browsing shows one suite. Searching always considers the complete 30-task catalog.
   function filterTasks() {
     const terms = normalize(searchInput.value.trim()).split(/\s+/).filter(Boolean);
+    const searching = terms.length > 0;
     let count = 0;
     chapters.forEach(chapter => {
       chapter.hidden = !terms.every(term => searchText.get(chapter).includes(term));
       if (!chapter.hidden) count++;
     });
-    suites.forEach(suite => { suite.hidden = ![...suite.querySelectorAll('.bo-chapter')].some(task => !task.hidden); });
+    suites.forEach(suite => {
+      suite.hidden = searching
+        ? ![...suite.querySelectorAll('.bo-chapter')].some(task => !task.hidden)
+        : suite.dataset.suiteSection !== selectedSuite;
+    });
+    tabs.forEach(tab => tab.setAttribute('aria-pressed', String(!searching && tab.dataset.suite === selectedSuite)));
+    explorer.classList.toggle('is-searching', searching);
     clearButton.hidden = !searchInput.value;
     document.querySelector('.bo-search-shortcut').hidden = !!searchInput.value;
     emptySearch.hidden = count > 0;
-    searchStatus.textContent = terms.length ? `${count} ${count === 1 ? 'task' : 'tasks'} found` : '';
-    markIndex(null);
-    highlightSuite(null);
+    searchStatus.textContent = searching ? `${count} ${count === 1 ? 'task' : 'tasks'} found` : '';
   }
   function clearSearch() {
-    if (!searchInput.value) return;
     searchInput.value = '';
     filterTasks();
   }
@@ -91,7 +99,7 @@
   document.querySelector('[data-clear-search]').addEventListener('click', () => { clearSearch(); searchInput.focus(); });
   searchForm.addEventListener('submit', event => {
     event.preventDefault();
-    document.getElementById('explore').scrollIntoView({block:'start'});
+    explorer.scrollIntoView({block:'start'});
   });
   document.addEventListener('keydown', event => {
     if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -103,56 +111,38 @@
       clearSearch();
     }
   });
-  let indexedTask = null;
-  function markIndex(id) {
-    indexedTask = id;
-    indexLinks.forEach(link => {
-      if (link.dataset.indexTask === id) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
-    });
-    const suite = id && document.getElementById('task-' + id)?.closest('[data-suite-section]');
-    if (suite) highlightSuite(suite.dataset.suiteSection);
-  }
-  function highlightSuite(slug) {
-    tabs.forEach(tab => {
-      const active = tab.dataset.suite === slug;
-      if (active) tab.setAttribute('aria-current', 'location');
-      else tab.removeAttribute('aria-current');
-    });
-    document.querySelectorAll('[data-index-suite]').forEach(link => {
-      if (link.dataset.indexSuite === slug) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
-    });
-    document.querySelectorAll(`[data-index-group="${slug}"]`).forEach(group => { group.open = true; });
-  }
   function readHash() {
     const hash = location.hash.slice(1);
-    // Old #mind / #act / #mind2act bookmarks also remain valid.
+    if (!hash) {
+      selectedSuite = suites[0].dataset.suiteSection;
+      clearSearch();
+      return;
+    }
+    // Old #mind / #act / #mind2act and task-specific bookmarks remain valid.
     const target = document.getElementById(hash) || document.getElementById('suite-' + hash);
     if (!target?.matches('.bo-chapter, .bo-suite')) return;
+    selectedSuite = target.closest('[data-suite-section]').dataset.suiteSection;
     clearSearch();
-    const suite = target.closest('[data-suite-section]');
-    markIndex(target.matches('.bo-chapter') ? target.dataset.task : null);
-    highlightSuite(suite.dataset.suiteSection);
-    target.scrollIntoView({block:'start', behavior:'auto'});
+    (target.matches('.bo-chapter') ? target : explorer).scrollIntoView({block:'start', behavior:'auto'});
   }
-  function pushHash(hash) {
+  function selectSuite(slug) {
+    selectedSuite = slug;
+    clearSearch();
+    const hash = '#suite-' + slug;
     if (location.hash !== hash) history.pushState(null, '', hash);
   }
-  tabs.forEach(tab => {
-    tab.addEventListener('click', event => {
-      event.preventDefault();
-      pushHash(tab.getAttribute('href'));
-      readHash();
-    });
-  });
-  document.querySelectorAll('[data-index-task], [data-index-suite]').forEach(link => {
-    link.addEventListener('click', event => {
-      event.preventDefault();
-      document.querySelector('.bo-mobile-index').open = false;
-      pushHash(link.getAttribute('href'));
-      readHash();
-    });
+  tabs.forEach(tab => tab.addEventListener('click', () => selectSuite(tab.dataset.suite)));
+  suiteControls.addEventListener('keydown', event => {
+    const current = event.target.closest('[data-suite]');
+    if (!current || event.altKey || event.ctrlKey || event.metaKey) return;
+    const position = tabs.indexOf(current);
+    const next = event.key === 'ArrowRight' ? (position + 1) % tabs.length
+      : event.key === 'ArrowLeft' ? (position - 1 + tabs.length) % tabs.length
+      : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : null;
+    if (next === null) return;
+    event.preventDefault();
+    selectSuite(tabs[next].dataset.suite);
+    tabs[next].focus();
   });
   window.addEventListener('hashchange', readHash);
   window.addEventListener('popstate', readHash);
@@ -164,26 +154,6 @@
       revealObserver.unobserve(target);
     });
   }, {threshold: .06});
-  const visibleTasks = new Set();
-  const indexObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) visibleTasks.add(entry.target);
-      else visibleTasks.delete(entry.target);
-    });
-    const header = parseInt(getComputedStyle(document.body).getPropertyValue('--bo-header'), 10);
-    const candidates = [...visibleTasks].filter(task => !task.closest('[hidden]')).sort((a,b) =>
-      Math.abs(a.getBoundingClientRect().top - header) - Math.abs(b.getBoundingClientRect().top - header));
-    if (!candidates.length) return;
-    // Keep an explicitly selected task active while it is visible, including the last row
-    // where the document cannot scroll far enough to put that task at the very top.
-    const current = indexedTask && document.getElementById('task-' + indexedTask);
-    if (current && !current.closest('[hidden]')) {
-      const rect = current.getBoundingClientRect();
-      if (rect.bottom > header && rect.top < innerHeight) return;
-    }
-    markIndex(candidates[0].dataset.task);
-  }, {rootMargin:'-90px 0px 0px 0px', threshold: .05});
-
   chapters.forEach(chapter => {
     const poster = chapter.querySelector('.bo-task-poster');
     const select = chapter.querySelector('select');
@@ -191,7 +161,6 @@
     const choices = data[chapter.dataset.task];
     if (!reduced.matches) chapter.classList.add('is-waiting');
     revealObserver.observe(chapter);
-    indexObserver.observe(chapter);
     function selectLevel(level) {
       const asset = choices[level];
       if (!asset) return;
@@ -206,6 +175,7 @@
     if (choices[restored]) selectLevel(restored);
   });
 
+  filterTasks();
   readHash();
   updateHeroPlayback();
   window.addEventListener('pagehide', () => {
