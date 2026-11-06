@@ -134,8 +134,9 @@ Act 的 GT 指真实下发的控制器参考目标，不是通过完整验收的
 
 ### Evaluation Protocol
 
-`protocol.html` contains the complete draft evaluation protocol, imported from
-`codex/website-redesign-20261104` at `0af9500701a0acb478b4b77aa10f7f08dae6135d`.
+`protocol.html` presents evaluation protocol v1.0.0 (evaluation code v1.0.0, scoring
+`mind2act-final-scoring-20261105`, budget `e2e-p90x1.2-v1`). Task IDs on the page use the
+site's IDs (E, FR2, M, ...) rather than the protocol file's (E1, DR2, M1, ...).
 Edit this standalone page directly; its layout is in `media/protocol.css`.
 The hero uses the same shared typography as the rest of the site via the shared
 site shell. Its approved reference artwork is documented in
