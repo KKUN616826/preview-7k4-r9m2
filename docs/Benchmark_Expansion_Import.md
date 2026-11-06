@@ -62,5 +62,5 @@
 1. 在 data/benchmark-expansion.json 的相应任务 media 字段中填写新视频文件名。
 2. 运行 python3 scripts/import_benchmark_videos.py /视频文件目录。
 3. 运行 python3 scripts/build_benchmark_expansion.py、python3 scripts/build_benchmark.py。
-4. 运行 python3 scripts/sync_benchmark_expansion.py、python3 scripts/build_capability_map.py、python3 scripts/build_leaderboard.py。
+4. 运行 python3 scripts/sync_benchmark_expansion.py、python3 scripts/build_home_tasks.py、python3 scripts/build_leaderboard.py。
 5. 按项目已有 Playwright 环境运行 scripts/test_benchmark_expansion.cjs 和相关页面检查。

@@ -10,7 +10,7 @@ The homepage follows the pattern used by RoboDojo, Embodied First Exam and X2Rea
 | 4 | `#tasks` | All 30 tasks, one row per suite, each linking to its task page | `build_home_tasks.py` from `data/benchmark-navigation.json` |
 | 5 | `#news`, `#resources-overview`, `#contributors` | Updates, documents and people | hand-maintained in `index.html` |
 
-The evaluation scope notes and the overview figure moved off the homepage; the introduction links to `protocol.html` and to `media/overview/mind2act-overview-v36.pdf`. The lunar capability map is no longer on the homepage; `build_capability_map.py` skips `index.html` when the section is absent, and its assets remain for reuse.
+The evaluation scope notes and the overview figure moved off the homepage; the introduction links to `protocol.html` and to `media/overview/mind2act-overview-v36.pdf`. The lunar capability map was removed with its scripts and tests (see git history before this change if it is needed again).
 
 ## Leaderboard preview
 

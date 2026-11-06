@@ -41,8 +41,8 @@ python3 scripts/validate_release.py
 python3 scripts/preview.py --port 8767
 ```
 
-浏览器测试需安装 Playwright，并设置 `NODE_PATH`、`CHROMIUM_EXECUTABLE`、`HERO_PREVIEW_URL=http://127.0.0.1:8767/`；任务球测试还使用 `PREVIEW_URL` 指定同一地址。
-发布前检查共享导航、首页动画、任务球、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_capability_map.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_stage.cjs`、`test_leaderboard_explorer.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
+浏览器测试需安装 Playwright，并设置 `NODE_PATH`、`CHROMIUM_EXECUTABLE`、`HERO_PREVIEW_URL=http://127.0.0.1:8767/`。
+发布前检查共享导航、首页动画、首页排行榜预览、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_stage.cjs`、`test_leaderboard_explorer.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
 
 
 ### 独立 Leaderboard 页面
