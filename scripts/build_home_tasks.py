@@ -58,34 +58,42 @@ def clean_cover(case):
     return case['cover']
 
 
+def tile(case, slug, hidden=False):
+    cid = escape(case['id'])
+    focus = ' tabindex="-1"' if hidden else ''
+    return (f'<li class="ht-tile ht-tile--{slug}"><a href="tasks/{cid}.html" title="{escape(case["title"])}"{focus}>'
+            f'<img src="{escape(clean_cover(case))}" width="720" height="540" alt="" loading="lazy" decoding="async">'
+            f'<span class="ht-tile-text"><span class="ht-id">{cid}</span>'
+            f'<span class="ht-name">{escape(case["nav_title"])}</span></span></a></li>')
+
+
 def render():
+    """A single moving film strip of every task, then one link per suite.
+
+    The suites themselves are introduced above (#introduction) and the full
+    catalogue lives on benchmark.html, so the homepage only previews the range.
+    The strip is duplicated once (hidden from assistive tech) for a seamless loop.
+    """
     suites = json.loads((ROOT / 'data/benchmark-navigation.json').read_text())
     total = sum(len(s['cases']) for s in suites)
-    rows = []
-    for suite in suites:
-        slug = escape(suite['slug'])
-        tiles = []
-        for case in suite['cases']:
-            cid = escape(case['id'])
-            cover = clean_cover(case)
-            tiles.append(
-                f'<li><a class="ht-tile" href="tasks/{cid}.html" title="{escape(case["title"])}">'
-                f'<img src="{escape(cover)}" width="720" height="540" alt="" loading="lazy" decoding="async">'
-                f'<span class="ht-tile-text"><span class="ht-id">{cid}</span>'
-                f'<span class="ht-name">{escape(case["nav_title"])}</span></span></a></li>')
-        rows.append(
-            f'<div class="ht-suite ht-suite--{slug}">'
-            f'<div class="ht-suite-head"><h3>{escape(suite["name"])}</h3>'
-            f'<p>{escape(suite["label"])} · {len(suite["cases"])} tasks</p>'
-            f'<a href="benchmark/{slug}.html">All {escape(suite["name"])} tasks <span aria-hidden="true">→</span></a></div>'
-            f'<ul class="ht-grid">{"".join(tiles)}</ul></div>')
+    cases = [(case, escape(s['slug'])) for s in suites for case in s['cases']]
+    track = ''.join(tile(c, slug) for c, slug in cases)
+    echo = ''.join(tile(c, slug, hidden=True) for c, slug in cases)
+    links = ''.join(
+        f'<a class="ht-suite-link ht-suite-link--{escape(s["slug"])}" href="benchmark/{escape(s["slug"])}.html">'
+        f'<span class="ht-suite-dot" aria-hidden="true"></span><strong>{escape(s["name"])}</strong>'
+        f'<span>{escape(s["label"])} · {len(s["cases"])} tasks</span><span aria-hidden="true">→</span></a>'
+        for s in suites)
     return (
         '<section class="academic-section home-tasks" id="tasks" aria-labelledby="home-tasks-title">'
         '<div class="ht-head"><div><p class="home-eyebrow">Benchmark</p>'
         f'<h2 id="home-tasks-title">{total} tasks, three suites</h2>'
         '<p>Each task has Easy, Medium and Hard configurations. Open a task to watch its demonstrations.</p></div>'
-        '<a class="home-link-button" href="benchmark.html">Browse the benchmark <span aria-hidden="true">→</span></a></div>'
-        + ''.join(rows) + '</section>')
+        f'<a class="home-link-button" href="benchmark.html">Browse all {total} tasks <span aria-hidden="true">→</span></a></div>'
+        f'<div class="ht-strip" role="region" aria-label="All {total} tasks" tabindex="0">'
+        f'<ul class="ht-track">{track}</ul><ul class="ht-track ht-track--echo" aria-hidden="true">{echo}</ul></div>'
+        f'<nav class="ht-suites" aria-label="Tasks by suite">{links}</nav>'
+        '</section>')
 
 
 def main():

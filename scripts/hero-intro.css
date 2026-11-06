@@ -13,6 +13,13 @@
   font-display: swap;
 }
 @font-face {
+  font-family: 'Pixelify Sans';
+  src: url('../media/fonts/pixelify-sans/PixelifySans-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
   font-family: 'JetBrains Mono';
   src: url('../media/fonts/jetbrains-mono/JetBrainsMono-Variable.ttf') format('truetype');
   font-weight: 100 800;
@@ -21,7 +28,8 @@
 }
 /* Scoped exceptions to the shared Manrope family; use its existing priority layer. */
 @layer m2a-typography {
-  body #overview .hero-intro h1.hero-intro-title { font-family: Sora, Arial, sans-serif !important; }
+  body #overview .hero-intro h1.hero-intro-title { font-family: 'Pixelify Sans', Sora, Arial, sans-serif !important; }
+  body #overview .hero-intro h1.hero-intro-title span { font-family: inherit !important; }
   body #overview .hero-intro-description { font-family: Inter, Arial, sans-serif !important; }
   body #overview .hero-intro-kicker { font-family: 'JetBrains Mono', monospace !important; }
 }
@@ -61,14 +69,27 @@ body #overview .hero-intro-kicker {
   letter-spacing: .12em !important;
   text-transform: uppercase;
 }
+/* The title is set like the navigation wordmark: pixel letters, a mint "2"
+   and a widely tracked, lighter "World". */
 body #overview .hero-intro h1.hero-intro-title {
   margin: 0;
   color: #fafbf7;
-  font-size: clamp(62px, 6.7vw, 106px);
+  font-size: clamp(68px, 8vw, 128px);
   font-weight: 700;
-  letter-spacing: -.035em !important;
-  line-height: 1.04;
+  letter-spacing: .01em !important;
+  line-height: .96;
   text-align: left;
+  text-shadow: 0 .06em 0 #0b1622b3;
+}
+body #overview .hero-intro-title .hero-intro-two { color: #bfe3d3; }
+body #overview .hero-intro-title .hero-intro-world {
+  display: block;
+  margin-top: .22em;
+  line-height: 1;
+  color: #a9c3cd;
+  font-size: .5em;
+  font-weight: 500;
+  letter-spacing: .42em !important;
 }
 body #overview .hero-intro-description {
   max-width: 450px;
@@ -227,7 +248,7 @@ body #overview .hero-intro .demo-no-script { bottom: 24px; left: 6%; }
   html body.dark-hero #overview .demo-hero.hero-intro { height: auto; min-height: 100svh; max-height: none; padding: 112px 20px 28px; gap: 0; }
   body #overview .hero-intro-copy { position: relative; inset: auto; order: 0; width: 100%; margin: 0 0 28px; }
   body #overview .hero-intro-kicker { font-size: 10px; margin-bottom: 16px; letter-spacing: .1em !important; }
-  body #overview .hero-intro h1.hero-intro-title { font-size: clamp(52px, 13vw, 80px); }
+  body #overview .hero-intro h1.hero-intro-title { font-size: clamp(56px, 16vw, 84px); }
   body #overview .hero-intro-description { font-size: 16px; margin-top: 20px; max-width: 450px; }
   body #overview .hero-intro-actions { margin-top: 24px; gap: 10px; }
   body #overview .hero-intro-actions a { font-size: 12px; min-height: 44px; padding: 11px 13px; gap: 12px; }
