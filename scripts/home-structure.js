@@ -1,4 +1,13 @@
-/* Homepage leaderboard preview: re-rank the reported models by the chosen suite. */
+/* Homepage behaviour not covered by scripts/site-shell.js (shared menu handling). */
+document.addEventListener('DOMContentLoaded', () => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const syncScroll = () => { document.documentElement.style.scrollBehavior = reduced.matches ? 'auto' : ''; };
+  syncScroll();
+  reduced.addEventListener('change', syncScroll);
+  document.getElementById('backTop')?.addEventListener('click', () => scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' }));
+});
+
+/* Leaderboard preview: re-rank the reported models by the chosen suite. */
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.querySelector('#top-ten.home-leaderboard');
   if (!root) return;

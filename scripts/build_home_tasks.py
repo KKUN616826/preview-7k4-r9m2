@@ -23,6 +23,7 @@ def ensure_head_assets(source):
     block = ('<!-- HOME_STRUCTURE_START -->'
              f'<link rel="stylesheet" href="scripts/home-structure.css?v={version("scripts/home-structure.css")}">'
              f'<script src="scripts/home-structure.js?v={version("scripts/home-structure.js")}" defer></script>'
+             f'<script src="scripts/site-shell.js?v={version("scripts/site-shell.js")}" defer></script>'
              '<!-- HOME_STRUCTURE_END -->\n')
     source = HEAD_ASSETS.sub('', source)
     head_end = source.index('</head>')
