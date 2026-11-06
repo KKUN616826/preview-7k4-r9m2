@@ -22,6 +22,11 @@ from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def monogram(name):
+    """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
+    return ''.join(ch for ch in name if ch.isalnum())[:2]
 ASSETS = ['scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-boards.css',
           'scripts/leaderboard-boards.js', 'scripts/leaderboard-stage-motion.js']
 
@@ -62,7 +67,7 @@ def release_label(model):
 def icon_html(model, size):
     if model['icon']:
         return f'<img src="{e(model["icon"])}" width="{size}" height="{size}" alt="" loading="lazy" decoding="async">'
-    return f'<span class="lb-icon-fallback" aria-hidden="true">{e(model["name"][:2])}</span>'
+    return f'<span class="lb-icon-fallback" aria-hidden="true">{e(monogram(model["name"]))}</span>'
 
 
 def board(data, track):

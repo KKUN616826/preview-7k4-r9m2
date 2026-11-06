@@ -7,10 +7,15 @@ from datetime import date
 from html import escape
 
 
+def monogram(name):
+    """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
+    return ''.join(ch for ch in name if ch.isalnum())[:2]
+
+
 def _icon(m, size):
     if m['icon']:
         return f'<img src="{escape(m["icon"])}" width="{size}" height="{size}" alt="">'
-    return f'<span class="lb-podium-monogram">{escape(m["name"][:2])}</span>'
+    return f'<span class="lb-podium-monogram">{escape(monogram(m["name"]))}</span>'
 
 
 def render(data):
@@ -23,7 +28,6 @@ def render(data):
              '<p>Official Mind2Act runs, with end-to-end models and coding agents ranked separately.</p></div>'
              + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if len(e2e) >= 3 else '')
              + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
-             + ('<div class="lb-stage-caption"><strong>VLA / WAM</strong> · Top 3</div>' if len(e2e) >= 3 else '')
              + '<div class="lb-stage-scene">'
              '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v1.png" alt="Lunar robotics campus with three '
              'demonstration stations and a central first, second and third place podium." width="1983" height="793" fetchpriority="high">'

@@ -81,3 +81,5 @@
 .lb-board-table .lb-sort-arrow, .lb-results .lb-board-table .lb-sort-arrow { position: static; margin-left: 5px; font-size: 11px; color: #8aa0aa; }
 .lb-board-table thead th[aria-sort] .lb-sort-arrow { color: #1f3a4b; }
 .lb-board-table thead tr:first-child th { position: static; height: auto; }
+.lb-results .lb-board-table thead th { height: auto !important; padding: 11px 12px !important; }
+.lb-podium-label, .lb-podium-label:hover { text-decoration: none; color: inherit; }

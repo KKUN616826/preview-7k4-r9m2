@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Render the homepage leaderboard preview from data/leaderboard-results.json.
 
-The homepage shows every model with reported scores, ranked by suite score;
-the full table, success rates and pending entries stay on leaderboard.html.
+One column per board (VLA / WAM, coding agents): the top five by Overall score on
+Clean once results exist, otherwise the first release batch. Details stay on leaderboard.html.
 """
 from pathlib import Path
 from html import escape
 from html.parser import HTMLParser
 import json
 import re
+from datetime import date
 from build_home_tasks import ensure_head_assets
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,48 +43,51 @@ class SectionBounds(HTMLParser):
                 self.bounds = (self.start, self.source_offset() + len('</section>'))
 
 
-def ranks(models, view):
-    """Competition ranking: tied scores share a rank, as on leaderboard.html."""
-    score = lambda m: m['results'][view]['score']
-    return {m['id']: 1 + sum(score(o) > score(m) for o in models) for m in models}
+def monogram(name):
+    return ''.join(ch for ch in name if ch.isalnum())[:2]
+
+
+def mark(model):
+    if model['icon']:
+        return f'<img src="{escape(model["icon"])}" width="22" height="22" alt="" loading="lazy" decoding="async">'
+    return f'<span class="hl-monogram" aria-hidden="true">{escape(monogram(model["name"]))}</span>'
+
+
+def column(data, track):
+    models = [m for m in data['models'] if m['track'] == track['key']]
+    reported = sorted([m for m in models if m['results']], key=lambda m: -m['results']['clean']['overall']['score'])
+    head = (f'<div class="hl-col-head"><h3>{escape(track["title"].replace(" Leaderboard", ""))}</h3>'
+            f'<p>{track["cases_per_cell"]} cases per task × difficulty</p></div>')
+    if reported:
+        rows = ''.join(
+            f'<li><span class="hl-rank">{1 + sum(o["results"]["clean"]["overall"]["score"] > m["results"]["clean"]["overall"]["score"] for o in reported)}</span>'
+            f'<span class="hl-model">{mark(m)}{escape(m["name"])}</span>'
+            f'<span class="hl-score">{m["results"]["clean"]["overall"]["score"]:.2f}</span></li>' for m in reported[:5])
+        return f'<div class="hl-col">{head}<ol class="hl-list">{rows}</ol><p class="hl-foot">Overall score · Clean</p></div>'
+    first = date.fromisoformat(data['first_release'])
+    batch = [m for m in models if m.get('release') == data['first_release']]
+    queued = [m for m in models if not m.get('release')]
+    rows = ''.join(f'<li><span class="hl-model">{mark(m)}{escape(m["name"])}</span>'
+                   f'<span class="hl-org">{escape(m["org"])}</span></li>' for m in batch)
+    foot = f'+ {len(queued)} more queued' if queued else ''
+    return (f'<div class="hl-col">{head}<p class="hl-when">Results on {first.day} {first.strftime("%B")}</p>'
+            f'<ul class="hl-list">{rows}</ul><p class="hl-foot">{foot}</p></div>')
 
 
 def render():
     data = json.loads((ROOT / 'data/leaderboard-results.json').read_text())
-    labels = {v['key']: v['label'] for v in data['views']}
-    reported = [m for m in data['models'] if all(m['results'][v]['score'] is not None for v in VIEWS)]
-    scored_tasks = sum(len(v['tasks']) for v in data['views'])
-    first = VIEWS[0]
-    rank = ranks(reported, first)
-    rows = []
-    for model in sorted(reported, key=lambda m: -m['results'][first]['score']):
-        scores = {v: model['results'][v]['score'] for v in VIEWS}
-        attrs = ''.join(f' data-{v}="{scores[v]}"' for v in VIEWS)
-        cells = ''.join(f'<td class="hl-score" data-col="{v}">{scores[v]:.2f}</td>' for v in VIEWS)
-        mark = (f'<img src="{escape(model["icon"])}" width="20" height="20" alt="">' if model.get('icon')
-                else f'<span class="hl-monogram" aria-hidden="true">{escape(model["name"][:1])}</span>')
-        rows.append(
-            f'<tr{attrs}><td class="hl-rank">{rank[model["id"]]}</td>'
-            f'<th scope="row"><span class="hl-model">{mark}{escape(model["name"])}</span></th>'
-            f'<td class="hl-type">{escape(data["paradigms"][model["paradigm"]])}</td>{cells}</tr>')
-    tabs = ''.join(
-        f'<button type="button" data-hl-view="{v}" aria-pressed="{str(v == first).lower()}">{escape(labels[v])}</button>'
-        for v in VIEWS)
-    sort_attr = {v: ' aria-sort="descending"' if v == first else '' for v in VIEWS}
-    heads = ''.join(
-        f'<th scope="col" class="hl-score" data-col="{v}"{sort_attr[v]}>{escape(labels[v])}</th>'
-        for v in VIEWS)
+    any_results = any(m['results'] for m in data['models'])
+    lead = ('End-to-end models and coding agents are ranked separately: they run different case counts and interfaces.'
+            if any_results else
+            'Official results start on 11 November. End-to-end models and coding agents are ranked separately, '
+            'because they run different case counts and interfaces.')
     return (
-        f'<section class="academic-section home-leaderboard" id="top-ten" data-view="{first}" aria-labelledby="home-leaderboard-title">'
+        '<section class="academic-section home-leaderboard" id="top-ten" aria-labelledby="home-leaderboard-title">'
         '<div class="hl-head"><div><p class="home-eyebrow">Leaderboard</p>'
-        '<h2 id="home-leaderboard-title">How current models score</h2>'
-        f'<p>Score (0–100) on each suite, from the original {scored_tasks}-task snapshot; the added tasks are not yet scored. '
-        f'{len(reported)} of {len(data["models"])} listed models have reported results.</p></div>'
-        f'<div class="hl-tabs" role="group" aria-label="Rank by suite">{tabs}</div></div>'
-        '<div class="hl-table-wrap"><table class="hl-table"><thead><tr><th scope="col" class="hl-rank">#</th>'
-        f'<th scope="col">Model</th><th scope="col" class="hl-type">Type</th>{heads}</tr></thead>'
-        f'<tbody>{"".join(rows)}</tbody></table></div>'
-        '<a class="home-link-button" href="leaderboard.html">Full leaderboard with success rates <span aria-hidden="true">→</span></a>'
+        '<h2 id="home-leaderboard-title">Two boards, one benchmark</h2>'
+        f'<p>{escape(lead)}</p></div></div>'
+        f'<div class="hl-cols">{"".join(column(data, t) for t in data["tracks"])}</div>'
+        '<a class="home-link-button" href="leaderboard.html">Open the leaderboard <span aria-hidden="true">→</span></a>'
         '</section>')
 
 

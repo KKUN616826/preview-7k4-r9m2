@@ -43,16 +43,18 @@ python3 scripts/preview.py --port 8767
 ```
 
 浏览器测试需安装 Playwright，并设置 `NODE_PATH`、`CHROMIUM_EXECUTABLE`、`HERO_PREVIEW_URL=http://127.0.0.1:8767/`。
-发布前检查共享导航、首页动画、首页排行榜预览、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_stage.cjs`、`test_leaderboard_explorer.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
+发布前检查共享导航、首页动画、首页排行榜预览、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_boards.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
 
 
 ### 独立 Leaderboard 页面
 
-- 数据：`data/leaderboard-results.json`，保留原页面转录的 Table 6 数值与来源信息；不与首页的旧候选名单文件混用。
-- 页面源：`scripts/leaderboard-page.html`；样式和交互：`scripts/leaderboard-explorer.css`、`scripts/leaderboard-explorer.js`。
-- 首屏结构：`scripts/leaderboard_stage.py`；布局：`scripts/leaderboard-stage.css`。月球场景铺满首屏，导航、分类 Tab 与底部入口悬浮其上；图片、动画与排名标签共用原图坐标，窄屏保留前三名并在顶部延展天空。
+- 数据：`data/leaderboard-results.json`（schema 2）。每个模型记录赛道（`e2e` / `agent`）、类型、机构、logo、首批发布日期或排队序号；`results` 在官方成绩公布前为 `null`，公布后按构建器文件头的格式填入 clean / random 各视角的 Score 与 Success。
+- VLA / WAM 与 Coding agent 分两张榜分别排名（每格 50 局 vs 5 局，接口与预算不同），不可横向比较。
+- 模型 logo：`media/icons/models/`，取自各模型或机构官网的彩色原版。
+- 页面源：`scripts/leaderboard-page.html`；样式：`scripts/leaderboard-explorer.css`、`scripts/leaderboard-boards.css`；交互：`scripts/leaderboard-boards.js`。
+- 首屏：`scripts/leaderboard_stage.py`、`scripts/leaderboard-stage.css`。有成绩后领奖台显示 VLA / WAM 榜 Clean 总分前三；之前显示首批发布日期与模型。
 - 单独构建：`python3 scripts/build_leaderboard.py`。完整构建也会调用此构建器；不要直接修改生成的 `leaderboard.html`。
-- 浏览器回归：`node scripts/test_leaderboard_explorer.cjs`；首页与新榜单入口衔接：`node scripts/test_view_leaderboard.cjs`，使用现有 Playwright / `NODE_PATH` 环境。
+- 浏览器回归：`node scripts/test_leaderboard_boards.cjs`；首页与新榜单入口衔接：`node scripts/test_view_leaderboard.cjs`，使用现有 Playwright / `NODE_PATH` 环境。
 - 此轮改版前的已保存版本：提交 `87c6ccf`，标签 `checkpoint-before-leaderboard`。首页、Benchmark 与 Documents 不属于这次独立榜单改版的修改范围。
 
 ### Benchmark 任务浏览
@@ -67,7 +69,7 @@ python3 scripts/preview.py --port 8767
 
 单独运行 `python3 scripts/build_benchmark.py` 更新总览、分类和任务详情；完整构建也会调用它。请修改上述源文件，不直接修改生成页面。浏览器回归运行 `node scripts/test_benchmark_browser.cjs`，使用与现有测试相同的 Playwright / `NODE_PATH` 环境。
 
-- 修改任务定义、媒体路径、难度和证据说明：`data/showcase-cases.json`（rollout 页面与封面导出使用）。
+- 修改任务定义、媒体路径、难度和证据说明：`data/showcase-cases.json`（封面导出使用）。
 - 修改完整研究介绍：`docs/PhysCo_Showcase.md`。
 - 排行榜数据与说明：`data/leaderboard-results.json`，详见 `docs/Leaderboard.md`。
 - 新媒体放在 `media/videos/` 或 `media/images/`，视频封面放在 `media/posters/`。
@@ -126,7 +128,7 @@ Act 的 GT 指真实下发的控制器参考目标，不是通过完整验收的
 
 封面与介绍的排版样式位于 `index.html` 的 `<head>`，署名和经过确认的 212 词介绍直接在 `index.html` 中维护。正文采用本地 Source Serif 4（Regular / Semibold WOFF2，附 OFL 许可证；来源 https://github.com/adobe-fonts/source-serif/tree/release）。清华 SIGS 标识从原首页内嵌图像提取为静态 PNG；社区 SVG 来源与许可证见 `media/icons/community/README.md`。
 
-完整 benchmark 说明在独立页面；首页的 30 个任务网格由 `scripts/build_home_tasks.py` 生成。正常构建只生成缺失的 rollout 页面，保留已单独更新的页面；只有显式调用 `build_rollouts(..., overwrite=True)` 才会覆盖它们。
+完整 benchmark 说明在独立页面；首页的 30 个任务网格由 `scripts/build_home_tasks.py` 生成。
 
 `test_project_browser.cjs` 覆盖 320、390、820、1440、1920px 下的版心、标题、作者标记、社区图标、按需视频加载、分享及字体加载失败回退。字体和图标均本地提供，不依赖外部 CDN。
 
