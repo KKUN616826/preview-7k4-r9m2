@@ -89,7 +89,7 @@ def render():
 
 def main():
     entry = render()
-    for relative in ['index.html', 'scripts/research_intro.html']:
+    for relative in ['index.html']:
         path = ROOT / relative
         source = path.read_bytes().decode()
         parser = SectionBounds(source)

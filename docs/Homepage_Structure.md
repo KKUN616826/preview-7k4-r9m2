@@ -4,7 +4,7 @@ The homepage follows the pattern used by RoboDojo, Embodied First Exam and X2Rea
 
 | Order | Section | Job | Source |
 |---|---|---|---|
-| 1 | `#overview` | Title, tagline, calls to action, interactive demo, paper information, film, key numbers | hand-maintained in `index.html`; numbers from `build_home_stats.py` |
+| 1 | `#overview` | Title, tagline, calls to action, interactive demo, paper information, film, key numbers | hand-maintained in `index.html`; demo data from `build_home_hero_data.py`, numbers from `build_home_stats.py` |
 | 2 | `#introduction` | Motivation and the three suites (Mind, Act, Mind2Act) | `scripts/intro-story.html` via `build_intro_story.py` |
 | 3 | `#top-ten` | Leaderboard preview: every model with reported scores, ranked by the selected suite | `build_home_leaderboard_entry.py` from `data/leaderboard-results.json` |
 | 4 | `#tasks` | All 30 tasks, one row per suite, each linking to its task page | `build_home_tasks.py` from `data/benchmark-navigation.json` |

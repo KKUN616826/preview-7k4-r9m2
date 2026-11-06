@@ -35,7 +35,7 @@ def apply_homepage(source):
     return source
 
 def main():
-    for relative in ['index.html','scripts/research_intro.html']:
+    for relative in ['index.html']:
         p=ROOT/relative;p.write_bytes(apply_homepage(p.read_bytes().decode()).encode())
     p=ROOT/'resources.html';s=p.read_text()
     s=s.replace('comprises 15 tasks','comprises 30 tasks').replace('<td>5</td>','<td>10</td>').replace('<td>15</td>','<td>30</td>').replace('45 task–level configurations','90 task–level configurations').replace('Browse the 15 tasks','Browse the 30 tasks')
