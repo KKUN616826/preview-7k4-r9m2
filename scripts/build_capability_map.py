@@ -20,9 +20,9 @@ def render():
     panels = []
     for suite in suites:
         slug, name = suite['slug'], suite['name']
-        panels.append(f'''<article class="cm-suite-intro cm-{slug}" aria-labelledby="cm-title-{slug}">
+        panels.append(f'''<a class="cm-suite-intro cm-{slug}" href="benchmark.html#suite-{slug}" aria-labelledby="cm-title-{slug}" aria-describedby="cm-goal-{slug}">
 <h3 id="cm-title-{slug}" class="cm-suite-title">{name}</h3>
-<p class="cm-suite-goal">{html.escape(suite['explorer'])}</p></article>''')
+<p id="cm-goal-{slug}" class="cm-suite-goal">{html.escape(suite['explorer'])}</p></a>''')
     cards = []
     for suite in suites:
         for task in suite['cases']:

@@ -73,17 +73,18 @@ body #capability-explorer .cm-credit{font:400 11px/1.6 Helvetica,Arial,sans-seri
 .cm-sr-only,body #capability-explorer.capability-map #cm-heading{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
 .cm-copy{align-self:stretch;margin-bottom:0;display:flex;flex-direction:column}
 body #capability-explorer.capability-map .cm-overview-meta{font:400 13px/1.5 Helvetica,Arial,sans-serif!important;color:#536b78!important;text-align:left!important;margin:0 0 20px!important}
-.cm-suite-intros{display:flex;flex-direction:column;justify-content:space-between;flex:1;padding-bottom:44px}
-.cm-suite-intro{padding:23px 0;border-top:1px solid #dce4e5}
-.cm-suite-intro:first-child{padding-top:8px;border-top:0}
-.cm-suite-intro:last-child{padding-bottom:0}
+.cm-suite-intros{display:flex;flex-direction:column;justify-content:space-between;gap:24px;flex:1;padding-bottom:44px}
+.cm-suite-intro{display:block;position:relative;padding:12px 18px;border-left:2px solid var(--cm-color);border-radius:0 8px 8px 0;color:inherit;text-decoration:none;transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease}
+.cm-suite-intro:focus-visible{outline:2px solid var(--cm-color);outline-offset:5px;background:#fff;box-shadow:0 8px 22px #20374912}
+@media(hover:hover) and (pointer:fine){.cm-suite-intro:hover{transform:translateY(-4px);background:#fff;box-shadow:0 8px 22px #20374912}}
+@media(prefers-reduced-motion:reduce){.cm-suite-intro{transform:none!important;transition:none!important}}
 body #capability-explorer.capability-map .cm-suite-title{font:700 clamp(36px,3.4vw,49px)/1.12 Sora,Arial,sans-serif!important;letter-spacing:-.05em!important;color:#203749!important;margin:0 0 14px!important;text-align:left!important}
 body #capability-explorer.capability-map .cm-suite-goal{font:400 16px/1.65 Helvetica,Arial,sans-serif!important;color:#536b78!important;margin:0!important;text-align:left!important;max-width:38ch}
 .cm-visual{align-self:start}
 .cm-credit a{color:inherit;text-underline-offset:3px}
 @media(min-width:1024px){.cm-layout{grid-template-columns:360px minmax(0,1fr);column-gap:40px}}
-@media(min-width:851px) and (max-width:1023px){.cm-layout{grid-template-columns:300px minmax(0,1fr);gap:24px}.cm-suite-intros{padding-bottom:0}.cm-suite-intro{padding:18px 0}}
-@media(max-width:850px){.cm-layout{grid-template-columns:1fr;gap:32px}.cm-copy{max-width:540px;width:100%;justify-self:center}.cm-visual{max-width:540px;justify-self:center}.cm-suite-intros{padding-bottom:0}.cm-suite-intro{padding:22px 0}body #capability-explorer.capability-map .cm-suite-title{font-size:36px!important}body #capability-explorer.capability-map .cm-suite-goal{max-width:48ch}}
+@media(min-width:851px) and (max-width:1023px){.cm-layout{grid-template-columns:300px minmax(0,1fr);gap:24px}.cm-suite-intros{padding-bottom:0}}
+@media(max-width:850px){.cm-layout{grid-template-columns:1fr;gap:32px}.cm-copy{max-width:540px;width:100%;justify-self:center}.cm-visual{max-width:540px;justify-self:center}.cm-suite-intros{padding-bottom:0}body #capability-explorer.capability-map .cm-suite-title{font-size:36px!important}body #capability-explorer.capability-map .cm-suite-goal{max-width:48ch}}
 
 @layer m2a-typography {
  body #capability-explorer.capability-map .cm-suite-title {font-family:Sora,Arial,sans-serif!important}

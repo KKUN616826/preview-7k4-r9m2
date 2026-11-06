@@ -56,6 +56,35 @@ const url = process.env.PREVIEW_URL || 'http://127.0.0.1:8766/';
       }
     }
     await page.setViewportSize({ width:1440,height:1000 });
+    const suiteLinks = root.locator('a.cm-suite-intro');
+    assert.equal(await suiteLinks.count(), 3);
+    const lineColors = [];
+    for (const slug of ['mind', 'act', 'mind2act']) {
+      const link = suiteLinks.filter({ has: page.locator(`#cm-title-${slug}`) });
+      assert.equal(await link.getAttribute('href'), `benchmark.html#suite-${slug}`);
+      const line = await link.evaluate(e => ({ width:getComputedStyle(e).borderLeftWidth, color:getComputedStyle(e).borderLeftColor }));
+      assert.equal(line.width, '2px');
+      lineColors.push(line.color);
+      await link.hover();
+      assert.equal(await link.evaluate(e => getComputedStyle(e).transform), 'none', 'reduced motion disables lift');
+    }
+    assert.equal(new Set(lineColors).size, 3);
+    await page.emulateMedia({ reducedMotion:'no-preference' });
+    await suiteLinks.first().hover();
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('a.cm-suite-intro')).transform === 'matrix(1, 0, 0, 1, 0, -4)');
+    await page.emulateMedia({ reducedMotion:'reduce' });
+    for (const slug of ['mind', 'act', 'mind2act']) {
+      const link = page.locator(`a.cm-suite-intro[href="benchmark.html#suite-${slug}"]`);
+      if (slug === 'mind') { await link.focus(); await page.keyboard.press('Enter'); }
+      else await link.click();
+      await page.waitForURL(`**/benchmark.html#suite-${slug}`);
+      await page.waitForFunction(slug => document.querySelector(`.bo-suite-tabs a[href="#suite-${slug}"]`)?.getAttribute('aria-current') === 'location', slug);
+      const target = page.locator(`#suite-${slug}`);
+      await page.waitForFunction(slug => {const b=document.getElementById(`suite-${slug}`).getBoundingClientRect();return b.top >= 0 && b.top < innerHeight/2;}, slug);
+      assert.equal(await target.isVisible(), true);
+      await page.goto(url);
+      await page.waitForFunction(() => document.querySelector('.capability-map').dataset.texture === 'loaded');
+    }
     await root.locator('.cm-reset').click();
     await page.waitForTimeout(150);
     await root.screenshot({path:'/tmp/capability-stacked-desktop.png'});
@@ -69,6 +98,6 @@ const url = process.env.PREVIEW_URL || 'http://127.0.0.1:8766/';
     assert.equal(await fallback.locator('.cm-task-preview').isVisible(), true);
     assert.equal(await fallback.locator('.cm-motion').isDisabled(), true);
     assert.deepEqual(errors, []);
-    console.log('PASS: stacked introductions, 30 task previews, neutral borders, keyboard rotation/focus, six viewport sizes and WebGL fallback.');
+    console.log('PASS: three colored suite links, hover/reduced motion, Benchmark anchor navigation, 30 task previews, keyboard rotation/focus, six viewport sizes and WebGL fallback.');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exit(1); });
