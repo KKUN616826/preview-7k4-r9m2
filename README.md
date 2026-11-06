@@ -30,10 +30,12 @@
 GitHub Pages 从 `main` 分支根目录发布已生成的静态页面。
 当前首页已替换旧任务预览结构；`scripts/build.py` 和 `scripts/validate.py` 仍包含旧结构假设，不作为当前版本的发布入口，直接运行可能覆盖已维护的任务模板。
 
-本次涉及的首页任务球与榜单使用对应构建器：
+首页按“每块只做一件事”组织：首屏与论文信息 → 三个套件 → 排行榜预览 → 30 个任务 → News / Resources / Contributors。结构与各区块的数据来源见 [首页结构说明](docs/Homepage_Structure.md)。首页模块与榜单使用对应构建器：
 
 ```sh
-python3 scripts/build_capability_map.py
+python3 scripts/build_intro_story.py
+python3 scripts/build_home_leaderboard_entry.py
+python3 scripts/build_home_tasks.py
 python3 scripts/build_leaderboard.py
 python3 scripts/validate_release.py
 python3 scripts/preview.py --port 8767

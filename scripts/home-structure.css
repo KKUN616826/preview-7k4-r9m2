@@ -1,0 +1,266 @@
+/* Homepage structure: one job per section.
+   Loaded in <head> so the leaderboard preview and task grid are styled on first paint.
+   Shared column: 1024px; section headings 30px; supporting text 16–18px. */
+:root {
+  --home-column: min(1024px, calc(100% - 32px));
+  --home-ink: #192d43;
+  --home-muted: #536b78;
+  --home-rule: #d9ddd5;
+  --home-surface: #f5f7f7;
+  --home-accent: #4e7c70;
+  --mind-accent: #49796b;
+  --act-accent: #446f86;
+  --mind2act-accent: #91793d;
+}
+
+/* Section shell shared by the new modules and the sections that follow them. */
+html body main #top-ten.home-leaderboard,
+html body main #tasks.home-tasks,
+html body main #news,
+html body main #resources-overview,
+html body main #contributors {
+  box-sizing: border-box;
+  width: var(--home-column) !important;
+  max-width: 1024px !important;
+  margin: 0 auto !important;
+  padding: 72px 0 !important;
+  border: 0 !important;
+  border-top: 1px solid var(--home-rule) !important;
+  scroll-margin-top: 96px;
+}
+html body main #news h2,
+html body main #resources-overview h2,
+html body main #contributors h2,
+html body main #top-ten.home-leaderboard h2,
+html body main #tasks.home-tasks h2 {
+  margin: 0 0 12px !important;
+  font-size: 30px !important;
+  font-weight: 650 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -.75px !important;
+  color: var(--home-ink) !important;
+  text-align: left !important;
+}
+.home-eyebrow {
+  margin: 0 0 10px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase;
+  color: var(--home-muted) !important;
+}
+.hl-head p:not(.home-eyebrow),
+.ht-head p:not(.home-eyebrow) {
+  max-width: 620px;
+  margin: 0 !important;
+  font-size: 17px !important;
+  line-height: 1.6 !important;
+  color: var(--home-muted) !important;
+}
+.home-link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--home-accent);
+  border-radius: 999px;
+  color: var(--home-accent) !important;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: background-color .2s, color .2s;
+}
+.home-link-button:hover { background: var(--home-accent); color: #fff !important; }
+.home-link-button:focus-visible { outline: 2px solid var(--home-accent); outline-offset: 3px; }
+
+/* Leaderboard preview */
+.hl-head, .ht-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.hl-tabs {
+  display: inline-flex;
+  flex: none;
+  padding: 4px;
+  border: 1px solid var(--home-rule);
+  border-radius: 999px;
+  background: var(--home-surface);
+}
+.hl-tabs button {
+  min-height: 36px;
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--home-muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.hl-tabs button[aria-pressed="true"] { background: var(--home-ink); color: #fff; }
+.hl-tabs button:focus-visible { outline: 2px solid var(--home-accent); outline-offset: 2px; }
+.hl-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 24px;
+  border: 1px solid var(--home-rule);
+  border-radius: 10px;
+}
+/* Legacy rules target "body #top-ten th/td" with !important, so these do too. */
+.hl-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff !important;
+  font-variant-numeric: tabular-nums;
+}
+html body main #top-ten .hl-table th,
+html body main #top-ten .hl-table td {
+  padding: 13px 18px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e6e9e4 !important;
+  background: #fff !important;
+  color: #43586a !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  font-family: inherit !important;
+  letter-spacing: 0 !important;
+  text-align: left;
+  text-transform: none !important;
+  white-space: nowrap;
+}
+html body main #top-ten .hl-table thead th {
+  background: var(--home-surface) !important;
+  color: var(--home-muted) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .6px !important;
+  text-transform: uppercase !important;
+}
+html body main #top-ten .hl-table tbody th { color: var(--home-ink) !important; font-weight: 600 !important; }
+html body main #top-ten .hl-table tbody tr:last-child > * { border-bottom: 0 !important; }
+html body main #top-ten .hl-table tbody tr:hover { background: none !important; }
+html body main #top-ten .hl-table tbody tr:hover > * { background: #f8faf9 !important; }
+html body main #top-ten .hl-table .hl-rank { width: 48px; color: var(--home-muted) !important; }
+html body main #top-ten .hl-table td.hl-type { color: var(--home-muted) !important; }
+html body main #top-ten .hl-table .hl-score { width: 120px; text-align: right; }
+html body main #top-ten .hl-table thead th[aria-sort],
+html body main #top-ten:not([data-view]) td[data-col="mind"],
+html body main #top-ten[data-view="mind"] td[data-col="mind"],
+html body main #top-ten[data-view="act"] td[data-col="act"],
+html body main #top-ten[data-view="coupling"] td[data-col="coupling"] { color: var(--home-ink) !important; font-weight: 650 !important; }
+html body main #top-ten .hl-table tbody tr:first-child td.hl-rank { color: var(--home-accent) !important; font-weight: 700 !important; }
+.hl-model { display: inline-flex; align-items: center; gap: 10px; }
+.hl-model img { width: 20px; height: 20px; object-fit: contain; }
+.hl-monogram {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e6edf2;
+  color: var(--act-accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Task grid: one row per suite */
+.ht-suite { --suite-accent: var(--mind-accent); margin-top: 36px; }
+.ht-suite--act { --suite-accent: var(--act-accent); }
+.ht-suite--mind2act { --suite-accent: var(--mind2act-accent); }
+.ht-suite-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding-left: 12px;
+  border-left: 3px solid var(--suite-accent);
+}
+html body main #tasks .ht-suite-head h3 {
+  margin: 0 !important;
+  font-size: 20px !important;
+  font-weight: 650 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.3px !important;
+  color: var(--home-ink) !important;
+}
+html body main #tasks .ht-suite-head p { margin: 0 !important; font-size: 15px !important; color: var(--home-muted) !important; }
+.ht-suite-head a {
+  margin-left: auto;
+  color: var(--suite-accent) !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.ht-suite-head a:hover { text-decoration: underline !important; }
+.ht-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ht-tile {
+  display: block;
+  overflow: hidden;
+  border: 1px solid #e0e4e2;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--home-ink) !important;
+  text-decoration: none !important;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.ht-tile img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: left center; /* multi-view stills keep the main camera on the left */
+  background: #eef1ef;
+}
+.ht-tile-text { display: flex; gap: 8px; align-items: baseline; padding: 9px 11px 11px; min-height: 3.1em; }
+.ht-id { flex: none; color: var(--suite-accent); font-size: 12px; font-weight: 700; letter-spacing: .3px; }
+.ht-name { font-size: 14px; font-weight: 550; line-height: 1.35; }
+.ht-tile:hover { border-color: var(--suite-accent); box-shadow: 0 6px 18px rgba(25, 45, 67, .08); transform: translateY(-2px); }
+.ht-tile:focus-visible { outline: 2px solid var(--suite-accent); outline-offset: 2px; }
+
+/* Introduction: the scope notes and overview figure now live on Protocol and Documents. */
+html body #introduction.intro-readable p.intro-more { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 0 !important; }
+
+@media (max-width: 900px) {
+  .hl-head, .ht-head { flex-direction: column; align-items: flex-start; }
+  .ht-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #top-ten .hl-type { display: none; }
+}
+@media (max-width: 560px) {
+  html body main #top-ten.home-leaderboard,
+  html body main #tasks.home-tasks,
+  html body main #news,
+  html body main #resources-overview,
+  html body main #contributors { padding: 52px 0 !important; }
+  .ht-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ht-suite-head { flex-wrap: wrap; }
+  .ht-suite-head a { margin-left: 0; }
+  html body main #top-ten .hl-table th, html body main #top-ten .hl-table td { padding: 11px 10px !important; }
+  html body main #top-ten .hl-table .hl-score { width: auto; }
+  /* Narrow screens show only the score column for the selected suite. */
+  html body main #top-ten[data-view="mind"] .hl-table [data-col]:not([data-col="mind"]),
+  html body main #top-ten[data-view="act"] .hl-table [data-col]:not([data-col="act"]),
+  html body main #top-ten[data-view="coupling"] .hl-table [data-col]:not([data-col="coupling"]) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ht-tile { transition: none; } .ht-tile:hover { transform: none; } }
+/* Legacy #top-ten rules force a 1000px table and a 105px rank column. */
+html body main #top-ten .hl-table { width: 100% !important; min-width: 0 !important; }
+html body main #top-ten .hl-table th,
+html body main #top-ten .hl-table td { min-width: 0 !important; }
+html body main #top-ten .hl-table .hl-rank { width: 48px !important; }

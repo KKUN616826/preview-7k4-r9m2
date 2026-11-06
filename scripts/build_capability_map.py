@@ -52,5 +52,8 @@ if __name__ == '__main__':
     page = ROOT / 'index.html'
     source = page.read_bytes().decode()
     source, count = re.subn(r'<section id="(?:research-motivation|capability-explorer)".*?</section>\r?',lambda _:render(),source,count=1,flags=re.S)
-    assert count == 1
-    page.write_bytes(source.encode())
+    if count == 0:
+        # The homepage now uses the task grid (scripts/build_home_tasks.py); the map is kept for reuse elsewhere.
+        print('index.html has no capability map section; nothing to update.')
+    else:
+        page.write_bytes(source.encode())
