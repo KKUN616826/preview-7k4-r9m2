@@ -10,6 +10,7 @@ The homepage follows the pattern used by RoboDojo, Embodied First Exam and X2Rea
 | 4 | `#top-ten` | Leaderboard preview: every model with reported scores, ranked by the selected suite | `build_home_leaderboard_entry.py` from `data/leaderboard-results.json` |
 | 5 | `#tasks` | One moving film strip of all 30 tasks, then one link per suite | `build_home_tasks.py` from `data/benchmark-navigation.json` |
 | 6 | `#news`, `#resources-overview`, `#contributors` | Updates, documents and people | hand-maintained in `index.html` |
+| 7 | `#model-diagnostics` | Eight-second coming-soon teaser: centered Model, harness, report, then copy | `build_home_diagnostics.py` from `home-diagnostics.html`, CSS/JS, generated lunar background |
 
 The evaluation scope notes and the overview figure moved off the homepage; the introduction links to `protocol.html` and to `media/overview/mind2act-overview-v36.pdf`. The lunar capability map was removed with its scripts and tests (see git history before this change if it is needed again).
 
@@ -49,4 +50,5 @@ python3 scripts/build_intro_story.py
 python3 scripts/build_home_leaderboard_entry.py
 python3 scripts/build_home_tasks.py
 python3 scripts/build_home_diagnosis.py
+python3 scripts/build_home_diagnostics.py
 ```
