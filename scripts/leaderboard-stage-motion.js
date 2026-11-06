@@ -10,8 +10,7 @@
  button.hidden=false;
  function updateButton(){
   button.disabled=reduced.matches;
-  button.dataset.paused=String(userPaused||blocked||reduced.matches);
-  button.title=reduced.matches?'Animation paused for reduced motion':(userPaused||blocked)?'Play animation':'Pause animation';
+  button.textContent=reduced.matches?'Motion reduced':(userPaused||blocked)?'Play animation':'Pause animation';
   button.setAttribute('aria-pressed',String(userPaused||blocked||reduced.matches));
   button.setAttribute('aria-label',reduced.matches?'Animation disabled by reduced motion preference':(userPaused||blocked)?'Play mechanical arm animation':'Pause mechanical arm animation');
  }
