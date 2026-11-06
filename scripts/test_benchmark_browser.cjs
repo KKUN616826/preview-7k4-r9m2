@@ -18,20 +18,48 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     await page.goto(new URL('benchmark.html', base).href);
     await page.evaluate(() => document.fonts.ready);
     assert.equal(await page.locator('.bo-chapter').count(), taskCount);
-    assert.equal(await page.locator('.bo-suite:visible').count(), 3);
-    assert.equal(await page.locator('.bo-chapter:visible').count(), taskCount);
+    assert.equal(await page.locator('.bo-suite:visible').count(), 1);
+    assert.equal(await page.locator('.bo-chapter:visible').count(), suites[0].cases.length);
+    assert.equal(await page.locator('.bo-index, .bo-mobile-index, .bo-family-head, .bo-task-id > span').count(), 0);
+    assert.equal(await page.locator('.bo-suite-tabs [data-suite]').count(), 3);
+    assert.equal(await page.locator('.bo-suite-tabs').evaluate(el => getComputedStyle(el).position), 'static');
+    await page.locator('#tab-mind2act').click();
     await page.locator('#task-CP01 select').selectOption('medium');
     assert.match(await page.locator('#task-CP01 .bo-task-poster').getAttribute('src'), /CP01-medium.jpg$/);
     assert.match(await page.locator('#task-CP01 .bo-task-link').getAttribute('href'), /CP01.html#medium$/);
-    assert.ok(page.url().endsWith('/benchmark.html'));
+    assert.ok(page.url().endsWith('/benchmark.html#suite-mind2act'));
     assert.equal(await page.getByText('View task', {exact:true}).count(), 0);
     await page.locator('#tab-mind').click();
     assert.equal(await page.locator('#task-E2 option[value=hard]').isDisabled(), false);
-    await page.locator('#tab-act').click();
-    await page.waitForFunction(() => { const el = document.querySelector('#suite-act'); return Math.abs(el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).scrollMarginTop)) < 5; });
-    assert.equal(await page.locator('.bo-chapter:visible').count(), taskCount);
-    await page.locator('.bo-index [data-index-task=CP05]').click();
-    assert.equal(await page.locator('.bo-index [data-index-task=CP05]').getAttribute('aria-current'), 'location');
+    await page.locator('#tab-mind').focus();
+    await page.keyboard.press('ArrowRight');
+    assert.equal(await page.locator('#tab-act').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('#tab-act').evaluate(el => el === document.activeElement), true);
+    assert.equal(await page.locator('#suite-act').isVisible(), true);
+    assert.equal(await page.locator('.bo-chapter:visible').count(), suites[1].cases.length);
+    await page.keyboard.press('End');
+    assert.equal(await page.locator('#tab-mind2act').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('#tab-mind2act').evaluate(el => el === document.activeElement), true);
+    await page.goBack();
+    assert.equal(await page.locator('#suite-act').isVisible(), true);
+    await page.goForward();
+    assert.equal(await page.locator('#suite-mind2act').isVisible(), true);
+    // Search covers all suites, even while a different suite was selected.
+    await page.locator('#benchmark-search').fill('E2');
+    assert.equal(await page.locator('#task-E2').isVisible(), true);
+    assert.equal(await page.locator('#task-CP05').isVisible(), false);
+    assert.equal(await page.locator('.bo-suite-tabs [aria-pressed=true]').count(), 0);
+    await page.locator('.bo-search-clear').click();
+    assert.equal(await page.locator('#suite-mind2act').isVisible(), true);
+    assert.equal(await page.locator('.bo-chapter:visible').count(), suites[2].cases.length);
+    await page.locator('#benchmark-search').fill('not-a-real-task-xyz');
+    assert.equal(await page.locator('.bo-chapter:visible').count(), 0);
+    assert.equal(await page.locator('.bo-search-empty').isVisible(), true);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('.bo-chapter:visible').count(), suites[2].cases.length);
+    await page.goto(new URL('benchmark.html#task-CP05', base).href);
+    assert.equal(await page.locator('#tab-mind2act').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('#task-CP05').isVisible(), true);
     await page.locator('#task-CP05 select').selectOption('medium');
     // Clicking task copy follows the full-card link with the selected difficulty.
     await page.locator('#task-CP05 .bo-task-link').click({position:{x:270,y:75}});
@@ -64,7 +92,7 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
 
     await card.locator('a').click();
     assert.ok(page.url().endsWith('/tasks/E.html#easy'));
-    assert.equal(await page.locator('.workspace-sidebar a[aria-current=page] .workspace-case-id').textContent(), 'E');
+    assert.equal(await page.locator('.workspace-sidebar a[aria-current=page] .workspace-case-id').textContent(), suites[0].cases[0].code || suites[0].cases[0].id);
     await page.locator('[data-level="hard"]').click();
     await page.locator('[data-panel="hard"]').waitFor({ state: 'visible' });
     await page.reload();
@@ -80,7 +108,7 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     for (const relative of paths) {
       const response = await page.goto(new URL(relative, base).href);
       assert.equal(response.status(), 200, relative);
-      if (relative === 'benchmark.html') assert.equal(await page.locator('.bo-suite:visible').count(), 3);
+      if (relative === 'benchmark.html') assert.equal(await page.locator('.bo-suite:visible').count(), 1);
       else assert.equal(await page.locator('.workspace-sidebar a[aria-current=page]').count(), 1, relative);
       const assets = await page.locator('link[rel=stylesheet],img,video source').evaluateAll(elements =>
         elements.map(el => el.href || el.src).filter(url => url.startsWith(location.origin)));
@@ -91,12 +119,18 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     }
     console.log('PASS: overview, suites, all catalog tasks, links, assets, hover and history');
 
-    for (const width of [320, 390, 820, 1024, 1440, 1920, 2560]) {
+    for (const width of [320, 390, 820, 855, 1024, 1440, 1920, 2560]) {
       await page.setViewportSize({ width, height: 1000 });
       for (const relative of ['benchmark.html', 'benchmark/mind.html', 'tasks/E.html#medium']) {
         await page.goto(new URL(relative, base).href);
         await page.evaluate(() => document.fonts.ready);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${relative} ${width}`);
+        if (relative === 'benchmark.html') {
+          const bounds = await page.locator('.bo-explorer').boundingBox();
+          assert.ok(bounds.width <= 1001, `task canvas max width ${width}`);
+          assert.ok(bounds.x >= (width < 768 ? 20 : 40), `task canvas side margins ${width}`);
+          assert.equal(await page.locator('.bo-chapter:visible').count(), suites[0].cases.length);
+        }
         if (relative === 'benchmark/mind.html') {
           const layout = await page.evaluate(() => {
             const rows = [...document.querySelectorAll('.benchmark-task-row')].map(el => el.getBoundingClientRect());

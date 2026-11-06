@@ -298,3 +298,11 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .lb-stage-tabs, .lb-stage-caption, .lb-stage-full, .lb-stage-motion-toggle, .lb-stage-footer p { background: #fafcf5; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+
+/* Play / pause is an icon button (title and aria-label carry the text). */
+.lb-stage .lb-stage-motion-toggle { display: inline-grid; place-items: center; width: 40px; min-width: 40px; padding: 0; border-radius: 50%; }
+.lb-stage-motion-toggle > svg { grid-area: 1 / 1; display: block; pointer-events: none; }
+.lb-stage-motion-toggle[data-paused=false] > .lb-motion-play,
+.lb-stage-motion-toggle[data-paused=true] > .lb-motion-pause { display: none; }
+.lb-stage-motion-toggle:focus-visible { outline: 2px solid #315b60; outline-offset: 3px; }
+.lb-stage .lb-stage-motion-toggle:disabled { opacity: .6; }

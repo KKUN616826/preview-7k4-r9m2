@@ -107,14 +107,6 @@ def chapter(case, index, total):
     </article>'''
 
 
-def quick_index(suites):
-    groups = []
-    for suite in suites:
-        links = ''.join(f'<li><a href="#task-{c["id"]}" data-index-task="{c["id"]}"><span>{c["id"]}</span>{e(c.get("nav_title", c["title"]))}</a></li>' for c in suite['cases'])
-        groups.append(f'<details data-index-group="{suite["slug"]}" open><summary><a href="#suite-{suite["slug"]}" data-index-suite="{suite["slug"]}">{suite["name"]}<span>{len(suite["cases"])}</span></a></summary><ul>{links}</ul></details>')
-    return '<nav aria-label="Task quick index">' + ''.join(groups) + '</nav>'
-
-
 def render(suites):
     records = {c['id']: {**task_data(c), 'suite': s['name']} for s in suites for c in s['cases']}
     default = 'mind2act'
@@ -130,12 +122,14 @@ def render(suites):
           <figcaption>{task_id} <span>{e(c.get('nav_title', c['title']))}</span></figcaption>
         </figure>''')
     hero_buttons = ''.join(f'<button type="button" data-hero-select="{s["slug"]}" aria-pressed="{str(s["slug"] == default).lower()}"><span aria-hidden="true"></span>{s["name"]}</button>' for s in suites)
-    tabs = ''.join(f'<a id="tab-{s["slug"]}" href="#suite-{s["slug"]}" data-suite="{s["slug"]}">{s["name"]}<span>{len(s["cases"])}</span></a>' for s in suites)
+    tabs = ''.join(f'<button type="button" id="tab-{s["slug"]}" data-suite="{s["slug"]}" '
+                   f'aria-controls="suite-{s["slug"]}" aria-pressed="{str(s["slug"] == suites[0]["slug"]).lower()}">{s["name"]}</button>' for s in suites)
     panels = []
     for s in suites:
-        chapters = ''.join(chapter(records[c['id']], i + 1, len(s['cases'])) for i, c in enumerate(s['cases']))
+        chapters = ''.join(chapter(records[c['id']], 0, len(s['cases'])) for c in s['cases'])
         panels.append(f'''<section class="bo-suite" id="suite-{s['slug']}" data-suite-section="{s['slug']}" aria-labelledby="suite-heading-{s['slug']}">
-          <div class="bo-suite-intro"><h2 id="suite-heading-{s['slug']}">{s['name']}</h2><p>{e(s['description'])}</p></div><div class="bo-task-grid">{chapters}</div>
+          <h2 class="bo-suite-heading" id="suite-heading-{s['slug']}">{s['name']}</h2>
+          <div class="bo-task-grid">{chapters}</div>
         </section>''')
     payload = {k: v['levels'] for k, v in records.items()}
     return f'''<section class="bo-hero" aria-labelledby="benchmark-title">
@@ -156,12 +150,12 @@ def render(suites):
       <p id="benchmark-search-status" class="bo-search-status" role="status" aria-live="polite" aria-atomic="true"></p>
     </form>
     <section class="bo-explorer" id="explore" aria-labelledby="explorer-title">
-      <div class="bo-explorer-layout"><aside class="bo-index"><p class="bo-index-title">Quick index</p>{quick_index(suites)}</aside><div class="bo-explorer-body">
-      <div class="bo-explorer-heading"><h2 id="explorer-title">Explore the benchmark</h2><nav class="bo-suite-tabs" aria-label="Jump to capability suite">{tabs}</nav></div>
-      <details class="bo-mobile-index"><summary>Browse tasks</summary>{quick_index(suites)}</details>
+      <div class="bo-explorer-heading"><h2 id="explorer-title">Explore the benchmark</h2></div>
+      <div class="bo-suite-tabs" role="group" aria-label="Capability suite">{tabs}</div>
+      <div class="bo-explorer-body">
       <div class="bo-search-empty" hidden><h3>No tasks found</h3><p>Try a task name, ID, or a different keyword.</p><button type="button" data-clear-search>Clear search</button></div>
       {''.join(panels)}
-      </div></div>
+      </div>
     </section>
     <script type="application/json" id="benchmark-overview-data">{json.dumps(payload, ensure_ascii=False).replace('<', chr(92) + 'u003c')}</script>'''
 
@@ -175,8 +169,8 @@ def document(content):
 <link rel="icon" href="media/images/mind2act-favicon-v2.png">
 <link rel="preload" href="media/fonts/Sora-variable.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-4">
-<link rel="stylesheet" href="scripts/benchmark-overview.css?v=search-visible-5">
+<link rel="stylesheet" href="scripts/benchmark-overview.css?v=suite-switch-7">
 </head><body class="benchmark-overview"><a class="bo-skip" href="#explore">Skip to tasks</a>{header}
 <main class="bo-main" id="benchmark-content">{content}</main>
-<script src="scripts/benchmark-overview.js?v=4" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>
+<script src="scripts/benchmark-overview.js?v=suite-switch-7" defer></script><script src="scripts/site-shell.js?v=unified-1" defer></script>
 </body></html>\n'''

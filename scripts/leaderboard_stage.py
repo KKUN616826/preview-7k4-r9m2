@@ -51,6 +51,8 @@ def render(data):
                      + '</ul></div>')
     parts.append('</div></div></div><div class="lb-stage-footer"><a href="#results" class="lb-stage-full">View both leaderboards ↓</a>'
                  f'<p>Protocol {escape(data["protocol"]["version"])} · Clean and Random reported separately</p>'
-                 '<button type="button" class="lb-stage-motion-toggle" aria-pressed="false" aria-label="Pause mechanical arm animation" hidden>Pause animation</button>'
+                 '<button type="button" class="lb-stage-motion-toggle" aria-pressed="false" aria-label="Pause mechanical arm animation" data-paused="false" title="Pause animation" hidden>'
+                 '<svg class="lb-motion-pause" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>'
+                 '<svg class="lb-motion-play" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>'
                  '</div></section>')
     return ''.join(parts)
