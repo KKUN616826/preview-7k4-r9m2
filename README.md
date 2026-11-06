@@ -43,6 +43,18 @@ python3 scripts/preview.py --port 8767
 发布前检查共享导航、首页动画、任务球、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_capability_map.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_stage.cjs`、`test_leaderboard_explorer.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
 
 
+### Home 模型诊断预告
+
+首页底部的 `#model-diagnostics` 为 Coming soon 动画，不代表诊断服务已经开放。
+卡片仅为合成示例，没有真实模型测评数值。
+
+- 内容：`scripts/home-diagnostics.html`；样式和动画：`scripts/home-diagnostics.css`；播放控制：`scripts/home-diagnostics.js`。
+- 背景：`media/images/diagnostics/lunar-silver.webp`，生成素材说明见同目录 README。
+- 更新：`python3 scripts/build_home_diagnostics.py`，仅同步预告区到 `index.html` 和 `scripts/showcase.html`，保留其他本地改动。不要为此运行旧版完整首页构建。
+- 浏览器检查：`node scripts/test_home_diagnostics.cjs`，沿用现有 Playwright、`NODE_PATH` 和 `CHROMIUM_EXECUTABLE` 环境。
+- 动画按 8 秒循环：0–1.2s 只显示居中大 Model；1.2–2.8s 缩小并左移，Harness 随之出现；3–4.2s 展示诊断；4.2–5.5s 卡片揭晓；5.5–6.1s 再出现标题和说明；停留至 7.6s 后循环。卡片下缘保留粒子消散效果。
+- 进入可视范围后播放，支持暂停与重播；离屏、后台时暂停，系统减少动态效果设置下显示完整静态卡片。
+
 ### 独立 Leaderboard 页面
 
 - 数据：`data/leaderboard-results.json`，保留原页面转录的 Table 6 数值与来源信息；不与首页的旧候选名单文件混用。
