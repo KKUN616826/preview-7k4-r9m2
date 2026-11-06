@@ -1,14 +1,29 @@
 #!/usr/bin/env python3
-"""Build only the standalone leaderboard from its versioned result snapshot."""
+"""Build leaderboard.html from data/leaderboard-results.json.
+
+End-to-end models (VLA / WAM) and coding agents are ranked on separate boards:
+they run different case counts (50 vs 5 per task x difficulty) and interfaces.
+A model's `results` stays null until its official run is published; such models
+are listed with their release date or queue position and are never ranked.
+
+Published results use:
+  "results": {"clean":  {"overall": {"score": S, "success": R}, "mind": {...}, "act": {...}, "coupling": {...}},
+              "random": {... same keys ...},
+              "valid":  {"clean": N, "random": N}}
+Scores are 0-100 means; success is the percentage of cases scoring 100.
+"""
 from leaderboard_stage import render as render_stage
-import json
-import re
 import hashlib
+import json
 import math
+import re
+from datetime import date
 from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+ASSETS = ['scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-boards.css',
+          'scripts/leaderboard-boards.js', 'scripts/leaderboard-stage-motion.js']
 
 
 def e(value):
@@ -17,85 +32,123 @@ def e(value):
 
 def load():
     data = json.loads((ROOT / 'data/leaderboard-results.json').read_text())
-    assert data['status'] == 'partial'
+    assert data['schema_version'] == 2
     ids = [m['id'] for m in data['models']]
-    assert len(ids) == len(set(ids))
-    for model in data['models']:
-        assert model['paradigm'] in data['paradigms']
-        for view in data['views']:
-            result = model['results'][view['key']]
-            for value in result.values():
-                assert value is None or (isinstance(value, (float, int)) and math.isfinite(value) and 0 <= value <= 100)
-        for key in ['icon', 'cases']:
-            assert not model[key] or (ROOT / model[key]).is_file()
+    assert len(ids) == len(set(ids)), 'duplicate model id'
+    tracks = {t['key'] for t in data['tracks']}
+    settings = [s['key'] for s in data['settings']]
+    views = [v['key'] for v in data['views']]
+    for m in data['models']:
+        assert m['track'] in tracks and m['type'] in data['types'], m['id']
+        assert (m['type'] == 'agent') == (m['track'] == 'agent'), f'{m["id"]}: agents belong on the agent board'
+        assert not m['icon'] or (ROOT / m['icon']).is_file(), f'{m["id"]}: missing icon {m["icon"]}'
+        assert m['results'] or m.get('release') or m.get('queue'), f'{m["id"]}: needs results, a release date or a queue position'
+        if m['results']:
+            for s in settings:
+                for v in views:
+                    for metric in ('score', 'success'):
+                        value = m['results'][s][v][metric]
+                        assert isinstance(value, (int, float)) and math.isfinite(value) and 0 <= value <= 100, (m['id'], s, v, metric)
     return data
 
 
-def number(value, metric):
-    return '—' if value is None else f'{value:.{2 if metric == "score" else 1}f}'
+def release_label(model):
+    if model.get('release'):
+        d = date.fromisoformat(model['release'])
+        return f'{d.day} {d.strftime("%b")}'
+    return f'Queue #{model["queue"]}'
 
 
-def result_cell(value, metric):
-    label = number(value, metric)
-    if value is None:
-        return '<span class="lb-value-label">—</span>'
-    if metric == 'success':
-        return f'<span class="lb-value-label">{label}%</span>'
-    return (f'<span class="lb-score-display"><span class="lb-score-track" aria-hidden="true">'
-            f'<span class="lb-score-fill" style="width:{value}%"></span></span>'
-            f'<span class="lb-value-label">{label}</span></span>')
+def icon_html(model, size):
+    if model['icon']:
+        return f'<img src="{e(model["icon"])}" width="{size}" height="{size}" alt="" loading="lazy" decoding="async">'
+    return f'<span class="lb-icon-fallback" aria-hidden="true">{e(model["name"][:2])}</span>'
 
 
-def table(data):
+def board(data, track):
     views = data['views']
-    group_head = ''.join(f'<th colspan="2" scope="colgroup" data-group="{v["key"]}"><span>'
-                         f'<img src="{v["icon"]}" width="20" height="20" alt="">{v["label"]}</span></th>' for v in views)
-    metrics = ''.join(f'<th scope="col" data-group="{v["key"]}" data-sort-cell="{v["key"]}-{metric}" aria-sort="none">'
-                      f'<button type="button" data-sort-view="{v["key"]}" data-sort-metric="{metric}" '
-                      f'aria-label="Sort by {v["label"]} {label}">{label}<small>{unit}</small><span class="lb-sort-arrow" aria-hidden="true">↕</span></button></th>'
-                      for v in views for metric, label, unit in [('score', 'Score', '0–100'), ('success', 'Success', '%')])
+    models = [m for m in data['models'] if m['track'] == track['key']]
+    reported = sorted([m for m in models if m['results']], key=lambda m: -m['results']['clean']['overall']['score'])
+    pending = sorted([m for m in models if not m['results']], key=lambda m: (m.get('release') is None, m.get('release') or '', m.get('queue') or 0))
+    sort_attr = {v['key']: ' aria-sort="descending"' if v['key'] == 'overall' else '' for v in views}
+    arrow = {v['key']: '↓' if v['key'] == 'overall' else '↕' for v in views}
+    heads = ''.join(
+        f'<th scope="col" class="lb-number" data-col="{v["key"]}"{sort_attr[v["key"]]}>'
+        f'<button type="button" data-sort="{v["key"]}" title="{e(v["description"])}">{e(v["label"])}'
+        f'<span class="lb-sort-arrow" aria-hidden="true">{arrow[v["key"]]}</span></button></th>' for v in views)
     rows = []
-    for model in data['models']:
-        mid = e(model['id'])
-        icon = f'<img src="{model["icon"]}" width="23" height="23" alt="">' if model['icon'] else '<span class="lb-icon-fallback" aria-hidden="true">'+e(model['name'][:2])+'</span>'
-        values = ''.join(f'<td data-group="{v["key"]}" data-value="{metric}" class="lb-number">{result_cell(model["results"][v["key"]][metric], metric)}</td>' for v in views for metric in ['score', 'success'])
-        rows.append(f'<tr class="lb-result" data-model="{mid}"><td class="lb-rank">—</td>'
-                    f'<th scope="row" class="lb-model-cell"><button type="button" class="lb-model-button" data-details="{mid}" aria-expanded="false" aria-controls="detail-{mid}">'
-                    f'{icon}<span>{e(model["name"])}</span><span class="lb-expand" aria-hidden="true">+</span></button></th>'
-                    f'<td><span class="lb-paradigm" data-family="{e(model["paradigm"])}">{e(data["paradigms"][model["paradigm"]])}</span></td>{values}'
-                    '</tr>')
-        detail_scores = ''.join(f'<div><h4>{v["label"]}</h4><p>{number(model["results"][v["key"]]["score"], "score")} <span>Score</span></p>'
-                                f'<p>{number(model["results"][v["key"]]["success"], "success")} <span>Success %</span></p></div>' for v in views)
-        has_results = any(r['score'] is not None or r['success'] is not None for r in model['results'].values())
-        source = 'All-level results transcribed from the previously supplied Table 6.' if has_results else 'No result is reported in the current data snapshot.'
-        demo = f'<a href="{e(model["cases"])}">View model-family demos ↗</a>' if model['cases'] else '<span>No demonstration link available.</span>'
-        rows.append(f'<tr class="lb-detail-row" id="detail-{mid}" data-detail-model="{mid}" hidden><td colspan="10">'
-                    f'<section class="lb-model-detail" aria-label="{e(model["name"])} details"><div class="lb-detail-head"><h3>{e(model["name"])}</h3>'
-                    f'<span>{e(data["paradigms"][model["paradigm"]])}</span></div><div class="lb-detail-scores">{detail_scores}</div>'
-                    f'<p>{source} Difficulty-specific results, exact evaluated checkpoints and run-level evidence are not included in this snapshot.</p>'
-                    f'<div class="lb-detail-links">{demo}<a href="#protocol">How to read these results ↓</a></div>'
-                    '<p class="lb-detail-note">Demo links show model-family examples; they are not evidence for the reported scores.</p></section></td></tr>')
-    return ('<div class="lb-table-scroll" role="region" aria-label="Model results; scroll to view all metrics" tabindex="0">'
-            '<table class="lb-table"><caption class="lb-sr-only">Mind2Act World results across Mind, Act and Mind2Act</caption>'
-            '<thead><tr><th scope="col" class="lb-rank-heading">Rank</th><th scope="col" class="lb-model-heading">Model</th>'
-            f'<th scope="col">Paradigm</th>{metrics}</tr></thead>'
-            f'<tbody id="lb-rows">{"".join(rows)}</tbody></table></div>')
+    for m in reported + pending:
+        cells = []
+        for v in views:
+            if m['results']:
+                attrs = ''.join(f' data-{s}-{metric}="{m["results"][s][v["key"]][metric]}"'
+                                for s in ('clean', 'random') for metric in ('score', 'success'))
+                cells.append(f'<td class="lb-number" data-col="{v["key"]}"{attrs}>'
+                             f'{m["results"]["clean"][v["key"]]["score"]:.2f}</td>')
+            else:
+                cells.append(f'<td class="lb-number lb-pending-cell" data-col="{v["key"]}">—</td>')
+        status = ('<span class="lb-status lb-status-done">Reported</span>' if m['results'] else
+                  f'<span class="lb-status{" lb-status-date" if m.get("release") else ""}">{e(release_label(m))}</span>')
+        rows.append(
+            f'<tr class="lb-result{"" if m["results"] else " lb-pending"}" data-model="{e(m["id"])}">'
+            f'<td class="lb-rank">{"" if m["results"] else "—"}</td>'
+            f'<th scope="row" class="lb-model-cell"><span class="lb-model-name">{icon_html(m, 24)}<span>{e(m["name"])}</span></span></th>'
+            f'<td><span class="lb-paradigm" data-family="{e(m["type"])}">{e(data["types"][m["type"]])}</span></td>'
+            f'<td class="lb-org">{e(m["org"])}</td>{"".join(cells)}<td class="lb-status-cell">{status}</td></tr>')
+    total = track['cases_per_setting']
+    settings = ''.join(f'<button type="button" data-setting="{s["key"]}" aria-pressed="{str(s["key"] == "clean").lower()}" '
+                       f'title="{e(s["description"])}">{e(s["label"])}</button>' for s in data['settings'])
+    note = ''
+    if track['key'] == 'agent':
+        note = ('<p class="lb-board-note">Coding agents run a 5-case subset of every task × difficulty (450 per setting); '
+                'end-to-end models run all 50 (4,500). Because case counts and interfaces differ, the two boards are ranked '
+                'separately and their scores should not be compared. We plan to extend agents to the full setting as resources allow.</p>')
+    return (
+        f'<section class="lb-board" id="board-{e(track["key"])}" data-board="{e(track["key"])}" data-sort="overall" data-setting="clean" data-metric="score" '
+        f'aria-labelledby="board-{e(track["key"])}-title">'
+        f'<div class="lb-board-head"><div><h3 id="board-{e(track["key"])}-title">{e(track["title"])}</h3>'
+        f'<p>{e(track["summary"])} {track["cases_per_cell"]} cases per task × difficulty · {total:,} per setting.</p></div>'
+        '<div class="lb-board-controls">'
+        f'<div class="lb-toggle" role="group" aria-label="Setting">{settings}</div>'
+        '<div class="lb-toggle" role="group" aria-label="Metric"><button type="button" data-metric="score" aria-pressed="true">Score</button>'
+        '<button type="button" data-metric="success" aria-pressed="false">Success %</button></div></div></div>'
+        '<div class="lb-table-scroll" role="region" tabindex="0" aria-label="' + e(track['title']) + '; scroll for all columns">'
+        f'<table class="lb-table lb-board-table"><caption class="lb-sr-only">{e(track["title"])}</caption>'
+        '<thead><tr><th scope="col" class="lb-rank-heading">Rank</th><th scope="col" class="lb-model-heading">Model</th>'
+        f'<th scope="col">Type</th><th scope="col">Contributor</th>{heads}<th scope="col">Results</th></tr></thead>'
+        f'<tbody>{"".join(rows)}</tbody></table></div>{note}</section>')
+
+
+def schedule(data):
+    first = [m for m in data['models'] if m.get('release') == data['first_release']]
+    queue = sorted([m for m in data['models'] if not m['results'] and m.get('queue')], key=lambda m: m['queue'])
+    chip = lambda m: f'<li>{icon_html(m, 20)}<span>{e(m["name"])}</span></li>'
+    d = date.fromisoformat(data['first_release'])
+    return ('<section class="lb-schedule" aria-labelledby="lb-schedule-title"><h3 id="lb-schedule-title">Evaluation schedule</h3>'
+            f'<div class="lb-schedule-step"><p><strong>{d.day} {d.strftime("%B")}</strong> First results</p><ul>{"".join(chip(m) for m in first)}</ul></div>'
+            f'<div class="lb-schedule-step"><p><strong>Then</strong> {e(data["cadence"])} In order:</p><ol>{"".join(chip(m) for m in queue)}</ol></div>'
+            '</section>')
 
 
 def main():
     data = load()
     header = (ROOT / 'scripts/benchmark/header.html').read_text().replace(' aria-current="page"', '')
     header = header.replace('href="leaderboard.html"', 'href="leaderboard.html" aria-current="page"')
-    options = ''.join(f'<option value="{e(key)}">{e(value)}</option>' for key, value in data['paradigms'].items())
     payload = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
+    boards = ''.join(board(data, t) for t in data['tracks'])
     template = (ROOT / 'scripts/leaderboard-page.html').read_text()
-    for key, value in {'HEADER': header, 'TABLE': table(data), 'DATA': payload, 'PARADIGMS': options, 'STAGE': render_stage(data)}.items():
+    for key, value in {'HEADER': header, 'BOARDS': boards, 'SCHEDULE': schedule(data), 'DATA': payload,
+                       'STAGE': render_stage(data), 'PROTOCOL_VERSION': e(data['protocol']['version']),
+                       'SCORING_VERSION': e(data['protocol']['scoring']), 'UPDATED': e(data['updated'])}.items():
         template = template.replace('__' + key + '__', value)
-    for asset in ['scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-stage-ui.js', 'scripts/leaderboard-stage-motion.js', 'scripts/leaderboard-explorer.js']:
+    leftover = re.findall(r'__[A-Z_]+__', template)
+    assert not leftover, f'unreplaced placeholders: {leftover}'
+    for asset in ASSETS:
         version = hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
-        template = re.sub(re.escape(asset)+r'\?v=[^"\s]+', asset+'?v='+version, template)
+        template = re.sub(re.escape(asset) + r'(?:\?v=[^"\s]+)?"', asset + '?v=' + version + '"', template)
     (ROOT / 'leaderboard.html').write_text(template, newline='\n')
-    print(f'Built standalone leaderboard: {len(data["models"])} entries; original results preserved.')
+    reported = sum(1 for m in data['models'] if m['results'])
+    print(f'Built leaderboard: {len(data["models"])} models, {reported} with published results.')
 
 
 if __name__ == '__main__':
