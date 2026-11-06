@@ -1,8 +1,8 @@
 """Render data-backed homepage statistics; update only their homepage locations."""
-import hashlib
 import json
 import re
 from pathlib import Path
+from build_home_tasks import refresh_stylesheet_versions
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,9 +25,7 @@ def render():
         f'<dd class="home-stat-detail">{detail}</dd>'
         + ('<dd class="home-stat-scope">Results on the original 15 tasks</dd>' if icon == 'robot' else '')
         + '</div>' for value, label, detail, icon in metrics)
-    version = hashlib.sha256((ROOT / 'scripts/home-stats.css').read_bytes()).hexdigest()[:10]
     return ('<!-- HOME_STATS_START -->\n'
-            f'<link rel="stylesheet" href="scripts/home-stats.css?v={version}">\n'
             f'<section id="benchmark-at-a-glance" class="home-stats" aria-label="Benchmark at a glance"><dl>{cards}</dl></section>\n'
             '<!-- HOME_STATS_END -->')
 
@@ -44,5 +42,5 @@ def update(source):
 
 if __name__ == '__main__':
     page = ROOT / 'index.html'
-    page.write_bytes(update(page.read_bytes().decode()).encode())
+    page.write_bytes(refresh_stylesheet_versions(update(page.read_bytes().decode())).encode())
     print('Updated four homepage statistics beneath the promotional video.')

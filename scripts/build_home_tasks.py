@@ -14,20 +14,38 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SECTION = re.compile(r'<section[^>]*\bid="tasks"[^>]*>.*?</section>', re.S)
 HEAD_ASSETS = re.compile(r'<!-- HOME_STRUCTURE_START -->.*?<!-- HOME_STRUCTURE_END -->\n?', re.S)
+# Homepage stylesheets live in <head>; builders refresh their cache-busting versions in place.
+HEAD_STYLESHEETS = ['scripts/hero-intro.css', 'scripts/home-stats.css', 'scripts/intro-typography.css',
+                    'scripts/intro-suite-cards.css', 'scripts/resources-cards.css', 'scripts/home-reveal.css',
+                    'scripts/home-content-width.css']
+
+
+def version(asset):
+    return hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
+
+
+def refresh_stylesheet_versions(source):
+    for asset in HEAD_STYLESHEETS:
+        source = re.sub(rf'href="{re.escape(asset)}(?:\?v=[^"]*)?"', f'href="{asset}?v={version(asset)}"', source)
+    return source
 
 
 def ensure_head_assets(source):
-    """Load the homepage structure stylesheet in <head> so the first paint is styled."""
-    def version(asset):
-        return hashlib.sha256((ROOT / asset).read_bytes()).hexdigest()[:10]
+    """Load the homepage structure assets in <head> so the first paint is styled.
+
+    An existing block is replaced in place, so its position in the cascade never moves.
+    """
     block = ('<!-- HOME_STRUCTURE_START -->'
              f'<link rel="stylesheet" href="scripts/home-structure.css?v={version("scripts/home-structure.css")}">'
              f'<script src="scripts/home-structure.js?v={version("scripts/home-structure.js")}" defer></script>'
              f'<script src="scripts/site-shell.js?v={version("scripts/site-shell.js")}" defer></script>'
              '<!-- HOME_STRUCTURE_END -->\n')
-    source = HEAD_ASSETS.sub('', source)
-    head_end = source.index('</head>')
-    return source[:head_end] + block + source[head_end:]
+    if HEAD_ASSETS.search(source):
+        source = HEAD_ASSETS.sub(lambda _: block, source, count=1)
+    else:
+        head_end = source.index('</head>')
+        source = source[:head_end] + block + source[head_end:]
+    return refresh_stylesheet_versions(source)
 
 
 def clean_cover(case):
