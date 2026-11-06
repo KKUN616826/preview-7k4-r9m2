@@ -80,7 +80,7 @@ def render():
     track = ''.join(tile(c, slug) for c, slug in cases)
     echo = ''.join(tile(c, slug, hidden=True) for c, slug in cases)
     links = ''.join(
-        f'<a class="ht-suite-link ht-suite-link--{escape(s["slug"])}" href="benchmark/{escape(s["slug"])}.html">'
+        f'<a class="ht-suite-link ht-suite-link--{escape(s["slug"])}" href="benchmark.html#suite-{escape(s["slug"])}">'
         f'<span class="ht-suite-dot" aria-hidden="true"></span><strong>{escape(s["name"])}</strong>'
         f'<span>{escape(s["label"])} · {len(s["cases"])} tasks</span><span aria-hidden="true">→</span></a>'
         for s in suites)
