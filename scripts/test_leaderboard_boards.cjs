@@ -27,7 +27,8 @@ const { chromium } = require('playwright');
     }
     assert.ok(data.models.filter(m => m.type === 'agent').every(m => m.track === 'agent'), 'agents only on the agent board');
     assert.match(await page.locator('#board-agent .lb-board-note').textContent(), /ranked\s+separately/);
-    assert.equal(await page.locator('.lb-podium-label').count() + await page.locator('.lb-stage-upcoming').count() > 0, true, 'hero shows podium or first release');
+    assert.equal(await page.locator('.lb-climb-model').count() > 0, true, 'hero shows the climb toward the target');
+    assert.equal(await page.locator('.lb-climb-target').count(), 1, 'hero shows the target line');
     await page.click('#board-e2e [data-setting="random"]');
     assert.equal(await page.getAttribute('#board-e2e [data-setting="random"]', 'aria-pressed'), 'true');
     for (const width of [320, 390, 820, 1440]) {
