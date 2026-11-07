@@ -6,7 +6,7 @@ The homepage follows the pattern used by RoboDojo, Embodied First Exam and X2Rea
 |---|---|---|---|
 | 1 | `#overview` | Title, tagline, calls to action, interactive demo, paper information, film, key numbers | hand-maintained in `index.html`; demo data from `build_home_hero_data.py`, numbers from `build_home_stats.py` |
 | 2 | `#introduction` | Motivation and the three suites (Mind, Act, Mind2Act) | `scripts/intro-story.html` via `build_intro_story.py` |
-| 3 | `#diagnosis` | What the diagnosis card adds (four points) and two synthetic sample cards | `build_home_diagnosis.py` from `data/diagnosis-samples.json` |
+| 3 | `#diagnosis` | What the diagnosis card adds (four points), two synthetic sample cards in the v5 letters, and the sixteen-profile chart in four families | `build_home_diagnosis.py` from `data/diagnosis-samples.json` |
 | 3b | `#model-diagnostics` | Coming soon: the improvement loop (evaluate → diagnose → prescribe targeted data → train), drawn on the page so it continues the diagnosis cards | `build_home_diagnostics.py` from `home-diagnostics.html`, CSS and JS |
 | 4 | `#top-ten` | Leaderboard preview: every model with reported scores, ranked by the selected suite | `build_home_leaderboard_entry.py` from `data/leaderboard-results.json` |
 | 5 | `#tasks` | One moving film strip of all 30 tasks, then one link per suite | `build_home_tasks.py` from `data/benchmark-navigation.json` |
@@ -25,7 +25,10 @@ The evaluation scope notes and the overview figure moved off the homepage; the i
 
 - The two cards are the harness v3 reference samples (`harness/docs/reference_card`, 2026-11-04): the English coding-agent card and the end-to-end card, translated with the English card's terms. They come from fault-injected simulated policies; the section and each card say "synthetic sample". Replace them with real cards once official results exist.
 - Percentages in the failure bars are the exact segment widths from the reference cards. `media/diagnosis/diagnosis-card-sample-en.pdf` is the full English sample.
-- Profile codes and axis letters use Pixelify Sans, the pixel face that matches the navigation wordmark.
+- Profile codes use the v5 letters (MBTI-style letters, meanings defined by this benchmark; 2026-11-07 handoff): E/I Act- or Mind-dominant, S/N entity or spatial memory, T/F precision or reactivity, J/P feedforward or feedback. The v4 codes were converted with `profile.v4_to_v5`: MXPS -> IXTJ, MXPQ -> IXFJ. The PDF still uses the v4 letters and says so next to the link.
+- Card layout follows the harness reference card: a hero panel in the family colour (letters 1 + 4) with a pixel avatar and "Your model is ...", the quote, three numbered findings, the three views as bars with a tick at the expected value, the four axes, where the loop breaks, and the priority fix. A nickname appears only when all four letters are decided; otherwise the card names the family and which axis has no clear lean.
+- Below the cards, "Sixteen profiles, four families" lays out the sixteen codes and nicknames in four family rows, after the family rows of an MBTI type chart. Definitions, nicknames and the avatar generator live in `scripts/profile_v5.py`; the nicknames still await sign-off.
+- Type names use Pixelify Sans, the pixel face of the wordmark; codes and letters use JetBrains Mono. Both are registered in the typography layer of `media/typography.css`, which otherwise forces the site font.
 
 ## Hero title
 

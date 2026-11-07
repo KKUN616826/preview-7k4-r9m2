@@ -51,11 +51,12 @@ python3 scripts/preview.py --port 8767
 诊断卡区（`#diagnosis`）正下方的 `#model-diagnostics` 是 Coming soon 预告：harness 像医生，诊断模型、开出针对性数据（“抓药”），数据回流训练后再评测，模型一轮轮变强，harness 也随看过的模型积累经验（2026-11-05 同步会的“培养方案” loop）。不代表该服务已经开放，图中的条形和代码不是任何模型的结果。
 
 - 内容：`scripts/home-diagnostics.html`；样式：`scripts/home-diagnostics.css`；动画：`scripts/home-diagnostics.js`。直接画在白色页面上（HTML 卡片 + SVG 连线），文字可编辑，不再使用视频。
-- 流程：Your model → 1 Evaluate（Mind / Act / Mind2Act）→ 2 Diagnose（诊断卡）→ 3 Prescribe（针对性数据）→ 4 Train 回流；三轮依次补 Act、Mind2Act、Mind，每轮机器人图标长大一点，harness 经验条增长。约 17 秒一个循环。
-- 性格画像随训练变化：MXPS → AXPS（Act 数据使其偏执行，M→A）→ AXFS（闭环 Mind2Act 数据使其偏反馈驱动，P→F）→ ALFS（记忆数据让不稳定的记忆倾向定下来，X→L）。诊断卡显示诊断时的画像，模型卡片在训练后更新并高亮变化的字母。
+- 流程：Your model → 1 Evaluate（Mind / Act / Mind2Act）→ 2 Diagnose（诊断卡）→ 3 Prescribe（针对性数据）→ 4 Train 回流；三轮依次补 Act、Mind2Act、Mind，每轮像素头像长大一点并随性格换形象，harness 经验条增长；最后停 2.4 秒展示完整类型。约 19 秒一个循环。
+- 性格画像（v5 类 MBTI 字母）随训练变化：IXTJ 前馈规划型 → EXTJ 程式执行型（Act 数据使其偏做，I→E）→ EXTP 伺服响应型（闭环 Mind2Act 数据使其看反馈，J→P）→ ENTP 调校师 Tuner（记忆数据让不稳定的记忆倾向定在记位，X→N）。诊断卡显示诊断时的画像，模型卡片在训练后更新并高亮变化的字母。
 - 窄屏改为竖排，回流线走右侧。离屏或后台时暂停，可手动暂停；系统减少动态效果时显示第三轮的静止画面。
 - 更新：`python3 scripts/build_home_diagnostics.py`，把预告区放在 `<!-- HOME_DIAGNOSIS_END -->` 之后，并同步 head 中的样式和脚本。
 - 浏览器检查：`node scripts/test_home_diagnostics.cjs`。
+- 诊断卡与 16 型速查表使用 v5 字母（借用 MBTI 字母，含义由本基准重新定义，见飞书交接文档“Mind2Act 模型性格分类 v5”）：定义、四大主类型、16 个昵称和像素头像都在 `scripts/profile_v5.py`；头像按字母生成（第 1+4 位定家族配色，E 宽脸带耳、I 窄脸，S 双眼、N 护目镜，T 平嘴、F 咧嘴，J 平顶帽、P 天线），X 画成半透明。只有四个字母都判定时才显示昵称。16 个昵称仍待负责人确认。
 - 钢酱的 8 秒灰银视频版（`media/diagnostics-teaser/`）在提交 80a83e3 中，可从 git 历史恢复。
 
 ### 独立 Leaderboard 页面

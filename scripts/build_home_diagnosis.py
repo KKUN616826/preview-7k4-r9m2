@@ -11,6 +11,7 @@ import re
 from html import escape
 from pathlib import Path
 from build_home_tasks import refresh_stylesheet_versions
+import profile_v5 as pv
 
 ROOT = Path(__file__).resolve().parents[1]
 BLOCK = re.compile(r'<!-- HOME_DIAGNOSIS_START -->.*?<!-- HOME_DIAGNOSIS_END -->\n?', re.S)
@@ -25,7 +26,8 @@ CONTRIBUTIONS = [
      'Mind and Act test reasoning and execution alone; Mind2Act joins them in one closed loop. '
      'Each is read against the expectation for the model’s level and the task difficulty.'),
     ('A four-letter behavioural profile',
-     'Mind or Act, entity or location memory, plan-ahead or feedback-driven control, precision or agility. '
+     'MBTI-style letters with meanings defined by this benchmark: E acts / I thinks, S remembers what / '
+     'N remembers where, T precision / F reactivity, J plans ahead / P follows feedback. '
      'Tendencies, not ability; an unstable lean is written X.'),
     ('Where the loop breaks',
      'Every failed episode is traced to the first stage after which success became impossible: '
@@ -36,25 +38,30 @@ CONTRIBUTIONS = [
 ]
 
 
-def view_tile(v):
-    arrow = {'above': '▲', 'below': '▼'}.get(v['call'], '')
-    delta = 'in line with expectation' if v['call'] == 'in line' else f'{abs(v["delta"]):.1f} pp {v["call"]} expectation'
-    return (f'<div class="dx-view dx-view--{v["key"]}"><span class="dx-view-name">{escape(v["label"])}</span>'
-            f'<strong>{v["value"]:.1f}%</strong>'
-            f'<span class="dx-view-call dx-call--{v["call"].replace(" ", "-")}">{arrow} {escape(delta)}</span></div>')
+VIEW_ORDER = ['mind', 'act', 'mind2act']
+AXIS_COLOUR = {'energy': '#203749', 'information': '#49796b', 'decisions': '#446f86', 'lifestyle': '#91793d'}
+
+
+def view_bar(v):
+    call = 'in line with expectation' if v['call'] == 'in line' else f'{abs(v["delta"]):.1f} pp {v["call"]} expectation'
+    return (f'<div class="dx-bar dx-bar--{v["key"]}"><span class="dx-bar-name">{escape(v["label"])}</span>'
+            f'<span class="dx-bar-track" role="img" aria-label="{v["value"]:.1f}%, expected {v["expected"]:.1f}%, {escape(call)}">'
+            f'<i style="width:{v["value"]:.1f}%"></i><b style="left:{v["expected"]:.1f}%"></b></span>'
+            f'<strong>{v["value"]:.1f}%</strong></div>')
 
 
 def axis_row(a):
-    # The bar runs from the second pole (right) to the first pole (left); 50% is the centre.
-    pos = 50 - (a['lean'] - 50) if a['side'] == 'first' else 50 + (a['lean'] - 50)
-    pole = a['poles'][0] if a['side'] == 'first' else a['poles'][1]
-    unstable = a['letter'] == 'X'
+    key, name, compares, left, right = next(x for x in pv.AXES if x[0] == a['key'])
+    # 50% is the centre; the marker moves toward the pole the lean points to.
+    pos = 50 - (a['lean'] - 50) if a['side'] == 'left' else 50 + (a['lean'] - 50)
+    unstable = a['letter'] not in (left[0], right[0])
+    pole = left if a['side'] == 'left' else right
     note = f'stability {a["stability"]}%' + (' · no clear lean' if unstable else '')
-    return (f'<div class="dx-axis{" is-unstable" if unstable else ""}">'
-            f'<span class="dx-axis-name">{escape(a["axis"])}</span>'
-            f'<span class="dx-axis-bar" role="img" aria-label="{a["lean"]}% {escape(pole)}, {escape(note)}">'
-            f'<span class="dx-pole">{escape(a["poles"][0])}</span><span class="dx-track"><i style="left:{pos:.0f}%"></i></span>'
-            f'<span class="dx-pole">{escape(a["poles"][1])}</span></span>'
+    return (f'<div class="dx-axis{" is-unstable" if unstable else ""}" style="--axis:{AXIS_COLOUR[key]}">'
+            f'<span class="dx-axis-name" title="{escape(compares)}">{name}</span>'
+            f'<span class="dx-axis-bar" role="img" aria-label="{a["lean"]}% {escape(pole[1])}, {escape(note)}">'
+            f'<span class="dx-pole"><b>{left[0]}</b> {pv.SHORT[left[0]]}</span><span class="dx-track"><i style="left:{pos:.0f}%"></i></span>'
+            f'<span class="dx-pole">{pv.SHORT[right[0]]} <b>{right[0]}</b></span></span>'
             f'<span class="dx-letter" title="{escape(note)}">{escape(a["letter"])}</span></div>')
 
 
@@ -70,14 +77,31 @@ def failure_bar(f):
             f'<ul class="dx-legend">{legend}</ul>{note}</div>')
 
 
+def article(name):
+    return ('an ' if name[0] in 'AEIOU' else 'a ') + name
+
+
 def card(c):
-    return (f'<article class="dx-card" aria-label="Sample diagnosis card: {escape(c["name"])}">'
-            f'<div class="dx-card-head"><div><p class="dx-model">{escape(c["name"])}</p>'
-            f'<p class="dx-kind">{escape(c["track"])} · synthetic sample</p></div>'
-            f'<span class="dx-code" aria-label="Profile code {escape(c["code"])}">{escape(c["code"])}</span></div>'
-            f'<p class="dx-type"><strong>{escape(c["type"])}</strong> {escape(c["subtype"])}'
-            f'<span>“{escape(c["quote"])}”</span></p>'
-            f'<div class="dx-views">{"".join(view_tile(v) for v in c["views"])}</div>'
+    code, fam = c['code'], pv.family(c['code'])
+    nick = pv.nickname(code)
+    name = nick or (pv.FAMILIES[fam][0] if fam else 'no core type')
+    kicker = 'Your model is ' + ('the' if nick else ('a' if fam and name[0] not in 'AEIOU' else 'an' if fam else ''))
+    sub = (f'{pv.FAMILIES[fam][0]} · ' if nick else '') + pv.traits(code)
+    undecided = [ax[2] for ax, ch in zip(pv.AXES, code) if ch not in ax[3][0] + ax[4][0]]
+    why = (f'<p class="dx-hero-note">No nickname: {" and ".join(undecided)} shows no clear lean '
+           f'({"/".join(ch for ch in code if ch in "X?")}).</p>') if not nick else ''
+    views = {v['key']: v for v in c['views']}
+    findings = ''.join(f'<li><strong>{escape(h)}</strong><span>{escape(t)}</span></li>' for h, t in c['findings'])
+    return (f'<article class="dx-card dx-fam--{(fam or "x").lower()}" aria-label="Sample diagnosis card: {escape(c["name"])}">'
+            f'<div class="dx-card-head"><p class="dx-model">{escape(c["name"])} <span>· {escape(c["track"].lower())} · synthetic sample</span></p>'
+            f'<span class="dx-code" aria-label="Profile code {escape(code)}">{escape(code)}</span></div>'
+            f'<div class="dx-hero">{pv.avatar(code, "dx-avatar")}<div class="dx-hero-text">'
+            f'<p class="dx-hero-kicker">{escape(kicker)}</p><p class="dx-hero-name">{escape(name)}</p>'
+            f'<p class="dx-hero-traits">{escape(sub)}</p>{why}</div></div>'
+            f'<p class="dx-quote">“{escape(c["quote"])}”</p>'
+            f'<ol class="dx-findings">{findings}</ol>'
+            f'<div class="dx-bars">{"".join(view_bar(views[k]) for k in VIEW_ORDER)}'
+            '<p class="dx-cap">Tick = expected for a model of this overall level</p></div>'
             f'<div class="dx-profile"><p class="dx-label">Behavioural profile <span>tendencies, not ability</span></p>'
             f'{"".join(axis_row(a) for a in c["axes"])}</div>'
             f'{failure_bar(c["failures"])}'
@@ -85,6 +109,25 @@ def card(c):
             f'<p><strong>{escape(c["fix"]["name"])}.</strong> {escape(c["fix"]["action"])}</p>'
             f'<p class="dx-gain">Expected: {escape(c["fix"]["gain"])}</p></div>'
             '</article>')
+
+
+def types_grid():
+    """Sixteen profiles in four families, after the family rows of an MBTI type chart."""
+    rows = []
+    for fam in pv.ORDER:
+        name, blurb, good, risk = pv.FAMILIES[fam]
+        codes = [c for c in pv.NICKNAMES if c[0] + c[3] == fam]
+        tiles = ''.join(f'<li>{pv.avatar(c, "dx-avatar")}<b>{c}</b><span>{escape(pv.NICKNAMES[c])}</span></li>' for c in codes)
+        rows.append(f'<div class="dx-family dx-fam--{fam.lower()}"><div class="dx-family-text">'
+                    f'<p class="dx-family-key">{fam[0]}··{fam[1]}</p><h4>{escape(name)}</h4><p>{escape(blurb)}</p>'
+                    f'<p class="dx-family-edge"><span>Strong at</span> {escape(good)}<br><span>Watch for</span> {escape(risk)}</p></div>'
+                    f'<ul class="dx-family-tiles">{tiles}</ul></div>')
+    key = ''.join(f'<li><b>{l[0]}</b> {escape(l[1])} <i>/</i> <b>{r[0]}</b> {escape(r[1])}</li>' for _, _, _, l, r in pv.AXES)
+    return ('<div class="dx-types" aria-labelledby="dx-types-title">'
+            '<div class="dx-types-head"><h3 id="dx-types-title">Sixteen profiles, four families</h3>'
+            '<p>The letters are borrowed from MBTI; their meanings are defined by this benchmark. The first and last '
+            'letters set the family. A nickname appears only when all four letters are decided.</p>'
+            f'<ul class="dx-types-key">{key}</ul></div>{"".join(rows)}</div>')
 
 
 def render():
@@ -98,9 +141,10 @@ def render():
             '</div>'
             f'<ol class="dx-points">{points}</ol>'
             f'<div class="dx-cards">{"".join(card(c) for c in data["cards"])}</div>'
+            f'{types_grid()}'
             '<p class="dx-disclaimer"><strong>Synthetic samples.</strong> Both cards were generated from fault-injected '
             'simulated policies to show the card’s format and logic; they are not results of any real model. '
-            f'<a href="{escape(data["pdf"])}" target="_blank" rel="noopener">Full sample card (PDF) '
+            f'<a href="{escape(data["pdf"])}" target="_blank" rel="noopener">Full sample card (PDF, {escape(data["pdf_note"])}) '
             '<span aria-hidden="true">↗</span></a></p>'
             '</section>\n<!-- HOME_DIAGNOSIS_END -->\n')
 

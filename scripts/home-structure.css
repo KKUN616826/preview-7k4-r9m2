@@ -231,36 +231,79 @@ html body #introduction.intro-readable p.intro-more { display: flex; flex-wrap: 
 html body main #diagnosis .dx-points h3 { margin: 0 0 6px !important; font-size: 16px !important; font-weight: 650 !important; line-height: 1.35 !important; color: var(--dx-ink) !important; }
 html body main #diagnosis .dx-points p { margin: 0 !important; font-size: 14px !important; line-height: 1.55 !important; color: var(--dx-muted) !important; }
 .dx-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 36px; }
-.dx-card { display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid var(--dx-line); border-radius: 14px; background: #fff; box-shadow: 0 10px 30px -24px rgba(25, 45, 67, .35); color: var(--dx-ink); }
-.dx-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-html body main #diagnosis p.dx-model { margin: 0 !important; font: 600 18px/1.3 'JetBrains Mono', ui-monospace, monospace !important; color: var(--dx-ink) !important; }
-html body main #diagnosis p.dx-kind { margin: 2px 0 0 !important; font-size: 13px !important; color: var(--dx-muted) !important; }
-html body main #diagnosis .dx-code { flex: none; padding: 6px 10px 4px; border-radius: 6px; background: #17232e; color: #f4f6ef; font-family: 'Pixelify Sans', 'JetBrains Mono', monospace !important; font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: .08em; }
-html body main #diagnosis p.dx-type { margin: -6px 0 0 !important; font-size: 15px !important; line-height: 1.5 !important; color: var(--dx-muted) !important; }
-.dx-type strong { color: var(--dx-ink); font-weight: 650; }
-.dx-type span { display: block; font-style: italic; }
-.dx-views { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 8px; }
-.dx-view { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 10px; background: #eef4f1; color: #2f5f50; }
-.dx-view--mind2act { background: #f4eedf; color: #7a6227; }
-.dx-view--act { background: #e9f0f4; color: #325f78; }
-.dx-view-name { font-size: 12px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
-.dx-view strong { font-size: 28px; font-weight: 700; line-height: 1.15; letter-spacing: -.02em; color: var(--dx-ink); font-variant-numeric: tabular-nums; }
-.dx-view-call { font-size: 12px; line-height: 1.35; color: var(--dx-muted); }
-.dx-call--above { color: #2f7a55; }
-.dx-call--below { color: #a1452f; }
-html body main #diagnosis p.dx-label { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 8px !important; font-size: 12px !important; font-weight: 650 !important; letter-spacing: .05em; text-transform: uppercase; color: var(--dx-ink) !important; }
+/* Family colours (letters 1 + 4 of the v5 code), shared by the card hero and the sixteen-type chart. */
+.dx-fam--ij { --fam: #4f46b0; --fam-ink: #272063; --fam-tint: #ecebfc; }
+.dx-fam--ip { --fam: #2f7360; --fam-ink: #163b31; --fam-tint: #e4f3ec; }
+.dx-fam--ej { --fam: #2f6386; --fam-ink: #15344a; --fam-tint: #e5f0f6; }
+.dx-fam--ep { --fam: #a2451f; --fam-ink: #4f1d0b; --fam-tint: #fae8e0; }
+.dx-fam--x { --fam: #5d6a72; --fam-ink: #2b3439; --fam-tint: #eef1f2; }
+.dx-avatar { display: block; flex: none; image-rendering: pixelated; }
+.dx-card { display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid var(--dx-line); border-radius: 16px; background: #fff; }
+.dx-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+html body main #diagnosis p.dx-model { margin: 0 !important; font: 600 16px/1.35 'JetBrains Mono', ui-monospace, monospace !important; color: var(--dx-ink) !important; }
+.dx-model span { font-family: var(--m2a-font-sans, Arial, sans-serif); font-size: 14px; font-weight: 400; color: var(--dx-muted); }
+html body main #diagnosis .dx-code { flex: none; color: var(--fam-ink); font: 700 15px/1 'JetBrains Mono', ui-monospace, monospace !important; letter-spacing: .14em; }
+.dx-hero { display: flex; align-items: center; gap: 22px; margin: -2px 0 0; padding: 20px 22px; border-radius: 14px; background: var(--fam-tint); }
+.dx-hero .dx-avatar { width: 112px; height: 112px; margin: -6px 0; }
+.dx-hero-text { min-width: 0; }
+html body main #diagnosis p.dx-hero-kicker { margin: 0 !important; font-size: 15px !important; line-height: 1.3 !important; color: var(--fam) !important; }
+html body main #diagnosis p.dx-hero-name { margin: 2px 0 0 !important; font: 700 clamp(26px, 2.5vw, 34px)/1.1 'Pixelify Sans', 'JetBrains Mono', monospace !important; letter-spacing: .01em; color: var(--fam-ink) !important; }
+html body main #diagnosis p.dx-hero-traits { margin: 8px 0 0 !important; font-size: 12.5px !important; line-height: 1.45 !important; color: color-mix(in srgb, var(--fam-ink) 75%, #fff) !important; }
+html body main #diagnosis p.dx-hero-note { margin: 4px 0 0 !important; font-size: 12px !important; line-height: 1.4 !important; color: var(--dx-muted) !important; }
+html body main #diagnosis p.dx-quote { margin: -4px 0 0 !important; font-size: 16px !important; font-style: italic; line-height: 1.5 !important; color: #3d4c55 !important; }
+.dx-findings { margin: 0; padding: 0; list-style: none; counter-reset: dx-find; border-top: 1px solid var(--dx-line); }
+html body main #diagnosis .dx-findings li { display: grid; grid-template-columns: 26px 1fr; padding: 10px 0; border-bottom: 1px solid var(--dx-line); background: none !important; counter-increment: dx-find; }
+.dx-findings li::before { content: counter(dx-find); grid-row: span 2; color: var(--fam); font-size: 16px; line-height: 1.35; }
+.dx-findings strong { font-size: 16px; font-weight: 650; line-height: 1.35; color: var(--dx-ink); }
+.dx-findings span { font-size: 13.5px; line-height: 1.45; color: var(--dx-muted); }
+.dx-bars { display: grid; gap: 7px; }
+.dx-bar { display: grid; grid-template-columns: 74px minmax(0, 1fr) 52px; align-items: center; gap: 12px; font-size: 14px; color: var(--dx-ink); }
+.dx-bar strong { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dx-bar-track { position: relative; height: 10px; border-radius: 5px; background: #eeeae3; }
+.dx-bar-track i { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--view); }
+.dx-bar-track b { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; border-radius: 1px; background: #17232e; }
+.dx-bar--mind { --view: #49796b; }
+.dx-bar--act { --view: #446f86; }
+.dx-bar--mind2act { --view: #b48a35; }
+html body main #diagnosis p.dx-cap { margin: 2px 0 0 !important; font-size: 12px !important; color: var(--dx-muted) !important; }
+html body main #diagnosis p.dx-label { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 8px !important; font-size: 12px !important; font-weight: 650 !important; letter-spacing: .06em; text-transform: uppercase; color: var(--dx-ink) !important; }
 .dx-label span { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--dx-muted); }
-.dx-axis { display: grid; grid-template-columns: 82px minmax(0, 1fr) 30px; align-items: center; gap: 10px; padding: 5px 0; border-top: 1px solid #f0f2f0; }
-.dx-axis-name { font-size: 13px; font-weight: 600; }
-.dx-axis-bar { display: grid; grid-template-columns: 1fr minmax(48px, 1.1fr) 1fr; align-items: center; gap: 8px; min-width: 0; }
+.dx-axis { display: grid; grid-template-columns: 86px minmax(0, 1fr) 28px; align-items: center; gap: 10px; padding: 6px 0; border-top: 1px solid #edf0ee; }
+.dx-axis-name { display: grid; font-size: 13px; font-weight: 650; line-height: 1.25; }
+.dx-axis-name small { font-size: 10.5px; font-weight: 400; color: var(--dx-muted); }
+.dx-axis-bar { display: grid; grid-template-columns: 1fr minmax(48px, 1fr) 1fr; align-items: center; gap: 8px; min-width: 0; }
 .dx-pole { overflow: hidden; font-size: 11.5px; color: var(--dx-muted); white-space: nowrap; text-overflow: ellipsis; }
+.dx-pole b { color: var(--dx-ink); font: 700 12px/1 'JetBrains Mono', ui-monospace, monospace; }
 .dx-pole:first-child { text-align: right; }
 .dx-track { position: relative; height: 6px; border-radius: 3px; background: linear-gradient(90deg, #dfe6e2, #f3f5f3 50%, #dfe6e2); }
 .dx-track::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: #b9c4c0; }
-.dx-track i { position: absolute; top: 50%; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: var(--home-accent); box-shadow: 0 1px 3px rgba(25, 45, 67, .3); transform: translate(-50%, -50%); }
-.dx-letter { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; background: #17232e; color: #f4f6ef; font: 700 16px/1 'Pixelify Sans', monospace; }
-.dx-axis.is-unstable .dx-track i { background: #9aa6a2; }
+.dx-track i { position: absolute; top: 50%; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: var(--axis); box-shadow: 0 0 0 1px var(--axis); transform: translate(-50%, -50%); }
+.dx-letter { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; background: var(--axis); color: #fff; font: 700 15px/1 'JetBrains Mono', ui-monospace, monospace; }
+.dx-axis.is-unstable .dx-track i { background: #9aa6a2; box-shadow: 0 0 0 1px #9aa6a2; }
 .dx-axis.is-unstable .dx-letter { background: #e6eae8; color: #6d7b80; }
+
+/* Sixteen profiles in four families, laid out like the family rows of an MBTI type chart. */
+.dx-types { margin-top: 48px; }
+.dx-types-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 32px; align-items: end; margin-bottom: 18px; }
+html body main #diagnosis .dx-types-head h3 { margin: 0 !important; font-size: 22px !important; font-weight: 650 !important; line-height: 1.3 !important; color: var(--dx-ink) !important; }
+html body main #diagnosis .dx-types-head p { grid-column: 1; margin: 0 !important; font-size: 14px !important; line-height: 1.55 !important; color: var(--dx-muted) !important; }
+.dx-types-key { grid-column: 2; grid-row: 1 / span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin: 0; padding: 0; list-style: none; }
+html body main #diagnosis .dx-types-key li { font-size: 12.5px !important; line-height: 1.5 !important; color: var(--dx-muted) !important; background: none !important; white-space: nowrap; }
+.dx-types-key b { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; background: #17232e; color: #fff; font: 700 11px/1 'JetBrains Mono', ui-monospace, monospace; }
+.dx-types-key i { font-style: normal; color: #b9c4c0; }
+.dx-family { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 24px; align-items: center; padding: 18px 22px; border-radius: 16px; background: var(--fam-tint); }
+.dx-family + .dx-family { margin-top: 10px; }
+html body main #diagnosis .dx-family-text p { margin: 0 !important; font-size: 13px !important; line-height: 1.5 !important; color: color-mix(in srgb, var(--fam-ink) 78%, #fff) !important; }
+html body main #diagnosis .dx-family-text p.dx-family-key { font: 700 12px/1 'JetBrains Mono', ui-monospace, monospace !important; letter-spacing: .2em; color: var(--fam) !important; }
+html body main #diagnosis .dx-family-text h4 { margin: 6px 0 4px !important; font: 700 20px/1.15 'Pixelify Sans', monospace !important; color: var(--fam-ink) !important; }
+html body main #diagnosis .dx-family-text p.dx-family-edge { margin-top: 8px !important; font-size: 12px !important; }
+.dx-family-edge span { font-weight: 650; color: var(--fam); }
+.dx-family-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+html body main #diagnosis .dx-family-tiles li { display: grid; justify-items: center; gap: 2px; padding: 12px 6px 10px; border-radius: 12px; background: #ffffffb8; background-image: none !important; text-align: center; transition: transform .2s, box-shadow .2s; }
+.dx-family-tiles li:hover { transform: translateY(-3px); box-shadow: 0 8px 18px color-mix(in srgb, var(--fam) 18%, transparent); }
+.dx-family-tiles .dx-avatar { width: 64px; height: 64px; margin-bottom: 6px; }
+.dx-family-tiles b { font: 700 15px/1 'JetBrains Mono', ui-monospace, monospace; letter-spacing: .1em; color: var(--fam-ink); }
+.dx-family-tiles span { font-size: 13px; font-weight: 600; color: var(--fam); }
 .dx-stack { display: flex; height: 22px; overflow: hidden; border-radius: 6px; }
 .dx-stage { display: grid; place-items: center; min-width: 0; color: #fff; font-size: 11px; font-weight: 650; }
 .dx-stage--perceive, .dx-legend .dx-stage--perceive::before { background: var(--dx-perceive); }
@@ -284,19 +327,26 @@ html body main #diagnosis p.dx-disclaimer { margin: 20px 0 0 !important; font-si
 @media (max-width: 900px) {
   .dx-points { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dx-cards { grid-template-columns: minmax(0, 1fr); }
+  .dx-types-head { grid-template-columns: minmax(0, 1fr); }
+  .dx-types-key { grid-column: 1; grid-row: auto; }
+  .dx-family { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 }
 @media (max-width: 560px) {
   .dx-points { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .dx-card { padding: 18px 16px; }
-  .dx-views { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .dx-view { padding: 10px 8px; }
-  .dx-view strong { font-size: 22px; }
-  .dx-axis { grid-template-columns: 64px minmax(0, 1fr) 26px; gap: 8px; }
+  .dx-card-head { flex-wrap: wrap; gap: 4px 12px; }
+  .dx-hero { gap: 14px; padding: 16px; }
+  .dx-hero .dx-avatar { width: 64px; height: 64px; }
+  .dx-bar { grid-template-columns: 64px minmax(0, 1fr) 46px; gap: 8px; font-size: 13px; }
+  .dx-axis { grid-template-columns: 74px minmax(0, 1fr) 26px; gap: 8px; }
   .dx-axis-bar { grid-template-columns: 1fr 1fr; row-gap: 4px; }
   .dx-axis-bar .dx-track { grid-column: 1 / -1; grid-row: 1; }
   .dx-pole { grid-row: 2; font-size: 11px; }
   .dx-pole:first-child { text-align: left; }
   .dx-pole:last-child { text-align: right; }
+  .dx-types-key { grid-template-columns: minmax(0, 1fr); }
+  .dx-family { padding: 16px 14px; }
+  .dx-family-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* Project title: the pixel wordmark of the hero, and the tagline's three views in their dimension colours. */
