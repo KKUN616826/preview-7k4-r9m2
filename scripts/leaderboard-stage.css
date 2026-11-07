@@ -134,6 +134,38 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 }
 .lb-stage-caption strong { color: var(--stage-accent); }
 .lb-podium-labels { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+/* Suite stations: each label names the benchmark case its arm acts out. */
+.lb-stations { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.lb-stage .lb-station {
+  --station-accent: #49796b;
+  position: absolute;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border: 1px solid #ffffffb3;
+  border-left: 3px solid var(--station-accent);
+  border-radius: 6px;
+  transform: translate(-50%, -100%);
+  background: #f9fbf6d9;
+  box-shadow: 0 2px 10px #29465324;
+  color: #203f4f;
+  font-size: clamp(11px, .72vw, 16px);
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  pointer-events: auto;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background .15s, box-shadow .15s;
+}
+.lb-stage .lb-station.is-below { transform: translate(-50%, 0); }
+.lb-station strong { color: var(--station-accent); font-weight: 700; letter-spacing: .02em; }
+.lb-station:hover { background: #fffffff2; box-shadow: 0 4px 14px #29465338; }
+.lb-station:focus-visible { outline: 2px solid var(--station-accent); outline-offset: 2px; }
+.lb-station--act { --station-accent: #446f86; }
+.lb-station--mind2act { --station-accent: #91793d; }
+.lb-station[data-clipped] { visibility: hidden; }
 .lb-stage .lb-podium-label {
   position: absolute;
   display: flex;
@@ -236,6 +268,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-stage h1 { font-size: 36px; }
 }
 @media (max-width: 760px) {
+  .lb-stations { display: none; }
   .lb-stage {
     --stage-height: max(100dvh, 640px);
     --stage-inset: 20px;

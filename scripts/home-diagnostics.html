@@ -1,17 +1,45 @@
-<section class="diagnostic-preview" id="model-diagnostics" aria-labelledby="md-title">
-  <h2 class="md-sr-only" id="md-title">Your model. Decoded.</h2>
-  <p class="md-sr-only" id="md-description">Coming soon. A large model signature moves left as evaluation, evidence tracing and diagnosis appear. The illustrative profile guides targeted improvement, then a second evaluation and diagnosis produce Preview 02. The example does not represent real model results.</p>
-  <div class="md-media">
-    <video class="md-video" width="1600" height="720" muted playsinline loop preload="none" poster="media/diagnostics-teaser/opening.webp" aria-label="Eight-second model diagnostics preview" aria-describedby="md-description">
-      <source src="media/diagnostics-teaser/diagnostics-lunar-loop-8s.mp4" type="video/mp4">
-    </video>
-    <img class="md-static" src="media/diagnostics-teaser/poster.webp" width="1600" height="720" loading="lazy" decoding="async" alt="Illustrative diagnosis preview: a model passes through Mind, Act and Mind2Act evaluation, Logs, Video and Tools evidence, then Scorer and Rules plus judge. Human review is optional. The example profile is The Strategist, MXPS, with behavioral tendencies and an outcome-verification next step. A targeted-improvement return path leads to a second evaluation and Preview 02. This illustrates an intended iteration loop, not measured improvement.">
-    <div class="md-controls" role="group" aria-label="Diagnostic preview playback controls" hidden>
-      <button type="button" class="md-pause" aria-pressed="false">Pause</button>
-      <button type="button" class="md-replay">Replay <span aria-hidden="true">↻</span></button>
-      <button type="button" class="md-fullscreen" aria-label="View diagnostic preview fullscreen">Fullscreen</button>
-    </div>
+<section class="academic-section home-loop" id="model-diagnostics" aria-labelledby="md-title">
+  <div class="lp-head">
+    <p class="home-eyebrow">Coming soon</p>
+    <h2 id="md-title">Your model. Decoded, then trained.</h2>
+    <p>A diagnosis card is the first visit. Next, the Mind2Act harness writes a training plan from it: targeted data goes back to the model, the model is evaluated again, and every model it treats makes the harness a better doctor.</p>
   </div>
-  <p class="md-error" hidden>Preview unavailable. <a href="media/diagnostics-teaser/diagnostics-lunar-loop-8s.mp4">Open video</a></p>
-  <noscript><p class="md-open"><a href="media/diagnostics-teaser/diagnostics-lunar-loop-8s.mp4">Play the eight-second preview</a></p></noscript>
+  <div class="lp-figure" data-round="1" data-step="0">
+    <svg class="lp-wires" aria-hidden="true" focusable="false"><path class="lp-path lp-path--forward"/><path class="lp-path lp-path--return"/><g class="lp-tokens"></g></svg>
+    <ol class="lp-steps">
+      <li class="lp-node lp-node--model">
+        <svg class="lp-robot" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M32 6v7" /><circle cx="32" cy="5" r="3" class="lp-robot-led"/><rect x="14" y="13" width="36" height="26" rx="8"/><circle cx="25" cy="26" r="3.2" class="lp-robot-eye"/><circle cx="39" cy="26" r="3.2" class="lp-robot-eye"/><path d="M20 47h24l3 12H17z"/><path d="M14 47l-6 9M50 47l6 9"/></svg>
+        <p class="lp-title">Your model <span class="lp-round">Round <b>1</b></span></p>
+        <ul class="lp-skills" aria-label="Illustrative abilities">
+          <li class="lp-skill lp-skill--mind"><span>Mind</span><i style="--v:.56"></i></li>
+          <li class="lp-skill lp-skill--act"><span>Act</span><i style="--v:.34"></i></li>
+          <li class="lp-skill lp-skill--mind2act"><span>Mind2Act</span><i style="--v:.28"></i></li>
+        </ul>
+      </li>
+      <li class="lp-node lp-node--evaluate">
+        <p class="lp-step">1 · Evaluate</p>
+        <p class="lp-title">Three views</p>
+        <ul class="lp-suites"><li class="lp-suite--mind">Mind</li><li class="lp-suite--act">Act</li><li class="lp-suite--mind2act">Mind2Act</li></ul>
+        <p class="lp-desc">30 tasks, scored the same way for every model.</p>
+      </li>
+      <li class="lp-node lp-node--diagnose">
+        <p class="lp-step">2 · Diagnose</p>
+        <p class="lp-title">Diagnosis card</p>
+        <div class="lp-card"><span class="lp-code">MXPS</span><span class="lp-weak">Loop breaks at <b>Act</b></span></div>
+        <p class="lp-desc">Where it fails, why, and what to change first.</p>
+      </li>
+      <li class="lp-node lp-node--prescribe">
+        <p class="lp-step">3 · Prescribe</p>
+        <p class="lp-title">Targeted data</p>
+        <div class="lp-data" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="lp-desc">The data engine builds the dose for the weak view.</p>
+      </li>
+    </ol>
+    <p class="lp-return-label"><span class="lp-step">4 · Train</span> on the prescription, then evaluate again</p>
+    <div class="lp-harness"><span class="lp-harness-name">Mind2Act harness</span><span class="lp-harness-xp" aria-hidden="true"><i></i></span><span class="lp-harness-note">experience grows with every model it treats</span></div>
+  </div>
+  <div class="lp-foot">
+    <p class="lp-disclaimer">Illustration of planned work. The bars and codes are not results of any model.</p>
+    <button type="button" class="lp-toggle" aria-pressed="false" hidden>Pause</button>
+  </div>
 </section>

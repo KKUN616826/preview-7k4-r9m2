@@ -62,10 +62,10 @@
 .lb-updated { margin: 18px 0 0; color: #7d919b; font-size: 13px; }
 
 /* Hero before first results: release date and first batch instead of the podium. */
-.lb-stage-upcoming { position: absolute; left: 50%; bottom: 9%; transform: translateX(-50%); display: grid; justify-items: center; gap: 6px; width: min(92%, 760px); padding: 16px 20px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 14px; background: rgba(255, 255, 255, .82); backdrop-filter: blur(6px); text-align: center; }
+.lb-stage-upcoming { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 4px 10px; width: min(92%, 760px); box-sizing: border-box; padding: 10px 20px 12px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 14px; background: rgba(255, 255, 255, .82); backdrop-filter: blur(6px); text-align: center; }
 .lb-stage-upcoming p { margin: 0; color: #506c7b; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-.lb-stage-upcoming strong { color: #1f3a4b; font-size: 22px; font-weight: 700; }
-.lb-stage-upcoming ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px; margin: 6px 0 0; padding: 0; list-style: none; }
+.lb-stage-upcoming strong { color: #1f3a4b; font-size: 19px; font-weight: 700; }
+.lb-stage-upcoming ul { flex-basis: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px; margin: 6px 0 0; padding: 0; list-style: none; }
 .lb-stage-upcoming li { display: inline-flex; align-items: center; gap: 7px; color: #2b4757; font-size: 13px; font-weight: 600; }
 .lb-stage-upcoming li img, .lb-stage-upcoming li .lb-podium-monogram { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; background: #fff; }
 

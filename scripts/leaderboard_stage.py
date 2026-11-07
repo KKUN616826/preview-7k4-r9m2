@@ -6,6 +6,24 @@ release date and the models in that batch.
 from datetime import date
 from html import escape
 
+# One station per suite, each acting out one benchmark case (see media/leaderboard-motion/scene.js).
+# x, y: the label's anchor in artwork units (1983 x 793); below=True hangs the label under the anchor.
+STATIONS = [
+    ('mind', 'Mind', 'E', 'Duplicate identification', 'remember, then choose', 668, 369, False),
+    ('mind2act', 'Mind2Act', 'CP08', 'Reference-guided building', 'rebuild a reference from memory', 1166, 600, False),
+    ('act', 'Act', 'FR1', 'Conveyor picking', 'pick a moving parcel', 1600, 512, True),
+]
+
+
+def stations():
+    items = ''.join(
+        f'<a class="lb-station lb-station--{slug}{" is-below" if below else ""}" href="tasks/{case}.html" '
+        f'style="left:{x / 19.83:.2f}%;top:{y / 7.93:.2f}%" '
+        f'aria-label="{name} station: {escape(title)} ({case}), {escape(gist)}">'
+        f'<strong>{name}</strong><span>{escape(title)}</span></a>'
+        for slug, name, case, title, gist, x, y, below in STATIONS)
+    return f'<nav class="lb-stations" aria-label="What each station shows">{items}</nav>'
+
 
 def monogram(name):
     """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
@@ -33,6 +51,7 @@ def render(data):
              'demonstration stations and a central first, second and third place podium." width="1983" height="793" fetchpriority="high">'
              '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v2.webp" '
              'aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video>']
+    parts.append(stations())
     if len(e2e) >= 3:
         parts.append('<div class="lb-podium-labels">')
         for rank in (2, 1, 3):

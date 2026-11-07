@@ -1,8 +1,14 @@
-# Local three-arm animation source
+# Local three-station animation source
 
-`campus-loop.mp4` is a silent, six-second, 2880 × 1152 H.264 loop (CRF 20) used behind the live leaderboard controls and scores. It is rendered from `scene.html` and `scene.js`, with the campus artwork (`media/images/leaderboard-lunar-campus-v2.webp`) and two repair plates (`clean-plate-front.webp`, `clean-plate-sides.webp`). No external video service or Three.js is required.
+`campus-loop.mp4` is a silent, eight-second, 2880 × 1152 H.264 loop (CRF 20) used behind the live leaderboard controls and scores. It is rendered from `scene.html` and `scene.js`, with the campus artwork (`media/images/leaderboard-lunar-campus-v2.webp`) and two repair plates (`clean-plate-front.webp`, `clean-plate-sides.webp`). No external video service or Three.js is required.
 
-Left and right arm cycles are offset by 0.8 and 2 seconds. The left yellow, right red and foreground blue blocks follow their respective grippers. This remains a 2D layered concept: complex 3D occlusion and crop edges are not a finished rig.
+Each arm acts out one benchmark case from its suite, and the leaderboard labels each station with a link to that task (`STATIONS` in `scripts/leaderboard_stage.py`):
+
+- Left, **Mind** (E, Duplicate Item Identification): the board marks the green triangle, covers its tiles, and the probe weighs the blue and yellow blocks before tapping the green one; the triangle reopens with a check.
+- Front, **Mind2Act** (CP08, Reference-Guided Block Construction): a projected reference shows blue on yellow, disappears, and the arm stacks the blue block on the yellow one from memory; the reference returns in green when they match.
+- Right, **Act** (FR1, Continuous Conveyor Picking): rollers turn and a parcel rides the belt; the arm matches its speed, picks it in motion and sets it on the collection deck.
+
+This remains a 2D layered concept: complex 3D occlusion and crop edges are not a finished rig. Station labels that the cover crop would cut at the stage edge are hidden, and all labels are hidden below 760 px.
 
 To regenerate, run `node scripts/render_leaderboard_motion.cjs` from the project root with Playwright available in Node's module path, Chrome installed, and FFmpeg on PATH. The script exports frames into an OS temporary directory and removes them after encoding. The authored source files stay here.
 

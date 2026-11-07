@@ -7,10 +7,10 @@ The homepage follows the pattern used by RoboDojo, Embodied First Exam and X2Rea
 | 1 | `#overview` | Title, tagline, calls to action, interactive demo, paper information, film, key numbers | hand-maintained in `index.html`; demo data from `build_home_hero_data.py`, numbers from `build_home_stats.py` |
 | 2 | `#introduction` | Motivation and the three suites (Mind, Act, Mind2Act) | `scripts/intro-story.html` via `build_intro_story.py` |
 | 3 | `#diagnosis` | What the diagnosis card adds (four points) and two synthetic sample cards | `build_home_diagnosis.py` from `data/diagnosis-samples.json` |
+| 3b | `#model-diagnostics` | Coming soon: the improvement loop (evaluate → diagnose → prescribe targeted data → train), drawn on the page so it continues the diagnosis cards | `build_home_diagnostics.py` from `home-diagnostics.html`, CSS and JS |
 | 4 | `#top-ten` | Leaderboard preview: every model with reported scores, ranked by the selected suite | `build_home_leaderboard_entry.py` from `data/leaderboard-results.json` |
 | 5 | `#tasks` | One moving film strip of all 30 tasks, then one link per suite | `build_home_tasks.py` from `data/benchmark-navigation.json` |
 | 6 | `#news`, `#resources-overview`, `#contributors` | Updates, documents and people | hand-maintained in `index.html` |
-| 7 | `#model-diagnostics` | Eight-second coming-soon teaser: centered Model, first harness pass and report, targeted improvement feedback, second harness pass and Preview 02, then copy | `build_home_diagnostics.py` from `home-diagnostics.html`, CSS/JS, lunar improvement-loop MP4 and poster images |
 
 The evaluation scope notes and the overview figure moved off the homepage; the introduction links to `protocol.html` and to `media/overview/mind2act-overview-v36.pdf`. The lunar capability map was removed with its scripts and tests (see git history before this change if it is needed again).
 
@@ -29,7 +29,7 @@ The evaluation scope notes and the overview figure moved off the homepage; the i
 
 ## Hero title
 
-Set like the navigation wordmark: Pixelify Sans (`media/fonts/pixelify-sans`, OFL), a mint "2" and a widely tracked, lighter "World". The font and spans are in `scripts/hero-intro.css`; the markup is hand-maintained in `index.html`.
+Set like the logo lockup (`mind2act-official-logo.png` in git history before 6d5c517): the pixel planet (`media/images/mind2act-planet.webp`, cut from the navigation logo), "Mind2Act" in Pixelify Sans (`media/fonts/pixelify-sans`, OFL) with a mint "2", and a small tracked "WORLD". "WORLD" sits after "Act" when the line has room and under the name otherwise. Styles are in `scripts/hero-intro.css`; the markup is hand-maintained in `index.html`.
 
 ## Task strip
 
