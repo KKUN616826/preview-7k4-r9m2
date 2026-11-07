@@ -1,39 +1,17 @@
 <section class="diagnostic-preview" id="model-diagnostics" aria-labelledby="md-title">
-  <div class="md-surface">
-    <header class="md-heading">
-      <span class="md-coming">Coming soon</span>
-      <h2 id="md-title">Your model. Decoded.</h2>
-      <p>A new way to understand reasoning, action, and the loop between them.</p>
-    </header>
-    <div class="md-stage">
-      <figure class="md-framework" aria-label="A model enters the Mind2Act Harness. Evaluation evidence is traced and diagnosed to produce a model profile.">
-        __FRAMEWORK__
-      </figure>
-      <div class="md-output">
-        <div class="md-report-shell">
-        <article class="md-report" aria-label="Illustrative diagnostic card for a synthetic example model">
-          <div class="md-report-top"><span>Model diagnostics</span><span>Preview / 01</span></div>
-          <p class="md-model-name">Example model <small>Illustrative profile</small></p>
-          <div class="md-identity md-reveal"><h3>The Strategist</h3><div class="md-type" aria-label="Behavior type MXPS"><b>M</b><b>X</b><b>P</b><b>S</b></div></div>
-          <div class="md-scores md-reveal" aria-label="Three evaluation views; scores are not yet available"><span>Mind <i>—</i></span><span>Act <i>—</i></span><span>Mind2Act <i>—</i></span></div>
-          <dl class="md-traits md-reveal" aria-label="Illustrative behavioral tendencies, not capability scores">
-            <div><dt>Reasoning</dt><dd><span style="--position:64%"></span><span class="md-sr-only">Illustrative tendency</span></dd></div>
-            <div><dt>Memory</dt><dd><span style="--position:27%"></span><span class="md-sr-only">Illustrative tendency</span></dd></div>
-            <div><dt>Control</dt><dd><span style="--position:49%"></span><span class="md-sr-only">Illustrative tendency</span></dd></div>
-            <div><dt>Execution</dt><dd><span style="--position:73%"></span><span class="md-sr-only">Illustrative tendency</span></dd></div>
-          </dl>
-          <div class="md-failures md-reveal"><h4>Where the loop breaks</h4><div class="md-failure-strip" role="img" aria-label="Illustrative failure stages: perception, reasoning, action, verification and other"><i></i><i></i><i></i><i></i><i></i></div></div>
-          <p class="md-next md-reveal"><strong>Next step</strong><span>Outcome verification</span></p>
-          <p class="md-disclaimer md-sr-only">Synthetic example · Not a real model result</p>
-        </article>
-        <div class="md-particles" aria-hidden="true">__PARTICLES__</div>
-        </div>
-        <p class="md-output-note">Full profile — coming soon</p>
-      </div>
+  <h2 class="md-sr-only" id="md-title">Your model. Decoded.</h2>
+  <p class="md-sr-only" id="md-description">Coming soon. A large model signature moves left as evaluation, evidence tracing and diagnosis appear. An illustrative model profile is revealed last. The example does not represent real model results.</p>
+  <div class="md-media">
+    <video class="md-video" width="1600" height="668" muted playsinline loop preload="none" poster="media/diagnostics-teaser/opening.webp" aria-label="Eight-second model diagnostics preview" aria-describedby="md-description">
+      <source src="media/diagnostics-teaser/diagnostics-silver-8s.mp4" type="video/mp4">
+    </video>
+    <img class="md-static" src="media/diagnostics-teaser/poster.webp" width="1600" height="668" loading="lazy" decoding="async" alt="Illustrative diagnosis preview: a model passes through Mind, Act and Mind2Act evaluation, Logs, Video and Tools evidence, then Scorer and Rules plus judge. Human review is optional. The example profile is The Strategist, MXPS, with behavioral tendencies and an outcome-verification next step.">
+    <div class="md-controls" role="group" aria-label="Diagnostic preview playback controls" hidden>
+      <button type="button" class="md-pause" aria-pressed="false">Pause</button>
+      <button type="button" class="md-replay">Replay <span aria-hidden="true">↻</span></button>
+      <button type="button" class="md-fullscreen" aria-label="View diagnostic preview fullscreen">Fullscreen</button>
     </div>
-    <footer class="md-footer">
-      <p>Evidence in. A clearer model picture out.</p>
-      <div class="md-controls"><button type="button" class="md-pause" aria-pressed="false" hidden>Pause</button><button type="button" class="md-replay">Replay <span aria-hidden="true">↻</span></button></div>
-    </footer>
   </div>
+  <p class="md-error" hidden>Preview unavailable. <a href="media/diagnostics-teaser/diagnostics-silver-8s.mp4">Open video</a></p>
+  <noscript><p class="md-open"><a href="media/diagnostics-teaser/diagnostics-silver-8s.mp4">Play the eight-second preview</a></p></noscript>
 </section>

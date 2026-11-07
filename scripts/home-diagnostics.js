@@ -2,53 +2,68 @@
   'use strict';
   const root = document.getElementById('model-diagnostics');
   if (!root) return;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const video = root.querySelector('.md-video');
+  const controls = root.querySelector('.md-controls');
   const pause = root.querySelector('.md-pause');
   const replay = root.querySelector('.md-replay');
+  const fullscreen = root.querySelector('.md-fullscreen');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let visible = false;
-  let paused = false;
-  const positionIntro = () => {
-    const surface = root.querySelector('.md-surface').getBoundingClientRect();
-    const svg = root.querySelector('.md-framework > svg').getBoundingClientRect();
-    if (!svg.width) return;
-    const scale = svg.width / 600;
-    // Use the same model throughout: start at the center of the whole scene,
-    // then travel to its final diagram position. Works for both column layouts.
-    root.style.setProperty('--md-intro-x', `${(surface.width / 2 - (svg.left - surface.left)) / scale - 91}px`);
-    root.style.setProperty('--md-intro-y', `${(surface.height * .43 - (svg.top - surface.top)) / scale - 146}px`);
-    root.style.setProperty('--md-intro-scale', String(Math.min(235, surface.width * .48) / (134 * scale)));
+  let userPaused = false;
+  let failed = false;
+  let loaded = false;
+  video.muted = true;
+  root.classList.add('md-enhanced');
+  controls.hidden = false;
+
+  const updateUI = () => {
+    const playing = !video.paused && video.readyState >= 2 && !video.ended && !reduced.matches && !failed;
+    root.dataset.playing = String(playing);
+    root.classList.toggle('md-static-mode', reduced.matches || failed);
+    pause.hidden = reduced.matches || failed;
+    replay.disabled = reduced.matches || failed;
+    pause.textContent = playing ? 'Pause' : 'Play';
+    pause.setAttribute('aria-label', playing ? 'Pause animation' : 'Play animation');
+    pause.setAttribute('aria-pressed', String(userPaused));
+    root.querySelector('.md-error').hidden = !failed;
   };
-  const update = () => {
-    const animated = !reduced.matches;
-    root.classList.toggle('md-enabled', animated);
-    root.dataset.playing = String(animated && visible && !paused && !document.hidden);
-    pause.hidden = !animated;
-    replay.disabled = !animated;
-    pause.setAttribute('aria-pressed', String(paused));
-    pause.textContent = paused ? 'Resume' : 'Pause';
+  const shouldPlay = () => visible && !document.hidden && !userPaused && !reduced.matches && !failed;
+  const sync = () => {
+    if (!shouldPlay()) { video.pause(); updateUI(); return; }
+    if (!loaded) { video.load(); loaded = true; }
+    const request = video.play();
+    if (request) request.catch(error => {
+      if (error.name === 'AbortError' || !shouldPlay()) return;
+      userPaused = true;
+      updateUI();
+    });
+    updateUI();
   };
-  pause.addEventListener('click', () => { paused = !paused; update(); });
-  replay.addEventListener('click', () => {
-    if (reduced.matches) return;
-    paused = false;
-    root.getAnimations({ subtree: true }).forEach(animation => { animation.currentTime = 0; });
-    update();
+  pause.addEventListener('click', () => { userPaused = !video.paused; sync(); });
+  replay.addEventListener('click', () => { video.currentTime = 0; userPaused = false; sync(); });
+  fullscreen.addEventListener('click', () => {
+    const media = root.querySelector('.md-media');
+    if (document.fullscreenElement === media) document.exitFullscreen?.();
+    else if (media.requestFullscreen) media.requestFullscreen().catch(() => {});
+    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
   });
+  video.addEventListener('play', updateUI);
+  video.addEventListener('playing', updateUI);
+  video.addEventListener('loadeddata', updateUI);
+  video.addEventListener('pause', updateUI);
+  video.addEventListener('ended', updateUI);
+  const showFallback = () => { failed = true; video.pause(); updateUI(); };
+  video.addEventListener('error', showFallback);
+  video.querySelector('source').addEventListener('error', showFallback);
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
       visible = entries.some(entry => entry.isIntersecting);
-      update();
+      sync();
     }, { threshold: .12 }).observe(root);
-  } else {
-    visible = true;
-  }
-  document.addEventListener('visibilitychange', update);
-  reduced.addEventListener('change', update);
-  // Printing always shows the complete illustrative profile.
-  window.addEventListener('beforeprint', () => root.classList.remove('md-enabled'));
-  window.addEventListener('afterprint', update);
-  positionIntro();
-  if ('ResizeObserver' in window) new ResizeObserver(positionIntro).observe(root);
-  else window.addEventListener('resize', positionIntro);
-  update();
+  } else visible = true;
+  reduced.addEventListener('change', sync);
+  document.addEventListener('visibilitychange', sync);
+  window.addEventListener('beforeprint', () => video.pause());
+  window.addEventListener('afterprint', sync);
+  sync();
 })();
