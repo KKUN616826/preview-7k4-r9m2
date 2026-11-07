@@ -373,156 +373,141 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .lb-stage .lb-station { background: #fafcf5; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
-/* The climb: every reported model at the height of its Overall score, from the launch line (0) to the
-   target line (100), in release order. Each launches from the ground in turn; the step line follows
-   the best score so far. Laid out on the stage, between the Mind and Act stations. */
-.lb-climb { --launch: .32s; --c: #6f8f97; position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-.lb-climb-field { position: absolute; left: 6%; right: 23%; top: 23%; bottom: 33%; }
-.lb-climb-target, .lb-climb-grid, .lb-climb-ground { position: absolute; left: -2%; right: -2%; height: 0; }
-.lb-climb-target { top: 0; border-top: 2px solid #a2451f; box-shadow: 0 0 12px 1px #a2451f55; }
-.lb-climb-target::after { content: ""; position: absolute; right: 0; bottom: 0; width: 2px; height: 26px; background: #1f3a4b; }
-.lb-climb-target::before { content: ""; position: absolute; right: -14px; bottom: 13px; border-left: 14px solid #a2451f; border-block: 7px solid transparent; }
-.lb-climb-target b, .lb-climb-target > span { position: absolute; bottom: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(255, 255, 255, .82); white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-.lb-climb-target b { left: 0; color: #a2451f; font-size: 13px; font-weight: 800; }
-.lb-climb-target > span { left: 44px; color: #1f3a4b; font-size: 12px; font-weight: 650; letter-spacing: .3px; }
-.lb-climb-grid { bottom: calc(var(--y) * 1%); border-top: 1px dashed rgba(255, 255, 255, .75); }
-.lb-climb-grid i, .lb-climb-ground i { position: absolute; right: 0; bottom: 3px; color: #315f72; font-size: 11px; font-style: normal; font-weight: 650; text-shadow: 0 0 4px #fff, 0 0 2px #fff; }
-.lb-climb-ground { bottom: 0; border-top: 2px dashed rgba(49, 95, 114, .55); }
-.lb-climb-frontier { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; animation: lb-climb-reveal calc(var(--n) * var(--launch) + .9s) linear .45s both; }
-.lb-climb-step { fill: none; stroke: #a2451f; stroke-width: 3; stroke-linejoin: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 3px #fff); }
-.lb-climb-area { fill: #a2451f; opacity: .13; }
-.lb-climb-models { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
-.lb-climb-model { position: absolute; left: var(--x); top: 0; bottom: 0; width: 0; }
-.lb-climb-model::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: -1px;
-  width: 2px;
-  height: calc(var(--y) * 1%);
-  border-radius: 2px;
-  background: linear-gradient(to top, transparent, var(--c));
-  opacity: .55;
-  animation: lb-climb-stem 1.05s cubic-bezier(.2, .75, .25, 1) calc(.5s + var(--i) * var(--launch)) both;
+/* The moonshot: a route from the top of the central launch tower (0) to the rim of the moon (100).
+   It lives on the artwork, so it stays on the tower and the moon at every crop. Each model flies
+   out along it in release order and lands at the distance of its Overall score. */
+.lb-stage-sub { max-width: 30em; margin-top: 4px !important; font-size: clamp(14px, 1vw, 17px) !important; }
+.lb-shot { --badge: clamp(26px, 1.55vw, 34px); --launch: .3s; --fly: 1.15s; --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
+.lb-shot-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lb-shot-route { fill: none; stroke: #1f3a4b; stroke-width: 3; stroke-dasharray: 1 9; stroke-linecap: round; opacity: .7; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 1px #fff); }
+.lb-shot-trail {
+  fill: none;
+  stroke: #a2451f;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  filter: drop-shadow(0 0 5px #f0a37a);
+  animation: lb-shot-trail calc(var(--n) * var(--launch) + var(--fly)) cubic-bezier(.3, .1, .3, 1) .5s both;
 }
-.lb-climb-model a {
-  position: absolute;
-  bottom: calc(var(--y) * 1%);
-  left: 0;
+.lb-shot-flag line { stroke: #1f3a4b; stroke-width: 2.4; }
+.lb-shot-flag path { fill: #a2451f; animation: lb-shot-wave 1.8s ease-in-out infinite alternate; transform-origin: 0 -27px; transform-box: view-box; }
+.lb-shot-flag circle { fill: #fff; stroke: #a2451f; stroke-width: 2.5; }
+.lb-shot-pad, .lb-shot-moon { position: absolute; white-space: nowrap; }
+.lb-shot-pad { transform: translate(14px, -4px); padding: 2px 8px; border-radius: 6px; background: rgba(255, 255, 255, .86); color: #2b4757; font-size: 11px; font-weight: 650; }
+.lb-shot-pad b { color: #1f3a4b; font-size: 12px; }
+.lb-shot-moon {
   display: flex;
   align-items: center;
-  gap: 6px;
-  transform: translate(-15px, 50%);
+  gap: 8px;
+  transform: translate(calc(-100% + 34px), calc(-100% - 48px));
+  padding: 6px 12px 6px 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .92);
+  box-shadow: 0 6px 20px #1f3a4b2e;
   color: #1f3a4b;
-  text-decoration: none;
-  pointer-events: auto;
-  animation: lb-climb-launch 1.05s cubic-bezier(.2, .75, .25, 1) calc(.5s + var(--i) * var(--launch)) both;
+  font-size: 13px;
+  font-weight: 700;
 }
-.lb-climb-badge {
+.lb-shot-moon > b { display: grid; place-items: center; min-width: 40px; height: 32px; border-radius: 8px; background: #a2451f; color: #fff; font-size: 17px; font-weight: 800; }
+.lb-shot-moon small { display: block; color: #506c7b; font-size: 11px; font-weight: 600; }
+.lb-shot-models { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
+.lb-shot-model {
+  position: absolute;
+  width: 0;
+  height: 0;
+  animation: lb-shot-fly var(--fly) cubic-bezier(.35, .1, .25, 1) calc(.5s + var(--i) * var(--launch)) both;
+}
+.lb-shot-model a { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 5px; transform: translate(calc(var(--badge) / -2), -50%); color: #1f3a4b; text-decoration: none; pointer-events: auto; }
+.lb-shot-badge {
   display: grid;
   place-items: center;
   flex: none;
-  width: 30px;
-  height: 30px;
+  width: var(--badge, 28px);
+  height: var(--badge, 28px);
   box-sizing: border-box;
   border: 2px solid var(--c);
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 8px #1f3a4b33;
-  animation: lb-climb-burn 1.05s ease-out calc(.5s + var(--i) * var(--launch)) both;
+  box-shadow: 0 2px 8px #1f3a4b40;
+  animation: lb-shot-burn var(--fly) ease-out calc(.5s + var(--i) * var(--launch)) both;
 }
-.lb-climb-badge img { width: 20px; height: 20px; object-fit: contain; }
-.lb-climb-mono { color: var(--c); font-size: 11px; font-weight: 800; }
-.lb-climb-label { display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 7px; border-radius: 6px; background: rgba(255, 255, 255, .78); color: #2b4757; font-size: 11px; font-weight: 600; white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-.lb-climb-label b { color: #1f3a4b; font-size: 12px; font-variant-numeric: tabular-nums; }
-.lb-climb-model a:hover .lb-climb-label, .lb-climb-model a:focus-visible .lb-climb-label { background: #fff; box-shadow: 0 2px 10px #1f3a4b26; }
-.lb-climb-model a:focus-visible { outline: none; }
-.lb-climb-model a:focus-visible .lb-climb-badge { outline: 2px solid var(--c); outline-offset: 2px; }
-.lb-climb-model.is-record .lb-climb-label b { color: #a2451f; }
-.lb-climb-model.is-lead a { transform: translate(-21px, 50%); }
-.lb-climb-model.is-lead .lb-climb-badge { width: 42px; height: 42px; border: 3px solid #a2451f; animation: lb-climb-burn 1.05s ease-out calc(.5s + var(--i) * var(--launch)) both, lb-climb-glow 2.6s ease-out calc(1.8s + var(--i) * var(--launch)) infinite; }
-.lb-climb-model.is-lead .lb-climb-mono { color: #a2451f; font-size: 14px; }
-.lb-climb-model.is-lead .lb-climb-label { padding: 4px 10px; background: #fff; box-shadow: 0 4px 14px #1f3a4b2e; font-size: 13px; }
-.lb-climb-model.is-lead .lb-climb-label b { font-size: 17px; }
-/* Score HUD in the right column, above the Act station. */
-.lb-climb-hud {
-  position: absolute;
-  top: 19%;
-  right: 3.4%;
-  width: clamp(200px, 15vw, 260px);
-  padding: 14px 16px 12px;
-  border: 1px solid rgba(255, 255, 255, .7);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, .84);
-  box-shadow: 0 6px 22px #2946532b;
-  color: #2b4757;
-  pointer-events: auto;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+.lb-shot-badge img { width: 20px; height: 20px; object-fit: contain; }
+.lb-shot-mono { color: var(--c); font-size: 11px; font-weight: 800; }
+.lb-shot-label { display: inline-flex; align-items: baseline; gap: 5px; padding: 1px 6px; border-radius: 6px; background: rgba(255, 255, 255, .84); color: #2b4757; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.lb-shot-label b { color: #1f3a4b; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.lb-shot-label small { color: #506c7b; font-size: 11px; font-weight: 600; }
+/* Badges only, as on a summit chart; the top three carry their score, the leader its name, and every
+   badge shows its name and score on hover or focus. */
+.lb-shot-model:not(.is-top) .lb-shot-label { display: none; }
+.lb-shot-model:not(.is-lead) .lb-shot-label > span { display: none; }
+.lb-shot-model a:hover .lb-shot-label, .lb-shot-model a:focus-visible .lb-shot-label { display: inline-flex; }
+.lb-shot-model:not(.is-lead) a:hover .lb-shot-label > span, .lb-shot-model:not(.is-lead) a:focus-visible .lb-shot-label > span { display: inline; }
+.lb-shot-model.is-left a { flex-direction: row-reverse; transform: translate(calc(-100% + var(--badge) / 2), -50%); }
+.lb-shot-model.is-up a, .lb-shot-model.is-down a { flex-direction: column; gap: 2px; transform: translate(-50%, -14px); }
+.lb-shot-model.is-up a { flex-direction: column-reverse; transform: translate(-50%, calc(-100% + 14px)); }
+.lb-shot-model a:hover, .lb-shot-model a:focus-visible { z-index: 2; }
+.lb-shot-model a:hover .lb-shot-label, .lb-shot-model a:focus-visible .lb-shot-label { background: #fff; box-shadow: 0 2px 10px #1f3a4b26; }
+.lb-shot-model a:focus-visible { outline: none; }
+.lb-shot-model a:focus-visible .lb-shot-badge { outline: 2px solid var(--c); outline-offset: 2px; }
+.lb-shot-model.is-lead { z-index: 1; }
+.lb-shot-model.is-lead a { transform: translate(-25px, -50%); gap: 8px; }
+.lb-shot-model.is-lead .lb-shot-badge {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #a2451f;
+  animation: lb-shot-burn var(--fly) ease-out calc(.5s + var(--i) * var(--launch)) both, lb-shot-glow 2.6s ease-out calc(.5s + var(--n) * var(--launch) + var(--fly)) infinite;
 }
-.lb-climb-hud p { margin: 0; }
-.lb-climb-kicker { color: #506c7b; font-size: 10.5px; font-weight: 650; letter-spacing: .8px; text-transform: uppercase; }
-.lb-climb-best { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; margin-top: 8px !important; }
-.lb-climb-best span { flex-basis: 100%; color: #506c7b; font-size: 12px; font-weight: 600; }
-.lb-climb-best b { color: #a2451f; font-size: clamp(30px, 2.4vw, 42px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; animation: lb-climb-in .5s calc(var(--n) * var(--launch) + 1.2s) both; }
-.lb-climb-best i { color: #506c7b; font-size: 14px; font-style: normal; font-weight: 650; }
-.lb-climb-gap { margin-top: 4px !important; color: #2b4757; font-size: 12.5px; }
-.lb-climb-gap b { color: #1f3a4b; }
-.lb-climb-note { margin-top: 8px !important; padding-top: 8px; border-top: 1px solid #dfe7e8; color: #506c7b; font-size: 11px; line-height: 1.45; }
-.lb-climb-note strong { color: #1f3a4b; }
-.lb-climb-first { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: 8px !important; padding-top: 8px; border-top: 1px solid #dfe7e8; color: #506c7b; font-size: 11px; font-weight: 600; }
-.lb-climb-first strong { color: #1f3a4b; font-size: 12.5px; }
-.lb-climb-first > span { display: inline-flex; gap: 3px; }
-.lb-climb-first > span > span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; background: #fff; box-shadow: 0 0 0 1px #dfe7e8; }
-.lb-climb-first img { width: 15px; height: 15px; object-fit: contain; }
-@keyframes lb-climb-launch { from { bottom: 0; opacity: 0; } 12% { opacity: 1; } }
-@keyframes lb-climb-stem { from { height: 0; opacity: 1; } 70% { opacity: .9; } }
-@keyframes lb-climb-burn {
-  0%, 70% { box-shadow: 0 16px 14px -6px color-mix(in srgb, var(--c) 70%, #ffb347), 0 2px 8px #1f3a4b33; }
+.lb-shot-model.is-lead .lb-shot-badge img { width: 30px; height: 30px; }
+.lb-shot-model.is-lead .lb-shot-mono { color: #a2451f; font-size: 17px; }
+.lb-shot-label em { grid-column: 1 / -1; margin-top: 3px; padding-top: 4px; border-top: 1px solid #e3e9ea; color: #1f3a4b; font-size: 12px; font-style: normal; font-weight: 700; }
+.lb-shot-label em i { color: #a2451f; font-style: normal; }
+.lb-shot-model.is-lead .lb-shot-label { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: 8px; padding: 5px 11px; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px #1f3a4b33; font-size: 13px; font-weight: 700; }
+.lb-shot-model.is-lead .lb-shot-label b { color: #a2451f; font-size: 22px; font-weight: 800; line-height: 1; }
+.lb-shot-model.is-lead .lb-shot-label small { grid-column: 1 / -1; font-size: 10.5px; letter-spacing: .6px; text-transform: uppercase; }
+/* Preview caption and the first batch, under the page title. */
+.lb-shot-note { display: grid; justify-items: start; gap: 4px; width: fit-content; margin-top: 12px !important; padding: 6px 12px; border-radius: 10px; background: rgba(255, 255, 255, .8); color: #506c7b; font-size: 12px !important; line-height: 1.4 !important; pointer-events: auto; }
+.lb-shot-note strong { color: #1f3a4b; }
+.lb-shot-first { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; }
+.lb-shot-first strong { margin-right: 4px; }
+.lb-shot-first > span { display: inline-grid; place-items: center; width: 20px; height: 20px; }
+.lb-shot-first img { width: 17px; height: 17px; object-fit: contain; }
+@keyframes lb-shot-fly {
+  0% { opacity: 0; translate: calc(var(--k0x) * 1cqw) calc(var(--k0y) * 1cqh); }
+  8% { opacity: 1; }
+  33% { translate: calc(var(--k1x) * 1cqw) calc(var(--k1y) * 1cqh); }
+  66% { translate: calc(var(--k2x) * 1cqw) calc(var(--k2y) * 1cqh); }
+  100% { opacity: 1; translate: 0 0; }
 }
-@keyframes lb-climb-glow {
-  0% { box-shadow: 0 0 0 0 #a2451f66, 0 2px 8px #1f3a4b33; }
-  70%, 100% { box-shadow: 0 0 0 14px transparent, 0 2px 8px #1f3a4b33; }
+@keyframes lb-shot-burn {
+  0%, 70% { box-shadow: 0 6px 14px 4px #f0a37a, 0 2px 8px #1f3a4b40; }
+  100% { box-shadow: 0 2px 8px #1f3a4b40; }
 }
-@keyframes lb-climb-reveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-@keyframes lb-climb-in { from { opacity: 0; transform: translateY(6px); } }
-@media (max-width: 1100px) {
-  .lb-climb-field { top: 28%; right: 26%; }
-  .lb-climb-model:not(.is-lead) .lb-climb-label { display: none; }
-  .lb-climb-model:not(.is-lead) a:hover .lb-climb-label, .lb-climb-model:not(.is-lead) a:focus-visible .lb-climb-label { display: inline-flex; }
-  .lb-climb-model.is-lead a { flex-direction: row-reverse; transform: translate(calc(-100% + 21px), 50%); }
+@keyframes lb-shot-glow {
+  0% { box-shadow: 0 0 0 0 #a2451f88, 0 4px 14px #1f3a4b40; }
+  70%, 100% { box-shadow: 0 0 0 16px #a2451f00, 0 4px 14px #1f3a4b40; }
 }
-@media (max-width: 760px) {
-  .lb-climb-field { left: 9%; right: 11%; top: 360px; bottom: 23%; }
-  .lb-climb-target > span { font-size: 11px; }
-  .lb-climb-hud { top: 150px; left: 20px; right: 20px; width: auto; display: grid; grid-template-columns: auto 1fr; gap: 0 12px; align-items: center; padding: 10px 12px; }
-  .lb-climb-kicker, .lb-climb-note, .lb-climb-first { grid-column: 1 / -1; }
-  .lb-climb-best { margin-top: 4px !important; }
-  .lb-climb-best b { font-size: 28px; }
-  .lb-climb-gap { margin-top: 4px !important; }
-  .lb-climb-model:not(.is-lead) .lb-climb-label { display: none; }
-  .lb-climb-badge { width: 24px; height: 24px; }
-  .lb-climb-model a { transform: translate(-12px, 50%); }
-}
-/* Score-only labels keep fourteen entries legible; the name appears on hover or focus, and the leader is named. */
-.lb-climb-model:not(.is-lead) .lb-climb-label > span { display: none; }
-.lb-climb-model:not(.is-lead) a:hover .lb-climb-label > span, .lb-climb-model:not(.is-lead) a:focus-visible .lb-climb-label > span { display: inline; }
-.lb-climb-model:not(.is-lead) .lb-climb-label { padding: 1px 5px; }
-.lb-climb-model a:hover, .lb-climb-model a:focus-visible { z-index: 2; }
-/* A soft veil behind the field so the marks read over the busy campus. */
-.lb-climb-field::before { content: ""; position: absolute; inset: -6% -3% -3%; border-radius: 24px; background: linear-gradient(to top, rgba(255, 255, 255, .42), rgba(255, 255, 255, .12) 70%, transparent); -webkit-mask-image: radial-gradient(120% 100% at 50% 100%, #000 55%, transparent); mask-image: radial-gradient(120% 100% at 50% 100%, #000 55%, transparent); }
-/* What is left: a dashed bracket from the leader up to the target line. */
-.lb-climb-togo { position: absolute; left: var(--x); top: 0; bottom: calc(var(--y) * 1% + 24px); width: 0; border-left: 2px dashed #a2451f; opacity: .85; animation: lb-climb-in .6s calc(var(--n) * var(--launch) + 1.1s) both; }
-.lb-climb-togo em { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); padding: 3px 9px; border-radius: 999px; background: #a2451f; color: #fff; font-size: 12px; font-style: normal; font-weight: 700; white-space: nowrap; box-shadow: 0 3px 10px #a2451f44; }
-/* Desktop: the HUD runs as one strip beside the page title, clear of the Act station. */
+@keyframes lb-shot-trail { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes lb-shot-wave { from { transform: skewY(-6deg); } to { transform: skewY(6deg); } }
+/* Room for the moon: on wide screens the campus sits lower, and its sky fades into the stage colour,
+   so the route's end stays clear of the site header. */
 @media (min-width: 761px) {
-  .lb-climb-hud { top: clamp(96px, 11.5vh, 128px); width: auto; max-width: calc(100% - 420px); display: flex; align-items: center; gap: 0; padding: 10px 6px; }
-  .lb-climb-hud > p { padding: 0 14px; }
-  .lb-climb-hud > p + p { border-left: 1px solid #dfe7e8; }
-  .lb-climb-hud .lb-climb-kicker { max-width: 128px; line-height: 1.4; }
-  .lb-climb-hud .lb-climb-best { flex-wrap: nowrap; margin: 0 !important; }
-  .lb-climb-hud .lb-climb-best span { flex-basis: auto; max-width: 48px; line-height: 1.2; }
-  .lb-climb-hud .lb-climb-gap { max-width: 120px; margin: 0 !important; line-height: 1.35; }
-  .lb-climb-hud .lb-climb-note { max-width: 170px; margin: 0 !important; padding-top: 0; border-top: 0; }
-  .lb-climb-hud .lb-climb-first { margin: 0 !important; padding-top: 0; border-top: 0; max-width: 190px; }
+  .lb-stage { --sky: clamp(40px, 9vh, 104px); background: linear-gradient(#d3e6ef, #dcebed 40%); }
+  .lb-stage-scene { top: calc(50% + var(--sky)); }
+  .lb-stage-art, .lb-stage-motion-video {
+    mask-image: linear-gradient(transparent, #000 calc(var(--sky) * 1.4));
+    -webkit-mask-image: linear-gradient(transparent, #000 calc(var(--sky) * 1.4));
+  }
+}
+/* Phones: the stations are hidden, so the campus is cropped to the launch tower and the moon. */
+@media (max-width: 760px) {
+  .lb-stage-scene { left: 16vw; width: min(calc((var(--stage-height) - 180px) * 1983 / 793), 345vw); transform: translateX(-50.08%); mask-image: none; -webkit-mask-image: none; }
+  .lb-stage-art, .lb-stage-motion-video { mask-image: linear-gradient(transparent, #000 80px); -webkit-mask-image: linear-gradient(transparent, #000 80px); }
+  .lb-shot { --badge: 24px; }
+  .lb-shot-model.is-lead .lb-shot-badge { width: 42px; height: 42px; }
+  .lb-shot-model.is-lead a { transform: translate(-21px, -50%); gap: 6px; }
+  .lb-shot-model.is-lead .lb-shot-label { padding: 4px 9px; font-size: 12px; }
+  .lb-shot-model.is-lead .lb-shot-label b { font-size: 18px; }
+  .lb-shot-moon { padding: 4px 9px 4px 4px; font-size: 12px; transform: translate(calc(-100% + 12px), calc(-100% - 46px)); }
+  .lb-shot-moon > b { min-width: 34px; height: 28px; font-size: 15px; }
+  .lb-shot-note { font-size: 11px !important; }
 }
