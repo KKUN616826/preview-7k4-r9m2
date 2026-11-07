@@ -102,7 +102,8 @@ def _shot(entries, preview, data, when):
                  + '</span></p>')
     return (f'<div class="lb-shot{" lb-shot--preview" if preview else ""}" style="--n:{n}">'
             f'<svg class="lb-shot-svg" viewBox="0 0 {W} {H}" aria-hidden="true">'
-            f'<g class="lb-shot-levels">{levels}</g>{gap}<g class="lb-shot-trails">{"".join(trails)}</g></svg>'
+            f'<g class="lb-shot-levels">{levels}</g>{gap}<g class="lb-shot-trails">{"".join(trails)}</g>'
+            f'<text class="lb-shot-axis-title" transform="translate({PADS[0] - 115:.0f} {(_earth(PADS[0]) + _height(PADS[0], 100)) / 2:.0f}) rotate(-90)">Overall score</text></svg>'
             f'<p class="lb-shot-tag lb-shot-tag--moon" style="{_pct(1500, TOP)}"><b>100</b> The Moon · every case solved</p>'
             f'<ol class="lb-shot-models" aria-label="Overall score by model, in release order">{"".join(items)}</ol>'
             f'</div>'), first

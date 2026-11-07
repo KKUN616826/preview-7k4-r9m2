@@ -392,7 +392,9 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* Desktop: the whole campus is always in view, full width and resting on the bottom of the stage;
    any height above it continues the artwork's sky, so the chart on the art is never cropped. */
 @media (min-width: 761px) {
-  .lb-stage { background: #c7dfe4; }
+  /* Tall enough for the whole scene plus room for the title above the 100 line; on very wide or
+     short screens the stage runs past the first screen rather than cropping the chart. */
+  .lb-stage { --stage-height: max(100dvh, 600px, calc(100vw * 1053 / 1983 + 120px)); background: #c7dfe4; }
   .lb-stage-scene { top: auto; bottom: 0; left: 0; width: 100%; transform: none; }
   .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 7%); mask-image: linear-gradient(transparent, #000 7%); }
 }
@@ -406,6 +408,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-tick { fill: #3e606c; font: 600 15px/1 Inter, system-ui, sans-serif; text-anchor: end; paint-order: stroke; stroke: #eef5f8; stroke-width: 4px; stroke-linejoin: round; }
 .lb-shot-trail { stroke: var(--ink); stroke-width: 2; opacity: .5; stroke-dasharray: 1 1; animation: lb-shot-draw var(--rise-time) cubic-bezier(.25, .7, .3, 1) calc(.4s + var(--i) * var(--launch)) both; }
 .lb-shot-trail.is-lead { stroke: var(--accent); stroke-width: 3; opacity: .9; }
+.lb-shot-axis-title { fill: #3e606c; font: 650 14px/1 Inter, system-ui, sans-serif; letter-spacing: 1.2px; text-anchor: middle; text-transform: uppercase; paint-order: stroke; stroke: #eef5f8; stroke-width: 4px; }
 .lb-shot-pad { fill: #fff; stroke: var(--ink); stroke-width: 1.5; opacity: .8; }
 .lb-shot-gap { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; animation: lb-shot-fade .6s ease-out calc(.4s + var(--n) * var(--launch) + var(--rise-time)) both; }
 .lb-shot-tag, .lb-shot-togo, .lb-shot-axis { position: absolute; margin: 0; white-space: nowrap; color: var(--ink); }
@@ -461,7 +464,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 60px); mask-image: linear-gradient(transparent, #000 60px); }
   .lb-stage-motion-video, .lb-stage .lb-stage-motion-toggle { display: none !important; }
   .lb-shot { --badge: 22px; }
-  .lb-shot-trails, .lb-shot-gap, .lb-shot-tick { display: none; }
+  .lb-shot-trails, .lb-shot-gap, .lb-shot-tick, .lb-shot-axis-title { display: none; }
   .lb-shot-model { --rise: calc(var(--s) * 34.19); left: calc((1262 + 450 * var(--t)) / 1983 * 100%) !important; top: calc((596 - 360 * var(--s)) / 1053 * 100%) !important; }
   .lb-shot-model::before { content: ""; position: absolute; left: -1px; top: 0; width: 2px; height: calc(var(--s) * 360 / 1053 * 100cqh); background: linear-gradient(#1f3a4b99, #1f3a4b22); }
   .lb-shot-model.is-lead::before { background: linear-gradient(#a2451f, #a2451f33); }
