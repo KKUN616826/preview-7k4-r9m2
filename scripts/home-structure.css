@@ -184,9 +184,9 @@ html body main #top-ten .hl-when { margin: 0 0 8px !important; font-size: 14px !
 
 .contributor-logos {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  max-width: 440px;
+  max-width: 666px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -203,7 +203,18 @@ html body main #top-ten .hl-when { margin: 0 0 8px !important; font-size: 14px !
 }
 .contributor-logo--simpleai { background: var(--home-ink); border-color: var(--home-ink); }
 .contributor-logo img { display: block; width: 100%; max-width: 164px; height: 34px; object-fit: contain; }
-.contributor-logo:hover { border-color: var(--home-accent); }
+a.contributor-logo:hover { border-color: var(--home-accent); }
+.contributor-logo--yuanxing {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding-inline: 12px;
+  color: var(--home-ink);
+  font-size: 16px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.contributor-logo--yuanxing img { flex: none; width: 40px; height: 40px; }
 
 /* Introduction: the scope notes and overview figure now live on Protocol and Documents. */
 html body #introduction.intro-readable p.intro-more { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 0 !important; }
@@ -214,6 +225,7 @@ html body #introduction.intro-readable p.intro-more { display: flex; flex-wrap: 
   .hl-cols { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
+  .contributor-logos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   html body main #top-ten.home-leaderboard,
   html body main #tasks.home-tasks,
   html body main #news,
