@@ -27,9 +27,9 @@ const { chromium } = require('playwright');
     }
     assert.ok(data.models.filter(m => m.type === 'agent').every(m => m.track === 'agent'), 'agents only on the agent board');
     assert.match(await page.locator('#board-agent .lb-board-note').textContent(), /ranked\s+separately/);
-    assert.equal(await page.locator('.lb-shot-model').count() > 0, true, 'hero places models along the route to the moon');
-    assert.equal(await page.locator('.lb-shot-moon').count(), 1, 'hero marks the moon as the target');
-    assert.equal(await page.locator('.lb-shot-model.is-lead').count(), 1, 'hero names one leader');
+    assert.equal(await page.locator('.lb-sky-model').count() > 0, true, 'hero places models between the Earth and the Moon');
+    assert.equal(await page.locator('.lb-sky-moon').count(), 1, 'hero marks the Moon as the target');
+    assert.equal(await page.locator('.lb-sky-model.is-lead').count(), 1, 'hero names one leader');
     await page.click('#board-e2e [data-setting="random"]');
     assert.equal(await page.getAttribute('#board-e2e [data-setting="random"]', 'aria-pressed'), 'true');
     for (const width of [320, 390, 820, 1440]) {
