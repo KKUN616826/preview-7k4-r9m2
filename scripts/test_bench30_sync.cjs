@@ -21,7 +21,7 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
      v.muted=true;v.load();await new Promise((ok,fail)=>{v.addEventListener('loadedmetadata',ok,{once:true});v.addEventListener('error',()=>fail(Error(v.error?.message)),{once:true});});
      await v.play();v.pause();return{width:v.videoWidth,height:v.videoHeight,duration:v.duration,src:v.currentSrc};
     });
-    assert.equal(actual.width,r.width);assert.equal(actual.height,r.height);assert.ok(Math.abs(actual.duration-r.duration)<.1);assert.ok(actual.src.endsWith(r.path));
+    assert.equal(actual.width,r.width);assert.equal(actual.height,r.height);assert.ok(Math.abs(actual.duration-r.duration)<.1);assert.ok(new URL(actual.src).pathname.endsWith(r.path));
     const response=await page.request.get(new URL(r.path,base).href,{headers:{Range:'bytes=0-1023'}});assert.equal(response.status(),206);assert.equal((await response.body()).length,1024);
     const footer=await page.locator('.task-footer').boundingBox();if(footer.y+footer.height>768)overflow.push(`${task}/${r.level}`);
    }

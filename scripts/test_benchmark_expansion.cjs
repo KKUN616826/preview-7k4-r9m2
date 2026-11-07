@@ -27,7 +27,7 @@ const base=process.env.HERO_PREVIEW_URL||'http://127.0.0.1:8765/';
      await new Promise((ok,fail)=>{if(v.readyState>=2)return ok();v.addEventListener('loadeddata',ok,{once:true});v.addEventListener('error',()=>fail(Error(v.error?.message)),{once:true});});
      v.pause();return {duration:v.duration,w:v.videoWidth,h:v.videoHeight,src:v.currentSrc};
     });
-    assert.ok(Math.abs(result.duration-record.duration)<.1);assert.equal(result.w,record.width);assert.equal(result.h,record.height);assert.ok(result.src.endsWith(`/${c.id}/${level}.mp4`));played++;
+    assert.ok(Math.abs(result.duration-record.duration)<.1);assert.equal(result.w,record.width);assert.equal(result.h,record.height);assert.ok(new URL(result.src).pathname.endsWith(`/${c.id}/${level}.mp4`));played++;
     const range=await p.request.get(new URL(record.path,base).href,{headers:{Range:'bytes=0-1023'}});assert.equal(range.status(),206);assert.equal((await range.body()).length,1024);
    }
    const visibleVideo=await p.locator('[data-panel]:visible video').count();

@@ -118,7 +118,25 @@ def detail(suite, case):
     return content
 
 
+_MEDIA = re.compile(r'((?:data-)?src|poster|"video"|"poster")(="|: ")((?:\.\./)?)(media/(?:task-demos|benchmark-expansion|benchmark-covers)/[^"?]+)"')
+
+
+def versioned(html):
+    """Add a content hash to every demo video, poster and cover URL, so a replaced file is fetched anew
+    instead of served from the browser cache under its unchanged name."""
+    def add(m):
+        path = ROOT / m[4]
+        if not path.is_file():
+            return m[0]
+        return f'{m[1]}{m[2]}{m[3]}{m[4]}?v={hashlib.sha256(path.read_bytes()).hexdigest()[:10]}"'
+    return _MEDIA.sub(add, html)
+
+
 def page(suites, current, title, content, prefix='', is_detail=False):
+    return versioned(_page(suites, current, title, content, prefix, is_detail))
+
+
+def _page(suites, current, title, content, prefix='', is_detail=False):
     if current == 'overview':
         from benchmark_overview import document
         return document(content)
@@ -133,7 +151,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
         'tasks/task-pages.css', f'media/site-shell.css?v={shell_version}',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
-        'tasks/benchmark-workspace.css?v=task-search-7',
+        'tasks/benchmark-workspace.css?v=task-search-8',
         *(['tasks/benchmark-task-rows.css?v=1'] if current in {s['slug'] for s in suites} else [])])
     body_class = 'benchmark-workspace' + (' task-detail' if is_detail else '')
     if current in {suite['slug'] for suite in suites}:
