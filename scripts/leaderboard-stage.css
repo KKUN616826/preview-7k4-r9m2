@@ -432,7 +432,9 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-model.is-lead a { --badge: clamp(44px, 2.9vw, 56px); }
 .lb-shot-model.is-lead .lb-shot-badge { border: 2.5px solid var(--accent); animation: lb-shot-glow 2.8s ease-out calc(.4s + var(--n) * var(--launch) + var(--rise-time)) infinite; }
 .lb-shot-model.is-lead .lb-shot-mono { color: var(--accent); font-size: 17px; }
-.lb-shot-model.is-lead .lb-shot-label span { color: var(--ink); font-size: 13px; font-weight: 700; }
+.lb-shot-label em { margin-right: 4px; color: var(--accent); font-style: normal; font-weight: 800; }
+.lb-shot-model.is-top .lb-shot-label span { max-width: 120px; color: var(--ink); }
+.lb-shot-model.is-lead .lb-shot-label span { max-width: none; color: var(--ink); font-size: 13px; font-weight: 700; }
 .lb-shot-model.is-lead .lb-shot-label b { color: var(--accent); font-size: 26px; line-height: 1.05; }
 .lb-shot-model.is-lead .lb-shot-label small { order: -1; margin-bottom: 4px; white-space: nowrap; color: #3e606c; font-size: 12px; font-weight: 600; }
 .lb-shot-model.is-lead .lb-shot-label small i { color: var(--accent); font-style: normal; font-weight: 800; }
@@ -448,20 +450,26 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 @keyframes lb-shot-fade { from { opacity: 0; } }
 @keyframes lb-shot-glow { 0% { box-shadow: 0 0 0 0 #a2451f88, 0 2px 8px #1f3a4b33; } 70%, 100% { box-shadow: 0 0 0 16px #a2451f00, 0 2px 8px #1f3a4b33; } }
 @media (max-width: 1100px) {
-  .lb-shot-model:not(.is-lead) .lb-shot-label span { display: none; }
+  .lb-shot-model:not(.is-top) .lb-shot-label span { display: none; }
 }
-/* Phones: the stage is sized to the band of art that holds every pad and the Moon. */
+/* Phones: a narrow window of the art under the Moon (x 1230-1760), large enough that the sky between
+   the horizon and the Moon is tall; the pads are re-spread across that window and the trails drawn
+   in HTML, since the desktop trails sit outside it. The horizon there is close to level (y 596). */
 @media (max-width: 760px) {
-  .lb-stage { --scene-w: calc(100vw * 1983 / 1500); --stage-height: calc(var(--scene-w) * 1053 / 1983 + 300px); height: var(--stage-height); }
-  .lb-stage-scene { top: auto; bottom: 0; left: 0; width: var(--scene-w); transform: translateX(calc(var(--scene-w) * -300 / 1983)); mask-image: none; -webkit-mask-image: none; }
-  .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 40px); mask-image: linear-gradient(transparent, #000 40px); }
+  .lb-stage { --scene-w: 373vw; --scene-h: calc(var(--scene-w) * 1053 / 1983); --stage-height: calc(var(--scene-h) + 120px); height: var(--stage-height); }
+  .lb-stage-scene { top: auto; bottom: 0; left: 0; width: var(--scene-w); transform: translateX(calc(var(--scene-w) * -1230 / 1983)); mask-image: none; -webkit-mask-image: none; }
+  .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 60px); mask-image: linear-gradient(transparent, #000 60px); }
   .lb-stage-motion-video, .lb-stage .lb-stage-motion-toggle { display: none !important; }
-  .lb-shot { --badge: 20px; }
+  .lb-shot { --badge: 22px; }
+  .lb-shot-trails, .lb-shot-gap, .lb-shot-tick { display: none; }
+  .lb-shot-model { --rise: calc(var(--s) * 34.19); left: calc((1262 + 450 * var(--t)) / 1983 * 100%) !important; top: calc((596 - 360 * var(--s)) / 1053 * 100%) !important; }
+  .lb-shot-model::before { content: ""; position: absolute; left: -1px; top: 0; width: 2px; height: calc(var(--s) * 360 / 1053 * 100cqh); background: linear-gradient(#1f3a4b99, #1f3a4b22); }
+  .lb-shot-model.is-lead::before { background: linear-gradient(#a2451f, #a2451f33); }
   .lb-shot-mono { font-size: 9px; }
   .lb-shot-model:not(.is-lead) .lb-shot-label { display: none; }
-  .lb-shot-model.is-lead a { --badge: 32px; }
-  .lb-shot-model.is-lead .lb-shot-label b { font-size: 17px; }
-  .lb-shot-tick { font-size: 26px; }
-  .lb-shot-tag, .lb-shot-togo { font-size: 11px; }
-  .lb-shot-axis { display: none; }
+  .lb-shot-model.is-lead a { --badge: 34px; flex-direction: row; align-items: flex-end; gap: 6px; transform: translate(calc(-100% + var(--badge) / 2), calc(-100% + var(--badge) / 2)); }
+  .lb-shot-model.is-lead .lb-shot-label { align-items: flex-end; margin-bottom: 30px; }
+  .lb-shot-model.is-lead .lb-shot-label b { font-size: 20px; }
+  .lb-shot-tag { font-size: 11px; }
+  .lb-shot-tag--moon { transform: translate(-30%, 8px); }
 }

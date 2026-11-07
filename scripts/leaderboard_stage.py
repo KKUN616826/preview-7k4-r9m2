@@ -66,6 +66,7 @@ def _shot(entries, preview, data, when):
     n = len(entries)
     lead = max(range(n), key=lambda i: entries[i][1])
     best = entries[lead][1]
+    rank = {i: r + 1 for r, i in enumerate(sorted(range(n), key=lambda i: -entries[i][1]))}
     items, trails = [], []
     for i, (name, score, m) in enumerate(entries):
         x = PADS[0] + (PADS[1] - PADS[0]) * i / max(1, n - 1)
@@ -74,10 +75,11 @@ def _shot(entries, preview, data, when):
                       f'pathLength="1" style="--i:{i}"/><circle class="lb-shot-pad" cx="{x:.1f}" cy="{y0:.1f}" r="3.5"/>')
         badge = _icon(m, 28) if m else f'<span class="lb-shot-mono">{escape(name.split()[-1][:2])}</span>'
         href = f'models/{escape(m["id"])}.html' if m else '#board-e2e'
-        cls = 'lb-shot-model' + (' is-lead' if i == lead else '')
-        items.append(f'<li class="{cls}" style="{_pct(x, y)};--i:{i};--rise:{(y0 - y) / H * 100:.3f}">'
+        cls = 'lb-shot-model' + (' is-lead' if i == lead else '') + (' is-top' if rank[i] <= 3 else '')
+        place = f'<em>#{rank[i]}</em>' if rank[i] <= 3 else ''
+        items.append(f'<li class="{cls}" style="{_pct(x, y)};--i:{i};--rise:{(y0 - y) / H * 100:.3f};--t:{i / max(1, n - 1):.4f};--s:{score / TARGET:.4f}">'
                      f'<a href="{href}" title="{escape(name)} · Overall {score:.1f}" aria-label="{escape(name)}: Overall {score:.1f}{" (placeholder)" if preview else ""}">'
-                     f'<span class="lb-shot-label"><span>{escape(name)}</span><b>{score:.1f}</b>'
+                     f'<span class="lb-shot-label"><span>{place}{escape(name)}</span><b>{score:.1f}</b>'
                      + (f'<small><i>{TARGET - score:.1f}</i> to the Moon</small>' if i == lead else '') + '</span>'
                      f'<span class="lb-shot-badge">{badge}</span></a></li>')
     # Level lines across the sky, from the first pad to the Moon.
@@ -122,7 +124,6 @@ def render(data):
              '<p class="lb-stage-sub">Overall score of every VLA / WAM model, Clean setting. Height is score, from the '
              'Earth\'s horizon (0) to the Moon (100, every case solved); left to right is release order.</p>'
              f'{note}</div>'
-             + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if not preview else '')
              + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
              + '<div class="lb-stage-scene">'
              '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v4.webp" alt="Lunar robotics campus under a wide sky, '
