@@ -28,7 +28,7 @@ CONTRIBUTIONS = [
     ('A four-letter behavioural profile',
      'MBTI-style letters with meanings defined by this benchmark: E acts / I thinks, S remembers what / '
      'N remembers where, T precision / F reactivity, J plans ahead / P follows feedback. '
-     'Tendencies, not ability; an unstable lean is written X.'),
+     'Tendencies, not ability; a weak lean is shown with its stability.'),
     ('Where the loop breaks',
      'Every failed episode is traced to the first stage after which success became impossible: '
      'physics rules first, an agent judge on the evidence second, human calibration on new tasks.'),
@@ -54,11 +54,12 @@ def axis_row(a):
     key, name, compares, left, right = next(x for x in pv.AXES if x[0] == a['key'])
     # 50% is the centre; the marker moves toward the pole the lean points to.
     pos = 50 - (a['lean'] - 50) if a['side'] == 'left' else 50 + (a['lean'] - 50)
-    unstable = a['letter'] not in (left[0], right[0])
+    weak = a['stability'] < pv.STABLE
     pole = left if a['side'] == 'left' else right
-    note = f'stability {a["stability"]}%' + (' · no clear lean' if unstable else '')
-    return (f'<div class="dx-axis{" is-unstable" if unstable else ""}" style="--axis:{AXIS_COLOUR[key]}">'
-            f'<span class="dx-axis-name" title="{escape(compares)}">{name}</span>'
+    note = f'{"weak lean · " if weak else ""}stability {a["stability"]}%'
+    small = f'<small>weak lean · {a["stability"]}%</small>' if weak else ''
+    return (f'<div class="dx-axis{" is-weak" if weak else ""}" style="--axis:{AXIS_COLOUR[key]}">'
+            f'<span class="dx-axis-name" title="{escape(compares)}">{name}{small}</span>'
             f'<span class="dx-axis-bar" role="img" aria-label="{a["lean"]}% {escape(pole[1])}, {escape(note)}">'
             f'<span class="dx-pole"><b>{left[0]}</b> {pv.SHORT[left[0]]}</span><span class="dx-track"><i style="left:{pos:.0f}%"></i></span>'
             f'<span class="dx-pole">{pv.SHORT[right[0]]} <b>{right[0]}</b></span></span>'
@@ -77,27 +78,17 @@ def failure_bar(f):
             f'<ul class="dx-legend">{legend}</ul>{note}</div>')
 
 
-def article(name):
-    return ('an ' if name[0] in 'AEIOU' else 'a ') + name
-
-
 def card(c):
     code, fam = c['code'], pv.family(c['code'])
-    nick = pv.nickname(code)
-    name = nick or (pv.FAMILIES[fam][0] if fam else 'no core type')
-    kicker = 'Your model is ' + ('the' if nick else ('a' if fam and name[0] not in 'AEIOU' else 'an' if fam else ''))
-    sub = (f'{pv.FAMILIES[fam][0]} · ' if nick else '') + pv.traits(code)
-    undecided = [ax[2] for ax, ch in zip(pv.AXES, code) if ch not in ax[3][0] + ax[4][0]]
-    why = (f'<p class="dx-hero-note">No nickname: {" and ".join(undecided)} shows no clear lean '
-           f'({"/".join(ch for ch in code if ch in "X?")}).</p>') if not nick else ''
     views = {v['key']: v for v in c['views']}
     findings = ''.join(f'<li><strong>{escape(h)}</strong><span>{escape(t)}</span></li>' for h, t in c['findings'])
-    return (f'<article class="dx-card dx-fam--{(fam or "x").lower()}" aria-label="Sample diagnosis card: {escape(c["name"])}">'
+    return (f'<article class="dx-card" style="{pv.style(code)}" aria-label="Sample diagnosis card: {escape(c["name"])}">'
             f'<div class="dx-card-head"><p class="dx-model">{escape(c["name"])} <span>· {escape(c["track"].lower())} · synthetic sample</span></p>'
             f'<span class="dx-code" aria-label="Profile code {escape(code)}">{escape(code)}</span></div>'
             f'<div class="dx-hero">{pv.avatar(code, "dx-avatar")}<div class="dx-hero-text">'
-            f'<p class="dx-hero-kicker">{escape(kicker)}</p><p class="dx-hero-name">{escape(name)}</p>'
-            f'<p class="dx-hero-traits">{escape(sub)}</p>{why}</div></div>'
+            f'<p class="dx-hero-kicker">Your model is the</p><p class="dx-hero-name">{escape(pv.nickname(code))}</p>'
+            f'<p class="dx-hero-family">{escape(pv.FAMILIES[fam][0])}</p>'
+            f'<p class="dx-hero-traits">{escape(pv.traits(code))}</p></div></div>'
             f'<p class="dx-quote">“{escape(c["quote"])}”</p>'
             f'<ol class="dx-findings">{findings}</ol>'
             f'<div class="dx-bars">{"".join(view_bar(views[k]) for k in VIEW_ORDER)}'
@@ -116,17 +107,17 @@ def types_grid():
     rows = []
     for fam in pv.ORDER:
         name, blurb, good, risk = pv.FAMILIES[fam]
-        codes = [c for c in pv.NICKNAMES if c[0] + c[3] == fam]
-        tiles = ''.join(f'<li>{pv.avatar(c, "dx-avatar")}<b>{c}</b><span>{escape(pv.NICKNAMES[c])}</span></li>' for c in codes)
-        rows.append(f'<div class="dx-family dx-fam--{fam.lower()}"><div class="dx-family-text">'
+        codes = [c for c in pv.TYPES if pv.family(c) == fam]
+        tiles = ''.join(f'<li style="{pv.style(c)}">{pv.avatar(c, "dx-avatar")}<b>{c}</b><span>{escape(pv.NICKNAMES[c])}</span></li>' for c in codes)
+        rows.append(f'<div class="dx-family dx-fam--{fam.lower()}" style="--fam:{pv.FAMILY_COLOUR[fam]}"><div class="dx-family-text">'
                     f'<p class="dx-family-key">{fam[0]}··{fam[1]}</p><h4>{escape(name)}</h4><p>{escape(blurb)}</p>'
                     f'<p class="dx-family-edge"><span>Strong at</span> {escape(good)}<br><span>Watch for</span> {escape(risk)}</p></div>'
                     f'<ul class="dx-family-tiles">{tiles}</ul></div>')
     key = ''.join(f'<li><b>{l[0]}</b> {escape(l[1])} <i>/</i> <b>{r[0]}</b> {escape(r[1])}</li>' for _, _, _, l, r in pv.AXES)
     return ('<div class="dx-types" aria-labelledby="dx-types-title">'
             '<div class="dx-types-head"><h3 id="dx-types-title">Sixteen profiles, four families</h3>'
-            '<p>The letters are borrowed from MBTI; their meanings are defined by this benchmark. The first and last '
-            'letters set the family. A nickname appears only when all four letters are decided.</p>'
+            '<p>The letters are borrowed from MBTI; their meanings are defined by this benchmark. Each axis shows the side '
+            'a model leans to, so every model gets one of sixteen codes; the first and last letters set the family.</p>'
             f'<ul class="dx-types-key">{key}</ul></div>{"".join(rows)}</div>')
 
 

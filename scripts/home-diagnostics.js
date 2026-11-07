@@ -22,10 +22,9 @@
   const R = 5.6, HOLD = 2.4, CYCLE = R * ROUNDS.length + HOLD;
   // The v5 profile after 0, 1, 2 and 3 rounds (letters 1 and 4 set the family): Act data turns a
   // Mind-dominant model Act-dominant (I→E), closed-loop Mind2Act data makes it feedback-driven
-  // (J→P), and memory data settles its unstable memory lean on spatial memory (X→N). Tendencies,
-  // not scores; the last code is complete, so it earns a nickname.
-  const CODES = ['IXTJ', 'EXTJ', 'EXTP', 'ENTP'];
-  const TYPES = ['Feedforward Planner', 'Procedural Executor', 'Servo Responder', 'Tuner · Servo Responder'];
+  // (J→P), and memory data moves its memory from entities to space (S→N). Tendencies, not scores.
+  const CODES = ['ISTJ', 'ESTJ', 'ESTP', 'ENTP'];
+  const TYPES = ['Bookkeeper · Feedforward Planner', 'Assembler · Procedural Executor', 'Fixer · Servo Responder', 'Tuner · Servo Responder'];
   const avatars = $$('.lp-avatar-img'), typeEl = $('.lp-type');
   const codeEls = {card: $('.lp-card .lp-code'), model: $('.lp-profile .lp-code')};
   const shown = {};

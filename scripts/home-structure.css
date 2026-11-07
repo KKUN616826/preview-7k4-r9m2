@@ -236,7 +236,6 @@ html body main #diagnosis .dx-points p { margin: 0 !important; font-size: 14px !
 .dx-fam--ip { --fam: #2f7360; --fam-ink: #163b31; --fam-tint: #e4f3ec; }
 .dx-fam--ej { --fam: #2f6386; --fam-ink: #15344a; --fam-tint: #e5f0f6; }
 .dx-fam--ep { --fam: #a2451f; --fam-ink: #4f1d0b; --fam-tint: #fae8e0; }
-.dx-fam--x { --fam: #5d6a72; --fam-ink: #2b3439; --fam-tint: #eef1f2; }
 .dx-avatar { display: block; flex: none; image-rendering: pixelated; }
 .dx-card { display: flex; flex-direction: column; gap: 18px; padding: 22px; border: 1px solid var(--dx-line); border-radius: 16px; background: #fff; }
 .dx-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
@@ -244,12 +243,12 @@ html body main #diagnosis p.dx-model { margin: 0 !important; font: 600 16px/1.35
 .dx-model span { font-family: var(--m2a-font-sans, Arial, sans-serif); font-size: 14px; font-weight: 400; color: var(--dx-muted); }
 html body main #diagnosis .dx-code { flex: none; color: var(--fam-ink); font: 700 15px/1 'JetBrains Mono', ui-monospace, monospace !important; letter-spacing: .14em; }
 .dx-hero { display: flex; align-items: center; gap: 22px; margin: -2px 0 0; padding: 20px 22px; border-radius: 14px; background: var(--fam-tint); }
-.dx-hero .dx-avatar { width: 112px; height: 112px; margin: -6px 0; }
+.dx-hero .dx-avatar { width: 128px; height: 128px; margin: -14px -4px -10px -10px; }
 .dx-hero-text { min-width: 0; }
 html body main #diagnosis p.dx-hero-kicker { margin: 0 !important; font-size: 15px !important; line-height: 1.3 !important; color: var(--fam) !important; }
 html body main #diagnosis p.dx-hero-name { margin: 2px 0 0 !important; font: 700 clamp(26px, 2.5vw, 34px)/1.1 'Pixelify Sans', 'JetBrains Mono', monospace !important; letter-spacing: .01em; color: var(--fam-ink) !important; }
 html body main #diagnosis p.dx-hero-traits { margin: 8px 0 0 !important; font-size: 12.5px !important; line-height: 1.45 !important; color: color-mix(in srgb, var(--fam-ink) 75%, #fff) !important; }
-html body main #diagnosis p.dx-hero-note { margin: 4px 0 0 !important; font-size: 12px !important; line-height: 1.4 !important; color: var(--dx-muted) !important; }
+html body main #diagnosis p.dx-hero-family { margin: 4px 0 0 !important; font-size: 14px !important; font-weight: 650 !important; line-height: 1.3 !important; color: var(--fam) !important; }
 html body main #diagnosis p.dx-quote { margin: -4px 0 0 !important; font-size: 16px !important; font-style: italic; line-height: 1.5 !important; color: #3d4c55 !important; }
 .dx-findings { margin: 0; padding: 0; list-style: none; counter-reset: dx-find; border-top: 1px solid var(--dx-line); }
 html body main #diagnosis .dx-findings li { display: grid; grid-template-columns: 26px 1fr; padding: 10px 0; border-bottom: 1px solid var(--dx-line); background: none !important; counter-increment: dx-find; }
@@ -279,8 +278,9 @@ html body main #diagnosis p.dx-label { display: flex; justify-content: space-bet
 .dx-track::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: #b9c4c0; }
 .dx-track i { position: absolute; top: 50%; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: var(--axis); box-shadow: 0 0 0 1px var(--axis); transform: translate(-50%, -50%); }
 .dx-letter { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; background: var(--axis); color: #fff; font: 700 15px/1 'JetBrains Mono', ui-monospace, monospace; }
-.dx-axis.is-unstable .dx-track i { background: #9aa6a2; box-shadow: 0 0 0 1px #9aa6a2; }
-.dx-axis.is-unstable .dx-letter { background: #e6eae8; color: #6d7b80; }
+.dx-axis-name small { font-size: 10.5px; font-weight: 500; color: #a1452f; }
+.dx-axis.is-weak .dx-track i { background: #fff; }
+.dx-axis.is-weak .dx-letter { background: #fff; color: var(--axis); box-shadow: inset 0 0 0 2px var(--axis); }
 
 /* Sixteen profiles in four families, laid out like the family rows of an MBTI type chart. */
 .dx-types { margin-top: 48px; }
@@ -301,7 +301,7 @@ html body main #diagnosis .dx-family-text p.dx-family-edge { margin-top: 8px !im
 .dx-family-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 html body main #diagnosis .dx-family-tiles li { display: grid; justify-items: center; gap: 2px; padding: 12px 6px 10px; border-radius: 12px; background: #ffffffb8; background-image: none !important; text-align: center; transition: transform .2s, box-shadow .2s; }
 .dx-family-tiles li:hover { transform: translateY(-3px); box-shadow: 0 8px 18px color-mix(in srgb, var(--fam) 18%, transparent); }
-.dx-family-tiles .dx-avatar { width: 64px; height: 64px; margin-bottom: 6px; }
+.dx-family-tiles .dx-avatar { width: 76px; height: 76px; margin: -6px 0 2px; }
 .dx-family-tiles b { font: 700 15px/1 'JetBrains Mono', ui-monospace, monospace; letter-spacing: .1em; color: var(--fam-ink); }
 .dx-family-tiles span { font-size: 13px; font-weight: 600; color: var(--fam); }
 .dx-stack { display: flex; height: 22px; overflow: hidden; border-radius: 6px; }

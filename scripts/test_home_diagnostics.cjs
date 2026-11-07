@@ -40,7 +40,7 @@ const base = process.env.HERO_PREVIEW_URL || 'http://127.0.0.1:8765/';
       // The model's pixel avatar follows its profile: one per round, exactly one shown.
       assert.equal(await root.locator('.lp-avatar-img').count(), 4);
       assert.equal(await root.locator('.lp-avatar-img.is-current').count(), 1);
-      assert.match(await root.locator('.lp-node--model .lp-code').textContent(), /^[EIX][SNX][TFX][JPX]$/);
+      assert.match(await root.locator('.lp-node--model .lp-code').textContent(), /^[EI][SN][TF][JP]$/);
       await page.emulateMedia({reducedMotion: 'reduce'});
       await page.waitForFunction(() => document.querySelector('#model-diagnostics').dataset.playing === 'false');
       assert.equal(await toggle.isHidden(), true);

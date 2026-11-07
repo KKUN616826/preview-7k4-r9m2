@@ -1,11 +1,11 @@
 {
-  "_source": "Mind2Act harness diagnosis card v3 reference samples (harness/docs/reference_card, 2026-11-04): diagnosis_card_reference_en.html and diagnosis_card_reference_e2e_zh.html. Both are synthetic samples generated from fault-injected simulated policies; they show the card's format and logic and are not results of any real model. Codes converted to the v5 letters (MBTI-style, 2026-11-07 handoff) with profile.v4_to_v5: MXPS -> IXTJ, MXPQ -> IXFJ.",
+  "_source": "Mind2Act harness diagnosis card v3 reference samples (harness/docs/reference_card, 2026-11-04): diagnosis_card_reference_en.html and diagnosis_card_reference_e2e_zh.html. Both are synthetic samples generated from fault-injected simulated policies; they show the card's format and logic and are not results of any real model. Codes use the v5 letters (MBTI-style, 2026-11-07 handoff). Every axis shows the side the model leans to; the memory axes of both samples lean weakly (stability 60% and 66%), where the harness writes X.",
   "pdf": "media/diagnosis/diagnosis-card-sample-en.pdf",
   "cards": [
     {
       "name": "sim-fragmented",
       "track": "Coding agent",
-      "code": "IXTJ",
+      "code": "ISTJ",
       "quote": "Brilliant on paper. Falls apart when the plan has to touch the real world.",
       "views": [
         {
@@ -45,7 +45,7 @@
           "key": "information",
           "lean": 51,
           "side": "left",
-          "letter": "X",
+          "letter": "S",
           "stability": 60
         },
         {
@@ -113,7 +113,7 @@
     {
       "name": "sim-integrated",
       "track": "End-to-end policy",
-      "code": "IXFJ",
+      "code": "INFJ",
       "quote": "Hands wobble, but it keeps the loop closed and gets things done.",
       "views": [
         {
@@ -153,7 +153,7 @@
           "key": "information",
           "lean": 52,
           "side": "right",
-          "letter": "X",
+          "letter": "N",
           "stability": 66
         },
         {
