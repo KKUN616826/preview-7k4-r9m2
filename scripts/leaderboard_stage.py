@@ -9,11 +9,13 @@ Mind, Act and Mind2Act scores and the Random setting are columns in the tables b
 Until three end-to-end results are published, the route shows anonymous placeholder entries
 (PREVIEW), captioned as placeholders, together with the first release date and batch.
 """
+import math
 from datetime import date
 from html import escape
 
 # One station per suite (see media/leaderboard-motion/scene.js). Labels name the dimension only.
-# x, y: the label's bottom anchor above the arm, in v3 artwork units (1983 x 793, 260 less sky than v4); align: which
+# x, y: the label's bottom anchor above the arm, in v3 artwork units (1983 x 793, SKY less sky than v4,
+# mapped to the corrected view by _view); align: which
 # edge of the label sits on x, so labels near the crop edge stay inside the stage.
 STATIONS = [
     # (slug, index, name, gist, shoulder pivot x/y on the 1983x793 artwork (scene.js S), placement, leader length)
@@ -27,7 +29,7 @@ def stations():
     """HUD tags: each dimension hangs on a leader line whose beacon sits on the shoulder of the arm illustrating it."""
     items = ''.join(
         f'<a class="lb-station lb-station--{slug} lb-station--{place}" href="benchmark.html#suite-{slug}" '
-        f'style="left:{x / 19.83:.2f}%;top:{(y + 260) / 10.53:.2f}%;--lead:{lead / 10.53:.2f}cqh">'
+        f'style="{_pct(*_view(x, y + SKY))};--lead:{lead * ZOOM / 10.53:.2f}cqh">'
         f'<span class="lb-station-index">Dimension {num}</span>'
         f'<strong>{name}</strong><span class="lb-station-gist">{escape(gist)}</span></a>'
         for slug, num, name, gist, x, y, place, lead in STATIONS)
@@ -59,22 +61,41 @@ def _icon(m, size):
 # Geometry of leaderboard-lunar-campus-v4.webp in artwork units (1983 x 1053): v3 with SKY units of sky
 # inserted between the Moon and the Earth (scripts/extend_lunar_sky.py), so v3 y + SKY = v4 y.
 W, H, SKY = 1983, 1053, 260
-MOON = (1698.5, -369.5, 590.0)               # centre and radius of the Moon's disc
-# The Earth's horizon, measured on v3 and moved down by SKY: (x, y) samples, interpolated linearly.
-HORIZON = [(300, 272), (600, 279), (900, 300), (1150, 320), (1500, 330), (1700, 343), (1983, 365)]
+# The painted camera is rolled: the Earth's horizon falls about 2.8 degrees to the right, so its crest
+# sits off the left edge and the Earth looks tilted. The page turns the art (still and loop) back by
+# ROLL about its centre and enlarges it by ZOOM to cover the corners (.lb-stage-art in
+# leaderboard-stage.css). Everything below is laid out in that corrected view, where the horizon is a
+# level, symmetric arc.
+ROLL, ZOOM = 2.8, 1.035
+# The horizon on v4, fitted to a parabola from x 360 to 1840: y = A x^2 + B x + C, artwork units.
+HORIZON_FIT = (1.8239e-05, 1.31081e-02, 528.449)
+MOON_ART = ((1698.5, -369.5), 590.0)         # the Moon's centre and radius on v4
 LAUNCH = (640, 1460)                         # launch sites along the horizon, clear of the Mind and Act labels
 LANDING = (1290, 1740)                       # landing sites along the Moon's visible lower limb
 
 
+def _view(x, y):
+    """Artwork point -> corrected view point (turned by -ROLL about the centre, scaled by ZOOM)."""
+    a = math.radians(ROLL)
+    dx, dy = x - W / 2, y - H / 2
+    return (W / 2 + ZOOM * (dx * math.cos(a) + dy * math.sin(a)),
+            H / 2 + ZOOM * (-dx * math.sin(a) + dy * math.cos(a)))
+
+
+_HZ = sorted(_view(x, HORIZON_FIT[0] * x * x + HORIZON_FIT[1] * x + HORIZON_FIT[2]) for x in range(-200, 2201, 25))
+MOON = (*_view(*MOON_ART[0]), MOON_ART[1] * ZOOM)   # centre and radius of the Moon's disc in view
+
+
 def _earth(x):
-    for (x0, y0), (x1, y1) in zip(HORIZON, HORIZON[1:]):
+    """The Earth's horizon at view x."""
+    for (x0, y0), (x1, y1) in zip(_HZ, _HZ[1:]):
         if x <= x1:
-            return y0 + (y1 - y0) * (x - x0) / (x1 - x0) + SKY
-    return HORIZON[-1][1] + SKY
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+    return _HZ[-1][1]
 
 
 def _limb(x):
-    """The Moon's surface (its lower limb) at artwork x."""
+    """The Moon's surface (its lower limb) at view x."""
     cx, cy, r = MOON
     return x, cy + (r * r - (x - cx) ** 2) ** .5
 
@@ -152,7 +173,7 @@ def _shot(entries, preview, data, when):
         lx, ly = pts[0]
         contours += f'<path class="lb-shot-contour" d="{d}"/><text class="lb-shot-contour-label" x="{lx - 10:.1f}" y="{ly + 4:.1f}">{v}</text>'
     # The two surfaces: the Earth's horizon under the launch sites, the Moon's limb above the routes.
-    earth = 'M' + ' L'.join(f'{x} {_earth(x) - 2:.1f}' for x in range(LAUNCH[0] - 160, LAUNCH[1] + 161, 20))
+    earth = 'M' + ' L'.join(f'{x} {_earth(x) - 2:.1f}' for x in range(0, W + 1, 20))
     cx, cy, r = MOON
     moon = f'M{cx - (r * r - (cy + 0) ** 2) ** .5 + 1:.1f} 0 A{r} {r} 0 0 0 {W} {cy + (r * r - (W - cx) ** 2) ** .5:.1f}'
     first = ''

@@ -16,3 +16,8 @@
 - 样式：`scripts/leaderboard-stage.css`
 - 背景加高：`scripts/extend_lunar_sky.py`
 - 重新生成页面：`python3 scripts/build_leaderboard.py`
+
+## 地平线与版面（2026-11-08）
+
+- 原图的相机有约 2.8° 的侧倾，地平线向右下斜、弧顶偏在左边。页面把静态图和机械臂视频一起反向旋转 2.8° 并放大 3.5%（`leaderboard-stage.css` 的 `.lb-stage-art`），地平线成为左右对称的圆弧；`leaderboard_stage.py` 的 `ROLL`、`ZOOM`、`_view` 用同一变换摆放航线、标签和地球、月球。
+- 桌面端只显示画面顶部到第 940 行（共 1053 行），园区最前面一圈不再出现；首屏高度等于这一段加 100px 标题空间，不再强制占满一屏。图的上沿渐隐到天空色，月球不再被直线截断。

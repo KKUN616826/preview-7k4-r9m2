@@ -389,6 +389,26 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   mask-composite: intersect;
 }
 .lb-stage[data-motion-ready=true] .lb-stage-art { visibility: visible; }
+/* Level the Earth. The painted camera is rolled about 2.8 degrees, so the horizon falls to the right;
+   the still and the loop are turned back together about the scene's centre and enlarged slightly to
+   cover the corners (ROLL and ZOOM in leaderboard_stage.py, which lays the chart out in this view).
+   The loop's box starts 24.69% down the scene, so its origin is the scene centre in its own box. */
+.lb-stage-art { transform: rotate(-2.8deg) scale(1.035); transform-origin: 50% 50%; }
+.lb-stage-motion-video { transform: rotate(-2.8deg) scale(1.035); transform-origin: 50% 33.61%; }
+/* Desktop: less campus, more sky. The stage shows the scene from the top down to row 940 of 1053, so
+   the front ring of the campus falls away, plus 100px of sky colour above it for the title; it is
+   only as tall as that, at full width. */
+@media (min-width: 761px) {
+  .lb-stage { --stage-height: max(600px, calc(100vw * 940 / 1983 + 100px)); background: #c9e0e6; }
+  .lb-stage-scene {
+    --scene-w: max(100vw, calc((var(--stage-height) - 100px) * 1983 / 940));
+    top: auto;
+    bottom: calc(var(--scene-w) * (940 - 1053) / 1983);
+    width: var(--scene-w);
+    transform: translateX(-50%);
+  }
+  .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #0008 7%, #000 16%); mask-image: linear-gradient(transparent, #0008 7%, #000 16%); }
+}
 .lb-stage-sub { max-width: 30em; margin-top: 4px !important; font-size: clamp(14px, 1vw, 17px) !important; }
 .lb-shot { --launch: .16s; --fly: 1.2s; --badge: clamp(30px, 2vw, 40px); --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
 .lb-shot-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -479,6 +499,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* Narrow desktops: the leader's label sits above its badge so it stays inside the stage. */
 @media (min-width: 761px) and (max-width: 1060px) {
   .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
+  .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 80px), -40%); }
 }
 /* Phones: the stations are hidden and the stage is sized to the band of art that holds every route,
    from the first launch site to the Moon; the sky above it continues behind the title. */
@@ -503,4 +524,10 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-shot-tag--earth { transform: translate(0, -30%); }
   .lb-shot-contour-label { display: none; }
   .lb-stage-footer { position: absolute; bottom: 12px; }
+}
+/* Narrow desktops: the station tags keep their names only. Phones: the leader's label sits above it. */
+@media (min-width: 761px) and (max-width: 1180px) { .lb-stage .lb-station-gist { display: none; } }
+@media (max-width: 760px) {
+  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
+  .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 80px), -40%); }
 }
