@@ -52,6 +52,7 @@ python3 scripts/preview.py --port 8767
 
 - 内容：`scripts/home-diagnostics.html`；样式：`scripts/home-diagnostics.css`；动画：`scripts/home-diagnostics.js`。直接画在白色页面上（HTML 卡片 + SVG 连线），文字可编辑，不再使用视频。
 - 流程：Your model → 1 Evaluate（Mind / Act / Mind2Act）→ 2 Diagnose（诊断卡）→ 3 Prescribe（针对性数据）→ 4 Train 回流；三轮依次补 Act、Mind2Act、Mind，每轮机器人图标长大一点，harness 经验条增长。约 17 秒一个循环。
+- 性格画像随训练变化：MXPS → AXPS（Act 数据使其偏执行，M→A）→ AXFS（闭环 Mind2Act 数据使其偏反馈驱动，P→F）→ ALFS（记忆数据让不稳定的记忆倾向定下来，X→L）。诊断卡显示诊断时的画像，模型卡片在训练后更新并高亮变化的字母。
 - 窄屏改为竖排，回流线走右侧。离屏或后台时暂停，可手动暂停；系统减少动态效果时显示第三轮的静止画面。
 - 更新：`python3 scripts/build_home_diagnostics.py`，把预告区放在 `<!-- HOME_DIAGNOSIS_END -->` 之后，并同步 head 中的样式和脚本。
 - 浏览器检查：`node scripts/test_home_diagnostics.cjs`。

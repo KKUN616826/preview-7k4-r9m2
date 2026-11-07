@@ -6,23 +6,23 @@ release date and the models in that batch.
 from datetime import date
 from html import escape
 
-# One station per suite, each acting out one benchmark case (see media/leaderboard-motion/scene.js).
-# x, y: the label's anchor in artwork units (1983 x 793); below=True hangs the label under the anchor.
+# One station per suite (see media/leaderboard-motion/scene.js). Labels name the dimension only.
+# x, y: the label's bottom anchor above the arm, in artwork units (1983 x 793); align: which
+# edge of the label sits on x, so labels near the crop edge stay inside the stage.
 STATIONS = [
-    ('mind', 'Mind', 'E', 'Duplicate identification', 'remember, then choose', 668, 369, False),
-    ('mind2act', 'Mind2Act', 'CP08', 'Reference-guided building', 'rebuild a reference from memory', 1166, 600, False),
-    ('act', 'Act', 'FR1', 'Conveyor picking', 'pick a moving parcel', 1600, 512, True),
+    ('mind', 'Mind', 'memory and decisions', 522, 298, 'center'),
+    ('mind2act', 'Mind2Act', 'reasoning and execution together', 992, 520, 'center'),
+    ('act', 'Act', 'physical execution', 1696, 300, 'right'),
 ]
 
 
 def stations():
     items = ''.join(
-        f'<a class="lb-station lb-station--{slug}{" is-below" if below else ""}" href="tasks/{case}.html" '
-        f'style="left:{x / 19.83:.2f}%;top:{y / 7.93:.2f}%" '
-        f'aria-label="{name} station: {escape(title)} ({case}), {escape(gist)}">'
-        f'<strong>{name}</strong><span>{escape(title)}</span></a>'
-        for slug, name, case, title, gist, x, y, below in STATIONS)
-    return f'<nav class="lb-stations" aria-label="What each station shows">{items}</nav>'
+        f'<a class="lb-station lb-station--{slug} lb-station--{align}" href="benchmark.html#suite-{slug}" '
+        f'style="left:{x / 19.83:.2f}%;top:{y / 7.93:.2f}%">'
+        f'<strong>{name}</strong><span>{escape(gist)}</span></a>'
+        for slug, name, gist, x, y, align in STATIONS)
+    return f'<nav class="lb-stations" aria-label="The three evaluation dimensions">{items}</nav>'
 
 
 def monogram(name):

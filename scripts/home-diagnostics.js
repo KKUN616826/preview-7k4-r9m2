@@ -19,6 +19,19 @@
   const START = {mind: .58, act: .30, mind2act: .36};
   const ROUNDS = [['act', .22], ['mind2act', .2], ['mind', .16]];
   const R = 5.6, CYCLE = R * ROUNDS.length;
+  // The four-letter profile after 0, 1, 2 and 3 rounds: Act data turns a reasoning-led model
+  // execution-led (M→A), closed-loop Mind2Act data makes it feedback-driven (P→F), and memory
+  // data settles its unstable memory lean (X→L). Tendencies, not scores.
+  const CODES = ['MXPS', 'AXPS', 'AXFS', 'ALFS'];
+  const codeEls = {card: $('.lp-card .lp-code'), model: $('.lp-profile .lp-code')};
+  const shown = {};
+  function setCode(where, code, prev) {
+    const key = code + '|' + (prev || '');
+    if (shown[where] === key) return;
+    shown[where] = key;
+    codeEls[where].innerHTML = [...code].map((ch, i) => prev && prev[i] !== ch ? `<span class="is-new">${ch}</span>` : `<span>${ch}</span>`).join('');
+    codeEls[where].setAttribute('aria-label', `Profile ${code}`);
+  }
 
   const dot = document.createElementNS(NS, 'circle');
   dot.setAttribute('r', 4.5);
@@ -72,6 +85,10 @@
     root.style.setProperty('--lp-focus', COLORS[focus]);
     root.style.setProperty('--xp', (.22 + .2 * done).toFixed(2));
     $('.lp-weak b').textContent = NAMES[focus];
+    // The card reads the profile at diagnosis time; the model's profile updates once it has trained.
+    setCode('card', CODES[k], null);
+    const fresh = trained || (k > 0 && t < 1.4);
+    setCode('model', CODES[done], fresh && done > 0 ? CODES[done - 1] : null);
 
     const step = t < 1.7 ? 1 : t < 2.6 ? 2 : t < 4.0 ? 3 : t < 5.0 ? 4 : 0;
     fig.dataset.step = String(step);

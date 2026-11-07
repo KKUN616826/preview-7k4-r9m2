@@ -1,11 +1,12 @@
-/* Three stations, one per benchmark suite, on an 8-second loop (artwork units, 1983 × 793).
+/* Three stations, one per suite, on an 8-second loop (artwork units, 1983 × 793).
  *
- * Left  · Mind     (E, duplicate identification): the board marks one item, covers it,
- *                   and the probe weighs the blocks before choosing the matching green one.
- * Front · Mind2Act (CP08, reference-guided construction): a projected reference shows the
- *                   target stack, disappears, and the arm rebuilds it from memory.
- * Right · Act      (FR1, conveyor picking): the arm tracks a parcel on the moving belt,
- *                   picks it in motion and sets it on the collection deck.
+ * Left  · Mind     : the board marks one item and covers it; the arm weighs the blocks
+ *                    before choosing the matching one (remember, then decide).
+ * Front · Mind2Act : a projected reference shows the target stack, disappears, and the arm
+ *                    rebuilds it from memory (reasoning and execution together).
+ * Right · Act      : the arm tracks a parcel on the moving belt and picks it in motion
+ *                    (timely, precise execution).
+ * All three arms carry the same two-finger gripper, drawn here, so their tools match.
  */
 const LOOP = 8;
 const svg = document.querySelector('#scene'), $ = id => document.getElementById(id), ns = 'http://www.w3.org/2000/svg';
@@ -35,6 +36,18 @@ function solve(arm, p, sign) {
   $(arm.tool).setAttribute('transform', `translate(${p[0] - wx} ${p[1] - wy})`);
 }
 
+/* One gripper design for all three arms: a dark palm and two 7-unit fingers. */
+function gripper(toolId, x, y) {
+  const g = document.createElementNS(ns, 'g'), mk = (tag, attrs) => { const e = document.createElementNS(ns, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); g.append(e); return e; };
+  mk('rect', {x: x - 7, y, width: 14, height: 3.6, rx: 1.2, fill: '#33424c'});
+  mk('rect', {x: x - 5.5, y: y + .5, width: 11, height: 1, rx: .5, fill: '#8ea4ae'});
+  const finger = side => mk('path', {d: `M${x + side * 4.5} ${y + 3.2}v5.6l${-side * 1.4} 1.6`, fill: 'none', stroke: '#2b3943', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'});
+  const l = finger(-1), r = finger(1);
+  $(toolId).append(g);
+  return open => { l.setAttribute('transform', `translate(${-open} 0)`); r.setAttribute('transform', `translate(${open} 0)`); };
+}
+const GRIP = {L: gripper('LtoolMoving', 582, 403), F: gripper('tool', 1088.5, 609), R: gripper('RtoolMoving', 1528, 429)};
+
 /* Ambient stars and lamps. */
 for (let i = 0; i < 22; i++) {
   const e = document.createElementNS(ns, 'circle');
@@ -48,9 +61,9 @@ for (let i = 0; i < 22; i++) {
     $('lights').append(e);
   });
 
-/* Left · Mind. The probe tip sits 80 units below the wrist. */
+/* Left · Mind. */
 const LEFT = {S: [436, 383], E: [489, 317], W: [580, 364], upper: 'LupperMoving', fore: 'LforeMoving', tool: 'LtoolMoving'};
-const tip = (x, y) => [x - 1, y - 80];
+const tip = (x, y) => [x - 2, y - 49];                                  // finger tips sit 49 units below the wrist
 const leftKeys = [[0, ...tip(566, 420)], [2.2, ...tip(566, 420)],
   [2.7, ...tip(538, 424)], [3.0, ...tip(538, 428)], [3.25, ...tip(538, 424)],     // weighs the blue block
   [3.7, ...tip(574, 422)], [3.95, ...tip(574, 426)], [4.15, ...tip(574, 422)],   // then the yellow one
@@ -59,6 +72,7 @@ const leftKeys = [[0, ...tip(566, 420)], [2.2, ...tip(566, 420)],
 const covers = [...$('covers').children];
 function renderMind(t) {
   solve(LEFT, track(leftKeys, t), -1);
+  GRIP.L(t > 4.75 && t < 5.0 ? 0 : 1.6);
   $('cueRing').setAttribute('opacity', pulse(t, .25, .6, 1.7, 2.0) * (.75 + .25 * Math.sin(t * 9)));
   covers.forEach((c, i) => {
     // All four close at 2.0 s; the triangle reopens when the right block is chosen, the rest at 7.0 s.
@@ -88,9 +102,7 @@ function renderMind2Act(t) {
   $('shadow').setAttribute('cx', 1092 + cube[0]);
   $('shadow').setAttribute('rx', 17 + lift * .13);
   $('shadow').setAttribute('opacity', (stacked || cube[0] < -30 ? 0 : .2) - lift * .0015);
-  const g = carry ? 0 : 2;
-  $('fingerL').setAttribute('transform', `translate(${-g} 0)`);
-  $('fingerR').setAttribute('transform', `translate(${g} 0)`);
+  GRIP.F(carry ? 0 : 2);
   // The reference is shown, withdrawn, and shown again in green once the stack matches it.
   const shown = pulse(t, .2, .55, 1.6, 2.0) * (.8 + .2 * Math.sin(t * 7)), check = pulse(t, 4.6, 4.85, 5.35, 5.6);
   $('ghost').setAttribute('opacity', Math.max(shown, check));
@@ -103,7 +115,7 @@ const RIGHT = {S: [1681, 400], E: [1591, 367], W: [1525, 426], upper: 'RupperMov
 const BELT = {x0: 1757, x1: 1592, speed: 36, grip: 4.0};
 const beltY = x => 468 + (x - 1590) * 6 / 167;                         // parcel base on the belt
 const parcelX = t => BELT.x0 - BELT.speed * t;
-const GRIP_DY = 22;                                                   // wrist above the parcel base when gripping
+const GRIP_DY = 26;                                                   // wrist above the parcel base when gripping
 const rightKeys = (() => {
   const keys = [[0, 1625, 418], [2.4, 1625, 418]];
   for (let t = 2.8; t <= BELT.grip + 1e-9; t += .2) {                  // follow, then descend onto the moving parcel
@@ -119,6 +131,7 @@ for (let i = 0; i < 16; i++) { const e = document.createElementNS(ns, 'path'); $
 function renderAct(t) {
   const p = track(rightKeys, t);
   solve(RIGHT, p, 1);
+  GRIP.R(t >= BELT.grip && t < 5.9 ? 0 : 2);
   let x, y, o = 1;
   if (t < BELT.grip) { x = parcelX(t); y = beltY(x); o = ramp(t, 0, .35); }
   else if (t < 5.9) { x = p[0]; y = p[1] + GRIP_DY; }
