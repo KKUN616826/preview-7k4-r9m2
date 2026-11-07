@@ -1,11 +1,13 @@
-# Approved silver diagnostic teaser
+# Lunar diagnostic improvement-loop teaser
 
-The homepage plays the exact approved 8-second, 1600 × 668, 24 fps silent MP4.
-It was rendered from the editable HTML/SVG/CSS silver preview on 2026-11-07.
-The sequence is a centered large model, evaluation, evidence tracing, attribution, then the illustrative report and final copy. Human review is an optional dashed branch.
+The homepage plays the exact 8-second, 1600 × 720, 24 fps silent MP4 exported on 2026-11-07.
+The gray-silver lunar backdrop is retained. The report has a narrow translucent lower edge with spaced white square particles and sparse gray fragments.
 
-- MP4 SHA-256: `3c1ddc8a02fd6078b8a28063b04bfb0cf40dd087bfd75222e1eb50c6286482c2`
-- `opening.webp`: frame 0, avoids showing the finished report before playback.
-- `poster.webp`: completed report for reduced motion, no JavaScript and media errors.
+Sequence: centered large Model → first Evaluate / Trace / Diagnose pass → Preview 01 → an explicit Targeted improvement return path → a second Evaluate / Trace / Diagnose pass → Preview 02 → final coming-soon copy.
 
-The background is a CSS gray-silver gradient with subtle lunar linework. This is a coming-soon illustration, not a real model result or lunar mission photograph.
+- MP4 SHA-256: `5cdcd6877592524f12baa7b940a863da304ebf6ce80ef201ae0ce5f556b1248e`
+- `opening.webp`: frame 0, to keep the opening Model-only.
+- `poster.webp`: completed second-pass profile at 7.2s, for reduced motion, no JavaScript and media errors.
+- Human review remains an optional dashed branch. The tendency axes and score dashes do not invent numerical improvement.
+
+This is an illustration of the intended diagnosis/improvement/re-evaluation workflow. It does not claim that the diagnosis service is available or that an actual improvement experiment has been run.

@@ -52,10 +52,10 @@ python3 scripts/preview.py --port 8767
 卡片仅为合成示例，没有真实模型测评数值。
 
 - 内容：`scripts/home-diagnostics.html`；样式和动画：`scripts/home-diagnostics.css`；播放控制：`scripts/home-diagnostics.js`。
-- 成片：`media/diagnostics-teaser/diagnostics-silver-8s.mp4`，与已确认的灰银预览逐字节一致；开场与静态封面为同目录 `opening.webp`、`poster.webp`。
+- 成片：`media/diagnostics-teaser/diagnostics-lunar-loop-8s.mp4`，灰银月面背景，包含诊断、针对性改进回流、第二轮测评与 Preview 02 的闭环预告；开场与静态封面为同目录 `opening.webp`、`poster.webp`。
 - 更新：`python3 scripts/build_home_diagnostics.py`，仅同步预告区与 head 中的样式、脚本到 `index.html`，保留其他内容；不依赖已删除的旧首页模板。
 - 浏览器检查：`node scripts/test_home_diagnostics.cjs`，沿用现有 Playwright、`NODE_PATH` 和 `CHROMIUM_EXECUTABLE` 环境。
-- 灰银成片按 8 秒循环：居中大 Model → 左移 → Evaluate → Trace → Diagnose → 卡片与文案。卡片下缘保留粒子消散效果；网站直接播放成片，避免与审核预览出现差异。
+- 灰银成片按 8 秒循环：居中大 Model → 首轮测评与诊断卡 → 针对性改进回流 → 第二轮测评与 Preview 02 → 最终文案。卡片下缘保留粒子消散效果；网站直接播放成片，避免与审核预览出现差异。
 - 进入可视范围后加载并静音播放，支持暂停、重播和全屏；离屏、后台时暂停，系统减少动态效果、无 JS 或视频错误时显示完整静态卡片。
 
 ### 独立 Leaderboard 页面
