@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" fill="none">
-  <!-- Only the exposed lower arcs are traced; no line crosses the cake. -->
-  <path d="M664 688 C652 752 756 827 918 829 C1063 832 1175 780 1182 712" stroke="#9FB2C8" stroke-opacity=".37" stroke-width="4"/>
-  <path d="M679 719 C693 790 790 848 922 849 C1055 851 1154 800 1166 744" stroke="#E4E6D2" stroke-opacity=".19" stroke-width="4"/>
-  <path d="M718 770 C762 825 836 859 925 860 C1011 861 1087 835 1125 803" stroke="#7189A5" stroke-opacity=".22" stroke-width="4"/>
-</svg>

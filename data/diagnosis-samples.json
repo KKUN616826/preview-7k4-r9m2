@@ -1,0 +1,67 @@
+{
+  "_source": "Mind2Act harness diagnosis card v3 reference samples (harness/docs/reference_card, 2026-11-04): diagnosis_card_reference_en.html and diagnosis_card_reference_e2e_zh.html. Both are synthetic samples generated from fault-injected simulated policies; they show the card's format and logic and are not results of any real model.",
+  "pdf": "media/diagnosis/diagnosis-card-sample-en.pdf",
+  "cards": [
+    {
+      "name": "sim-fragmented",
+      "track": "Coding agent",
+      "code": "MXPS",
+      "type": "The Strategist",
+      "subtype": "feedforward planner",
+      "quote": "thinks several moves ahead before acting",
+      "views": [
+        {"key": "mind2act", "label": "Mind2Act", "value": 7.2, "expected": 19.2, "delta": -12.0, "call": "below"},
+        {"key": "mind", "label": "Mind", "value": 60.6, "expected": 51.0, "delta": 9.5, "call": "above"},
+        {"key": "act", "label": "Act", "value": 47.2, "expected": 44.8, "delta": 2.4, "call": "in line"}
+      ],
+      "axes": [
+        {"axis": "Mind vs. Act", "lean": 56, "side": "first", "poles": ["reasoning-led", "execution-led"], "letter": "M", "stability": 100},
+        {"axis": "Memory", "lean": 51, "side": "first", "poles": ["entity-anchored", "location-anchored"], "letter": "X", "stability": 60},
+        {"axis": "Control", "lean": 85, "side": "first", "poles": ["plan-ahead", "feedback-driven"], "letter": "P", "stability": 100},
+        {"axis": "Execution", "lean": 56, "side": "first", "poles": ["precision-first", "agility-first"], "letter": "S", "stability": 92}
+      ],
+      "failures": {
+        "view": "Mind2Act",
+        "n": 167,
+        "stages": [["perceive", 12.6], ["reason", 4.8], ["act", 23.4], ["verify", 52.1], ["other", 7.2]]
+      },
+      "fix": {
+        "kind": "Agent module",
+        "name": "Outcome verification",
+        "action": "Read the physical outcome after every step before choosing the next.",
+        "gain": "Mind2Act 7.2% → about 13.6% (+6.4 pp)"
+      }
+    },
+    {
+      "name": "sim-integrated",
+      "track": "End-to-end policy",
+      "code": "MXPQ",
+      "type": "The Strategist",
+      "subtype": "feedforward planner",
+      "quote": "thinks several moves ahead before acting",
+      "views": [
+        {"key": "mind2act", "label": "Mind2Act", "value": 35.0, "expected": 24.2, "delta": 10.8, "call": "above"},
+        {"key": "mind", "label": "Mind", "value": 61.7, "expected": 58.2, "delta": 3.5, "call": "in line"},
+        {"key": "act", "label": "Act", "value": 37.8, "expected": 52.0, "delta": -14.3, "call": "below"}
+      ],
+      "axes": [
+        {"axis": "Mind vs. Act", "lean": 62, "side": "first", "poles": ["reasoning-led", "execution-led"], "letter": "M", "stability": 100},
+        {"axis": "Memory", "lean": 52, "side": "second", "poles": ["entity-anchored", "location-anchored"], "letter": "X", "stability": 66},
+        {"axis": "Control", "lean": 63, "side": "first", "poles": ["plan-ahead", "feedback-driven"], "letter": "P", "stability": 99},
+        {"axis": "Execution", "lean": 64, "side": "second", "poles": ["precision-first", "agility-first"], "letter": "Q", "stability": 99}
+      ],
+      "failures": {
+        "view": "Mind2Act",
+        "n": 117,
+        "note": "No language log: perceive and reason are one stage.",
+        "stages": [["perceive-reason", 38.5], ["act", 36.8], ["verify", 13.7], ["other", 11.1]]
+      },
+      "fix": {
+        "kind": "Training data",
+        "name": "Contact-rich demonstrations",
+        "action": "Add contact-rich manipulation demonstrations and millimetre-level alignment data.",
+        "gain": "Act 37.8% → about 60.3% (+22.5 pp)"
+      }
+    }
+  ]
+}

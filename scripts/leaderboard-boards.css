@@ -1,0 +1,85 @@
+/* Separate VLA / WAM and coding-agent boards, release schedule and protocol summary.
+   Builds on leaderboard-explorer.css (.lb-results card, .lb-table, .lb-paradigm). */
+.lb-boards .lb-results-heading { display: block; margin-bottom: 8px; }
+.lb-boards .lb-results-heading p { max-width: 760px; margin: 8px 0 0; color: #506c7b; font-size: 15px; line-height: 1.6; }
+
+.lb-board { margin-top: 36px; scroll-margin-top: calc(var(--lb-header, 72px) + 20px); }
+.lb-board-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; margin-bottom: 14px; }
+.lb-board-head h3 { margin: 0 0 6px; font-size: 22px; font-weight: 650; letter-spacing: -.3px; color: #1f3a4b; }
+.lb-board-head p { max-width: 620px; margin: 0; font-size: 14px; line-height: 1.55; color: #506c7b; }
+.lb-board-controls { display: flex; flex-wrap: wrap; gap: 10px; }
+.lb-toggle { display: inline-flex; padding: 3px; border: 1px solid #d6dfdc; border-radius: 999px; background: #f4f7f6; }
+.lb-toggle button { min-height: 32px; padding: 4px 14px; border: 0; border-radius: 999px; background: transparent; color: #506c7b; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.lb-toggle button[aria-pressed="true"] { background: #1f3a4b; color: #fff; }
+.lb-toggle button:focus-visible, .lb-board-table thead button:focus-visible { outline: 2px solid #4e7c70; outline-offset: 2px; }
+
+.lb-board-table { min-width: 980px; }
+.lb-board-table thead th { padding: 10px 12px; border-bottom: 1px solid #d6dfdc; background: #f4f7f6; color: #5a7380; font-size: 12px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; white-space: nowrap; }
+.lb-board-table thead th.lb-number { text-align: right; }
+.lb-board-table thead button { padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.lb-board-table thead th[aria-sort] { color: #1f3a4b; }
+.lb-board-table .lb-sort-arrow { margin-left: 4px; opacity: .7; }
+.lb-board-table td, .lb-board-table th[scope="row"] { padding: 12px; border-bottom: 1px solid #e3e8e5; vertical-align: middle; }
+.lb-board-table td.lb-number { text-align: right; font-variant-numeric: tabular-nums; color: #2b4757; }
+.lb-board-table td.lb-rank { width: 52px; color: #5a7380; font-weight: 600; }
+.lb-board-table tbody tr:not(.lb-pending):nth-child(-n+3) td.lb-rank { color: #4e7c70; }
+.lb-model-name { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; color: #1f3a4b; white-space: nowrap; }
+.lb-model-name img { width: 24px; height: 24px; object-fit: contain; border-radius: 5px; flex: none; }
+.lb-model-name .lb-icon-fallback { width: 24px; height: 24px; font-size: 10px; font-weight: 700; color: #446f86; background: #eef3f6; }
+.lb-org { color: #506c7b; white-space: nowrap; }
+.lb-paradigm[data-family="agent"] { color: #315fa3; background: #eaf1ff; border-color: #d6e3fc; }
+.lb-board-table tr.lb-pending td.lb-number { color: #a3b2b9; }
+.lb-board-table tr.lb-pending .lb-model-name { color: #34505f; }
+.lb-status { display: inline-block; padding: 2px 9px; border: 1px solid #d6dfdc; border-radius: 999px; background: #f4f7f6; color: #5a7380; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.lb-status-date { border-color: #b9d3cb; background: #e8f2ee; color: #2f6657; }
+.lb-status-done { border-color: #c9d9f2; background: #edf3fd; color: #315fa3; }
+.lb-board-note { margin: 12px 0 0; padding: 12px 14px; border-left: 3px solid #88a3b3; background: #f4f7f8; color: #3f5a68; font-size: 14px; line-height: 1.6; }
+
+.lb-schedule { margin-top: 36px; padding: 22px 24px; border: 1px solid #dfe5e2; border-radius: 10px; background: #f8faf9; }
+.lb-schedule h3 { margin: 0 0 14px; font-size: 18px; font-weight: 650; color: #1f3a4b; }
+.lb-schedule-step + .lb-schedule-step { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #d6dfdc; }
+.lb-schedule-step p { margin: 0 0 10px; font-size: 14px; color: #506c7b; }
+.lb-schedule-step p strong { margin-right: 8px; color: #1f3a4b; }
+.lb-schedule ul, .lb-schedule ol { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: queue; }
+.lb-schedule li { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 6px; border: 1px solid #dfe5e2; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 600; color: #2b4757; }
+.lb-schedule ol li::before { counter-increment: queue; content: counter(queue); display: inline-grid; place-items: center; min-width: 18px; height: 18px; border-radius: 50%; background: #eef3f1; color: #5a7380; font-size: 11px; }
+.lb-schedule li img { width: 20px; height: 20px; object-fit: contain; border-radius: 4px; }
+.lb-schedule li .lb-icon-fallback { width: 20px; height: 20px; font-size: 9px; }
+
+.lb-reading .lb-protocol-heading p { color: #506c7b; }
+.lb-reading-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 20px 0 8px; }
+.lb-reading-grid article { padding: 18px 20px; border: 1px solid #dfe5e2; border-radius: 10px; background: #fff; }
+.lb-reading-grid h3, .lb-track-compare h4 { margin: 0 0 8px; font-size: 16px; font-weight: 650; color: #1f3a4b; }
+.lb-reading-grid p { margin: 0; font-size: 14px; line-height: 1.65; color: #3f5a68; }
+.lb-track-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 12px; }
+.lb-track-compare > div { padding: 18px 20px; border: 1px solid #dfe5e2; border-radius: 10px; background: #fff; }
+.lb-track-compare dl { margin: 0; }
+.lb-track-compare dl div { display: grid; grid-template-columns: 82px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid #edf1ef; }
+.lb-track-compare dt { color: #5a7380; font-size: 13px; font-weight: 600; }
+.lb-track-compare dd { margin: 0; color: #2b4757; font-size: 14px; line-height: 1.55; }
+.lb-scope-note { margin: 14px 0 0; color: #3f5a68; font-size: 14px; line-height: 1.6; }
+.lb-facts { margin: 10px 0 0; padding-left: 20px; color: #3f5a68; font-size: 14px; line-height: 1.7; }
+.lb-updated { margin: 18px 0 0; color: #7d919b; font-size: 13px; }
+
+/* Hero before first results: release date and first batch instead of the podium. */
+.lb-stage-upcoming { position: absolute; left: 50%; bottom: 9%; transform: translateX(-50%); display: grid; justify-items: center; gap: 6px; width: min(92%, 760px); padding: 16px 20px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 14px; background: rgba(255, 255, 255, .82); backdrop-filter: blur(6px); text-align: center; }
+.lb-stage-upcoming p { margin: 0; color: #506c7b; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.lb-stage-upcoming strong { color: #1f3a4b; font-size: 22px; font-weight: 700; }
+.lb-stage-upcoming ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px; margin: 6px 0 0; padding: 0; list-style: none; }
+.lb-stage-upcoming li { display: inline-flex; align-items: center; gap: 7px; color: #2b4757; font-size: 13px; font-weight: 600; }
+.lb-stage-upcoming li img, .lb-stage-upcoming li .lb-podium-monogram { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; background: #fff; }
+
+@media (max-width: 760px) {
+  .lb-reading-grid, .lb-track-compare { grid-template-columns: 1fr; }
+  .lb-board-head h3 { font-size: 19px; }
+  .lb-stage-upcoming { position: static; transform: none; width: auto; margin: 12px; }
+  .lb-stage-upcoming li span { display: none; }
+}
+
+/* Legacy explorer rules capped the table at 680px with inner scrolling and positioned arrows absolutely. */
+.lb-boards .lb-table-scroll { max-height: none; overflow-x: auto; overflow-y: visible; }
+.lb-board-table .lb-sort-arrow, .lb-results .lb-board-table .lb-sort-arrow { position: static; margin-left: 5px; font-size: 11px; color: #8aa0aa; }
+.lb-board-table thead th[aria-sort] .lb-sort-arrow { color: #1f3a4b; }
+.lb-board-table thead tr:first-child th { position: static; height: auto; }
+.lb-results .lb-board-table thead th { height: auto !important; padding: 11px 12px !important; }
+.lb-podium-label, .lb-podium-label:hover { text-decoration: none; color: inherit; }

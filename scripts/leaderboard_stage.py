@@ -1,14 +1,56 @@
-"""Generate the public top-three overview from the same scored model snapshot."""
+"""Leaderboard hero: the lunar podium shows the top three end-to-end models (Clean, Overall score).
+
+Before any end-to-end result is published, the podium is replaced by the first
+release date and the models in that batch.
+"""
+from datetime import date
 from html import escape
 
+
+def monogram(name):
+    """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
+    return ''.join(ch for ch in name if ch.isalnum())[:2]
+
+
+def _icon(m, size):
+    if m['icon']:
+        return f'<img src="{escape(m["icon"])}" width="{size}" height="{size}" alt="">'
+    return f'<span class="lb-podium-monogram">{escape(monogram(m["name"]))}</span>'
+
+
 def render(data):
-    parts=['<section class="lb-stage" id="leaderboard-stage" aria-labelledby="lb-title" data-current-view="mind"><div class="lb-stage-head"><div><h1 id="lb-title">Leaderboard</h1><p>Three views of robotic manipulation.</p></div><div class="lb-stage-controls"><p class="lb-stage-metric">Ranked by Score · 0–100</p><div class="lb-stage-tabs" role="group" aria-label="Featured ranking">']
-    for v in data['views']:
-        parts.append(f'<button type="button" data-stage-select="{v["key"]}" aria-pressed="{str(v["key"]=="mind").lower()}">{escape(v["label"])}</button>')
-    parts.append('</div></div></div><div class="lb-stage-visual"><div class="lb-stage-world"><div class="lb-stage-caption" aria-live="polite"><strong>Mind</strong> · Top 3</div><div class="lb-stage-scene"><img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v1.png" alt="Lunar robotics campus with three demonstration stations and a central first, second and third place podium." width="1983" height="793" fetchpriority="high"><video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v1.png" aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video><div class="lb-podium-labels">')
-    mind=sorted([m for m in data['models'] if m['results']['mind']['score'] is not None],key=lambda m:m['results']['mind']['score'],reverse=True)
-    for rank in [2,1,3]:
-        m=mind[rank-1]
-        parts.append(f'<button type="button" class="lb-podium-label lb-podium-rank-{rank}" data-podium-rank="{rank}" data-stage-model="{m["id"]}" data-stage-suite="mind"><span class="lb-podium-avatar"><img src="{escape(m["icon"])}" alt=""><span class="lb-podium-monogram" hidden></span></span><span class="lb-podium-name">{escape(m["name"])}</span><strong>{m["results"]["mind"]["score"]:.2f}</strong></button>')
-    parts.append('</div><div class="lb-stage-stations"><button type="button" data-stage-select="mind" aria-label="Show Mind rankings"><span>Mind</span></button><button type="button" data-stage-select="act" aria-label="Show Act rankings"><span>Act</span></button><button type="button" data-stage-select="coupling" aria-label="Show Mind2Act rankings"><span>Mind2Act</span></button></div></div></div></div><div class="lb-stage-footer"><a href="#results" class="lb-stage-full">View full results ↓</a><p>Original 15-task result snapshot · Added tasks not yet evaluated</p><button type="button" class="lb-stage-motion-toggle" aria-pressed="false" aria-label="Pause mechanical arm animation" hidden>Pause animation</button></div></section>')
+    e2e = sorted([m for m in data['models'] if m['track'] == 'e2e' and m['results']],
+                 key=lambda m: -m['results']['clean']['overall']['score'])
+    first = date.fromisoformat(data['first_release'])
+    when = f'{first.day} {first.strftime("%B")}'
+    parts = ['<section class="lb-stage" id="leaderboard-stage" aria-labelledby="lb-title">'
+             '<div class="lb-stage-head"><div><h1 id="lb-title">Leaderboard</h1>'
+             '<p>Official Mind2Act runs, with end-to-end models and coding agents ranked separately.</p></div>'
+             + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if len(e2e) >= 3 else '')
+             + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
+             + '<div class="lb-stage-scene">'
+             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v2.webp" alt="Lunar robotics campus with three '
+             'demonstration stations and a central first, second and third place podium." width="1983" height="793" fetchpriority="high">'
+             '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v2.webp" '
+             'aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video>']
+    if len(e2e) >= 3:
+        parts.append('<div class="lb-podium-labels">')
+        for rank in (2, 1, 3):
+            m = e2e[rank - 1]
+            score = m['results']['clean']['overall']['score']
+            parts.append(f'<a class="lb-podium-label lb-podium-rank-{rank}" href="#board-e2e" '
+                         f'aria-label="Rank {rank}: {escape(m["name"])}, Overall score {score:.2f}">'
+                         f'<span class="lb-podium-avatar">{_icon(m, 32)}</span>'
+                         f'<span class="lb-podium-name">{escape(m["name"])}</span><strong>{score:.2f}</strong></a>')
+        parts.append('</div>')
+    else:
+        batch = [m for m in data['models'] if m.get('release') == data['first_release']]
+        parts.append('<div class="lb-stage-upcoming"><p>First results</p>'
+                     f'<strong>{escape(when)}</strong><ul>'
+                     + ''.join(f'<li title="{escape(m["name"])} · {escape(m["org"])}">{_icon(m, 32)}<span>{escape(m["name"])}</span></li>' for m in batch)
+                     + '</ul></div>')
+    parts.append('</div></div></div><div class="lb-stage-footer"><a href="#results" class="lb-stage-full">View both leaderboards ↓</a>'
+                 f'<p>Protocol {escape(data["protocol"]["version"])} · Clean and Random reported separately</p>'
+                 '<button type="button" class="lb-stage-motion-toggle" aria-pressed="false" aria-label="Pause mechanical arm animation" hidden>Pause animation</button>'
+                 '</div></section>')
     return ''.join(parts)

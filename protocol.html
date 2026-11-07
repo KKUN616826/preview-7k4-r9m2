@@ -5,14 +5,14 @@
 <section class="pr-hero" aria-label="Evaluation protocol overview">
 <header class="pr-head">
 <div class="pr-head-copy">
-  <p class="pr-eyebrow">Evaluation protocol <span>Draft v0.1 · Nov 5, 2026</span></p>
+  <p class="pr-eyebrow">Evaluation protocol <span>v1.0.0 · Nov 5, 2026</span></p>
   <h1><span>How Mind2Act World</span> <span>evaluates a system</span></h1>
-  <p class="pr-lead">Every system is run on the same task configurations, scored by the environment rather than by itself, and reported together with the conditions it ran under.</p>
+  <p class="pr-lead">Mind2Act runs every model itself, on the same hidden cases, with fixed budgets and environment-side scorers. End-to-end models and coding agents are ranked on separate boards.</p>
   <dl class="pr-facts">
     <div><dt>tasks</dt><dd>30</dd></div>
     <div><dt>task configurations</dt><dd>90</dd></div>
-    <div><dt>evaluation tracks</dt><dd>2</dd></div>
-    <div><dt>clock conditions</dt><dd>2</dd></div>
+    <div><dt>cases per setting</dt><dd>4,500</dd></div>
+    <div><dt>leaderboards</dt><dd>2</dd></div>
   </dl>
 </div>
 <figure class="pr-hero-visual" aria-labelledby="pr-hero-caption">
@@ -39,9 +39,9 @@
 </figure>
 </header>
 <nav class="pr-hero-links" aria-label="Evaluation protocol quick links">
-  <a href="#tracks">Two evaluation tracks <span aria-hidden="true">↓</span></a>
-  <a href="#clock">Clock conditions <span aria-hidden="true">↓</span></a>
-  <a href="#metrics">Metrics &amp; reporting <span aria-hidden="true">↓</span></a>
+  <a href="#tracks">Two leaderboards <span aria-hidden="true">↓</span></a>
+  <a href="#episodes">Cases &amp; randomization <span aria-hidden="true">↓</span></a>
+  <a href="#metrics">Scoring <span aria-hidden="true">↓</span></a>
   <a href="#tracks">Read full protocol <span aria-hidden="true">↓</span></a>
 </nav>
 </section>
@@ -50,130 +50,129 @@
 <nav class="pr-toc" aria-label="On this page">
   <p>On this page</p>
   <ol>
-    <li><a href="#tracks">Evaluation tracks</a></li>
-    <li><a href="#episodes">Episodes</a></li>
-    <li><a href="#clock">Clock conditions</a></li>
-    <li><a href="#metrics">Metrics</a></li>
-    <li><a href="#diagnostics">Diagnostics</a></li>
-    <li><a href="#disclosure">Reporting conditions</a></li>
+    <li><a href="#tracks">Two leaderboards</a></li>
+    <li><a href="#episodes">Cases</a></li>
+    <li><a href="#clock">Budgets and endings</a></li>
+    <li><a href="#metrics">Scoring</a></li>
+    <li><a href="#diagnostics">Validity</a></li>
+    <li><a href="#disclosure">Declarations</a></li>
     <li><a href="#submit">Submitting</a></li>
   </ol>
 </nav>
 
 <article class="pr-article">
-<div class="pr-callout"><p><strong>Status.</strong> Budgets, episode counts, seeds and tolerances are fixed for each evaluation round before any system is run, and are published with that round's results. Until then they are listed as pending; they are never chosen after seeing model rankings.</p></div>
+<div class="pr-callout">
+<p><strong>Version.</strong> Evaluation code <code>v1.0.0</code>, scoring <code>mind2act-final-scoring-20261105</code>, budget <code>e2e-p90x1.2-v1</code>. If the code, budgets or scoring change, earlier results are archived and the new version restarts its count from 0 / 4,500.</p>
+</div>
 
 <section id="tracks" aria-labelledby="tracks-title">
-  <h2 id="tracks-title">Two evaluation tracks</h2>
-  <p class="pr-section-lead">Coding agents and end-to-end robot policies act through different interfaces. Both tracks share the same tasks, initial conditions and environment-side success checker.</p>
+  <h2 id="tracks-title">Two leaderboards</h2>
+  <p class="pr-section-lead">End-to-end models and coding agents see the same cases and the same goal instruction, but act through different interfaces and budgets. They are ranked separately and their scores are not compared.</p>
   <div class="pr-tracks">
     <div class="pr-track">
-      <p class="pr-track-tag">Coding-agent track</p>
-      <h3>No learned policy in the action path</h3>
-      <p>The agent reads the instruction, RGB observations and robot state, and acts through a fixed, non-learned end-effector harness with bounded motion and an explicit give-up.</p>
-      <ol class="pr-flow" aria-label="Coding-agent loop"><li>observe</li><li class="pr-arrow" aria-hidden="true">→</li><li>EEF harness</li><li class="pr-arrow" aria-hidden="true">→</li><li>bounded motion</li></ol>
+      <p class="pr-track-tag">VLA / WAM board</p>
+      <h3>The model outputs joint actions</h3>
+      <p>Observations: three 640×480 RGB views (head, left and right wrist), both arms' joint angles and grippers, the time and the English instruction exactly as in training. Actions: 6 joint angles per arm plus two normalized grippers, 14 values per 30 Hz control step. The model runs as a service over XPolicyLab WebSocket RPC; simulation pauses during inference. No tools and no external memory: history frames are supplied in the model's training format. 50 cases per task × difficulty.</p>
+      <ol class="pr-flow" aria-label="End-to-end loop"><li>observe</li><li class="pr-arrow" aria-hidden="true">→</li><li>act()</li><li class="pr-arrow" aria-hidden="true">→</li><li>14-D joint row</li></ol>
     </div>
     <div class="pr-track">
-      <p class="pr-track-tag">End-to-end track</p>
-      <h3>The policy produces the action</h3>
-      <p>VLA and world-action policies emit action chunks through the XPolicyLab lifecycle. The adapter states camera order, proprioception, units, action mode, chunk duration and termination.</p>
-      <ol class="pr-flow" aria-label="Policy lifecycle"><li>reset()</li><li class="pr-arrow" aria-hidden="true">→</li><li>update_obs(obs)</li><li class="pr-arrow" aria-hidden="true">→</li><li>get_action()</li></ol>
+      <p class="pr-track-tag">Coding-agent board</p>
+      <h3>The agent calls four tools</h3>
+      <p>Through the RoboProbe adapter the agent sees the three RGB views, the measured 14-D end-effector poses and grippers, read-only joint angles, the last action's result and its remaining budget. It can <code>move_eef</code> (absolute world targets, planned by a fixed cuRobo version), <code>wait_steps</code>, <code>memory_resolve</code> (reopen up to six earlier screenshots) or <code>give_up</code>. A task recipe states the capability, scene, completion condition and scoring table. 5 of the 50 cases per task × difficulty; we plan to extend agents to all 50 as resources allow.</p>
+      <ol class="pr-flow" aria-label="Coding-agent loop"><li>observe</li><li class="pr-arrow" aria-hidden="true">→</li><li>tool call</li><li class="pr-arrow" aria-hidden="true">→</li><li>planned motion</li></ol>
     </div>
   </div>
-  <p>Ground-truth scoring state is never returned to the model. Results that use privileged poses, additional sensors or extra development episodes are reported as separate, labelled conditions.</p>
+  <p>Neither track sees task metadata, scene definitions, ground truth, scorers, expert trajectories or reference data.</p>
 </section>
 
 <section id="episodes" aria-labelledby="episodes-title">
-  <h2 id="episodes-title">What an episode fixes</h2>
-  <p class="pr-section-lead">An evaluation instance is fully specified before it starts.</p>
+  <h2 id="episodes-title">Cases</h2>
+  <p class="pr-section-lead">30 tasks × 3 difficulties × 50 cases = 4,500 cases per setting, run in two settings. A case fixes the task, difficulty, seed, scene and instruction, identically for every model.</p>
   <ul class="pr-chips">
-    <li><b>Task definition</b><span>One of the 30 tasks</span></li>
-    <li><b>Difficulty</b><span>Easy, Medium or Hard</span></li>
-    <li><b>Initial condition</b><span>From a frozen distribution</span></li>
-    <li><b>External-event seed</b><span>Timing of arrivals and disturbances</span></li>
-    <li><b>Observation permissions</b><span>What the system may see</span></li>
-    <li><b>Declared budgets</b><span>Time, actuator steps, model and tool calls</span></li>
+    <li><b>Mind</b><span>E, E2, F, F2, M, M2, P, P2, S, S2</span></li>
+    <li><b>Act</b><span>FR1, FR2, DR3, DR7, PR1–PR6</span></li>
+    <li><b>Mind2Act</b><span>CP01–CP10</span></li>
+    <li><b>Clean</b><span>Original scenes</span></li>
+    <li><b>Random</b><span>23 table materials, 6 light types, clutter</span></li>
+    <li><b>Agent subset</b><span>5 cases per cell, 450 per setting</span></li>
   </ul>
   <ol class="pr-rules">
-    <li><span><strong>Fresh start.</strong> Each episode begins with a fresh runtime or policy state and no cross-episode experience on the target task. History within the episode is allowed, and the Mind tasks require it.</span></li>
-    <li><span><strong>Every started episode counts.</strong> Aborted and unsuccessful episodes are kept. A timeout after a valid start is a task failure.</span></li>
-    <li><span><strong>Setup failures are not zeros.</strong> An unavailable model or a setup that fails before the episode starts is recorded as missing coverage, not as a success rate of zero.</span></li>
-    <li><span><strong>Independent scoring.</strong> Success is decided by the environment-side checker, not by the system's own report.</span></li>
-    <li><span><strong>Full timing logs.</strong> Logs keep observation capture, inference start and end, action dispatch and completion, feedback delivery and episode end, so each effect can be traced to the command that caused it.</span></li>
+    <li><span><strong>Hidden set.</strong> The evaluation cases are kept by Mind2Act and have no validation split; evaluation seeds are separate from training seeds.</span></li>
+    <li><span><strong>Random changes appearance only.</strong> Lights keep their poses, with each colour channel at 0–2× white and intensity at 0.8–1.2×. Object poses, robot, cameras, collisions, masses, seeds, instructions and scoring match Clean, and every Random case is paired with a Clean case and looks the same on every run.</span></li>
+    <li><span><strong>One run per case.</strong> Each case is evaluated once, without repeated seeds.</span></li>
+    <li><span><strong>Official runs.</strong> Mind2Act runs every model on its own machines with the released code, assets and budgets.</span></li>
   </ol>
 </section>
 
 <section id="clock" aria-labelledby="clock-title">
-  <h2 id="clock-title">Clock conditions</h2>
-  <p class="pr-section-lead">Dynamic tasks depend on whether the world waits while the model thinks. The two conditions are recorded and tabulated separately.</p>
+  <h2 id="clock-title">Budgets and endings</h2>
+  <p class="pr-section-lead">Control and RGB run at 30 Hz and physics at 120 Hz: one control step is four physics steps, 1/30 s. Budgets are counted in physics steps, so model latency never consumes task time.</p>
   <div class="pr-compare">
     <div>
-      <h3>Continuous clock</h3>
-      <p>The environment and external events keep advancing while the model reasons or waits for an API response. The robot follows a declared hold policy until a new command arrives.</p>
-      <dl><div><dt>Supports</dt><dd>Real-time control claims</dd></div><div><dt>Matters for</dt><dd>Moving targets, timing windows</dd></div></dl>
+      <h3>VLA / WAM</h3>
+      <p>Physics budget per task × difficulty: 1.2 × the P90 duration of its training demonstrations, rounded to whole control steps. The same budget applies to Clean and Random.</p>
+      <dl><div><dt>Calls</dt><dd>Unlimited</dd></div><div><dt>Wall clock</dt><dd>2 h per case (safety stop, not scored)</dd></div></dl>
     </div>
     <div>
-      <h3>Paused inference</h3>
-      <p>Simulated time stops while the model computes. This isolates task reasoning from latency, but it does not support a real-time-control claim.</p>
-      <dl><div><dt>Supports</dt><dd>Reasoning diagnosis</dd></div><div><dt>Not for</dt><dd>Claims about control speed</dd></div></dl>
+      <h3>Coding agents</h3>
+      <p>4 × the end-to-end physics budget and at most 150 decisions; whichever runs out first ends the case. A rejected or invalid action still costs a decision. Network retries (up to 12 per decision) do not.</p>
+      <dl><div><dt>Calls</dt><dd>150 decisions</dd></div><div><dt>Wall clock</dt><dd>6 h per case (safety stop, not scored)</dd></div></dl>
     </div>
   </div>
-  <p>No effective action rate is inferred from simulator throughput or from controller interpolation inside a chunk.</p>
+  <p><strong>Two kinds of ending.</strong> Outcome tasks (22) check the success condition after every action, end at 100 when it is met, and otherwise run to the end of the budget and score the final state. Event tasks (8: E, E2, F2, FR2, M, CP04, CP05, CP10) score mechanism events and end when the prescribed sequence is complete.</p>
+  <p>Violations do not end a case early; only the final state is judged. "Inside" means supported by the container with its centre inside, with no tolerance margin; buttons, keys and levers count once per press of the mechanism itself.</p>
 </section>
 
 <section id="metrics" aria-labelledby="metrics-title">
-  <h2 id="metrics-title">Metrics</h2>
-  <p class="pr-section-lead">Every result reports two separate measurements. They are not interchangeable.</p>
+  <h2 id="metrics-title">Scoring</h2>
+  <p class="pr-section-lead">Every case gets a score from the task's own scorer, which reads native measurements only.</p>
   <div class="pr-metrics">
-    <div class="pr-metric"><span class="pr-metric-value">Score 0–100</span><p>Task performance, combining final success with verified stage progress.</p></div>
-    <div class="pr-metric"><span class="pr-metric-value">Success %</span><p>Successful episodes divided by valid started episodes.</p></div>
-    <div class="pr-metric"><span class="pr-metric-value">0 vs —</span><p>A measured zero is a result. A dash means not yet evaluated; it is neither zero nor an estimate.</p></div>
+    <div class="pr-metric"><span class="pr-metric-value">100</span><p>Success. Anything short of success earns the task's partial credit.</p></div>
+    <div class="pr-metric"><span class="pr-metric-value">30 / 22 / 15</span><p>Partial-credit caps for Mind and Act tasks (Easy / Medium / Hard).</p></div>
+    <div class="pr-metric"><span class="pr-metric-value">15 / 10 / 7</span><p>Partial-credit caps for Mind2Act tasks, so harder tiers never outscore easier ones.</p></div>
   </div>
-  <div class="pr-formula" role="math" aria-label="Success rate definitions">SR<sub>t</sub> = (1 / N<sub>t</sub>) · Σ s<sub>t,i</sub> &nbsp;<span>// task t, N valid started episodes</span><br>SR<sub>suite</sub> = mean of SR<sub>t</sub> over the suite's tasks<br>SR<sub>macro</sub> = (SR<sub>Mind</sub> + SR<sub>Act</sub> + SR<sub>Mind2Act</sub>) / 3</div>
-  <p>Task results are computed for a fixed difficulty first; any aggregate over difficulty uses a weighting fixed in advance. A suite or overall value stays empty until its coverage is complete, and a task that carries several capability tags is counted once.</p>
-  <p>Progress is credited at task-defined checkpoints whose effect has been verified and is still valid at the end of the episode. A later disturbance can revoke a checkpoint, so progress is not the number of commands sent or the best stage ever reached.</p>
+  <div class="pr-formula" role="math" aria-label="Metric definitions">Score = mean case score over valid cases &nbsp;<span>// zeros and partial credit included</span><br>Success % = share of valid cases scoring 100<br>Suite, Overall = plain means over 10 and 30 tasks</div>
+  <p>Count-based tasks award the cap × correct units / required units; graded tasks use 1.5 / 1.1 / 0.75 steps of the cap. Only core units earn credit: preparatory steps such as opening a drawer or lid, pressing START or returning a tool earn nothing, but are required for 100. PR4, S2, F2 and CP07 give no partial credit.</p>
+  <p>Results are aggregated per task × difficulty, then by suite and overall. With 50 cases per cell and 10 tasks per suite, averaging over cases, cells or tasks gives the same value. Clean and Random, and the three suites, are reported separately. Only Score and Success are reported, without uncertainty estimates.</p>
 </section>
 
 <section id="diagnostics" aria-labelledby="diagnostics-title">
-  <h2 id="diagnostics-title">Diagnostic measurements</h2>
-  <p class="pr-section-lead">Final success alone cannot show where a long-horizon episode broke down. These behavioural measurements locate the failure.</p>
+  <h2 id="diagnostics-title">Validity and integrity</h2>
+  <p class="pr-section-lead">Only valid cases enter the averages, and every result states how many there were.</p>
   <div class="pr-table-wrap"><table class="pr-table">
-    <thead><tr><th scope="col">Measurement</th><th scope="col">What it captures</th></tr></thead>
+    <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Premature advancement</th><td>Moving on to a dependent step before the current physical condition is met.</td></tr>
-      <tr><th scope="row">State mismatch</th><td>Continuing from a stale or wrong task state, such as treating a missed deposit as delivered.</td></tr>
-      <tr><th scope="row">Wrong-target binding</th><td>A valid physical execution on the wrong object, container, route node or frame.</td></tr>
-      <tr><th scope="row">Physical residual</th><td>Task-specific error: position or angle, insertion depth, delivered quantity, contact time.</td></tr>
-      <tr><th scope="row">Recovery cost</th><td>Extra actions, time and resources spent after a detected deviation.</td></tr>
-      <tr><th scope="row">Latency and update rate</th><td>Time from an observation to its command, and independently produced commands per second of active time.</td></tr>
+      <tr><th scope="row">valid</th><td>Passed native queue and seal checks. Valid zeros are always kept and never re-run.</td></tr>
+      <tr><th scope="row">infra_failed</th><td>Rendering, asset, process, controller or snapshot failure. Re-queued once; if it fails again it is excluded, not scored as 0.</td></tr>
+      <tr><th scope="row">operator_cancelled</th><td>Stopped by an operator. Data is kept but excluded from averages.</td></tr>
     </tbody>
   </table></div>
-  <p>Where a system's interfaces can be replaced, matched runs separate decision from execution: <code>Reason-Only</code> with an oracle executor, <code>Act-Only</code> with oracle subgoals, <code>Coupled</code> for the native system, and <code>Certified</code> as a feasibility reference rather than a model score.</p>
+  <p>Each result reports valid cases out of 4,500 (450 for agents), infrastructure failures and unfinished cells. Every case records the evaluation commit, asset release, budget table, protocol version and checkpoint SHA. Agents cannot reset or extend their call ledger. Before a run, the release, instructions, P90 budgets, 6 Hz recording and actual model inputs are verified, and expert replays confirm that each scene loads, completes and scores; replays are never model results.</p>
 </section>
 
 <section id="disclosure" aria-labelledby="disclosure-title">
-  <h2 id="disclosure-title">Reporting conditions</h2>
-  <p class="pr-section-lead">A leaderboard row compares complete systems, not equal pretraining or compute. Each row is published with the conditions below.</p>
+  <h2 id="disclosure-title">What submitters declare</h2>
+  <p class="pr-section-lead">A leaderboard row compares complete systems as submitted, not equal pretraining or compute.</p>
   <ul class="pr-chips">
-    <li><b>Exact checkpoint</b><span>Identity of the evaluated model</span></li>
-    <li><b>Training conditions</b><span>Any Mind2Act training or fine-tuning data</span></li>
-    <li><b>Observation permissions</b><span>Cameras, state, extra sensors</span></li>
-    <li><b>Action interface</b><span>Harness or action mode, chunk duration</span></li>
-    <li><b>Execution assistance</b><span>Tools and controllers in the loop</span></li>
-    <li><b>Budget and clock</b><span>Limits, clock condition, API calls and cost</span></li>
+    <li><b>Model and version</b><span>Name and release</span></li>
+    <li><b>Checkpoint</b><span>Servable checkpoint and its SHA</span></li>
+    <li><b>Inference settings</b><span>Chunk length, execution rate, stochasticity</span></li>
+    <li><b>Preprocessing</b><span>Image resizing is the adapter's choice</span></li>
+    <li><b>Agent settings</b><span>Model, effort, transport, call limit, retries</span></li>
+    <li><b>Statistics</b><span>Data statistics an E2E model needs</span></li>
   </ul>
-  <p>The current leaderboard reports all-level results on the original 15 tasks; see <a href="leaderboard.html#protocol">Reading the leaderboard</a> for what that snapshot covers.</p>
+  <p>Each case stores its score, success, termination reason, score components, the three camera videos and run metadata. See <a href="leaderboard.html#protocol">Reading the leaderboard</a> for how these appear on the boards.</p>
 </section>
 
 <section id="submit" aria-labelledby="submit-title">
   <h2 id="submit-title">From submission to leaderboard</h2>
-  <p class="pr-section-lead">Coding agents, harnesses, VLA and world-action policies are all welcome.</p>
+  <p class="pr-section-lead">VLA and world-action models, and coding agents, are all welcome. Mind2Act runs the evaluation.</p>
   <ol class="pr-steps">
-    <li><h3>Get in touch</h3><p>Open an issue with the system, its track and the conditions it needs.</p></li>
-    <li><h3>Integrate</h3><p>Connect a harness, or an adapter for the XPolicyLab lifecycle.</p></li>
-    <li><h3>Freeze</h3><p>Fix the checkpoint and configuration before the evaluation round.</p></li>
-    <li><h3>Evaluate</h3><p>Run on the same task configurations as every other entry, with all episodes kept.</p></li>
-    <li><h3>Publish</h3><p>The row appears with its reporting conditions; gaps stay marked “—”.</p></li>
+    <li><h3>Get in touch</h3><p>Open an issue with the model, its board and what it needs to run.</p></li>
+    <li><h3>Integrate</h3><p>Serve the model over XPolicyLab RPC, or describe the agent's transport and limits for RoboProbe.</p></li>
+    <li><h3>Freeze</h3><p>Fix the checkpoint SHA and inference settings.</p></li>
+    <li><h3>Evaluate</h3><p>Mind2Act runs all Clean and Random cases with the released code and budgets.</p></li>
+    <li><h3>Publish</h3><p>The row appears with valid cases out of the total; unpublished results stay marked “—”.</p></li>
   </ol>
 </section>
 

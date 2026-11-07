@@ -72,7 +72,7 @@ const sections = ['tracks', 'episodes', 'clock', 'metrics', 'diagnostics', 'disc
       await page.evaluate(() => document.fonts.ready);
       const bottom = await page.locator('.pr-hero').evaluate(el => el.getBoundingClientRect().bottom);
       assert.ok(bottom >= height - 1 && (width <= 1040 || Math.abs(bottom - height) < 2), `${width}×${height}: overview fills the first screen without clipping mobile content`);
-      assert.deepEqual(await page.locator('.pr-hero-links a').evaluateAll(els => els.map(el => el.getAttribute('href'))), ['#tracks','#clock','#metrics','#tracks'], 'All four hero guides are restored');
+      assert.deepEqual(await page.locator('.pr-hero-links a').evaluateAll(els => els.map(el => el.getAttribute('href'))), ['#tracks','#episodes','#metrics','#tracks'], 'All four hero guides are restored');
       if (width > 1040) {
         const guides = await page.locator('.pr-hero-links').boundingBox();
         const episode = await page.locator('.pr-episode-artwork').boundingBox();

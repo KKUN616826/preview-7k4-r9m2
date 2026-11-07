@@ -1,396 +1,56 @@
 {
-  "status": "partial",
-  "roster_source": "User-provided Table 6",
-  "roster_note": "All-level Score and SR transcribed from the supplied Table 6. Difficulty breakdowns are not yet reported.",
-  "paradigms": {
-    "coding": "Coding Agent",
-    "vla": "VLA",
-    "wam": "WAM",
-    "hybrid": "Hybrid"
+  "schema_version": 2,
+  "updated": "2026-11-06",
+  "protocol": {
+    "version": "v1.0.0",
+    "scoring": "mind2act-final-scoring-20261105",
+    "budget": "e2e-p90x1.2-v1"
   },
+  "first_release": "2026-11-11",
+  "cadence": "After 11 November, results for about one more model every two days.",
+  "settings": [
+    {"key": "clean", "label": "Clean", "description": "Original scenes."},
+    {"key": "random", "label": "Random", "description": "Randomized table material, lighting and clutter; same tasks."}
+  ],
   "views": [
+    {"key": "overall", "label": "Overall", "description": "Plain mean over all 30 tasks."},
+    {"key": "mind", "label": "Mind", "description": "Remember task information and select the required operations."},
+    {"key": "act", "label": "Act", "description": "Execute timely, precise and stable actions under physical constraints."},
+    {"key": "coupling", "label": "Mind2Act", "description": "Use task intent to guide actions and execution feedback to update what comes next."}
+  ],
+  "types": {"vla": "VLA", "wam": "WAM", "agent": "Coding agent"},
+  "tracks": [
     {
-      "key": "mind",
-      "label": "Mind",
-      "icon": "media/images/mind-moon-upper.png",
-      "description": "Remember task information and select the required operations.",
-      "tasks": [
-        "E",
-        "P",
-        "S",
-        "F",
-        "M"
-      ]
+      "key": "e2e",
+      "title": "VLA / WAM Leaderboard",
+      "summary": "End-to-end models: camera images and the instruction in, 14-D joint actions out, served over XPolicyLab RPC.",
+      "cases_per_cell": 50,
+      "cases_per_setting": 4500
     },
     {
-      "key": "act",
-      "label": "Act",
-      "icon": "media/images/act-moon-lower.png",
-      "description": "Execute timely, precise, and stable actions under physical constraints.",
-      "tasks": [
-        "FR1",
-        "FR2",
-        "PR1",
-        "PR2",
-        "PR3"
-      ]
-    },
-    {
-      "key": "coupling",
-      "label": "Mind2Act",
-      "icon": "media/images/lunar-ranking-moon.png",
-      "description": "Use task intent to guide actions and execution feedback to update what comes next.",
-      "tasks": [
-        "CP01",
-        "CP02",
-        "CP03",
-        "CP04",
-        "CP05"
-      ]
+      "key": "agent",
+      "title": "Coding Agent Leaderboard",
+      "summary": "Coding agents: end-effector tool calls through the RoboProbe adapter, 150 decisions and 4× the physics budget per case.",
+      "cases_per_cell": 5,
+      "cases_per_setting": 450
     }
   ],
   "models": [
-    {
-      "id": "astra",
-      "name": "GPT-6 Astra",
-      "paradigm": "coding",
-      "icon": "media/icons/openai.svg",
-      "cases": "rollouts/astra.html",
-      "results": {
-        "mind": {
-          "score": 59.03,
-          "success": 52.0
-        },
-        "act": {
-          "score": 19.96,
-          "success": 16.0
-        },
-        "coupling": {
-          "score": 19.84,
-          "success": 1.3
-        }
-      }
-    },
-    {
-      "id": "gemini",
-      "name": "Gemini 3.8",
-      "paradigm": "coding",
-      "icon": "media/icons/googlegemini.svg",
-      "cases": "rollouts/gemini.html",
-      "results": {
-        "mind": {
-          "score": 20.73,
-          "success": 20.0
-        },
-        "act": {
-          "score": 19.2,
-          "success": 17.3
-        },
-        "coupling": {
-          "score": 3.83,
-          "success": 0.0
-        }
-      }
-    },
-    {
-      "id": "deepseek",
-      "name": "DeepSeek V4.1",
-      "paradigm": "coding",
-      "icon": "media/icons/deepseek.svg",
-      "cases": "rollouts/deepseek.html",
-      "results": {
-        "mind": {
-          "score": 16.07,
-          "success": 13.3
-        },
-        "act": {
-          "score": 17.37,
-          "success": 13.3
-        },
-        "coupling": {
-          "score": 5.2,
-          "success": 0.0
-        }
-      }
-    },
-    {
-      "id": "claude",
-      "name": "Claude Opus",
-      "paradigm": "coding",
-      "icon": "media/icons/anthropic.svg",
-      "cases": "rollouts/claude.html",
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "gemini4",
-      "name": "Gemini4",
-      "paradigm": "coding",
-      "icon": "media/icons/googlegemini.svg",
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "g05",
-      "name": "G0.5",
-      "paradigm": "vla",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": 2.75,
-          "success": 0.1
-        },
-        "act": {
-          "score": 15.71,
-          "success": 11.8
-        },
-        "coupling": {
-          "score": 3.77,
-          "success": 0.0
-        }
-      }
-    },
-    {
-      "id": "pi05",
-      "name": "π0.5",
-      "paradigm": "vla",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": 2.95,
-          "success": 0.0
-        },
-        "act": {
-          "score": 24.06,
-          "success": 18.5
-        },
-        "coupling": {
-          "score": 15.42,
-          "success": 1.1
-        }
-      }
-    },
-    {
-      "id": "xvla",
-      "name": "X-VLA",
-      "paradigm": "vla",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": 0.58,
-          "success": 0.0
-        },
-        "act": {
-          "score": 7.17,
-          "success": 1.1
-        },
-        "coupling": {
-          "score": 7.41,
-          "success": 0.5
-        }
-      }
-    },
-    {
-      "id": "kinrt",
-      "name": "KinRT",
-      "paradigm": "vla",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": 3.78,
-          "success": 0.1
-        },
-        "act": {
-          "score": 16.24,
-          "success": 5.1
-        },
-        "coupling": {
-          "score": 5.63,
-          "success": 0.2
-        }
-      }
-    },
-    {
-      "id": "internw0",
-      "name": "InternW0",
-      "paradigm": "wam",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "internvla15",
-      "name": "InternVLA1.5",
-      "paradigm": "vla",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "lda1b",
-      "name": "LDA-1B",
-      "paradigm": "wam",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "openwam",
-      "name": "OpenWAM",
-      "paradigm": "wam",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "fastwam",
-      "name": "FastWAM",
-      "paradigm": "wam",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "qwen",
-      "name": "Qwen",
-      "paradigm": "coding",
-      "icon": "media/icons/qwen.svg",
-      "cases": "rollouts/qwen.html",
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    },
-    {
-      "id": "hybrid-pending",
-      "name": "To be specified",
-      "paradigm": "hybrid",
-      "icon": null,
-      "cases": null,
-      "results": {
-        "mind": {
-          "score": null,
-          "success": null
-        },
-        "act": {
-          "score": null,
-          "success": null
-        },
-        "coupling": {
-          "score": null,
-          "success": null
-        }
-      }
-    }
-  ],
-  "difficulty_status": "pending",
-  "provenance": {
-    "snapshot_commit": "87c6ccf",
-    "snapshot_file": "leaderboard.html#viewLeaderboardData",
-    "note": "Preserved from the existing page. Original Table 6 and run-level evidence are not bundled with this result snapshot."
-  }
+    {"id": "pi05", "name": "π0.5", "type": "vla", "track": "e2e", "org": "Physical Intelligence", "icon": "media/icons/models/pi05.png", "release": "2026-11-11", "results": null},
+    {"id": "xvla", "name": "X-VLA", "type": "vla", "track": "e2e", "org": "Tsinghua AIR", "icon": "media/icons/models/xvla.png", "release": "2026-11-11", "results": null},
+    {"id": "g05", "name": "G0.5", "type": "vla", "track": "e2e", "org": "Galaxea AI", "icon": "media/icons/models/g05.png", "release": "2026-11-11", "results": null},
+    {"id": "awomo", "name": "Awomo", "type": "wam", "track": "e2e", "org": "Awomo", "icon": "media/icons/models/awomo.png", "release": "2026-11-11", "results": null},
+    {"id": "deepseek-v41-flash", "name": "DeepSeek V4.1 Flash", "type": "agent", "track": "agent", "org": "DeepSeek", "icon": "media/icons/models/deepseek.png", "release": "2026-11-11", "results": null},
+    {"id": "gemini-4-argon", "name": "Gemini 4 Argon", "type": "agent", "track": "agent", "org": "Google", "icon": "media/icons/models/gemini.png", "release": "2026-11-11", "results": null},
+    {"id": "groot-n17", "name": "GR00T N1.7", "type": "vla", "track": "e2e", "org": "NVIDIA", "icon": "media/icons/models/groot.png", "release": null, "queue": 1, "results": null},
+    {"id": "starvla", "name": "StarVLA", "type": "vla", "track": "e2e", "org": "StarVLA", "icon": "media/icons/models/starvla.png", "release": null, "queue": 2, "results": null},
+    {"id": "gigaworld-policy", "name": "GigaWorld-Policy", "type": "wam", "track": "e2e", "org": "GigaAI", "icon": "media/icons/models/gigaworld.png", "release": null, "queue": 3, "results": null},
+    {"id": "dm05", "name": "DM0.5", "type": "vla", "track": "e2e", "org": "Dexmal", "icon": "media/icons/models/dm05.png", "release": null, "queue": 4, "results": null},
+    {"id": "openwam", "name": "OpenWAM", "type": "wam", "track": "e2e", "org": "OpenWAM", "icon": "media/icons/models/openwam.png", "release": null, "queue": 5, "results": null},
+    {"id": "kinrt", "name": "KinRT", "type": "vla", "track": "e2e", "org": "IIGroup, Tsinghua", "icon": "media/icons/models/kinrt.png", "release": null, "queue": 6, "results": null},
+    {"id": "ewam", "name": "EWAM", "type": "wam", "track": "e2e", "org": "EWAM Team", "icon": null, "release": null, "queue": 7, "results": null},
+    {"id": "x-wam", "name": "X-WAM", "type": "wam", "track": "e2e", "org": "Tsinghua & Xiaomi", "icon": null, "release": null, "queue": 8, "results": null},
+    {"id": "liber-0", "name": "Liber-0", "type": "wam", "track": "e2e", "org": "LiberAI", "icon": "media/icons/models/liber0.png", "release": null, "queue": 9, "results": null},
+    {"id": "internw0", "name": "InternW0", "type": "wam", "track": "e2e", "org": "Shanghai AI Lab", "icon": "media/icons/models/internw0.png", "release": null, "queue": 10, "results": null}
+  ]
 }

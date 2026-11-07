@@ -45,7 +45,7 @@ py -3 --version
 ```sh
 git clone --depth 1 --filter=blob:none --sparse --branch website-improvements https://github.com/KKUN616826/preview-7k4-r9m2.git mind2act-preview
 cd mind2act-preview
-git sparse-checkout set data docs media mindaccord rollouts scripts tasks intro_video_hyperframes/renders
+git sparse-checkout set data docs media mindaccord scripts tasks intro_video_hyperframes/renders
 ```
 
 这套下载方式只获取当前分支的网站及相关素材，跳过大量视频制作中间文件和旧历史。网站视频素材本身仍较多，首次下载需要一定时间；请等待最后一条命令完成后再启动。
@@ -113,15 +113,13 @@ Preview: http://127.0.0.1:8765/
 
 ### Leaderboard
 
-- 首屏五张摘要卡片及其导航入口。
-- Mind、Act、Mind2Act 三组成绩并列显示。
-- 模型搜索、范式筛选、已报告／未报告筛选、Reset。
-- 表头排序和 Rank by / Metric 切换。
-- Details 展开、再次关闭，以及筛选后详情状态。
-- 复制带筛选参数的网址，在同一台电脑上重新打开能否恢复状态。
-- 手机上默认显示当前能力指标，并通过 View all metrics 查看全表。
+- 首屏：成绩公布前显示首批发布日期与模型；公布后领奖台显示 VLA / WAM 榜前三。
+- VLA / WAM 与 Coding Agent 两张榜分开排名；Agent 榜下方说明两者设置不同、不可比较。
+- 每张榜的 Clean / Random、Score / Success % 切换，以及点击 Overall、Mind、Act、Mind2Act 表头排序。
+- 未公布成绩的模型显示日期或排队序号，不参与排名。
+- 下方 Evaluation schedule 与 Reading the leaderboard（按评测协议 v1.0.0）。
 
-现有成绩来自原页面转录的 Table 6，没有新增模型测量。模型家族演示链接不等于产生该分数的评分运行。
+榜单分 VLA / WAM 与 Coding agent 两张；官方成绩自 11 月 11 日起陆续公布，未公布的模型只显示发布日期或排队序号，不参与排名。
 
 ### Documents
 

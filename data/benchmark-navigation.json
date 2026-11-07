@@ -21,62 +21,6 @@
         ]
       },
       {
-        "id": "F",
-        "title": "Unknown Button Mapping and Slider Navigation",
-        "summary": "Infer an unknown button-to-motion mapping from feedback, retain it after reset, and navigate to the target.",
-        "cover": "media/benchmark-covers/F.jpg",
-        "nav_title": "Button Mapping",
-        "row_cover": "media/benchmark-covers/F.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "P",
-        "title": "Order-Based Meal Assembly",
-        "summary": "Remember initial and additional orders and deliver the requested ingredients to the correct containers.",
-        "cover": "media/benchmark-covers/P.jpg",
-        "nav_title": "Meal Assembly",
-        "row_cover": "media/benchmark-covers/P.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "S",
-        "title": "Rotating Tray Layout Reconstruction",
-        "summary": "Remember a colored-slot arrangement and restore it after the tray rotates.",
-        "cover": "media/benchmark-covers/S.jpg",
-        "nav_title": "Layout Reconstruction",
-        "row_cover": "media/benchmark-covers/S.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
-        "id": "M",
-        "title": "Workpiece Tracking and Route Reproduction",
-        "summary": "Track a hidden target through cover exchanges and reproduce its required station route.",
-        "cover": "media/benchmark-covers/M.jpg",
-        "nav_title": "Workpiece Tracking",
-        "row_cover": "media/benchmark-covers/M.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ]
-      },
-      {
         "id": "E2",
         "title": "Object-Code Keypad Entry",
         "summary": "Remember entity–value associations, decode the physical expression, and enter its exact result on the keypad.",
@@ -91,6 +35,20 @@
           "hard"
         ],
         "expansion": true
+      },
+      {
+        "id": "F",
+        "title": "Unknown Button Mapping and Slider Navigation",
+        "summary": "Infer an unknown button-to-motion mapping from feedback, retain it after reset, and navigate to the target.",
+        "cover": "media/benchmark-covers/F.jpg",
+        "nav_title": "Button Mapping",
+        "row_cover": "media/benchmark-covers/F.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "id": "F2",
@@ -109,6 +67,50 @@
         "expansion": true
       },
       {
+        "id": "M",
+        "title": "Workpiece Tracking and Route Reproduction",
+        "summary": "Track a hidden target through cover exchanges and reproduce its required station route.",
+        "cover": "media/benchmark-covers/M.jpg",
+        "nav_title": "Workpiece Tracking",
+        "row_cover": "media/benchmark-covers/M.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
+      },
+      {
+        "id": "M2",
+        "title": "Memory Card Matching",
+        "summary": "Remember revealed card identities and locations to find matching pairs.",
+        "nav_title": "Memory Card Matching",
+        "title_zh": "翻牌游戏",
+        "cover": "media/benchmark-covers/M2.jpg",
+        "row_cover": "media/benchmark-covers/M2.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "expansion": true
+      },
+      {
+        "id": "P",
+        "title": "Order-Based Meal Assembly",
+        "summary": "Remember initial and additional orders and deliver the requested ingredients to the correct containers.",
+        "cover": "media/benchmark-covers/P.jpg",
+        "nav_title": "Meal Assembly",
+        "row_cover": "media/benchmark-covers/P.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
+      },
+      {
         "id": "P2",
         "title": "Steamer Stack Order Reconstruction",
         "summary": "Remember a stack arrangement and reconstruct the order of the steamer components.",
@@ -125,6 +127,20 @@
         "expansion": true
       },
       {
+        "id": "S",
+        "title": "Rotating Tray Layout Reconstruction",
+        "summary": "Remember a colored-slot arrangement and restore it after the tray rotates.",
+        "cover": "media/benchmark-covers/S.jpg",
+        "nav_title": "Layout Reconstruction",
+        "row_cover": "media/benchmark-covers/S.jpg",
+        "initial_level": "easy",
+        "available_levels": [
+          "easy",
+          "medium",
+          "hard"
+        ]
+      },
+      {
         "id": "S2",
         "title": "Hidden-Zone Navigation",
         "summary": "Remember hidden restricted cells and guide a marker across the grid toward the goal.",
@@ -132,22 +148,6 @@
         "title_zh": "隐藏禁区导航",
         "cover": "media/benchmark-covers/S2.jpg",
         "row_cover": "media/benchmark-covers/S2.jpg",
-        "initial_level": "easy",
-        "available_levels": [
-          "easy",
-          "medium",
-          "hard"
-        ],
-        "expansion": true
-      },
-      {
-        "id": "M2",
-        "title": "Memory Card Matching",
-        "summary": "Remember revealed card identities and locations to find matching pairs.",
-        "nav_title": "Memory Card Matching",
-        "title_zh": "翻牌游戏",
-        "cover": "media/benchmark-covers/M2.jpg",
-        "row_cover": "media/benchmark-covers/M2.jpg",
         "initial_level": "easy",
         "available_levels": [
           "easy",
