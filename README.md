@@ -65,7 +65,7 @@ python3 scripts/preview.py --port 8767
 - VLA / WAM 与 Coding agent 分两张榜分别排名（每格 50 局 vs 5 局，接口与预算不同），不可横向比较。
 - 模型 logo：`media/icons/models/`，取自各模型或机构官网的彩色原版。
 - 页面源：`scripts/leaderboard-page.html`；样式：`scripts/leaderboard-explorer.css`、`scripts/leaderboard-boards.css`；交互：`scripts/leaderboard-boards.js`。
-- 首屏：`scripts/leaderboard_stage.py`、`scripts/leaderboard-stage.css`。月球园区场景中，高度即分数：地平线 0、月球 100；每个 VLA / WAM 模型从地平线竖直升到 Clean Overall 分数的高度，左右按发布顺序；少于 3 个成绩时显示匿名占位模型和首批发布日期。
+- 首屏：`scripts/leaderboard_stage.py`、`scripts/leaderboard-stage.css`。月球园区场景中，高度即分数：地平线 0、月球 100；每个 VLA / WAM 模型乘小飞船从地平线升到 Clean Overall 分数的高度、机头指向月球，左右按发布顺序；少于 3 个成绩时显示匿名占位模型和首批发布日期。
 - 单独构建：`python3 scripts/build_leaderboard.py`。完整构建也会调用此构建器；不要直接修改生成的 `leaderboard.html`。
 - 浏览器回归：`node scripts/test_leaderboard_boards.cjs`；首页与新榜单入口衔接：`node scripts/test_view_leaderboard.cjs`，使用现有 Playwright / `NODE_PATH` 环境。
 - 此轮改版前的已保存版本：提交 `87c6ccf`，标签 `checkpoint-before-leaderboard`。首页、Benchmark 与 Documents 不属于这次独立榜单改版的修改范围。

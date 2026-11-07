@@ -406,8 +406,8 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-level.is-top { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 8 7; opacity: .75; }
 .lb-shot-level.is-ground { stroke: #ffffff; stroke-width: 2.4; opacity: .9; }
 .lb-shot-tick { fill: #3e606c; font: 600 15px/1 Inter, system-ui, sans-serif; text-anchor: end; paint-order: stroke; stroke: #eef5f8; stroke-width: 4px; stroke-linejoin: round; }
-.lb-shot-trail { stroke: var(--ink); stroke-width: 2; opacity: .5; stroke-dasharray: 1 1; animation: lb-shot-draw var(--rise-time) cubic-bezier(.25, .7, .3, 1) calc(.4s + var(--i) * var(--launch)) both; }
-.lb-shot-trail.is-lead { stroke: var(--accent); stroke-width: 3; opacity: .9; }
+.lb-shot-trail { fill: none; stroke: #ffffff; stroke-width: 6; stroke-linecap: round; opacity: .95; filter: drop-shadow(0 0 1.2px #4f7283) drop-shadow(0 0 4px #ffffff); stroke-dasharray: 1 1; animation: lb-shot-draw var(--rise-time) cubic-bezier(.45, .05, .3, 1) calc(.4s + var(--i) * var(--launch)) both; }
+.lb-shot-trail.is-lead { stroke: #ffe3cf; stroke-width: 7; filter: drop-shadow(0 0 5px #f6b48a); }
 .lb-shot-axis-title { fill: #3e606c; font: 650 14px/1 Inter, system-ui, sans-serif; letter-spacing: 1.2px; text-anchor: middle; text-transform: uppercase; paint-order: stroke; stroke: #eef5f8; stroke-width: 4px; }
 .lb-shot-pad { fill: #fff; stroke: var(--ink); stroke-width: 1.5; opacity: .8; }
 .lb-shot-gap { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; animation: lb-shot-fade .6s ease-out calc(.4s + var(--n) * var(--launch) + var(--rise-time)) both; }
@@ -421,26 +421,57 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-togo b { color: var(--accent); font-size: 18px; font-weight: 800; }
 .lb-shot-axis { transform: translate(-6px, -50%); color: #fff; font-size: 12px; font-weight: 600; letter-spacing: .2px; text-shadow: 0 1px 3px #1f3a4bcc; }
 .lb-shot-models { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
-.lb-shot-model { position: absolute; width: 0; height: 0; animation: lb-shot-rise var(--rise-time) cubic-bezier(.25, .7, .3, 1) calc(.4s + var(--i) * var(--launch)) both; }
-.lb-shot-model a { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); color: var(--ink); text-decoration: none; pointer-events: auto; }
-.lb-shot-badge { display: grid; place-items: center; width: var(--badge); height: var(--badge); box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: 50%; background: #fff; box-shadow: 0 2px 8px #1f3a4b33; }
-.lb-shot-badge img { width: 68%; height: 68%; object-fit: contain; }
-.lb-shot-mono { color: var(--ink); font-size: 12px; font-weight: 750; }
-.lb-shot-label { display: flex; flex-direction: column; align-items: center; line-height: 1.15; text-shadow: 0 0 5px #fff, 0 0 2px #fff, 0 0 1px #fff; }
-.lb-shot-label span { max-width: 92px; overflow: hidden; color: #3e606c; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.lb-shot { --ship: clamp(30px, 2.3vw, 44px); }
+.lb-shot-model { position: absolute; width: 0; height: 0; animation: lb-shot-fly var(--rise-time) cubic-bezier(.45, .05, .3, 1) calc(.4s + var(--i) * var(--launch)) both; }
+.lb-shot-model a { position: absolute; left: 0; top: 0; width: 0; height: 0; color: var(--ink); text-decoration: none; pointer-events: auto; }
+/* The ship: rotated along its route, centred on its porthole, which sits at the score's height. */
+.lb-ship { position: absolute; left: 0; top: 0; width: var(--ship); height: calc(var(--ship) * 2); transform: translate(-50%, -45%) rotate(var(--r3)); transform-origin: 50% 45%; animation: lb-ship-turn var(--rise-time) cubic-bezier(.45, .05, .3, 1) calc(.4s + var(--i) * var(--launch)) both; }
+.lb-ship-body { position: absolute; inset: 0; animation: lb-ship-hover 3.2s ease-in-out calc(.4s + var(--i) * var(--launch) + var(--rise-time)) infinite; }
+.lb-ship-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 3px 5px #1f3a4b40); }
+.lb-ship-hull { fill: #fbfcfc; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
+.lb-ship-nose { fill: #3e606c; }
+.lb-ship-fin { fill: #3e606c; }
+.lb-ship-nozzle { fill: #8ea3ac; }
+.lb-ship-flame { position: absolute; left: 50%; top: 84%; width: 34%; height: 34%; border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%; background: radial-gradient(ellipse at 50% 20%, #fff8d6 0 22%, #ffc35a 45%, #f0772e 75%, transparent 100%); transform: translateX(-50%); transform-origin: 50% 0; filter: blur(.4px); animation: lb-ship-flame .16s ease-in-out infinite alternate; }
+.lb-shot-badge { position: absolute; left: 50%; top: 45%; display: grid; place-items: center; width: 56%; height: 28%; box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: 50%; background: #fff; transform: translate(-50%, -50%) rotate(calc(-1 * var(--r3))); }
+.lb-shot-badge img { width: 74%; height: 74%; object-fit: contain; }
+.lb-shot-mono { color: var(--ink); font-size: calc(var(--ship) * .22); font-weight: 800; line-height: 1; letter-spacing: -.3px; }
+/* Labels stay upright above the ship. */
+.lb-shot-label { position: absolute; left: 0; bottom: calc(var(--ship) * 1.05); display: flex; flex-direction: column; align-items: center; transform: translateX(-50%); line-height: 1.15; white-space: nowrap; text-shadow: 0 0 5px #fff, 0 0 2px #fff, 0 0 1px #fff; }
+.lb-shot-label span { max-width: 92px; overflow: hidden; color: #3e606c; font-size: 11px; font-weight: 600; text-overflow: ellipsis; }
 .lb-shot-label b { font-size: 14px; font-weight: 750; font-variant-numeric: tabular-nums; }
-.lb-shot-model a:hover .lb-shot-badge, .lb-shot-model a:focus-visible .lb-shot-badge { border-color: var(--accent); box-shadow: 0 0 0 3px #fff, 0 2px 10px #1f3a4b40; }
-.lb-shot-model a:focus-visible { outline: none; }
-.lb-shot-model.is-lead { z-index: 1; }
-.lb-shot-model.is-lead a { --badge: clamp(44px, 2.9vw, 56px); }
-.lb-shot-model.is-lead .lb-shot-badge { border: 2.5px solid var(--accent); animation: lb-shot-glow 2.8s ease-out calc(.4s + var(--n) * var(--launch) + var(--rise-time)) infinite; }
-.lb-shot-model.is-lead .lb-shot-mono { color: var(--accent); font-size: 17px; }
 .lb-shot-label em { margin-right: 4px; color: var(--accent); font-style: normal; font-weight: 800; }
+.lb-shot-model a:hover .lb-ship-hull, .lb-shot-model a:focus-visible .lb-ship-hull { stroke: var(--accent); stroke-width: 2.4; }
+.lb-shot-model a:hover, .lb-shot-model a:focus-visible { z-index: 3; }
+.lb-shot-model a:focus-visible { outline: none; }
 .lb-shot-model.is-top .lb-shot-label span { max-width: 120px; color: var(--ink); }
+.lb-shot-model.is-lead { z-index: 2; }
+.lb-shot-model.is-lead a { --ship: clamp(46px, 3.6vw, 68px); }
+.lb-shot-model.is-lead .lb-ship-nose, .lb-shot-model.is-lead .lb-ship-fin { fill: var(--accent); }
+.lb-shot-model.is-lead .lb-ship-hull { stroke-width: 1.3; }
+.lb-shot-model.is-lead .lb-ship-svg { filter: drop-shadow(0 0 10px #f6b48aaa) drop-shadow(0 3px 6px #1f3a4b55); }
+.lb-shot-model.is-lead .lb-shot-badge { border: 2px solid var(--accent); }
+.lb-shot-model.is-lead .lb-shot-mono { color: var(--accent); }
+.lb-shot-model.is-lead .lb-ship-flame { width: 40%; height: 48%; }
 .lb-shot-model.is-lead .lb-shot-label span { max-width: none; color: var(--ink); font-size: 13px; font-weight: 700; }
 .lb-shot-model.is-lead .lb-shot-label b { color: var(--accent); font-size: 26px; line-height: 1.05; }
 .lb-shot-model.is-lead .lb-shot-label small { order: -1; margin-bottom: 4px; white-space: nowrap; color: #3e606c; font-size: 12px; font-weight: 600; }
 .lb-shot-model.is-lead .lb-shot-label small i { color: var(--accent); font-style: normal; font-weight: 800; }
+@keyframes lb-shot-fly {
+  0% { opacity: 0; translate: calc(var(--k0x) * 1cqw) calc(var(--k0y) * 1cqh); }
+  6% { opacity: 1; }
+  33% { translate: calc(var(--k1x) * 1cqw) calc(var(--k1y) * 1cqh); }
+  66% { translate: calc(var(--k2x) * 1cqw) calc(var(--k2y) * 1cqh); }
+  100% { opacity: 1; translate: 0 0; }
+}
+@keyframes lb-ship-turn {
+  0% { transform: translate(-50%, -45%) rotate(var(--r0)); }
+  33% { transform: translate(-50%, -45%) rotate(var(--r1)); }
+  66% { transform: translate(-50%, -45%) rotate(var(--r2)); }
+  100% { transform: translate(-50%, -45%) rotate(var(--r3)); }
+}
+@keyframes lb-ship-hover { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@keyframes lb-ship-flame { from { scale: 1 .8; opacity: .85; } to { scale: .9 1.15; opacity: 1; } }
 /* Preview caption and the first batch, under the page title. */
 .lb-shot-note { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 16px; width: fit-content; margin-top: 14px !important; color: #3e606c; font-size: 12px !important; line-height: 1.45 !important; pointer-events: auto; }
 .lb-shot-note strong { color: var(--ink, #1f3a4b); }
@@ -463,15 +494,17 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-stage-scene { top: auto; bottom: 0; left: 0; width: var(--scene-w); transform: translateX(calc(var(--scene-w) * -1230 / 1983)); mask-image: none; -webkit-mask-image: none; }
   .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 60px); mask-image: linear-gradient(transparent, #000 60px); }
   .lb-stage-motion-video, .lb-stage .lb-stage-motion-toggle { display: none !important; }
-  .lb-shot { --badge: 22px; }
+  .lb-shot { --ship: 18px; }
   .lb-shot-trails, .lb-shot-gap, .lb-shot-tick, .lb-shot-axis-title { display: none; }
-  .lb-shot-model { --rise: calc(var(--s) * 34.19); left: calc((1262 + 450 * var(--t)) / 1983 * 100%) !important; top: calc((596 - 360 * var(--s)) / 1053 * 100%) !important; }
-  .lb-shot-model::before { content: ""; position: absolute; left: -1px; top: 0; width: 2px; height: calc(var(--s) * 360 / 1053 * 100cqh); background: linear-gradient(#1f3a4b99, #1f3a4b22); }
-  .lb-shot-model.is-lead::before { background: linear-gradient(#a2451f, #a2451f33); }
-  .lb-shot-mono { font-size: 9px; }
+  /* Re-spread across the window; a straight climb, the ship only leaning toward the Moon. */
+  .lb-shot-model { --rise: calc(var(--s) * 34.19); left: calc((1262 + 450 * var(--t)) / 1983 * 100%) !important; top: calc((596 - 360 * var(--s)) / 1053 * 100%) !important; animation-name: lb-shot-rise; }
+  .lb-shot-model::before { content: ""; position: absolute; left: -2px; top: calc(var(--ship) * .9); width: 4px; height: calc(var(--s) * 360 / 1053 * 100cqh - var(--ship) * .9); border-radius: 2px; background: linear-gradient(#ffffffee, #ffffff44); }
+  .lb-ship { --lean: calc(var(--r3) * .3); transform: translate(-50%, -45%) rotate(var(--lean)); animation: none; }
+  .lb-shot-badge { transform: translate(-50%, -50%) rotate(calc(-1 * var(--lean))); }
+  .lb-shot-mono { font-size: 6px; }
   .lb-shot-model:not(.is-lead) .lb-shot-label { display: none; }
-  .lb-shot-model.is-lead a { --badge: 34px; flex-direction: row; align-items: flex-end; gap: 6px; transform: translate(calc(-100% + var(--badge) / 2), calc(-100% + var(--badge) / 2)); }
-  .lb-shot-model.is-lead .lb-shot-label { align-items: flex-end; margin-bottom: 30px; }
+  .lb-shot-model.is-lead a { --ship: 30px; }
+  .lb-shot-model.is-lead .lb-shot-label { left: auto; right: calc(var(--ship) * .7); bottom: 0; align-items: flex-end; transform: none; }
   .lb-shot-model.is-lead .lb-shot-label b { font-size: 20px; }
   .lb-shot-tag { font-size: 11px; }
   .lb-shot-tag--moon { transform: translate(-30%, 8px); }

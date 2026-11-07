@@ -1,6 +1,6 @@
 """Leaderboard hero: the lunar campus under a wide sky, with the Earth on the horizon and the Moon above.
-Height is score. Each reported end-to-end model launches straight up from its pad on the Earth's horizon
-(0) and stops at the height of its Overall score (plain mean over all 30 tasks, Clean setting); the
+Height is score. Each reported end-to-end model rides a small ship that lifts off from its pad on the
+Earth's horizon (0), turns toward the Moon and stops at the height of its Overall score (plain mean over all 30 tasks, Clean setting); the
 level of the Moon's lower edge is 100, every case solved. Pads run left to right in release order, and
 level lines mark 25, 50 and 75, so the picture reads like a chart without looking like one.
 
@@ -57,6 +57,35 @@ def _height(x, score):
     return y0 + (TOP - y0) * score / TARGET
 
 
+MOON_C = (1698.5, -369.5)                    # the Moon's centre; every ship heads for it
+DRIFT = .38                                  # how far a ship drifts toward the Moon per unit of climb
+# A small rocket, nose up, 40 x 80; the porthole (centre 20, 36) carries the model's logo.
+SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 40 80" focusable="false">'
+        '<path class="lb-ship-fin" d="M9 44 L1 58 L1 67 L9 61Z M31 44 L39 58 L39 67 L31 61Z"/>'
+        '<path class="lb-ship-hull" d="M20 2 C30 12 31.5 30 31.5 46 L31 63 L9 63 L8.5 46 C8.5 30 10 12 20 2Z"/>'
+        '<path class="lb-ship-nose" d="M20 2 C25.5 7.5 28.2 13.5 29.4 19 L10.6 19 C11.8 13.5 14.5 7.5 20 2Z"/>'
+        '<path class="lb-ship-fin" d="M18 52 L22 52 L22 66 L18 66Z"/>'
+        '<rect class="lb-ship-nozzle" x="12.5" y="63" width="15" height="5" rx="1.5"/></svg>')
+
+
+def _unit(dx, dy):
+    d = (dx * dx + dy * dy) ** .5 or 1
+    return dx / d, dy / d
+
+
+def _bez(c, t):
+    u = 1 - t
+    return tuple(u ** 3 * c[0][k] + 3 * u * u * t * c[1][k] + 3 * u * t * t * c[2][k] + t ** 3 * c[3][k] for k in (0, 1))
+
+
+def _heading(c, t):
+    """Rotation of a nose-up ship along the curve at t, in degrees clockwise from up."""
+    import math
+    u = 1 - t
+    dx, dy = (3 * u * u * (c[1][k] - c[0][k]) + 6 * u * t * (c[2][k] - c[1][k]) + 3 * t * t * (c[3][k] - c[2][k]) for k in (0, 1))
+    return math.degrees(math.atan2(dx, -dy)) if (dx or dy) else 0.0
+
+
 def _pct(x, y):
     return f'left:{x / W * 100:.3f}%;top:{y / H * 100:.3f}%'
 
@@ -69,19 +98,36 @@ def _shot(entries, preview, data, when):
     rank = {i: r + 1 for r, i in enumerate(sorted(range(n), key=lambda i: -entries[i][1]))}
     items, trails = [], []
     for i, (name, score, m) in enumerate(entries):
-        x = PADS[0] + (PADS[1] - PADS[0]) * i / max(1, n - 1)
-        y0, y = _earth(x) - 4, _height(x, score)
-        trails.append(f'<line class="lb-shot-trail{" is-lead" if i == lead else ""}" x1="{x:.1f}" y1="{y0:.1f}" x2="{x:.1f}" y2="{y:.1f}" '
-                      f'pathLength="1" style="--i:{i}"/><circle class="lb-shot-pad" cx="{x:.1f}" cy="{y0:.1f}" r="3.5"/>')
+        px = PADS[0] + (PADS[1] - PADS[0]) * i / max(1, n - 1)
+        y0 = _earth(px) - 4
+        rise = y0 - _height(px, score)
+        # Gravity turn: straight up off the pad, then bending toward the Moon. The ship drifts toward
+        # the Moon as it climbs, but its height is still its score.
+        hx, hy = _unit(MOON_C[0] - px, MOON_C[1] - (y0 - rise))
+        x = px + hx * rise * DRIFT
+        y = _height(x, score)
+        hx, hy = _unit(MOON_C[0] - x, MOON_C[1] - y)
+        p0, p1 = (px, y0), (px, y0 - .5 * (y0 - y))
+        p2, p3 = (x - hx * .35 * (y0 - y), y - hy * .35 * (y0 - y)), (x, y)
+        curve = (p0, p1, p2, p3)
+        trails.append(f'<path class="lb-shot-trail{" is-lead" if i == lead else ""}" d="M{px:.1f} {y0:.1f} C{p1[0]:.1f} {p1[1]:.1f} '
+                      f'{p2[0]:.1f} {p2[1]:.1f} {x:.1f} {y:.1f}" pathLength="1" style="--i:{i}"/>'
+                      f'<circle class="lb-shot-pad" cx="{px:.1f}" cy="{y0:.1f}" r="3.5"/>')
+        # Keyframes: position offsets from the end (percent of the scene) and heading at t = 0, 1/3, 2/3, 1.
+        keys = ''
+        for k, t in enumerate((0, 1 / 3, 2 / 3, 1)):
+            (bx, by), ang = _bez(curve, t), _heading(curve, t)
+            keys += f';--k{k}x:{(bx - x) / W * 100:.3f};--k{k}y:{(by - y) / H * 100:.3f};--r{k}:{ang:.1f}deg'
         badge = _icon(m, 28) if m else f'<span class="lb-shot-mono">{escape(name.split()[-1][:2])}</span>'
         href = f'models/{escape(m["id"])}.html' if m else '#board-e2e'
         cls = 'lb-shot-model' + (' is-lead' if i == lead else '') + (' is-top' if rank[i] <= 3 else '')
         place = f'<em>#{rank[i]}</em>' if rank[i] <= 3 else ''
-        items.append(f'<li class="{cls}" style="{_pct(x, y)};--i:{i};--rise:{(y0 - y) / H * 100:.3f};--t:{i / max(1, n - 1):.4f};--s:{score / TARGET:.4f}">'
+        items.append(f'<li class="{cls}" style="{_pct(x, y)};--i:{i};--rise:{(y0 - y) / H * 100:.3f};--t:{i / max(1, n - 1):.4f};--s:{score / TARGET:.4f}{keys}">'
                      f'<a href="{href}" title="{escape(name)} · Overall {score:.1f}" aria-label="{escape(name)}: Overall {score:.1f}{" (placeholder)" if preview else ""}">'
+                     f'<span class="lb-ship" aria-hidden="true"><span class="lb-ship-body">{SHIP}<span class="lb-ship-flame"></span>'
+                     f'<span class="lb-shot-badge">{badge}</span></span></span>'
                      f'<span class="lb-shot-label"><span>{place}{escape(name)}</span><b>{score:.1f}</b>'
-                     + (f'<small><i>{TARGET - score:.1f}</i> to the Moon</small>' if i == lead else '') + '</span>'
-                     f'<span class="lb-shot-badge">{badge}</span></a></li>')
+                     + (f'<small><i>{TARGET - score:.1f}</i> to the Moon</small>' if i == lead else '') + '</span></a></li>')
     # Level lines across the sky, from the first pad to the Moon.
     levels = ''
     for v in (0, 25, 50, 75, 100):
@@ -90,9 +136,7 @@ def _shot(entries, preview, data, when):
         cls = 'lb-shot-level' + (' is-top' if v == 100 else ' is-ground' if v == 0 else '')
         levels += (f'<path class="{cls}" d="M' + ' L'.join(f'{a:.0f} {b:.1f}' for a, b in pts) + '"/>'
                    f'<text class="lb-shot-tick" x="{x0 - 10:.0f}" y="{_height(x0, v) + 5:.1f}">{v}</text>')
-    lx = PADS[0] + (PADS[1] - PADS[0]) * lead / max(1, n - 1)
-    ly = _height(lx, best)
-    gap = (f'<line class="lb-shot-gap" x1="{lx:.1f}" y1="{ly - 90:.1f}" x2="{lx:.1f}" y2="{TOP:.1f}"/>')
+    gap = ''
     first = ''
     if preview:
         batch = [m for m in data['models'] if m.get('release') == data['first_release']]
