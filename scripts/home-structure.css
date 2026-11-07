@@ -207,14 +207,14 @@ a.contributor-logo:hover { border-color: var(--home-accent); }
 .contributor-logo--yuanxing {
   display: flex;
   justify-content: center;
-  gap: 4px;
-  padding-inline: 12px;
+  gap: 6px;
+  padding: 9px 12px;
   color: var(--home-ink);
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 650;
   white-space: nowrap;
 }
-.contributor-logo--yuanxing img { flex: none; width: 40px; height: 40px; }
+.contributor-logo--yuanxing img { flex: none; width: 56px; height: 56px; }
 
 /* Introduction: the scope notes and overview figure now live on Protocol and Documents. */
 html body #introduction.intro-readable p.intro-more { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 0 !important; }
@@ -226,6 +226,8 @@ html body #introduction.intro-readable p.intro-more { display: flex; flex-wrap: 
 }
 @media (max-width: 560px) {
   .contributor-logos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .contributor-logo--yuanxing { gap: 4px; padding-inline: 5px; font-size: 18px; }
+  .contributor-logo--yuanxing img { width: 48px; height: 48px; }
   html body main #top-ten.home-leaderboard,
   html body main #tasks.home-tasks,
   html body main #news,
