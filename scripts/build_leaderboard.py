@@ -11,8 +11,12 @@ Published results use:
               "random": {... same keys ...},
               "valid":  {"clean": N, "random": N}}
 Scores are 0-100 means; success is the percentage of cases scoring 100.
+
+Each model also gets a page, models/<id>.html, built by build_model_pages.py; an optional
+"diagnosis" (the card schema of data/diagnosis-samples.json) fills the Profile column and that page.
 """
 from leaderboard_stage import render as render_stage
+from build_model_pages import build as build_model_pages, profile_cell
 import hashlib
 import json
 import math
@@ -97,7 +101,8 @@ def board(data, track):
         rows.append(
             f'<tr class="lb-result{"" if m["results"] else " lb-pending"}" data-model="{e(m["id"])}">'
             f'<td class="lb-rank">{"" if m["results"] else "—"}</td>'
-            f'<th scope="row" class="lb-model-cell"><span class="lb-model-name">{icon_html(m, 24)}<span>{e(m["name"])}</span></span></th>'
+            f'<th scope="row" class="lb-model-cell"><a class="lb-model-name" href="models/{e(m["id"])}.html">{icon_html(m, 24)}<span>{e(m["name"])}</span></a></th>'
+            f'<td class="lb-profile-cell">{profile_cell(m)}</td>'
             f'<td><span class="lb-paradigm" data-family="{e(m["type"])}">{e(data["types"][m["type"]])}</span></td>'
             f'<td class="lb-org">{e(m["org"])}</td>{"".join(cells)}<td class="lb-status-cell">{status}</td></tr>')
     settings = ''.join(f'<button type="button" data-setting="{s["key"]}" aria-pressed="{str(s["key"] == "clean").lower()}" '
@@ -119,6 +124,7 @@ def board(data, track):
         '<div class="lb-table-scroll" role="region" tabindex="0" aria-label="' + e(track['title']) + '; scroll for all columns">'
         f'<table class="lb-table lb-board-table"><caption class="lb-sr-only">{e(track["title"])}</caption>'
         '<thead><tr><th scope="col" class="lb-rank-heading">Rank</th><th scope="col" class="lb-model-heading">Model</th>'
+        '<th scope="col" title="Four-letter behavioural profile from the diagnosis card">Profile</th>'
         f'<th scope="col">Type</th><th scope="col">Contributor</th>{heads}<th scope="col">Results</th></tr></thead>'
         f'<tbody>{"".join(rows)}</tbody></table></div>{note}</section>')
 
@@ -152,7 +158,8 @@ def main():
         template = re.sub(re.escape(asset) + r'(?:\?v=[^"\s]+)?"', asset + '?v=' + version + '"', template)
     (ROOT / 'leaderboard.html').write_text(template, newline='\n')
     reported = sum(1 for m in data['models'] if m['results'])
-    print(f'Built leaderboard: {len(data["models"])} models, {reported} with published results.')
+    pages = build_model_pages(data)
+    print(f'Built leaderboard: {len(data["models"])} models, {reported} with published results; {pages} model pages.')
 
 
 if __name__ == '__main__':

@@ -42,7 +42,7 @@
   :where(.dx-hero-name, .dx-family-text h4, .lp-code, .lp-code *, .lp-type) {
     font-family: 'Pixelify Sans', LunarPixel, monospace !important;
   }
-  :where(.dx-model, .dx-code, .dx-family-key, .dx-family-tiles b, .dx-pole b, .dx-num, .dx-letter, .dx-types-key b) {
+  :where(.dx-model, .dx-code, .dx-family-key, .dx-family-tiles b, .dx-pole b, .dx-num, .dx-letter, .dx-types-key b, .lb-profile b, .mp-key b) {
     font-family: 'JetBrains Mono', ui-monospace, monospace !important;
   }
   :where(pre, code, kbd, samp, pre *, code *, kbd *, samp *) {
