@@ -318,7 +318,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
     content: "";
     position: absolute;
     inset: 0;
-    background: url('../media/images/leaderboard-lunar-campus-v4.webp') center top / auto 2400px no-repeat;
+    background: url('../media/images/leaderboard-lunar-campus-v5.webp') center top / auto 2400px no-repeat;
   }
   .lb-stage-scene {
     top: auto;
@@ -410,7 +410,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #0008 7%, #000 16%); mask-image: linear-gradient(transparent, #0008 7%, #000 16%); }
 }
 .lb-stage-sub { max-width: 30em; margin-top: 4px !important; font-size: clamp(14px, 1vw, 17px) !important; }
-.lb-shot { --launch: .16s; --fly: 1.2s; --badge: clamp(30px, 2vw, 40px); --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
+.lb-shot { --launch: .16s; --fly: 1.2s; --badge: clamp(24px, 2.5vw, 48px); --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
 .lb-shot-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .lb-shot-surface { fill: none; stroke-linecap: round; }
 .lb-shot-surface--earth { stroke: #e9f8ff; stroke-width: 5; filter: drop-shadow(0 0 6px #7cc4ef) drop-shadow(0 0 2px #fff); }
@@ -452,9 +452,17 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-models { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
 .lb-shot-model { position: absolute; width: 0; height: 0; animation: lb-shot-fly var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both; }
 .lb-shot-model a { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 5px; transform: translate(calc(var(--badge) / -2), -50%); color: #1f3a4b; text-decoration: none; pointer-events: auto; }
-.lb-shot-badge { display: grid; place-items: center; flex: none; width: var(--badge); height: var(--badge); box-sizing: border-box; border: 2px solid var(--c); border-radius: 50%; background: #fff; box-shadow: 0 3px 10px #1f3a4b40; }
-.lb-shot-badge img { width: 70%; height: 70%; object-fit: contain; }
-.lb-shot-mono { color: var(--c); font-size: 13px; font-weight: 800; }
+/* Each model rides a small rocket, turned along its route; its logo is in the porthole. */
+.lb-ship { position: relative; flex: none; width: var(--badge); height: calc(var(--badge) * 2); transform: rotate(var(--r3)); transform-origin: 50% 45%; animation: lb-ship-turn var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both; }
+.lb-ship-body { position: absolute; inset: 0; animation: lb-ship-hover 3.2s ease-in-out calc(.5s + var(--i) * var(--launch) + var(--fly)) infinite; }
+.lb-ship-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 3px 5px #1f3a4b40); }
+.lb-ship-hull { fill: #fbfcfc; stroke: #1f3a4b; stroke-width: 1.5; stroke-linejoin: round; }
+.lb-ship-nose, .lb-ship-fin { fill: var(--c); }
+.lb-ship-nozzle { fill: #8ea3ac; }
+.lb-ship-flame { position: absolute; left: 50%; top: 84%; width: 34%; height: 36%; border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%; background: radial-gradient(ellipse at 50% 20%, #fff8d6 0 22%, #ffc35a 45%, #f0772e 75%, transparent 100%); transform: translateX(-50%); transform-origin: 50% 0; animation: lb-ship-flame .16s ease-in-out infinite alternate; }
+.lb-shot-badge { position: absolute; left: 50%; top: 45%; display: grid; place-items: center; width: 58%; height: 29%; box-sizing: border-box; border: 1.5px solid #1f3a4b; border-radius: 50%; background: #fff; transform: translate(-50%, -50%) rotate(calc(-1 * var(--r3))); }
+.lb-shot-badge img { width: 74%; height: 74%; object-fit: contain; }
+.lb-shot-mono { color: var(--c); font-size: calc(var(--badge) * .24); font-weight: 800; line-height: 1; letter-spacing: -.3px; }
 .lb-shot-label { display: inline-flex; align-items: baseline; gap: 5px; padding: 1px 7px; border-radius: 6px; background: rgba(255, 255, 255, .88); color: #2b4757; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .lb-shot-label b { color: #1f3a4b; font-size: 12px; font-variant-numeric: tabular-nums; }
 .lb-shot-model:not(.is-top) .lb-shot-label { display: none; }
@@ -464,12 +472,14 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-model a:hover, .lb-shot-model a:focus-visible { z-index: 2; }
 .lb-shot-model a:hover .lb-shot-label, .lb-shot-model a:focus-visible .lb-shot-label { background: #fff; box-shadow: 0 2px 10px #1f3a4b26; }
 .lb-shot-model a:focus-visible { outline: none; }
-.lb-shot-model a:focus-visible .lb-shot-badge { outline: 2px solid var(--c); outline-offset: 2px; }
+.lb-shot-model a:hover .lb-ship-hull, .lb-shot-model a:focus-visible .lb-ship-hull { stroke: #a2451f; stroke-width: 2.4; }
 .lb-shot-model.is-top .lb-shot-label b { color: #a2451f; }
 .lb-shot-model.is-lead { z-index: 1; }
-.lb-shot-model.is-lead a { --badge: clamp(44px, 2.7vw, 56px); gap: 8px; }
-.lb-shot-model.is-lead .lb-shot-badge { border-width: 3px; border-color: #a2451f; animation: lb-shot-glow 2.6s ease-out calc(.5s + var(--n) * var(--launch) + var(--fly)) infinite; }
-.lb-shot-model.is-lead .lb-shot-mono { color: #a2451f; font-size: 17px; }
+.lb-shot-model.is-lead a { --badge: clamp(50px, 3.6vw, 68px); gap: 8px; }
+.lb-shot-model.is-lead { --c: #a2451f; }
+.lb-shot-model.is-lead .lb-shot-badge { border: 2px solid #a2451f; }
+.lb-shot-model.is-lead .lb-ship-svg { filter: drop-shadow(0 0 10px #f6b48aaa) drop-shadow(0 3px 6px #1f3a4b55); }
+.lb-shot-model.is-lead .lb-ship-flame { width: 40%; height: 50%; }
 .lb-shot-model.is-lead .lb-shot-label { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: 8px; padding: 5px 11px; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px #1f3a4b33; font-size: 13px; font-weight: 700; }
 .lb-shot-model.is-lead .lb-shot-label b { color: #a2451f; font-size: 22px; font-weight: 800; line-height: 1; }
 .lb-shot-model.is-lead .lb-shot-label small { grid-column: 1 / -1; margin-top: 3px; padding-top: 4px; border-top: 1px solid #e3e9ea; color: #1f3a4b; font-size: 12px; font-weight: 700; }
@@ -488,7 +498,10 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   66% { translate: calc(var(--k2x) * 1cqw) calc(var(--k2y) * 1cqh); }
   100% { opacity: 1; translate: 0 0; }
 }
-.lb-shot-model:not(.is-lead) a { flex-direction: column-reverse; gap: 3px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
+.lb-shot-model:not(.is-lead) a { flex-direction: column-reverse; gap: 3px; transform: translate(-50%, calc(-100% + var(--badge))); }
+@keyframes lb-ship-turn { 0% { transform: rotate(var(--r0)); } 33% { transform: rotate(var(--r1)); } 66% { transform: rotate(var(--r2)); } 100% { transform: rotate(var(--r3)); } }
+@keyframes lb-ship-hover { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@keyframes lb-ship-flame { from { scale: 1 .8; opacity: .85; } to { scale: .9 1.15; opacity: 1; } }
 @keyframes lb-shot-trail { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes lb-shot-fade { from { opacity: 0; } }
 @keyframes lb-shot-glow {
@@ -498,8 +511,8 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-tag--moon { transform: translate(calc(-100% + 56px), -50%); }
 /* Narrow desktops: the leader's label sits above its badge so it stays inside the stage. */
 @media (min-width: 761px) and (max-width: 1060px) {
-  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
-  .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 80px), -40%); }
+  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge))); }
+  .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 150px), -40%); }
 }
 /* Phones: the stations are hidden and the stage is sized to the band of art that holds every route,
    from the first launch site to the Moon; the sky above it continues behind the title. */
@@ -528,6 +541,20 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* Narrow desktops: the station tags keep their names only. Phones: the leader's label sits above it. */
 @media (min-width: 761px) and (max-width: 1180px) { .lb-stage .lb-station-gist { display: none; } }
 @media (max-width: 760px) {
-  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
-  .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 80px), -40%); }
+  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge))); }
+  .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 150px), -40%); }
+}
+/* Station tags: compact, sitting close above their arms. */
+.lb-stage .lb-station { gap: 0; padding: 4px 10px 5px; border-radius: 8px; line-height: 1.2; }
+.lb-stage .lb-station-index { font-size: clamp(8.5px, .5vw, 10px); letter-spacing: .8px; }
+.lb-stage .lb-station strong { font-size: clamp(14px, .9vw, 17px); }
+.lb-stage .lb-station-gist { font-size: clamp(10.5px, .62vw, 12px); }
+/* The Earth tag hangs left of its point, so it stays inside the stage on narrower screens. */
+.lb-stage .lb-shot-tag--earth { transform: translate(-82%, -50%); }
+@media (max-width: 760px) {
+  .lb-shot { --badge: 15px; }
+  .lb-shot-model.is-lead a { --badge: 26px; }
+  .lb-shot-mono { font-size: 4px; }
+  /* The phone window starts at artwork x 610; the tag sits at its left edge, on the ocean. */
+  .lb-stage .lb-shot-tag--earth { left: calc(622 / 1983 * 100%) !important; transform: translateY(-20%); }
 }

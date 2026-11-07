@@ -30,6 +30,7 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('.lb-shot-model').count() > 0, true, 'hero places models on routes from the Earth to the Moon');
     assert.equal(await page.locator('.lb-shot-tag--moon').count(), 1, 'hero marks the Moon surface as the target');
     assert.equal(await page.locator('.lb-shot-model.is-lead').count(), 1, 'hero names one leader');
+    assert.equal(await page.locator('.lb-shot-model .lb-ship').count(), await page.locator('.lb-shot-model').count(), 'every model rides a ship');
     await page.click('#board-e2e [data-setting="random"]');
     assert.equal(await page.getAttribute('#board-e2e [data-setting="random"]', 'aria-pressed'), 'true');
     for (const width of [320, 390, 820, 1440]) {

@@ -19,9 +19,9 @@ from html import escape
 # edge of the label sits on x, so labels near the crop edge stay inside the stage.
 STATIONS = [
     # (slug, index, name, gist, shoulder pivot x/y on the 1983x793 artwork (scene.js S), placement, leader length)
-    ('mind', '01', 'Mind', 'memory and decisions', 436, 383, 'start', 116),
-    ('mind2act', '03', 'Mind2Act', 'reasoning and execution together', 954, 594, 'side', 44),
-    ('act', '02', 'Act', 'physical execution', 1681, 400, 'end', 104),
+    ('mind', '01', 'Mind', 'memory and decisions', 436, 383, 'start', 58),
+    ('mind2act', '03', 'Mind2Act', 'reasoning and execution together', 954, 594, 'side', 28),
+    ('act', '02', 'Act', 'physical execution', 1681, 400, 'end', 52),
 ]
 
 
@@ -58,7 +58,8 @@ def _icon(m, size):
     return f'<span class="lb-podium-monogram">{escape(monogram(m["name"]))}</span>'
 
 
-# Geometry of leaderboard-lunar-campus-v4.webp in artwork units (1983 x 1053): v3 with SKY units of sky
+# Geometry of leaderboard-lunar-campus-v5.webp (v4 with the Earth enhanced, scripts/enhance_earth.py) in
+# artwork units (1983 x 1053): v3 with SKY units of sky
 # inserted between the Moon and the Earth (scripts/extend_lunar_sky.py), so v3 y + SKY = v4 y.
 W, H, SKY = 1983, 1053, 260
 # The painted camera is rolled: the Earth's horizon falls about 2.8 degrees to the right, so its crest
@@ -137,6 +138,15 @@ def _pct(x, y):
     return f'left:{x / W * 100:.3f}%;top:{y / H * 100:.3f}%'
 
 
+# A small rocket, nose up, 40 x 80; the model's logo sits in the porthole (centre 20, 36).
+SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 40 80" focusable="false">'
+        '<path class="lb-ship-fin" d="M9 44 L1 58 L1 67 L9 61Z M31 44 L39 58 L39 67 L31 61Z"/>'
+        '<path class="lb-ship-hull" d="M20 2 C30 12 31.5 30 31.5 46 L31 63 L9 63 L8.5 46 C8.5 30 10 12 20 2Z"/>'
+        '<path class="lb-ship-nose" d="M20 2 C25.5 7.5 28.2 13.5 29.4 19 L10.6 19 C11.8 13.5 14.5 7.5 20 2Z"/>'
+        '<path class="lb-ship-fin" d="M18 52 L22 52 L22 66 L18 66Z"/>'
+        '<rect class="lb-ship-nozzle" x="12.5" y="63" width="15" height="5" rx="1.5"/></svg>')
+
+
 def _shot(entries, preview, data, when):
     """entries: (name, score, model or None) in release order, launched left to right. Each model flies
     from the Earth's surface toward the Moon's and stops at the fraction of the way given by its
@@ -152,17 +162,24 @@ def _shot(entries, preview, data, when):
         ray = _ray(t)
         (ex, ey), f = ray[0][0], score / TARGET
         px, py = _at(ray, f)
-        keys = ''.join(f';--k{k}x:{(_at(ray, f * k / 3)[0] - px) / W * 100:.3f};--k{k}y:{(_at(ray, f * k / 3)[1] - py) / H * 100:.3f}'
-                       for k in range(3))
+        keys = ''
+        for k in range(4):
+            fk = f * k / 3
+            (ax, ay), (bx, by) = _at(ray, max(0.0, fk - .01)), _at(ray, min(1.0, fk + .01))
+            keys += f';--r{k}:{math.degrees(math.atan2(bx - ax, ay - by)):.1f}deg'
+            if k < 3:
+                kx, ky = _at(ray, fk)
+                keys += f';--k{k}x:{(kx - px) / W * 100:.3f};--k{k}y:{(ky - py) / H * 100:.3f}'
         lines.append(f'<path class="lb-shot-trail" d="{_path(ray, 0, f)}" pathLength="1" style="--i:{i};--c:{HUES[i % len(HUES)]}"/>'
                      f'<path class="lb-shot-rest{" is-lead" if i == lead else ""}" d="{_path(ray, f, 1)}" style="--i:{i}"/>'
                      f'<circle class="lb-shot-pad" cx="{ex:.1f}" cy="{ey:.1f}" r="4" style="--i:{i}"/>')
         badge = _icon(m, 28) if m else f'<span class="lb-shot-mono">{escape(name.split()[-1][:2])}</span>'
         href = f'models/{escape(m["id"])}.html' if m else '#board-e2e'
-        cls = 'lb-shot-model' + (' is-lead' if i == lead else '') + (' is-top' if i in top else '') 
+        cls = 'lb-shot-model' + (' is-lead' if i == lead else '') + (' is-top' if i in top else '')
         items.append(f'<li class="{cls}" style="{_pct(px, py)};--i:{i};--c:{HUES[i % len(HUES)]}{keys}">'
                      f'<a href="{href}" title="{escape(name)} · Overall {score:.1f}" aria-label="{escape(name)}: Overall {score:.1f}{" (placeholder)" if preview else ""}">'
-                     f'<span class="lb-shot-badge">{badge}</span>'
+                     f'<span class="lb-ship" aria-hidden="true"><span class="lb-ship-body">{SHIP}<span class="lb-ship-flame"></span>'
+                     f'<span class="lb-shot-badge">{badge}</span></span></span>'
                      f'<span class="lb-shot-label"><span>{escape(name)}</span><b>{score:.1f}</b>'
                      + (f'<small><i>{TARGET - score:.1f}</i> to the Moon</small>' if i == lead else '') + '</span></a></li>')
     # Contours through the same fraction of every route, extended a little past the outermost routes.
@@ -173,7 +190,6 @@ def _shot(entries, preview, data, when):
         lx, ly = pts[0]
         contours += f'<path class="lb-shot-contour" d="{d}"/><text class="lb-shot-contour-label" x="{lx - 10:.1f}" y="{ly + 4:.1f}">{v}</text>'
     # The two surfaces: the Earth's horizon under the launch sites, the Moon's limb above the routes.
-    earth = 'M' + ' L'.join(f'{x} {_earth(x) - 2:.1f}' for x in range(0, W + 1, 20))
     cx, cy, r = MOON
     moon = f'M{cx - (r * r - (cy + 0) ** 2) ** .5 + 1:.1f} 0 A{r} {r} 0 0 0 {W} {cy + (r * r - (W - cx) ** 2) ** .5:.1f}'
     first = ''
@@ -183,12 +199,11 @@ def _shot(entries, preview, data, when):
                  '<span class="lb-shot-first">First results <strong>' + escape(when) + '</strong>'
                  + ''.join(f'<span title="{escape(m["name"])} · {escape(m["org"])}">{_icon(m, 18)}</span>' for m in batch)
                  + '</span></p>')
-    (ex0, ey0) = (LAUNCH[0] + 30, _earth(LAUNCH[0] + 30) + 46)
+    (ex0, ey0) = (1850, _earth(1850) + 24)       # on the ocean right of the Act arm, clear of the tags
     mx0, my0 = _limb(1620)
     return (f'<div class="lb-shot{" lb-shot--preview" if preview else ""}" style="--n:{n};--lead:{lead}">'
             f'<svg class="lb-shot-svg" viewBox="0 0 {W} {H}" aria-hidden="true">'
             f'<path class="lb-shot-surface lb-shot-surface--moon" d="{moon}"/>'
-            f'<path class="lb-shot-surface lb-shot-surface--earth" d="{earth}"/>'
             f'<g class="lb-shot-contours">{contours}</g><g class="lb-shot-routes">{"".join(lines)}</g></svg>'
             f'<span class="lb-shot-tag lb-shot-tag--earth" style="{_pct(ex0, ey0)}"><b>0</b>Earth surface</span>'
             f'<span class="lb-shot-tag lb-shot-tag--moon" style="{_pct(mx0, my0 - 62)}"><b>{TARGET}</b>Moon surface<small>every case solved</small></span>'
@@ -215,9 +230,9 @@ def render(data):
              + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if not preview else '')
              + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
              + '<div class="lb-stage-scene">'
-             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v4.webp" alt="Lunar robotics campus under a wide sky, '
+             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v5.webp" alt="Lunar robotics campus under a wide sky, '
              'with the Earth on the horizon and the Moon above." width="1983" height="1053" fetchpriority="high">'
-             '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v3.webp" '
+             '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v3e.webp" '
              'aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video>']
     parts.append(stations())
     parts.append(shot)      # on the artwork, so routes start on the Earth's horizon and end on the Moon
