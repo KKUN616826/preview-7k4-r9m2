@@ -50,7 +50,7 @@ def ensure_head_assets(source):
 
 
 def clean_cover(case):
-    """Prefer the clean rendered stills; media/benchmark-covers frames carry camera and episode overlays."""
+    """Prefer the rendered overview stills; fall back to the head-camera cover frame."""
     for level in ('medium', 'easy', 'hard'):
         still = f'media/benchmark-overview/{case["id"]}-{level}.jpg'
         if (ROOT / still).is_file():

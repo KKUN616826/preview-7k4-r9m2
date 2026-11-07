@@ -91,7 +91,7 @@ def detail(suite, case):
             level = re.search(r'data-panel="([^"]+)"', panel)[1]
             panel = re.sub(r'(<div class="video-shell">.*?</video></div>)',
                            lambda video: '<figure class="expansion-demo">' + video[0] +
-                           f'<figcaption>{level.title()} · Multi-view demonstration</figcaption></figure>',
+                           f'<figcaption>{level.title()} · Head-camera demonstration</figcaption></figure>',
                            panel, count=1, flags=re.S)
         return panel
     content = re.sub(r'<section class="demo-panel".*?</aside></div></section>',
@@ -133,7 +133,7 @@ def page(suites, current, title, content, prefix='', is_detail=False):
         'tasks/task-pages.css', f'media/site-shell.css?v={shell_version}',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
-        'tasks/benchmark-workspace.css?v=task-search-6',
+        'tasks/benchmark-workspace.css?v=task-search-7',
         *(['tasks/benchmark-task-rows.css?v=1'] if current in {s['slug'] for s in suites} else [])])
     body_class = 'benchmark-workspace' + (' task-detail' if is_detail else '')
     if current in {suite['slug'] for suite in suites}:

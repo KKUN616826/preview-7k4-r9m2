@@ -20,7 +20,7 @@ def task_content(case):
         hidden='' if level==initial else ' hidden'
         out.append(f'<section class="demo-panel" data-panel="{level}" aria-label="{level.title()} demonstration"{hidden}><div class="demo-layout"><div>')
         if level in levels:
-            view='Multi-view' if 'triview' in levels[level].lower() else 'Head-view'
+            view='Multi-view' if 'triview' in levels[level].lower() else 'Head-camera'
             out.append(f'<figure class="expansion-demo"><div class="video-shell"><video controls playsinline preload="none" poster="../media/benchmark-expansion/{cid}/{level}.jpg" aria-label="{cid} {level.title()} demonstration"><source src="../media/task-demos/{cid}/{level}.mp4" type="video/mp4"></video></div><figcaption>{level.title()} · {view} demonstration</figcaption></figure>')
         else:
             available=' · '.join(l.title() for l in LEVELS if l in levels)
