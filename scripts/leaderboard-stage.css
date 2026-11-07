@@ -373,3 +373,92 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .lb-stage .lb-station { background: #fafcf5; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+/* Placeholder podium before the first results: dashed avatars mark entries that are not models. */
+.lb-podium-labels--preview .lb-podium-avatar { border-style: dashed; color: #3c6572; }
+.lb-podium-labels--preview .lb-podium-label { color: #2b4757; }
+/* Distance to the target: Overall score from 0 to 100, one mark per model in release order.
+   The fill runs to the leader; the dashed rest of the track is what is still unsolved. */
+.lb-race {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: max(7.5%, 76px);
+  width: min(92%, 760px);
+  box-sizing: border-box;
+  padding: 10px 24px 8px 20px;
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 14px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, .85);
+  box-shadow: 0 4px 16px #2946531f;
+  color: #2b4757;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.lb-race-head { display: flex; justify-content: space-between; align-items: center; gap: 4px 12px; flex-wrap: wrap; margin: 0; white-space: nowrap; }
+.lb-race-title { display: inline-flex; align-items: baseline; gap: 10px; color: #1f3a4b; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.lb-race-title b { color: #506c7b; font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.lb-race-first { display: inline-flex; align-items: center; gap: 7px; color: #506c7b; font-size: 11px; font-weight: 600; }
+.lb-race-first strong { color: #1f3a4b; font-size: 13px; }
+.lb-race-batch { display: inline-flex; gap: 3px; }
+.lb-race-batch > span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; background: #fff; box-shadow: 0 0 0 1px #dfe7e8; }
+.lb-race-batch img { width: 16px; height: 16px; object-fit: contain; }
+.lb-race-track { position: relative; height: 6px; margin: 28px 0 24px; border-radius: 3px; background: #e3eaeb; }
+.lb-race-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--to);
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8fb0a6, #49796b 55%, #a2451f);
+  transform-origin: left;
+  animation: lb-race-fill 2.4s cubic-bezier(.35, .7, .25, 1) .2s both;
+}
+.lb-race-gap { position: absolute; top: 50%; left: var(--from); right: 0; border-top: 1.5px dashed #a7b9bc; }
+.lb-race-gap em {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #8a4a26;
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 650;
+  white-space: nowrap;
+  animation: lb-race-in .5s 2.6s both;
+}
+.lb-race-mark {
+  position: absolute;
+  top: 50%;
+  left: var(--at);
+  width: 10px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  background: #6f8f97;
+  box-shadow: 0 1px 3px #29465333;
+  animation: lb-race-in .45s calc(.3s + var(--n) * .42s) both;
+}
+.lb-race-mark b, .lb-race-mark small, .lb-race-flag b, .lb-race-flag small { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; line-height: 1.2; }
+.lb-race-mark b, .lb-race-flag b { bottom: calc(100% + 5px); color: #2b4757; font-size: 12px; font-weight: 650; }
+.lb-race-mark small, .lb-race-flag small { top: calc(100% + 5px); color: #5d7684; font-size: 10.5px; }
+.lb-race-mark.is-lead { width: 14px; height: 14px; background: #a2451f; animation: lb-race-in .45s calc(.3s + var(--n) * .42s) both, lb-race-pulse 2.8s 3s ease-out infinite; }
+.lb-race-mark.is-lead b { color: #8a3a19; font-size: 15px; font-weight: 750; }
+.lb-race-mark.is-lead small { color: #1f3a4b; font-weight: 650; }
+.lb-race-flag { position: absolute; top: 50%; left: 100%; width: 2px; height: 20px; transform: translate(-50%, -50%); background: #1f3a4b; }
+.lb-race-flag::after { content: ""; position: absolute; top: 0; left: 2px; border-left: 9px solid #a2451f; border-block: 5px solid transparent; }
+.lb-race-flag b { bottom: calc(100% + 1px); color: #1f3a4b; font-size: 13px; font-weight: 750; }
+.lb-race-flag small { top: calc(100% + 1px); color: #1f3a4b; font-weight: 650; }
+@keyframes lb-race-fill { from { transform: scaleX(0); } }
+@keyframes lb-race-in { from { opacity: 0; scale: .4; } }
+@keyframes lb-race-pulse {
+  0% { box-shadow: 0 0 0 0 #a2451f55; }
+  60%, 100% { box-shadow: 0 0 0 10px transparent; }
+}
+@media (max-width: 760px) {
+  .lb-race { bottom: 118px; width: min(calc(100vw - 24px), 560px); padding: 8px 20px 6px 14px; }
+  .lb-race-title b { display: none; }
+  .lb-race-mark:not(.is-lead) small, .lb-race-mark:not(.is-lead) b { display: none; }
+  .lb-stage .lb-stage-caption { top: calc(var(--stage-height) * .5 - 335px); max-width: calc(100vw - 40px); font-size: 12px; white-space: normal; text-align: center; }
+}

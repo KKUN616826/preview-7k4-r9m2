@@ -9,6 +9,7 @@ import json
 import re
 from html import escape
 from pathlib import Path
+from task_codes import code
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,7 +42,7 @@ def navigation(suites, current, prefix):
         for case in suite['cases']:
             active = ' aria-current="page"' if current == case['id'] else ''
             parts.append(f'<li><a href="{prefix}tasks/{case["id"]}.html" title="{e(case["title"])}"{active}>'
-                         f'<span class="workspace-case-id">{case["id"]}</span><span>{e(case.get("nav_title", case["title"]))}</span></a></li>')
+                         f'<span class="workspace-case-id">{code(case["id"])}</span><span>{e(case.get("nav_title", case["title"]))}</span></a></li>')
         parts.append('</ul></section>')
     parts.append('</nav>')
     return ''.join(parts)
@@ -52,7 +53,7 @@ def card(case, prefix):
     return (f'<article class="task-card"><a class="task-card-link" href="{prefix}tasks/{case["id"]}.html#easy">'
             f'<div class="task-cover"><img src="{prefix}{e(case["cover"])}" loading="lazy" alt="Task demonstration">'
             f'<div class="task-hover"><p>{e(case["summary"])}</p><span>View task <span aria-hidden="true">↗</span>'
-            f'</span></div></div><h4><b>{case["id"]}</b> {e(case["title"])}</h4></a></article>')
+            f'</span></div></div><h4><b>{code(case["id"])}</b> {e(case["title"])}</h4></a></article>')
 
 
 def overview(suites):
@@ -65,12 +66,12 @@ def category(suite):
         f'<article class="benchmark-task-row"><a class="benchmark-task-link" href="../tasks/{c["id"]}.html#{c.get("initial_level", "easy")}">'
         f'<div class="benchmark-task-image"><img src="../{e(c.get("row_cover", c["cover"]))}" loading="lazy" '
         f'alt="{e(c["title"])} demonstration"></div>'
-        f'<div class="benchmark-task-copy"><p class="benchmark-task-meta">{c["id"]} · {suite["name"]}</p>'
+        f'<div class="benchmark-task-copy"><p class="benchmark-task-meta">{code(c["id"])} · {suite["name"]}</p>'
         f'<h3>{e(c["title"])}</h3><p class="benchmark-task-summary">{e(c["summary"])}</p>'
         '<span class="benchmark-task-entry">View task <span aria-hidden="true">→</span></span></div></a></article>'
         for c in suite['cases'])
     rows = ''.join(
-        f'<div><dt><a href="../tasks/{c["id"]}.html">{c["id"]} · {e(c["title"])}</a></dt>'
+        f'<div><dt><a href="../tasks/{c["id"]}.html">{code(c["id"])} · {e(c["title"])}</a></dt>'
         f'<dd>{e(c["summary"])}</dd></div>' for c in suite['cases'])
     return (f'<div class="workspace-page-head"><div class="workspace-breadcrumb"><a href="../benchmark.html">Benchmark</a> / {suite["name"]}</div>'
             f'<h1>{suite["name"]}</h1>'
@@ -107,7 +108,7 @@ def detail(suite, case):
         if not 0 <= position < len(catalog):
             return '<span class="task-adjacent-empty"></span>'
         target, group = catalog[position]
-        label = f'← Previous · {target["id"]}' if offset < 0 else f'{target["id"]} · Next →'
+        label = f'← Previous · {code(target["id"])}' if offset < 0 else f'{code(target["id"])} · Next →'
         direction = 'previous' if offset < 0 else 'next'
         accessible = ('Previous task: ' if offset < 0 else 'Next task: ') + target['title']
         return (f'<a class="task-adjacent task-adjacent-{direction}" href="{target["id"]}.html" aria-label="{e(accessible)}">'

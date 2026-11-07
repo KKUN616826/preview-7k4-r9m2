@@ -64,7 +64,7 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
 
     await card.locator('a').click();
     assert.ok(page.url().endsWith('/tasks/E.html#easy'));
-    assert.equal(await page.locator('.workspace-sidebar a[aria-current=page] .workspace-case-id').textContent(), 'E');
+    assert.equal(await page.locator('.workspace-sidebar a[aria-current=page] .workspace-case-id').textContent(), 'E1', 'E is shown as E1 next to E2');
     await page.locator('[data-level="hard"]').click();
     await page.locator('[data-panel="hard"]').waitFor({ state: 'visible' });
     await page.reload();
