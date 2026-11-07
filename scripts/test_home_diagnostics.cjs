@@ -37,6 +37,10 @@ const base = process.env.HERO_PREVIEW_URL || 'http://127.0.0.1:8765/';
       if (width >= 1024) assert.equal(new Set(tops).size, 1, 'four nodes in one row');
       if (width <= 820) assert.equal(new Set(tops).size, 4, 'nodes stacked');
       assert.match(await root.locator('.lp-disclaimer').textContent(), /not results of any model/);
+      // The model's pixel avatar follows its profile: one per round, exactly one shown.
+      assert.equal(await root.locator('.lp-avatar-img').count(), 4);
+      assert.equal(await root.locator('.lp-avatar-img.is-current').count(), 1);
+      assert.match(await root.locator('.lp-node--model .lp-code').textContent(), /^[EI][SN][TF][JP]$/);
       await page.emulateMedia({reducedMotion: 'reduce'});
       await page.waitForFunction(() => document.querySelector('#model-diagnostics').dataset.playing === 'false');
       assert.equal(await toggle.isHidden(), true);

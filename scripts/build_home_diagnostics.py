@@ -5,6 +5,10 @@ The section is placed directly after the diagnosis-card block (build_home_diagno
 """
 from pathlib import Path
 import hashlib
+import profile_v5 as pv
+
+# The model's profile after 0-3 rounds of the loop; must match CODES in home-diagnostics.js.
+LOOP_CODES = ['ISTJ', 'ESTJ', 'ESTP', 'ENTP']
 
 ROOT = Path(__file__).resolve().parents[1]
 START = '<!-- HOME DIAGNOSTICS START -->'
@@ -14,6 +18,8 @@ AFTER = '<!-- HOME_DIAGNOSIS_END -->\n'
 
 def render():
     source = (ROOT / 'scripts/home-diagnostics.html').read_text().strip()
+    avatars = ''.join(pv.avatar(code, 'lp-avatar-img', backdrop=True) for code in LOOP_CODES)
+    source = source.replace('<!-- LP_AVATARS -->', avatars)
     return START + '\n' + source + '\n' + END
 
 

@@ -18,11 +18,14 @@
   // Illustrative abilities before each round, and the view each round's prescription targets.
   const START = {mind: .58, act: .30, mind2act: .36};
   const ROUNDS = [['act', .22], ['mind2act', .2], ['mind', .16]];
-  const R = 5.6, CYCLE = R * ROUNDS.length;
-  // The four-letter profile after 0, 1, 2 and 3 rounds: Act data turns a reasoning-led model
-  // execution-led (M→A), closed-loop Mind2Act data makes it feedback-driven (P→F), and memory
-  // data settles its unstable memory lean (X→L). Tendencies, not scores.
-  const CODES = ['MXPS', 'AXPS', 'AXFS', 'ALFS'];
+  // Each round lasts R seconds; the cycle ends on a short hold that shows the finished profile.
+  const R = 5.6, HOLD = 2.4, CYCLE = R * ROUNDS.length + HOLD;
+  // The v5 profile after 0, 1, 2 and 3 rounds (letters 1 and 4 set the family): Act data turns a
+  // Mind-dominant model Act-dominant (I→E), closed-loop Mind2Act data makes it feedback-driven
+  // (J→P), and memory data moves its memory from entities to space (S→N). Tendencies, not scores.
+  const CODES = ['ISTJ', 'ESTJ', 'ESTP', 'ENTP'];
+  const TYPES = ['Bookkeeper · Feedforward Planner', 'Assembler · Procedural Executor', 'Fixer · Servo Responder', 'Tuner · Servo Responder'];
+  const avatars = $$('.lp-avatar-img'), typeEl = $('.lp-type');
   const codeEls = {card: $('.lp-card .lp-code'), model: $('.lp-profile .lp-code')};
   const shown = {};
   function setCode(where, code, prev) {
@@ -70,7 +73,7 @@
 
   function render(time, still) {
     if (!geo) layout();
-    const c = ((time % CYCLE) + CYCLE) % CYCLE, k = Math.floor(c / R), t = c - k * R;
+    const c = ((time % CYCLE) + CYCLE) % CYCLE, k = Math.min(ROUNDS.length - 1, Math.floor(c / R)), t = c - k * R;
     const [focus, gain] = ROUNDS[k], trained = t >= 5.0;
     // Abilities after the prescriptions already absorbed this cycle.
     const level = {...START};
@@ -89,6 +92,9 @@
     setCode('card', CODES[k], null);
     const fresh = trained || (k > 0 && t < 1.4);
     setCode('model', CODES[done], fresh && done > 0 ? CODES[done - 1] : null);
+    avatars.forEach((a, i) => a.classList.toggle('is-current', i === done));
+    if (typeEl.textContent !== TYPES[done]) typeEl.textContent = TYPES[done];
+    nodes[0].classList.toggle('is-final', done === CODES.length - 1);
 
     const step = t < 1.7 ? 1 : t < 2.6 ? 2 : t < 4.0 ? 3 : t < 5.0 ? 4 : 0;
     fig.dataset.step = String(step);

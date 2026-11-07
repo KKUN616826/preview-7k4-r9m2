@@ -37,11 +37,14 @@ html body main #model-diagnostics .lp-step { font-size: 11.5px !important; font-
 html body main #model-diagnostics .lp-desc { margin-top: auto !important; padding-top: 12px; font-size: 12.5px !important; line-height: 1.45 !important; color: var(--lp-muted) !important; }
 html body main #model-diagnostics .lp-title { margin-top: 4px !important; font-size: 16px !important; font-weight: 650 !important; line-height: 1.35 !important; color: var(--lp-ink) !important; }
 
-/* Model: a small robot that grows a little every round. */
+/* Model: a pixel character whose look follows its profile; it changes family as the letters move. */
 #model-diagnostics .lp-node--model { display: grid; grid-template-columns: 64px 1fr; column-gap: 12px; align-items: start; background: var(--lp-surface); }
-#model-diagnostics .lp-robot { grid-row: span 2; width: 64px; height: 64px; fill: #fff; stroke: var(--lp-ink); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; transform-origin: 50% 100%; transform: scale(var(--grow, .82)); transition: transform .8s cubic-bezier(.3, 1.5, .5, 1); }
-#model-diagnostics .lp-robot-eye { fill: var(--lp-ink); stroke: none; }
-#model-diagnostics .lp-robot-led { fill: var(--lp-focus); stroke: none; transition: fill .4s; }
+#model-diagnostics .lp-avatar { grid-row: span 3; position: relative; width: 64px; height: 64px; overflow: hidden; border-radius: 10px; }
+#model-diagnostics .lp-avatar-img { position: absolute; inset: 0; width: 64px; height: 64px; opacity: 0; transform: scale(calc(var(--grow, .82) * .9)); transform-origin: 50% 100%; transition: opacity .35s, transform .6s cubic-bezier(.3, 1.6, .5, 1); }
+#model-diagnostics .lp-avatar-img.is-current { opacity: 1; transform: scale(var(--grow, .82)); }
+#model-diagnostics .lp-node--model.is-final { border-color: #a2451f; box-shadow: 0 0 0 3px #fae8e0, 0 6px 22px #a2451f1f; }
+html body main #model-diagnostics .lp-node--model.is-final .lp-type { color: #a2451f !important; }
+html body main #model-diagnostics .lp-type { grid-column: 2; margin-top: 3px !important; font: 700 12.5px/1.3 'Pixelify Sans', 'JetBrains Mono', monospace !important; color: var(--lp-ink) !important; }
 html body main #model-diagnostics .lp-node--model .lp-title { margin-top: 2px !important; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 #model-diagnostics .lp-round { font-size: 12px; font-weight: 600; color: var(--lp-muted); white-space: nowrap; }
 #model-diagnostics .lp-skills { display: grid; gap: 5px; margin: 10px 0 0; padding: 0; list-style: none; }
@@ -109,5 +112,5 @@ html body main #model-diagnostics .lp-disclaimer { margin: 0 !important; font-si
   html body main #model-diagnostics .lp-head p:not(.home-eyebrow) { font-size: 15.5px !important; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #model-diagnostics .lp-robot, #model-diagnostics .lp-skill i::after, #model-diagnostics .lp-harness-xp i, #model-diagnostics .lp-node, #model-diagnostics .lp-data i, #model-diagnostics .lp-suites li { transition: none; }
+  #model-diagnostics .lp-avatar, #model-diagnostics .lp-avatar-img, #model-diagnostics .lp-skill i::after, #model-diagnostics .lp-harness-xp i, #model-diagnostics .lp-node, #model-diagnostics .lp-data i, #model-diagnostics .lp-suites li { transition: none; }
 }
