@@ -1,4 +1,5 @@
 """Benchmark landing page only; task content stays in scripts/benchmark/*.html."""
+import hashlib
 import json
 import re
 from html import escape, unescape
@@ -135,11 +136,11 @@ def render(suites):
     for s in suites:
         chapters = ''.join(chapter(records[c['id']], i + 1, len(s['cases'])) for i, c in enumerate(s['cases']))
         panels.append(f'''<section class="bo-suite" id="suite-{s['slug']}" data-suite-section="{s['slug']}" aria-labelledby="suite-heading-{s['slug']}">
-          <div class="bo-suite-intro"><h2 id="suite-heading-{s['slug']}">{s['name']}</h2><p>{e(s['description'])}</p></div><div class="bo-task-grid">{chapters}</div>
+          <div class="bo-suite-intro"><h2 id="suite-heading-{s['slug']}">{s['name']}</h2></div><div class="bo-task-grid">{chapters}</div>
         </section>''')
     payload = {k: v['levels'] for k, v in records.items()}
     return f'''<section class="bo-hero" aria-labelledby="benchmark-title">
-      <div class="bo-hero-copy"><p class="bo-eyebrow">Mind2Act World / Task explorer</p><h1 id="benchmark-title">Benchmark</h1>
+      <div class="bo-hero-copy"><h1 id="benchmark-title">Benchmark</h1>
         <p class="bo-hero-tagline">Reason. Execute.<br><strong>Coordinate.</strong></p>
         <dl class="bo-hero-meta"><div><dt>Tasks</dt><dd>{len(records)}</dd></div><div><dt>Capability suites</dt><dd>{len(suites)}</dd></div></dl></div>
       <div class="bo-hero-visual"><div class="bo-hero-stage">{''.join(frames)}</div>
@@ -167,6 +168,7 @@ def render(suites):
 
 
 def document(content):
+    shell_version = hashlib.sha256((ROOT / 'media/site-shell.css').read_bytes()).hexdigest()[:10]
     header = (ROOT / 'scripts/benchmark/header.html').read_text()
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -174,7 +176,7 @@ def document(content):
 <meta name="description" content="Explore 30 robotic manipulation tasks across Mind, Act, and Mind2Act. Watch demonstrations and compare available difficulty levels.">
 <link rel="icon" href="media/images/mind2act-favicon-v2.png">
 <link rel="preload" href="media/fonts/Sora-variable.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v=floating-white-4">
+<link rel="stylesheet" href="tasks/task-pages.css"><link rel="stylesheet" href="media/site-shell.css?v={shell_version}">
 <link rel="stylesheet" href="scripts/benchmark-overview.css?v=search-visible-5">
 </head><body class="benchmark-overview"><a class="bo-skip" href="#explore">Skip to tasks</a>{header}
 <main class="bo-main" id="benchmark-content">{content}</main>

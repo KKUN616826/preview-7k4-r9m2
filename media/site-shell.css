@@ -103,6 +103,35 @@ html:root body header.header #menuToggle {
 }
 html:root body header.header #menuToggle:active,
 html:root body header.header #menuToggle[aria-expanded=true] {background:var(--m2a-glass-pressed)!important}
+/* Floating Home action uses the same capsule and glass tokens as navigation. */
+html:root body button#backTop.backtop {
+ display:inline-flex;align-items:center;justify-content:center;
+ min-width:78px;min-height:44px;
+ padding:9px 18px!important;
+ border:1px solid var(--m2a-glass-edge)!important;
+ border-radius:999px!important;
+ background:var(--m2a-glass-surface)!important;
+ color:var(--m2a-glass-ink)!important;
+ box-shadow:var(--m2a-glass-shadow)!important;
+ backdrop-filter:var(--m2a-glass-filter);
+ -webkit-backdrop-filter:var(--m2a-glass-filter);
+ font:500 14px/1.3 var(--m2a-font-sans)!important;
+ transition:background .16s ease,box-shadow .16s ease,color .16s ease;
+ -webkit-tap-highlight-color:transparent;
+}
+@media(hover:hover){
+ html:root body button#backTop.backtop:hover {
+  background:var(--m2a-glass-hover),var(--m2a-glass-surface)!important;
+ }
+}
+html:root body button#backTop.backtop:active {
+ background:var(--m2a-glass-pressed),var(--m2a-glass-surface)!important;
+ box-shadow:inset 0 1px 4px #29465326,inset 0 -1px 0 #ffffff99!important;
+ transition-duration:.06s;
+}
+html:root body button#backTop.backtop:focus-visible {
+ outline:2px solid #376b80!important;outline-offset:4px!important;
+}
 @media(max-width:1040px){
  /* A filtered parent clips the dropdown's backdrop sampling. Move only the
     capsule's material to a sibling layer while its menu is open. */
@@ -162,7 +191,8 @@ body.leaderboard-explorer .lb-results .lb-view-buttons button:active {box-shadow
  @media(max-width:1040px){html:root body header.header #siteNav {background:#f8f8fa!important}}
 }
 @media(prefers-reduced-motion:reduce){
- html:root body header.header #siteNav a {transition:none!important}
+ html:root body header.header #siteNav a,
+ html:root body button#backTop.backtop {transition:none!important}
 }
 @media(prefers-reduced-transparency:reduce),(prefers-contrast:more){
  :root {--m2a-glass-surface:#f8f8fa;--m2a-glass-filter:none;--m2a-glass-edge:#718c94;--m2a-glass-selected:#25303b}
@@ -175,4 +205,37 @@ body.leaderboard-explorer .lb-results .lb-view-buttons button:active {box-shadow
 }
 @media(max-width:1040px) and (prefers-reduced-transparency:reduce){
  html:root body header.header #siteNav {background:#f8f8fa!important}
+}
+
+/* Constrain reading content below the original full-width hero sections.
+   Target one outer content shell per layout so nested columns are not scaled twice.
+   Home and all existing mobile/tablet layouts retain their approved dimensions. */
+@media (min-width: 1041px) {
+ html body { --page-content-width: min(1280px, 80vw); }
+ html body .pr-layout,
+ html body.leaderboard-explorer .lb-page > .lb-results,
+ html body.leaderboard-explorer .lb-page > .lb-protocol,
+ html body.benchmark-overview .bo-main > .bo-search,
+ html body.benchmark-overview .bo-main > .bo-explorer,
+ html body.documentation-page main.documentation,
+ html body main.news-page,
+ html body.benchmark-category .workspace-layout {
+  box-sizing: border-box;
+  width: var(--page-content-width);
+  max-width: 1280px;
+  margin-inline: auto;
+ }
+ html body main.news-page { max-width: 1024px; }
+ /* Let the current nine-column boards size their cells naturally. Legacy
+    three-column percentages otherwise squeeze headers together when narrowed. */
+ html body .lb-results .lb-board-table { table-layout: auto; }
+ html body .lb-results .lb-board-table .lb-model-heading { width: auto; min-width: 185px; }
+ html body .lb-results .lb-board-table thead tr:first-child th:nth-child(3) { width: auto; }
+ html body .lb-results .lb-board-table thead button { height: auto; padding: 0; text-align: inherit; }
+}
+/* Retain useful room for the article beside navigation on smaller desktops. */
+@media (min-width: 1041px) and (max-width: 1360px) {
+ html body.benchmark-category { --category-gutter: 28px; }
+ html body.benchmark-category .workspace-layout { grid-template-columns: 220px minmax(0, 1fr); }
+ html body.benchmark-category main.workspace-content { padding-inline: 28px; }
 }

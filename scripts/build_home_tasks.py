@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SECTION = re.compile(r'<section[^>]*\bid="tasks"[^>]*>.*?</section>', re.S)
 HEAD_ASSETS = re.compile(r'<!-- HOME_STRUCTURE_START -->.*?<!-- HOME_STRUCTURE_END -->\n?', re.S)
 # Homepage stylesheets live in <head>; builders refresh their cache-busting versions in place.
-HEAD_STYLESHEETS = ['scripts/hero-intro.css', 'scripts/home-stats.css', 'scripts/intro-typography.css',
+HEAD_STYLESHEETS = ['media/site-shell.css', 'scripts/hero-intro.css', 'scripts/home-stats.css', 'scripts/intro-typography.css',
                     'scripts/intro-suite-cards.css', 'scripts/resources-cards.css', 'scripts/home-reveal.css',
                     'scripts/home-content-width.css']
 
@@ -88,7 +88,7 @@ def render():
         '<section class="academic-section home-tasks" id="tasks" aria-labelledby="home-tasks-title">'
         '<div class="ht-head"><div><p class="home-eyebrow">Benchmark</p>'
         f'<h2 id="home-tasks-title">{total} tasks, three suites</h2>'
-        '<p>Each task has Easy, Medium and Hard configurations. Open a task to watch its demonstrations.</p></div>'
+        '</div>'
         f'<a class="home-link-button" href="benchmark.html">Browse all {total} tasks <span aria-hidden="true">→</span></a></div>'
         f'<div class="ht-strip" role="region" aria-label="All {total} tasks" tabindex="0">'
         f'<ul class="ht-track">{track}</ul><ul class="ht-track ht-track--echo" aria-hidden="true">{echo}</ul></div>'

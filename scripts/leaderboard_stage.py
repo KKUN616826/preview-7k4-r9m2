@@ -25,7 +25,7 @@ def render(data):
     when = f'{first.day} {first.strftime("%B")}'
     parts = ['<section class="lb-stage" id="leaderboard-stage" aria-labelledby="lb-title">'
              '<div class="lb-stage-head"><div><h1 id="lb-title">Leaderboard</h1>'
-             '<p>Official Mind2Act runs, with end-to-end models and coding agents ranked separately.</p></div>'
+             '</div>'
              + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if len(e2e) >= 3 else '')
              + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
              + '<div class="lb-stage-scene">'
