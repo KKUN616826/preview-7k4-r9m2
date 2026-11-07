@@ -298,3 +298,27 @@ html body main #diagnosis p.dx-disclaimer { margin: 20px 0 0 !important; font-si
   .dx-pole:first-child { text-align: left; }
   .dx-pole:last-child { text-align: right; }
 }
+
+/* Project title: the pixel wordmark of the hero, and the tagline's three views in their dimension colours. */
+html body div.project-identity h2.paper-title .paper-brand {
+  display: inline-block;
+  color: #142d3b !important;
+  font-size: clamp(46px, 5.6vw, 88px) !important;
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
+  letter-spacing: .02em !important;
+  text-shadow: .045em .045em 0 #d3e4e2;
+}
+html body div.project-identity h2.paper-title .paper-brand-two { display: inline !important; color: #49796b; }
+html body div.project-identity h2.paper-title .paper-project { margin-bottom: 18px !important; }
+html body div.project-identity h2.paper-title .title-emphasis {
+  --dim: #305f72;
+  color: var(--dim) !important;
+  font-weight: 700 !important;
+  background: linear-gradient(transparent 64%, color-mix(in srgb, var(--dim) 16%, transparent) 64%, color-mix(in srgb, var(--dim) 16%, transparent) 94%, transparent 94%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+html body div.project-identity h2.paper-title .title-emphasis--mind { --dim: #49796b; }
+html body div.project-identity h2.paper-title .title-emphasis--act { --dim: #446f86; }
+html body div.project-identity h2.paper-title .title-emphasis--mind2act { --dim: #91793d; }
