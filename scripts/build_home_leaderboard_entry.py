@@ -76,16 +76,11 @@ def column(data, track):
 
 def render():
     data = json.loads((ROOT / 'data/leaderboard-results.json').read_text())
-    any_results = any(m['results'] for m in data['models'])
-    lead = ('End-to-end models and coding agents are ranked separately: they run different case counts and interfaces.'
-            if any_results else
-            'Official results start on 11 November. End-to-end models and coding agents are ranked separately, '
-            'because they run different case counts and interfaces.')
     return (
         '<section class="academic-section home-leaderboard" id="top-ten" aria-labelledby="home-leaderboard-title">'
         '<div class="hl-head"><div><p class="home-eyebrow">Leaderboard</p>'
         '<h2 id="home-leaderboard-title">Two boards, one benchmark</h2>'
-        f'<p>{escape(lead)}</p></div></div>'
+        '</div></div>'
         f'<div class="hl-cols">{"".join(column(data, t) for t in data["tracks"])}</div>'
         '<a class="home-link-button" href="leaderboard.html">Open the leaderboard <span aria-hidden="true">→</span></a>'
         '</section>')

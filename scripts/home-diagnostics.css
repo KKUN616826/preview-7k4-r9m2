@@ -31,7 +31,6 @@ html body main #model-diagnostics {
 #model-diagnostics .md-heading { position: relative; z-index: 1; }
 #model-diagnostics .md-coming { display: inline-block; padding: 4px 12px; background: #d6e3d4; color: #2d5948; border: 1px solid #e1eddf; border-radius: 30px; font-size: 11px; font-weight: 650; letter-spacing: .07em; line-height: 1.4; text-transform: uppercase; }
 #model-diagnostics #md-title { margin: 9px 0 6px; color: #fff; font-size: clamp(30px, 2.65vw, 37px); font-weight: 700; line-height: 1.08; letter-spacing: -.045em; }
-#model-diagnostics .md-heading > p { color: #f0f2f2; font-size: 14px; line-height: 1.5; max-width: 680px; margin: 0; }
 #model-diagnostics .md-stage { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 0; align-items: center; margin: 12px 0 12px; }
 #model-diagnostics .md-framework { margin: 0 -1px 0 -12px; min-width: 0; }
 #model-diagnostics .md-framework > svg { display: block; width: 100%; overflow: visible; }
@@ -97,8 +96,7 @@ html body main #model-diagnostics {
 #model-diagnostics .md-particles i { position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); background: #f5f7f5; opacity: var(--alpha); }
 #model-diagnostics .md-particles i:nth-child(4n) { background: #d9dfe0; }
 #model-diagnostics .md-particles i:nth-child(9n) { background: #6f7b7d; }
-#model-diagnostics .md-footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding-top: 9px; border-top: 1px solid #ffffff50; }
-#model-diagnostics .md-footer > p { margin: 0; font-size: 12px; line-height: 1.5; color: #fff; }
+#model-diagnostics .md-footer { display: flex; justify-content: flex-end; align-items: center; gap: 14px; padding-top: 9px; border-top: 1px solid #ffffff50; }
 #model-diagnostics .md-controls { display: flex; align-items: center; gap: 5px; }
 #model-diagnostics .md-controls button { min-height: 30px; margin: 0; padding: 4px 10px; border: 1px solid #4c605d; border-radius: 30px; background: rgb(250 253 250 / .93); color: #345b4c; font-size: 11px; line-height: 1.5; white-space: nowrap; }
 #model-diagnostics .md-controls button:hover { background: #fff; }
@@ -180,7 +178,6 @@ html body main #model-diagnostics {
   #model-diagnostics .md-surface { padding: 20px 20px 12px; background-position: 37% center; }
   #model-diagnostics .md-surface::before { background: linear-gradient(140deg, rgb(34 38 41 / .50), rgb(55 60 63 / .30) 48%, rgb(255 255 255 / .2)); }
   #model-diagnostics #md-title { font-size: clamp(26px, 7.3vw, 36px); }
-  #model-diagnostics .md-heading > p { font-size: 13px; max-width: 380px; }
   #model-diagnostics .md-stage { grid-template-columns: minmax(0, 1fr); margin-top: 13px; gap: 8px; }
   #model-diagnostics .md-framework { margin: 0 -8px; }
   #model-diagnostics .md-framework .md-stage-label { font-size: 21px; }
@@ -190,7 +187,6 @@ html body main #model-diagnostics {
   #model-diagnostics .md-identity h3 { font-size: 21px; }
   #model-diagnostics .md-output-note { font-size: 9px; margin-top: 10px; }
   #model-diagnostics .md-footer { flex-direction: column; align-items: flex-start; gap: 9px; }
-  #model-diagnostics .md-footer > p { max-width: none; font-size: 11px; }
   #model-diagnostics .md-controls { gap: 4px; }
   #model-diagnostics .md-controls button { padding-inline: 8px; }
 }

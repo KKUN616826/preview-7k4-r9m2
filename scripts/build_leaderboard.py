@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def monogram(name):
     """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
     return ''.join(ch for ch in name if ch.isalnum())[:2]
-ASSETS = ['scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-boards.css',
+ASSETS = ['media/site-shell.css', 'scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-boards.css',
           'scripts/leaderboard-boards.js', 'scripts/leaderboard-stage-motion.js']
 
 
@@ -100,7 +100,6 @@ def board(data, track):
             f'<th scope="row" class="lb-model-cell"><span class="lb-model-name">{icon_html(m, 24)}<span>{e(m["name"])}</span></span></th>'
             f'<td><span class="lb-paradigm" data-family="{e(m["type"])}">{e(data["types"][m["type"]])}</span></td>'
             f'<td class="lb-org">{e(m["org"])}</td>{"".join(cells)}<td class="lb-status-cell">{status}</td></tr>')
-    total = track['cases_per_setting']
     settings = ''.join(f'<button type="button" data-setting="{s["key"]}" aria-pressed="{str(s["key"] == "clean").lower()}" '
                        f'title="{e(s["description"])}">{e(s["label"])}</button>' for s in data['settings'])
     note = ''
@@ -112,7 +111,7 @@ def board(data, track):
         f'<section class="lb-board" id="board-{e(track["key"])}" data-board="{e(track["key"])}" data-sort="overall" data-setting="clean" data-metric="score" '
         f'aria-labelledby="board-{e(track["key"])}-title">'
         f'<div class="lb-board-head"><div><h3 id="board-{e(track["key"])}-title">{e(track["title"])}</h3>'
-        f'<p>{e(track["summary"])} {track["cases_per_cell"]} cases per task × difficulty · {total:,} per setting.</p></div>'
+        '</div>'
         '<div class="lb-board-controls">'
         f'<div class="lb-toggle" role="group" aria-label="Setting">{settings}</div>'
         '<div class="lb-toggle" role="group" aria-label="Metric"><button type="button" data-metric="score" aria-pressed="true">Score</button>'

@@ -91,7 +91,7 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
     }
     console.log('PASS: overview, suites, all catalog tasks, links, assets, hover and history');
 
-    for (const width of [320, 390, 820, 1024, 1440, 1920, 2560]) {
+    for (const width of [320, 390, 820, 1024, 1100, 1280, 1440, 1920, 2560]) {
       await page.setViewportSize({ width, height: 1000 });
       for (const relative of ['benchmark.html', 'benchmark/mind.html', 'tasks/E.html#medium']) {
         await page.goto(new URL(relative, base).href);
@@ -101,7 +101,8 @@ const taskCount=suites.reduce((n,s)=>n+s.cases.length,0);
           const layout = await page.evaluate(() => {
             const rows = [...document.querySelectorAll('.benchmark-task-row')].map(el => el.getBoundingClientRect());
             const sidebar = document.querySelector('.workspace-sidebar').getBoundingClientRect();
-            return { right: innerWidth, left: innerWidth > 850 ? sidebar.right : 0,
+            const workspace = document.querySelector('.workspace-layout').getBoundingClientRect();
+            return { right: workspace.right, left: innerWidth > 850 ? sidebar.right : workspace.left,
               rows: rows.map(r => ({left:r.left, right:r.right, top:r.top, bottom:r.bottom})) };
           });
           layout.rows.forEach((row, i) => {

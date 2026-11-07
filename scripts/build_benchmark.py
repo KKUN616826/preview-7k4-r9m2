@@ -4,6 +4,7 @@
 Navigation and catalog content: data/benchmark-navigation.json.
 Existing task content: scripts/benchmark/<case>.html.
 """
+import hashlib
 import json
 import re
 from html import escape
@@ -72,8 +73,7 @@ def category(suite):
         f'<div><dt><a href="../tasks/{c["id"]}.html">{c["id"]} · {e(c["title"])}</a></dt>'
         f'<dd>{e(c["summary"])}</dd></div>' for c in suite['cases'])
     return (f'<div class="workspace-page-head"><div class="workspace-breadcrumb"><a href="../benchmark.html">Benchmark</a> / {suite["name"]}</div>'
-            f'<h1>{suite["name"]}</h1><p class="workspace-suite-subtitle">{suite["label"]}</p>'
-            f'<p class="benchmark-description">{suite["description"]}</p>'
+            f'<h1>{suite["name"]}</h1>'
             f'<p class="workspace-meta">{len(suite["cases"])} tasks <span>·</span> Easy / Medium / Hard</p></div>'
             f'<div class="workspace-question"><h2>What does this suite test?</h2><p>{suite["question"]}</p></div>'
             f'<section class="workspace-section" aria-labelledby="suite-tasks-title"><h2 id="suite-tasks-title">Explore the tasks</h2>'
@@ -127,8 +127,9 @@ def page(suites, current, title, content, prefix='', is_detail=False):
     nav = navigation(suites, current, prefix)
     if is_detail:
         nav = nav.replace('>Overview</a>', '><span aria-hidden="true">←</span> Benchmark overview</a>')
+    shell_version = hashlib.sha256((ROOT / 'media/site-shell.css').read_bytes()).hexdigest()[:10]
     styles = ''.join(f'<link rel="stylesheet" href="{prefix}{name}">' for name in [
-        'tasks/task-pages.css', 'media/site-shell.css?v=floating-white-4',
+        'tasks/task-pages.css', f'media/site-shell.css?v={shell_version}',
         'tasks/benchmark-catalog.css?v=2',
         *(['tasks/task-detail.css?v=case-1', 'tasks/benchmark-expansion.css?v=1'] if is_detail else []),
         'tasks/benchmark-workspace.css?v=task-search-6',
