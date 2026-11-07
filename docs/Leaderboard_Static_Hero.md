@@ -1,30 +1,18 @@
-# Leaderboard 静态首屏
+# Leaderboard 首屏
 
-本次按浅薄荷绿、雾蓝、奶油白的月球评测场参考图落地。场景是静态图片，标题、分类、模型标识、排名、成绩、站点名称和按钮是网页元素。未使用 Three.js、WebGL 或实时三维场景。
+全屏月球园区场景（`media/images/leaderboard-lunar-campus-v4.webp`，机械臂循环动画保留）。v4 在 v3 的月球和地球地平线之间加高了一段天空（`scripts/extend_lunar_sky.py`），让两者之间有空间放模型。
 
-## 内容与交互
+## 模型怎么摆
 
-- 首屏由中央前三名领奖台和 Mind / Act / Mind2Act 三张排名卡组成。
-- 排名和成绩读取同一份 `data/leaderboard-results.json`，不维护第二套成绩。
-- 顶部分类、场景上的分类按钮和排名卡标题均可切换当前评测分类。
-- 点击模型后跳至完整表格并展开对应详情；必要时清除表格筛选，确保模型可见。
-- 下方表格切换分类时，首屏同步切换；浏览器返回和带参数的链接保留同样行为。
-- 首屏明确按 Score 排序，不虚构综合总榜。
-- 现有结果仍为原有 15 任务的快照，未给新增任务附加成绩。
-- 手机端保留当前分类的前三名，其他分类可点击展开。
+- 每个已发布成绩的 VLA / WAM 模型一条航线：从地球地平线上的发射点（地球表面，0 分）飞向月球下沿的着陆点（月球表面，100 分 = 所有 case 全部完成）。
+- 发射点从左到右按发布顺序排列；航线先竖直上升再转向月球，各自独立，不会挤成一条线。
+- 模型停在航线全长的「Overall 分数 %」处：已飞部分是彩色实线，剩下到月球的部分是虚线。25 / 50 / 75 的等高线连接所有航线上的同一比例。
+- 第一名放大并标出名字、分数和「离月球还差多少」，前三名标分数，其余悬停或聚焦时显示。
+- 少于 3 个成绩时显示匿名占位模型（Model A–N），标题下注明 "placeholder … not results" 和首批发布日期。
 
 ## 文件
 
-- 场景图片：`media/images/leaderboard-lunar-campus-v2.webp`
-- 首屏内容生成：`scripts/leaderboard_stage.py`
+- 首屏生成：`scripts/leaderboard_stage.py`（几何参数 `MOON`、`HORIZON`、`LAUNCH`、`LANDING`，单位为 v4 的 1983 × 1053）
 - 样式：`scripts/leaderboard-stage.css`
-- 分类与榜单联动：`scripts/leaderboard-stage-ui.js`、`scripts/leaderboard-explorer.js`
+- 背景加高：`scripts/extend_lunar_sky.py`
 - 重新生成页面：`python3 scripts/build_leaderboard.py`
-
-## 场景素材
-
-使用内置 imagegen 编辑经确认的参考图，移除导航、标题、排名卡、模型徽标、模型名称、分数和站点文字；保留三维机械臂场景、奶油白/浅薄荷绿/雾蓝配色，以及中央 2/1/3 领奖台。生成一张约 2.5:1 的宽幅无界面场景图，供真实 HTML 文本叠加。原始参考生成文件名为 `exec-89196ea0-329b-436d-aff7-2e99db78515a.png`，最终场景素材生成文件名为 `exec-05ee13d5-6305-4727-a0ed-3df30a23fe94.png`。
-
-## 验证
-
-已检查三类前三名及全部成绩与源数据一致、分类与表格联动、模型详情、筛选重置、浏览历史、资源加载、桌面首屏高度，以及 320–1920px 的响应式布局。完整榜单的原有指标排序、零分与缺失值区分、筛选和详情检查继续通过。

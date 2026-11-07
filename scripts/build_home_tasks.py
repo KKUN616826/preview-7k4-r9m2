@@ -10,6 +10,7 @@ import json
 import re
 from html import escape
 from pathlib import Path
+from task_codes import code
 
 ROOT = Path(__file__).resolve().parents[1]
 SECTION = re.compile(r'<section[^>]*\bid="tasks"[^>]*>.*?</section>', re.S)
@@ -49,7 +50,7 @@ def ensure_head_assets(source):
 
 
 def clean_cover(case):
-    """Prefer the clean rendered stills; media/benchmark-covers frames carry camera and episode overlays."""
+    """Prefer the rendered overview stills; fall back to the head-camera cover frame."""
     for level in ('medium', 'easy', 'hard'):
         still = f'media/benchmark-overview/{case["id"]}-{level}.jpg'
         if (ROOT / still).is_file():
@@ -63,7 +64,7 @@ def tile(case, slug, hidden=False):
     focus = ' tabindex="-1"' if hidden else ''
     return (f'<li class="ht-tile ht-tile--{slug}"><a href="tasks/{cid}.html" title="{escape(case["title"])}"{focus}>'
             f'<img src="{escape(clean_cover(case))}" width="720" height="540" alt="" loading="lazy" decoding="async">'
-            f'<span class="ht-tile-text"><span class="ht-id">{cid}</span>'
+            f'<span class="ht-tile-text"><span class="ht-id">{escape(code(case["id"]))}</span>'
             f'<span class="ht-name">{escape(case["nav_title"])}</span></span></a></li>')
 
 

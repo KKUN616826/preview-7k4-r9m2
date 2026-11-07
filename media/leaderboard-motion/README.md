@@ -1,6 +1,6 @@
 # Local three-station animation source
 
-`campus-loop.mp4` is a silent, eight-second, 2880 × 1152 H.264 loop (CRF 20) used behind the live leaderboard controls and scores. It is rendered from `scene.html` and `scene.js`, with the campus artwork (`media/images/leaderboard-lunar-campus-v2.webp`) and two repair plates (`clean-plate-front.webp`, `clean-plate-sides.webp`). No external video service or Three.js is required.
+`campus-loop.mp4` is a silent, eight-second, 2880 × 1152 H.264 loop (CRF 20) used behind the live leaderboard controls and scores. It is rendered from `scene.html` and `scene.js`, with the campus artwork (`media/images/leaderboard-lunar-campus-v3.webp`) and two repair plates (`clean-plate-front.webp`, `clean-plate-sides.webp`). No external video service or Three.js is required.
 
 Each arm illustrates one evaluation dimension, and the leaderboard labels the stations with the dimension only (`STATIONS` in `scripts/leaderboard_stage.py`, linking to the suite on `benchmark.html`). Each label is a light tag in the style of the stage cards, on a thin leader whose marker sits on the arm's fixed shoulder pivot (`S` in `scene.js`); a tag the stage crop pushes past the edge is hidden:
 
@@ -19,3 +19,13 @@ The website keeps its static poster when reduced motion is requested or video lo
 ## Resolution (2026-11-06)
 
 The original artwork and plates were 1983 × 793. They were upscaled 2× (3966 × 1586) with Real-ESRGAN x4plus (ONNX, 64-pixel tiles with 8-pixel overlap, then Lanczos down to 2×) and stored as WebP. The loop is rendered at device scale 1.5 (2880 × 1152) so it stays sharp on wide and high-density screens. The previous 1983 × 793 PNG remains in git history (`media/images/leaderboard-lunar-campus-v1.png`).
+
+## Launch towers (2026-11-07)
+
+`leaderboard-lunar-campus-v3.webp` is v2 with the painted 1, 2 and 3 removed from the three central pillars, so they read as launch towers rather than a three-place podium. `scripts/erase_podium_digits.py` fills each digit box by vertical interpolation down each column (the cylinders are shaded across, not down), adds faint grain and feathers the edges; no other pixel changes. The loop was re-rendered from the same scene with v3.
+
+## Wider sky (2026-11-07)
+
+`leaderboard-lunar-campus-v4.webp` is v3 with 260 artwork units of sky inserted between the Moon and the Earth's horizon (`scripts/extend_lunar_sky.py`): the Moon stays at the top, everything below it moves down, and the new band is v3's upper sky blurred, stretched and re-starred. The scene is now 1983 × 1053. The loop is unchanged; on the page it sits over the lower 793 units and is masked to v3's rows below its clean sky, with the Moon's disc cut out, so the still artwork shows the Moon and the new sky.
+
+On it, `_shot` in `scripts/leaderboard_stage.py` draws one flight per reported VLA / WAM model, from a launch site on the Earth's horizon (0) to a landing site on the Moon's lower limb (100, every case solved), launch sites left to right in release order. Each climbs, then turns toward the Moon; the model stops at the fraction of the flight's length given by its Overall score, and a dashed line carries on to the Moon. Contours join 25, 50 and 75 percent of every flight. Before three results exist, the flights carry anonymous placeholder entries, captioned as not results.

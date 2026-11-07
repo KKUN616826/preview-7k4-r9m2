@@ -318,7 +318,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
     content: "";
     position: absolute;
     inset: 0;
-    background: url('../media/images/leaderboard-lunar-campus-v2.webp') center top / auto 2400px no-repeat;
+    background: url('../media/images/leaderboard-lunar-campus-v4.webp') center top / auto 2400px no-repeat;
   }
   .lb-stage-scene {
     top: auto;
@@ -372,4 +372,135 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .lb-stage .lb-station { background: #fafcf5; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+/* Earth to Moon. The artwork (v4) has the Moon at the top and the Earth's horizon low; each model
+   flies a straight route from a launch site on the horizon toward the Moon's surface and stops at
+   the fraction given by its Overall score. Everything is laid out in artwork units on the scene. */
+.lb-stage-scene { width: max(100%, calc(var(--stage-height) * 1983 / 1053)); aspect-ratio: 1983 / 1053; }
+/* The loop is the v3 frame, so it covers the scene below the inserted sky. Only its rows below v3's
+   clean sky (220 of 793) are shown, minus the Moon's disc; the still artwork stays visible under it,
+   with the Moon in place and the stretched sky above. */
+.lb-stage-motion-video {
+  top: 24.69%;
+  height: 75.31%;
+  -webkit-mask-image: linear-gradient(transparent 28.4%, #000 31.5%), radial-gradient(ellipse 30.6% 76.4% at 85.65% -46.6%, transparent 99%, #000 100.5%);
+  mask-image: linear-gradient(transparent 28.4%, #000 31.5%), radial-gradient(ellipse 30.6% 76.4% at 85.65% -46.6%, transparent 99%, #000 100.5%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.lb-stage[data-motion-ready=true] .lb-stage-art { visibility: visible; }
+.lb-stage-sub { max-width: 30em; margin-top: 4px !important; font-size: clamp(14px, 1vw, 17px) !important; }
+.lb-shot { --launch: .16s; --fly: 1.2s; --badge: clamp(30px, 2vw, 40px); --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
+.lb-shot-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lb-shot-surface { fill: none; stroke-linecap: round; }
+.lb-shot-surface--earth { stroke: #e9f8ff; stroke-width: 5; filter: drop-shadow(0 0 6px #7cc4ef) drop-shadow(0 0 2px #fff); }
+.lb-shot-surface--moon { stroke: #fff6e4; stroke-width: 4; filter: drop-shadow(0 0 7px #f3c98f) drop-shadow(0 0 2px #fff); }
+.lb-shot-contour { fill: none; stroke: #315f72; stroke-width: 1.2; stroke-dasharray: 2 8; opacity: .35; }
+.lb-shot-contour-label { fill: #315f72; font-size: 15px; font-weight: 700; text-anchor: end; paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+.lb-shot-trail {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  filter: drop-shadow(0 0 2px #fff);
+  animation: lb-shot-trail var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both;
+}
+.lb-shot-rest { fill: none; stroke: #1f3a4b; stroke-width: 1.4; stroke-dasharray: 2 6; stroke-linecap: round; opacity: .28; animation: lb-shot-fade .6s ease-out calc(.5s + var(--i) * var(--launch) + var(--fly)) both; }
+.lb-shot-rest.is-lead { stroke: #a2451f; stroke-width: 2.4; opacity: .85; }
+.lb-shot-pad { fill: #fff; stroke: #315f72; stroke-width: 1.5; }
+.lb-shot-tag {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px 4px 4px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 4px 14px #1f3a4b24;
+  color: #1f3a4b;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.lb-shot-tag b { display: grid; place-items: center; min-width: 32px; height: 26px; padding: 0 4px; border-radius: 7px; color: #fff; font-size: 14px; font-weight: 800; }
+.lb-shot-tag small { margin-left: 4px; padding-left: 8px; border-left: 1px solid #d6dfe0; color: #506c7b; font-size: 12px; font-weight: 600; }
+.lb-shot-tag--earth { transform: translate(-50%, -50%); }
+.lb-shot-tag--earth b { background: #2f6f9f; }
+.lb-shot-tag--moon { transform: translate(-50%, -50%); }
+.lb-shot-tag--moon b { background: #a2451f; }
+.lb-shot-models { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
+.lb-shot-model { position: absolute; width: 0; height: 0; animation: lb-shot-fly var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both; }
+.lb-shot-model a { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 5px; transform: translate(calc(var(--badge) / -2), -50%); color: #1f3a4b; text-decoration: none; pointer-events: auto; }
+.lb-shot-badge { display: grid; place-items: center; flex: none; width: var(--badge); height: var(--badge); box-sizing: border-box; border: 2px solid var(--c); border-radius: 50%; background: #fff; box-shadow: 0 3px 10px #1f3a4b40; }
+.lb-shot-badge img { width: 70%; height: 70%; object-fit: contain; }
+.lb-shot-mono { color: var(--c); font-size: 13px; font-weight: 800; }
+.lb-shot-label { display: inline-flex; align-items: baseline; gap: 5px; padding: 1px 7px; border-radius: 6px; background: rgba(255, 255, 255, .88); color: #2b4757; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.lb-shot-label b { color: #1f3a4b; font-size: 12px; font-variant-numeric: tabular-nums; }
+.lb-shot-model:not(.is-top) .lb-shot-label { display: none; }
+.lb-shot-model a:hover .lb-shot-label, .lb-shot-model a:focus-visible .lb-shot-label { display: inline-flex; }
+.lb-shot-model:not(.is-lead) .lb-shot-label > span { display: none; }
+.lb-shot-model a:hover .lb-shot-label > span, .lb-shot-model a:focus-visible .lb-shot-label > span { display: inline; }
+.lb-shot-model a:hover, .lb-shot-model a:focus-visible { z-index: 2; }
+.lb-shot-model a:hover .lb-shot-label, .lb-shot-model a:focus-visible .lb-shot-label { background: #fff; box-shadow: 0 2px 10px #1f3a4b26; }
+.lb-shot-model a:focus-visible { outline: none; }
+.lb-shot-model a:focus-visible .lb-shot-badge { outline: 2px solid var(--c); outline-offset: 2px; }
+.lb-shot-model.is-top .lb-shot-label b { color: #a2451f; }
+.lb-shot-model.is-lead { z-index: 1; }
+.lb-shot-model.is-lead a { --badge: clamp(44px, 2.7vw, 56px); gap: 8px; }
+.lb-shot-model.is-lead .lb-shot-badge { border-width: 3px; border-color: #a2451f; animation: lb-shot-glow 2.6s ease-out calc(.5s + var(--n) * var(--launch) + var(--fly)) infinite; }
+.lb-shot-model.is-lead .lb-shot-mono { color: #a2451f; font-size: 17px; }
+.lb-shot-model.is-lead .lb-shot-label { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: 8px; padding: 5px 11px; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px #1f3a4b33; font-size: 13px; font-weight: 700; }
+.lb-shot-model.is-lead .lb-shot-label b { color: #a2451f; font-size: 22px; font-weight: 800; line-height: 1; }
+.lb-shot-model.is-lead .lb-shot-label small { grid-column: 1 / -1; margin-top: 3px; padding-top: 4px; border-top: 1px solid #e3e9ea; color: #1f3a4b; font-size: 12px; font-weight: 700; }
+.lb-shot-model.is-lead .lb-shot-label small i { color: #a2451f; font-style: normal; }
+/* Preview caption and the first batch, under the page title. */
+.lb-shot-note { display: grid; justify-items: start; gap: 4px; width: fit-content; margin-top: 12px !important; padding: 6px 12px; border-radius: 10px; background: rgba(255, 255, 255, .8); color: #506c7b; font-size: 12px !important; line-height: 1.4 !important; pointer-events: auto; }
+.lb-shot-note strong { color: #1f3a4b; }
+.lb-shot-first { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; }
+.lb-shot-first strong { margin-right: 4px; }
+.lb-shot-first > span { display: inline-grid; place-items: center; width: 20px; height: 20px; }
+.lb-shot-first img { width: 17px; height: 17px; object-fit: contain; }
+@keyframes lb-shot-fly {
+  0% { opacity: 0; translate: calc(var(--k0x) * 1cqw) calc(var(--k0y) * 1cqh); }
+  10% { opacity: 1; }
+  33% { translate: calc(var(--k1x) * 1cqw) calc(var(--k1y) * 1cqh); }
+  66% { translate: calc(var(--k2x) * 1cqw) calc(var(--k2y) * 1cqh); }
+  100% { opacity: 1; translate: 0 0; }
+}
+.lb-shot-model:not(.is-lead) a { flex-direction: column-reverse; gap: 3px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
+@keyframes lb-shot-trail { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes lb-shot-fade { from { opacity: 0; } }
+@keyframes lb-shot-glow {
+  0% { box-shadow: 0 0 0 0 #a2451f88, 0 4px 14px #1f3a4b40; }
+  70%, 100% { box-shadow: 0 0 0 16px #a2451f00, 0 4px 14px #1f3a4b40; }
+}
+.lb-shot-tag--moon { transform: translate(calc(-100% + 56px), -50%); }
+/* Narrow desktops: the leader's label sits above its badge so it stays inside the stage. */
+@media (min-width: 761px) and (max-width: 1060px) {
+  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) / 2)); }
+}
+/* Phones: the stations are hidden and the stage is sized to the band of art that holds every route,
+   from the first launch site to the Moon; the sky above it continues behind the title. */
+@media (max-width: 760px) {
+  .lb-stage { --scene-w: calc(100vw * 1983 / 1130); --stage-height: calc(var(--scene-w) * 1053 / 1983 + 300px); height: var(--stage-height); }
+  .lb-stage-scene { top: auto; bottom: 0; left: 0; width: var(--scene-w); transform: translateX(calc(var(--scene-w) * -610 / 1983)); mask-image: none; -webkit-mask-image: none; }
+  .lb-stage-art, .lb-stage-motion-video { -webkit-mask-image: none; mask-image: none; }
+  .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 40px); mask-image: linear-gradient(transparent, #000 40px); }
+  .lb-stage-motion-video, .lb-stage .lb-stage-motion-toggle { display: none !important; }
+  .lb-shot { --badge: 22px; }
+  .lb-shot-mono { font-size: 10px; }
+  .lb-shot-model:not(.is-lead) .lb-shot-label { display: none; }
+  .lb-shot-model.is-lead a { --badge: 34px; }
+  .lb-shot-model.is-lead .lb-shot-label { padding: 3px 8px; font-size: 11px; }
+  .lb-shot-model.is-lead .lb-shot-label b { font-size: 16px; }
+  .lb-shot-model.is-lead .lb-shot-label small { font-size: 10px; }
+  .lb-shot-contour-label { font-size: 26px; }
+  .lb-shot-tag { padding: 3px 8px 3px 3px; font-size: 11px; }
+  .lb-shot-tag b { min-width: 26px; height: 22px; font-size: 12px; }
+  .lb-shot-tag small { display: none; }
+  .lb-shot-tag--moon { transform: translate(calc(-100% + 10px), 10%); }
+  .lb-shot-tag--earth { transform: translate(0, -30%); }
+  .lb-shot-contour-label { display: none; }
+  .lb-stage-footer { position: absolute; bottom: 12px; }
 }

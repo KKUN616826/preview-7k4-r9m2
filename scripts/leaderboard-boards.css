@@ -13,7 +13,7 @@
 .lb-toggle button[aria-pressed="true"] { background: #1f3a4b; color: #fff; }
 .lb-toggle button:focus-visible, .lb-board-table thead button:focus-visible { outline: 2px solid #4e7c70; outline-offset: 2px; }
 
-.lb-board-table { min-width: 980px; }
+.lb-board-table { min-width: 1040px; }
 .lb-board-table thead th { padding: 10px 12px; border-bottom: 1px solid #d6dfdc; background: #f4f7f6; color: #5a7380; font-size: 12px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; white-space: nowrap; }
 .lb-board-table thead th.lb-number { text-align: right; }
 .lb-board-table thead button { padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
@@ -83,3 +83,20 @@
 .lb-board-table thead tr:first-child th { position: static; height: auto; }
 .lb-results .lb-board-table thead th { height: auto !important; padding: 11px 12px !important; }
 .lb-podium-label, .lb-podium-label:hover { text-decoration: none; color: inherit; }
+/* Model names and the Profile column open the model page (models/<id>.html) with its diagnosis card. */
+a.lb-model-name { text-decoration: none; }
+a.lb-model-name:hover span { text-decoration: underline; text-underline-offset: 3px; }
+.lb-profile { display: inline-flex; align-items: center; gap: 7px; padding: 3px 11px 3px 4px; border: 1px solid color-mix(in srgb, var(--fam) 28%, #fff); border-radius: 999px; background: var(--fam-tint); color: var(--fam-ink); text-decoration: none; white-space: nowrap; transition: border-color .15s, box-shadow .15s; }
+.lb-profile:hover { border-color: var(--fam); box-shadow: 0 2px 8px color-mix(in srgb, var(--fam) 22%, transparent); }
+.lb-profile:focus-visible { outline: 2px solid var(--fam); outline-offset: 2px; }
+.lb-profile-avatar { width: 24px; height: 24px; flex: none; image-rendering: pixelated; }
+.lb-profile b { color: var(--fam); font-size: 13px; font-weight: 700; letter-spacing: .5px; }
+.lb-profile span { font-size: 12px; font-weight: 600; }
+.lb-profile.is-pending { --fam: #9aa8ae; --fam-ink: #6b8290; --fam-tint: #f6f8f7; border-style: dashed; }
+.lb-reading-profile { grid-column: 1 / -1; }
+.lb-reading-profile a { color: #4e7c70; font-weight: 600; }
+/* Tighter cells so the extra Profile column still fits a 1440px window without scrolling. */
+.lb-results .lb-board-table thead th { padding-inline: 9px !important; }
+.lb-board-table td, .lb-board-table th[scope="row"] { padding-inline: 9px; }
+.lb-board-table td.lb-org { min-width: 110px; max-width: 140px; white-space: normal; line-height: 1.35; }
+.lb-board-table .lb-model-name span { max-width: 150px; white-space: normal; line-height: 1.3; }

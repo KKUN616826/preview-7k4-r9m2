@@ -25,9 +25,9 @@
         "Physical keypad entry"
       ],
       "media": {
-        "easy": "E2_easy_e2-arithmetic-easy-2001-b857043da0b1.mp4",
-        "medium": "E2_medium_e2-arithmetic-medium-2037-d2fdb3bd9b2a.mp4",
-        "hard": "E2_hard_e2-arithmetic-hard-2027-dc8078be1b26.mp4"
+        "easy": "E2_easy.mp4",
+        "medium": "E2_medium.mp4",
+        "hard": "E2_hard.mp4"
       },
       "instructions": {
         "easy": "Observe the visible entity-value associations, remember them, decode the physical expression, and enter its exact result using only the closed gripper fingertips on the nine keys.",
@@ -49,9 +49,9 @@
         "Trial revision"
       ],
       "media": {
-        "easy": "F2_easy_F2-easy-seed66-f2-semantic50-v1.mp4",
-        "medium": "F2_medium_F2-medium-seed90-f2-semantic50-v1.mp4",
-        "hard": "F2_hard_F2-hard-seed295-f2-semantic50-v1.mp4"
+        "easy": "F2_easy.mp4",
+        "medium": "F2_medium.mp4",
+        "hard": "F2_hard.mp4"
       },
       "instructions": {
         "easy": "Place one colored block in each slot, then press and release the confirmation button on the right. The brief feedback gives the number of correct positions. Infer the hidden permutation in as few attempts as possible.",
@@ -73,9 +73,9 @@
         "Placement sequence"
       ],
       "media": {
-        "easy": "P2_easy_P_STEAMER_easy_train_048.mp4",
-        "medium": "P2_medium_P_STEAMER_medium_train_007.mp4",
-        "hard": "P2_hard_P_STEAMER_hard_train_049.mp4"
+        "easy": "P2_easy.mp4",
+        "medium": "P2_medium.mp4",
+        "hard": "P2_hard.mp4"
       },
       "instructions": {
         "easy": "Remove the lid, remember the dim sum order as you unstack the baskets from top to bottom onto the mats, then restack them in the same order from bottom to top on the left steamer pot and replace the lid.",
@@ -97,9 +97,9 @@
         "Hidden constraints"
       ],
       "media": {
-        "easy": "S2_easy_S2-easy-seed370-s2-semantic50-v1.mp4",
-        "medium": "S2_medium_S2-medium-seed856-s2-semantic50-v1.mp4",
-        "hard": "S2_hard_S2-hard-seed4016-s2-semantic50-v1.mp4"
+        "easy": "S2_easy.mp4",
+        "medium": "S2_medium.mp4",
+        "hard": "S2_hard.mp4"
       },
       "instructions": {
         "easy": "Remember the briefly lit forbidden cells. Press and release the arrow buttons to move one cell per press. Reach the ring without entering a forbidden cell or leaving the board. Do not touch the slider.",
@@ -121,9 +121,9 @@
         "Pair matching"
       ],
       "media": {
-        "easy": "M2_easy_memory_train_supplement_v1_easy_s010015.mp4",
-        "medium": "M2_medium_memory_train_supplement_v1_medium_s010001.mp4",
-        "hard": "M2_hard_memory_hard_s000132.mp4"
+        "easy": "M2_easy.mp4",
+        "medium": "M2_medium.mp4",
+        "hard": "M2_hard.mp4"
       },
       "instructions": {
         "easy": "Press and release a card's yellow button to turn it face up, revealing at most two unmatched cards at a time. Matching pictures stay face up; mismatches turn face down automatically. Wait until the flip or pair result finishes before selecting another card. Remember the pictures and their positions and match every pair.",
@@ -145,9 +145,9 @@
         "Stable release"
       ],
       "media": {
-        "easy": "PR4_easy_PR4-easy-train-seed410049.mp4",
-        "medium": "PR4_medium_PR4-medium-train-seed420036.mp4",
-        "hard": "PR4_hard_PR4-hard-train-seed430046.mp4"
+        "easy": "PR4_easy.mp4",
+        "medium": "PR4_medium.mp4",
+        "hard": "PR4_hard.mp4"
       },
       "instructions": {
         "easy": "Fold the square cloth along its centerline into the displayed rectangle, release it fully and leave it flat and stable.",
@@ -169,9 +169,9 @@
         "Stamp release"
       ],
       "media": {
-        "easy": "PR5_easy_PR5-easy-train-100003-distinct-card-y-v1.mp4",
-        "medium": "PR5_medium_PR5-medium-train-100011-distinct-card-y-v1.mp4",
-        "hard": "PR5_hard_PR5-hard-train-068-source-semantic-coverage-v1.mp4"
+        "easy": "PR5_easy.mp4",
+        "medium": "PR5_medium.mp4",
+        "hard": "PR5_hard.mp4"
       },
       "instructions": {
         "easy": "Pick up square stamp A and stamp once, fully inside the blue box, with its arrow aligned to the target arrow. Do not drag or stamp twice. Return the stamp to its holder in its original orientation and release it.",
@@ -193,9 +193,9 @@
         "Chain propagation"
       ],
       "media": {
-        "easy": "PR8_easy_PR8-easy-seed48-source-seeds-v1.mp4",
-        "medium": "PR8_medium_PR8-medium-seed39-source-seeds-v1.mp4",
-        "hard": "PR8_hard_PR8-hard-seed19-source-seeds-v1.mp4"
+        "easy": "PR6_easy.mp4",
+        "medium": "PR6_medium.mp4",
+        "hard": "PR6_hard.mp4"
       },
       "instructions": {
         "easy": "Stand the dominos anywhere inside the continuous curve band, in order along the curve. Push the first one so the chain of contacts rings the bell. Repair fallen or stalled segments using as few pushes as possible.",
@@ -217,9 +217,9 @@
         "Timely withdrawal"
       ],
       "media": {
-        "easy": "FR3_easy_FR3-phase-v1-easy-p1108.mp4",
-        "medium": "FR3_medium_FR3-phase-v1-medium-p1074.mp4",
-        "hard": "FR3_hard_FR3-phase-v1-hard-p1644.mp4"
+        "easy": "DR3_easy.mp4",
+        "medium": "DR3_medium.mp4",
+        "hard": "DR3_hard.mp4"
       },
       "instructions": {
         "easy": "Grasp the eraser, time the moving gate, and pass through its opening to place the eraser stably in the green tray behind it. Withdraw the whole gripper before the gate closes. Do not touch the gate, frame or rails.",
@@ -241,9 +241,9 @@
         "Controlled placement"
       ],
       "media": {
-        "easy": "PR7_easy_PR7-easy-train-s710031.mp4",
-        "medium": "PR7_medium_PR7-medium-train-s711018.mp4",
-        "hard": "PR7_hard_PR7-hard-train-s712044.mp4"
+        "easy": "DR4_easy.mp4",
+        "medium": "DR4_medium.mp4",
+        "hard": "DR4_hard.mp4"
       },
       "instructions": {
         "easy": "Carry the tray with two balls by its handle to the delivery platform, keeping each ball inside its marked circle. Set the tray down stably, release it and retreat. Do not touch the balls or hit other objects.",
@@ -265,9 +265,9 @@
         "Balanced placement"
       ],
       "media": {
-        "easy": "CP06_easy_cp06-easy-train-031.mp4",
-        "medium": "CP06_medium_cp06-medium-train-028.mp4",
-        "hard": "CP06_hard_cp06-hard-train-041.mp4"
+        "easy": "CP06_easy.mp4",
+        "medium": "CP06_medium.mp4",
+        "hard": "CP06_hard.mp4"
       },
       "instructions": {
         "easy": "Move all fruit and vegetables from the left tray onto the left scale pan. Use the weights on the right to balance the scale, then release them and keep the pointer in the green zone.",
@@ -289,9 +289,9 @@
         "Structural continuity"
       ],
       "media": {
-        "easy": "CP07_easy_bridge_easy_s000113.mp4",
-        "medium": "CP07_medium_bridge_train_supplement_v1_medium_s010036.mp4",
-        "hard": "CP07_hard_bridge_train_supplement_v2_hard_s010118.mp4"
+        "easy": "CP07_easy.mp4",
+        "medium": "CP07_medium.mp4",
+        "hard": "CP07_hard.mp4"
       },
       "instructions": {
         "easy": "Build a stable bridge across the gap with continuous wheel paths on both sides. Release the bridge pieces, then press and release the button and let the car drive across to the opposite bank.",
@@ -313,9 +313,9 @@
         "Block placement"
       ],
       "media": {
-        "easy": "CP08_easy_CP08-easy-train-2002-source-semantic-coverage-v1.mp4",
-        "medium": "CP08_medium_CP08-medium-train-2071-source-semantic-coverage-v1.mp4",
-        "hard": "CP08_hard_CP08-hard-train-2053-source-semantic-coverage-v1.mp4"
+        "easy": "CP08_easy.mp4",
+        "medium": "CP08_medium.mp4",
+        "hard": "CP08_hard.mp4"
       },
       "instructions": {
         "easy": "Remember the briefly shown front view, then build the structure from memory, centred in the marked area and aligned with the table reference line. Fix any misplaced lower blocks. Use only reference-colour blocks and release everything.",
@@ -337,9 +337,9 @@
         "Drawing control"
       ],
       "media": {
-        "easy": "CP09_easy_CP09-cov1-easy-f4-i3-l0.mp4",
-        "medium": "CP09_medium_seed031.mp4",
-        "hard": "CP09_hard_seed045.mp4"
+        "easy": "CP09_easy.mp4",
+        "medium": "CP09_medium.mp4",
+        "hard": "CP09_hard.mp4"
       },
       "instructions": {
         "easy": "Remember the briefly shown original drawing on the whiteboard. Erase the added strokes and redraw any original strokes you erased, so the board matches the original.",
@@ -361,9 +361,9 @@
         "Target discrimination"
       ],
       "media": {
-        "easy": "CP10_easy_CP10-easy-seed357-cp10-semantic50-v1.mp4",
-        "medium": "CP10_medium_CP10-medium-seed553-cp10-semantic50-v1.mp4",
-        "hard": "CP10_hard_CP10-hard-seed831-cp10-semantic50-v1.mp4"
+        "easy": "CP10_easy.mp4",
+        "medium": "CP10_medium.mp4",
+        "hard": "CP10_hard.mp4"
       },
       "instructions": {
         "easy": "Predict each ball from the launcher's settled aim. After two practice balls, use the sliding blocker to return every white ball to the far net and let every red ball pass untouched into the near net. Wait for each ball to settle before the next shot.",

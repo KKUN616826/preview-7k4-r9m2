@@ -4,6 +4,7 @@ import json
 import re
 from html import escape, unescape
 from pathlib import Path
+from task_codes import code
 
 ROOT = Path(__file__).resolve().parents[1]
 LEVELS = ('easy', 'medium', 'hard')
@@ -89,7 +90,7 @@ def chapter(case, index, total):
         f'{" disabled" if level not in levels else ""}>{level.title()}'
         f'{" (not available)" if level not in levels else ""}</option>'
         for level in LEVELS)
-    search_text = ' '.join(str(case.get(key, '')) for key in ('id', 'title', 'nav_title', 'summary', 'suite')) + ' ' + CATALOG_GOALS.get(case['id'], '')
+    search_text = ' '.join(str(case.get(key, '')) for key in ('id', 'title', 'nav_title', 'summary', 'suite')) + ' ' + code(case['id']) + ' ' + CATALOG_GOALS.get(case['id'], '')
     return f'''<article data-search="{e(search_text)}" class="bo-chapter" id="task-{case['id']}" data-task="{case['id']}" aria-labelledby="title-{case['id']}">
       <div class="bo-chapter-layout">
         <a class="bo-task-link" href="tasks/{case['id']}.html#{initial}" aria-labelledby="title-{case['id']}"></a>
@@ -98,7 +99,7 @@ def chapter(case, index, total):
           <span class="bo-play" aria-hidden="true"><span>▶</span></span>
         </div>
         <div class="bo-task-copy">
-          <p class="bo-task-id">{case['id']}</p>
+          <p class="bo-task-id">{code(case['id'])}</p>
           <h3 id="title-{case['id']}" title="{e(case['title'])}">{e(case.get('nav_title', case['title']))}</h3>
           <p class="bo-task-goal" title="{e(case['summary'])}">{e(CATALOG_GOALS.get(case['id'], case['summary']))}</p>
           <div class="bo-task-actions"><select class="bo-level-select" aria-label="Demonstration difficulty for {e(case['title'])}" aria-controls="task-{case['id']}">{choices}</select>
@@ -111,7 +112,7 @@ def chapter(case, index, total):
 def quick_index(suites):
     groups = []
     for suite in suites:
-        links = ''.join(f'<li><a href="#task-{c["id"]}" data-index-task="{c["id"]}"><span>{c["id"]}</span>{e(c.get("nav_title", c["title"]))}</a></li>' for c in suite['cases'])
+        links = ''.join(f'<li><a href="#task-{c["id"]}" data-index-task="{c["id"]}"><span>{code(c["id"])}</span>{e(c.get("nav_title", c["title"]))}</a></li>' for c in suite['cases'])
         groups.append(f'<details data-index-group="{suite["slug"]}" open><summary><a href="#suite-{suite["slug"]}" data-index-suite="{suite["slug"]}">{suite["name"]}<span>{len(suite["cases"])}</span></a></summary><ul>{links}</ul></details>')
     return '<nav aria-label="Task quick index">' + ''.join(groups) + '</nav>'
 

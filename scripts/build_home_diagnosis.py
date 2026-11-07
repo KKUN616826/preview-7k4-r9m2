@@ -78,12 +78,13 @@ def failure_bar(f):
             f'<ul class="dx-legend">{legend}</ul>{note}</div>')
 
 
-def card(c):
+def card(c, sample=True):
+    """A diagnosis card; sample=True labels it as a synthetic sample (homepage, models/sample.html)."""
     code, fam = c['code'], pv.family(c['code'])
     views = {v['key']: v for v in c['views']}
     findings = ''.join(f'<li><strong>{escape(h)}</strong><span>{escape(t)}</span></li>' for h, t in c['findings'])
-    return (f'<article class="dx-card" style="{pv.style(code)}" aria-label="Sample diagnosis card: {escape(c["name"])}">'
-            f'<div class="dx-card-head"><p class="dx-model">{escape(c["name"])} <span>· {escape(c["track"].lower())} · synthetic sample</span></p>'
+    return (f'<article class="dx-card" style="{pv.style(code)}" aria-label="{"Sample diagnosis card" if sample else "Diagnosis card"}: {escape(c["name"])}">'
+            f'<div class="dx-card-head"><p class="dx-model">{escape(c["name"])} <span>· {escape(c["track"].lower())}{" · synthetic sample" if sample else ""}</span></p>'
             f'<span class="dx-code" aria-label="Profile code {escape(code)}">{escape(code)}</span></div>'
             f'<div class="dx-hero">{pv.avatar(code, "dx-avatar")}<div class="dx-hero-text">'
             f'<p class="dx-hero-kicker">Your model is the</p><p class="dx-hero-name">{escape(pv.nickname(code))}</p>'
