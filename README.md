@@ -43,7 +43,7 @@ python3 scripts/preview.py --port 8767
 ```
 
 浏览器测试需安装 Playwright，并设置 `NODE_PATH`、`CHROMIUM_EXECUTABLE`、`HERO_PREVIEW_URL=http://127.0.0.1:8767/`。
-发布前检查共享导航、首页动画、首页排行榜预览、Protocol、Benchmark、90 段任务视频、排行榜，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_boards.cjs`、`test_view_leaderboard.cjs`。
+发布前检查共享导航、首页动画、首页排行榜预览、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_boards.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
 
 
 ### Home 训练闭环预告
@@ -65,7 +65,7 @@ python3 scripts/preview.py --port 8767
 - VLA / WAM 与 Coding agent 分两张榜分别排名（每格 50 局 vs 5 局，接口与预算不同），不可横向比较。
 - 模型 logo：`media/icons/models/`，取自各模型或机构官网的彩色原版。
 - 页面源：`scripts/leaderboard-page.html`；样式：`scripts/leaderboard-explorer.css`、`scripts/leaderboard-boards.css`；交互：`scripts/leaderboard-boards.js`。
-- 首屏：`scripts/leaderboard_stage.py`、`scripts/leaderboard-stage.css`。地球（0）到月球（100）的紧凑卡片，VLA / WAM 模型按 Clean Overall 分数排高度、按发布顺序排左右；少于 3 个成绩时显示匿名占位模型和首批发布日期。
+- 首屏：`scripts/leaderboard_stage.py`、`scripts/leaderboard-stage.css`。月球园区场景中，每个 VLA / WAM 模型从地球地平线（0）飞向月球表面（100），停在 Clean Overall 分数对应的比例处；少于 3 个成绩时显示匿名占位模型和首批发布日期。
 - 单独构建：`python3 scripts/build_leaderboard.py`。完整构建也会调用此构建器；不要直接修改生成的 `leaderboard.html`。
 - 浏览器回归：`node scripts/test_leaderboard_boards.cjs`；首页与新榜单入口衔接：`node scripts/test_view_leaderboard.cjs`，使用现有 Playwright / `NODE_PATH` 环境。
 - 此轮改版前的已保存版本：提交 `87c6ccf`，标签 `checkpoint-before-leaderboard`。首页、Benchmark 与 Documents 不属于这次独立榜单改版的修改范围。

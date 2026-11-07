@@ -32,7 +32,7 @@ def monogram(name):
     """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
     return ''.join(ch for ch in name if ch.isalnum())[:2]
 ASSETS = ['media/site-shell.css', 'scripts/leaderboard-explorer.css', 'scripts/leaderboard-stage.css', 'scripts/leaderboard-boards.css',
-          'scripts/leaderboard-boards.js']
+          'scripts/leaderboard-boards.js', 'scripts/leaderboard-stage-motion.js']
 
 
 def e(value):
