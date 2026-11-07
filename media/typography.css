@@ -34,6 +34,9 @@
   :where(.demo-brand, .demo-brand *) {
     font-family: LunarPixel, Pixel, monospace !important;
   }
+  :where(.paper-brand, .paper-brand *) {
+    font-family: 'Pixelify Sans', LunarPixel, monospace !important;
+  }
   :where(pre, code, kbd, samp, pre *, code *, kbd *, samp *) {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
   }
