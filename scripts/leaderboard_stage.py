@@ -6,6 +6,27 @@ release date and the models in that batch.
 from datetime import date
 from html import escape
 
+# One station per suite (see media/leaderboard-motion/scene.js). Labels name the dimension only.
+# x, y: the label's bottom anchor above the arm, in artwork units (1983 x 793); align: which
+# edge of the label sits on x, so labels near the crop edge stay inside the stage.
+STATIONS = [
+    # (slug, index, name, gist, shoulder pivot x/y on the 1983x793 artwork (scene.js S), placement, leader length)
+    ('mind', '01', 'Mind', 'memory and decisions', 436, 383, 'start', 116),
+    ('mind2act', '03', 'Mind2Act', 'reasoning and execution together', 954, 594, 'side', 44),
+    ('act', '02', 'Act', 'physical execution', 1681, 400, 'end', 104),
+]
+
+
+def stations():
+    """HUD tags: each dimension hangs on a leader line whose beacon sits on the shoulder of the arm illustrating it."""
+    items = ''.join(
+        f'<a class="lb-station lb-station--{slug} lb-station--{place}" href="benchmark.html#suite-{slug}" '
+        f'style="left:{x / 19.83:.2f}%;top:{y / 7.93:.2f}%;--lead:{lead / 7.93:.2f}cqh">'
+        f'<span class="lb-station-index">Dimension {num}</span>'
+        f'<strong>{name}</strong><span class="lb-station-gist">{escape(gist)}</span></a>'
+        for slug, num, name, gist, x, y, place, lead in STATIONS)
+    return f'<nav class="lb-stations" aria-label="The three evaluation dimensions">{items}</nav>'
+
 
 def monogram(name):
     """Two letters for a model without a logo, skipping punctuation (X-WAM -> XW)."""
@@ -33,6 +54,7 @@ def render(data):
              'demonstration stations and a central first, second and third place podium." width="1983" height="793" fetchpriority="high">'
              '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v2.webp" '
              'aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video>']
+    parts.append(stations())
     if len(e2e) >= 3:
         parts.append('<div class="lb-podium-labels">')
         for rank in (2, 1, 3):

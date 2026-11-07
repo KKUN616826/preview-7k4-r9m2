@@ -1,18 +1,166 @@
+/* Three stations, one per suite, on an 8-second loop (artwork units, 1983 × 793).
+ *
+ * Left  · Mind     : the board marks one item and covers it; the arm weighs the blocks
+ *                    before choosing the matching one (remember, then decide).
+ * Front · Mind2Act : a projected reference shows the target stack, disappears, and the arm
+ *                    rebuilds it from memory (reasoning and execution together).
+ * Right · Act      : the arm tracks a parcel on the moving belt and picks it in motion
+ *                    (timely, precise execution).
+ * All three arms carry the same two-finger gripper, drawn here, so their tools match.
+ */
+const LOOP = 8;
+const svg = document.querySelector('#scene'), $ = id => document.getElementById(id), ns = 'http://www.w3.org/2000/svg';
+const view = new URLSearchParams(location.search).get('view') || 'full';
+if (view !== 'full') svg.setAttribute('viewBox', ({front: '960 520 220 140', left: '470 280 240 190', right: '1460 340 330 170'})[view]);
 
-const svg=document.querySelector('#scene'),$=id=>document.getElementById(id);const view=new URLSearchParams(location.search).get('view')||'full';if(view!=='full'){document.body.classList.add('closeup');svg.setAttribute('viewBox',({front:'840 490 440 225',left:'385 270 310 215',right:'1430 300 335 220'})[view]);}
-const ns='http://www.w3.org/2000/svg';for(let i=0;i<22;i++){let e=document.createElementNS(ns,'circle');e.setAttribute('cx',35+(i*167)%1890);e.setAttribute('cy',35+(i*41)%190);e.setAttribute('r',4+(i%3)*2);$('stars').append(e)}
-const lamps=[[483,730,26,4],[737,767,38,4],[1236,767,40,4],[1572,641,7,7],[418,635,7,7],[764,495,18,4],[920,510,27,3],[1158,508,20,3]];lamps.forEach(([x,y,w,h])=>{let e=document.createElementNS(ns,'rect');for(const [k,v]of Object.entries({x,y,width:w,height:h,rx:2}))e.setAttribute(k,v);$('lights').append(e)});
-const S=[954,594],E=[1029,549],W=[1087,591],L1=Math.hypot(E[0]-S[0],E[1]-S[1]),L2=Math.hypot(W[0]-E[0],W[1]-E[1]),a1=Math.atan2(E[1]-S[1],E[0]-S[0]),a2=Math.atan2(W[1]-E[1],W[0]-E[0]);
-const keys=[[0,1087,584],[.45,1087,591],[.9,1087,591],[1.5,1080,535],[2.1,1042,535],[2.6,1042,591],[3.4,1042,591],[4,1042,535],[4.6,1087,535],[5.2,1087,591],[5.55,1087,591],[6,1087,584]];
-const smooth=t=>t*t*(3-2*t);function pose(t){let a=keys[0],b=keys[1];for(let i=0;i<keys.length-1;i++)if(t>=keys[i][0]&&t<=keys[i+1][0]){a=keys[i];b=keys[i+1];break}let u=smooth((t-a[0])/(b[0]-a[0]));return[a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u]}
-window.renderFrame=function(t){t=((t%6)+6)%6;const p=pose(t),dx=p[0]-S[0],dy=p[1]-S[1],d=Math.hypot(dx,dy),a=Math.atan2(dy,dx)-Math.acos(Math.max(-1,Math.min(1,(L1*L1+d*d-L2*L2)/(2*L1*d)))),e=[S[0]+L1*Math.cos(a),S[1]+L1*Math.sin(a)],b=Math.atan2(p[1]-e[1],p[0]-e[0]);$('upperArm').setAttribute('transform',`rotate(${(a-a1)*180/Math.PI} ${S})`);$('foreArm').setAttribute('transform',`translate(${e[0]-E[0]} ${e[1]-E[1]}) rotate(${(b-a2)*180/Math.PI} ${E})`);$('tool').setAttribute('transform',`translate(${p[0]-W[0]} ${p[1]-W[1]})`);
-const carry=t>=.9&&t<2.6||t>=3.4&&t<5.2,atDest=t>=2.6&&t<3.4;const cubeP=carry?[p[0]-W[0],p[1]-W[1]]:atDest?[-45,0]:[0,0];$('movingCube').setAttribute('transform',`translate(${cubeP})`);$('shadow').setAttribute('cx',1092+cubeP[0]);$('shadow').setAttribute('rx',17+Math.max(0,-cubeP[1])*.13);$('shadow').setAttribute('opacity',.2-Math.max(0,-cubeP[1])*.0015);
-const g=carry?0:2;$('fingerL').setAttribute('transform',`translate(${-g} 0)`);$('fingerR').setAttribute('transform',`translate(${g} 0)`);$('status').setAttribute('fill',carry?'#5f9c86':'#d4bb75');[...$('stars').children].forEach((e,i)=>e.setAttribute('opacity',.2+.3*(1+Math.sin(t*Math.PI/3+i))));[...$('lights').children].forEach((e,i)=>e.setAttribute('opacity',.25+.45*(1+Math.sin(t*Math.PI/3-i*.8))/2));$('phase').textContent=t<.9?'Observe → grasp':t<2.6?'Lift → transfer → place':t<3.4?'Release':t<5.2?'Return transfer':'Release → ready';};
-let paused=false,last=performance.now(),elapsed=0;function frame(now){if(!paused)elapsed+=(now-last)/1000;last=now;if(!window.manualFrames)renderFrame(elapsed);requestAnimationFrame(frame)}$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'Play animation':'Pause animation'};renderFrame(0);requestAnimationFrame(frame);
+const smooth = u => u * u * (3 - 2 * u);
+const clamp01 = u => Math.max(0, Math.min(1, u));
+const ramp = (t, a, b) => smooth(clamp01((t - a) / (b - a)));            // 0 before a, 1 after b
+const pulse = (t, a, b, c, d) => ramp(t, a, b) * (1 - ramp(t, c, d));     // fades in a→b, out c→d
+function track(keys, t) {                                                 // keys: [time, x, y]
+  for (let i = 0; i < keys.length - 1; i++) {
+    const [ta, xa, ya] = keys[i], [tb, xb, yb] = keys[i + 1];
+    if (t >= ta && t <= tb) { const u = smooth((t - ta) / (tb - ta)); return [xa + (xb - xa) * u, ya + (yb - ya) * u]; }
+  }
+  return keys[keys.length - 1].slice(1);
+}
+// Two-link arm: rotate the upper arm about S and carry the forearm and tool to the wrist target.
+function solve(arm, p, sign) {
+  const [sx, sy] = arm.S, [ex, ey] = arm.E, [wx, wy] = arm.W;
+  const l1 = Math.hypot(ex - sx, ey - sy), l2 = Math.hypot(wx - ex, wy - ey), d = Math.hypot(p[0] - sx, p[1] - sy);
+  const a = Math.atan2(p[1] - sy, p[0] - sx) + sign * Math.acos(Math.max(-1, Math.min(1, (l1 * l1 + d * d - l2 * l2) / (2 * l1 * d))));
+  const e = [sx + l1 * Math.cos(a), sy + l1 * Math.sin(a)], b = Math.atan2(p[1] - e[1], p[0] - e[0]);
+  const deg = r => r * 180 / Math.PI;
+  $(arm.upper).setAttribute('transform', `rotate(${deg(a - Math.atan2(ey - sy, ex - sx))} ${arm.S})`);
+  $(arm.fore).setAttribute('transform', `translate(${e[0] - ex} ${e[1] - ey}) rotate(${deg(b - Math.atan2(wy - ey, wx - ex))} ${arm.E})`);
+  $(arm.tool).setAttribute('transform', `translate(${p[0] - wx} ${p[1] - wy})`);
+}
 
-const frontRender=window.renderFrame;
-const armConfigs=[{id:'L',S:[436,383],E:[489,317],W:[580,364],sign:-1,offset:.8,source:[574,363],dest:[588,363],lift:55},{id:'R',S:[1681,400],E:[1591,367],W:[1525,426],sign:1,offset:2.0,source:[1525,426],dest:[1561,426],lift:36}];
-function sidePose(t,c){const [x,y]=c.source,[x2,y2]=c.dest,keys=[[0,x,y-7],[.45,x,y],[.9,x,y],[1.5,x,y-c.lift],[2.1,x2,y2-c.lift],[2.6,x2,y2],[3.4,x2,y2],[4,x2,y2-c.lift],[4.6,x,y-c.lift],[5.2,x,y],[5.55,x,y],[6,x,y-7]];let a=keys[0],b=keys[1];for(let i=0;i<keys.length-1;i++){if(t>=keys[i][0]&&t<=keys[i+1][0]){a=keys[i];b=keys[i+1];break}}const u=smooth((t-a[0])/(b[0]-a[0]));return [a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u];}
-function renderSide(time,c){const t=((time+c.offset)%6+6)%6,p=sidePose(t,c),[sx,sy]=c.S,[ex,ey]=c.E,[wx,wy]=c.W,l1=Math.hypot(ex-sx,ey-sy),l2=Math.hypot(wx-ex,wy-ey),dx=p[0]-sx,dy=p[1]-sy,d=Math.hypot(dx,dy),a=Math.atan2(dy,dx)+c.sign*Math.acos(Math.max(-1,Math.min(1,(l1*l1+d*d-l2*l2)/(2*l1*d)))),e=[sx+l1*Math.cos(a),sy+l1*Math.sin(a)],b=Math.atan2(p[1]-e[1],p[0]-e[0]),oa=Math.atan2(ey-sy,ex-sx),ob=Math.atan2(wy-ey,wx-ex);$(c.id+'upperMoving').setAttribute('transform',`rotate(${(a-oa)*180/Math.PI} ${c.S})`);$(c.id+'foreMoving').setAttribute('transform',`translate(${e[0]-ex} ${e[1]-ey}) rotate(${(b-ob)*180/Math.PI} ${c.E})`);$(c.id+'toolMoving').setAttribute('transform',`translate(${p[0]-wx} ${p[1]-wy})`);const carry=t>=.9&&t<2.6||t>=3.4&&t<5.2,atDest=t>=2.6&&t<3.4,move=carry?[p[0]-c.source[0],p[1]-c.source[1]]:atDest?[c.dest[0]-c.source[0],c.dest[1]-c.source[1]]:[0,0];$(c.id+'cubeMoving').setAttribute('transform',`translate(${move})`);}
-window.renderFrame=function(t){frontRender(t);armConfigs.forEach(c=>renderSide(t,c));};renderFrame(0);
+/* One gripper design for all three arms: a dark palm and two 7-unit fingers. */
+function gripper(toolId, x, y) {
+  const g = document.createElementNS(ns, 'g'), mk = (tag, attrs) => { const e = document.createElementNS(ns, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); g.append(e); return e; };
+  mk('rect', {x: x - 7, y, width: 14, height: 3.6, rx: 1.2, fill: '#33424c'});
+  mk('rect', {x: x - 5.5, y: y + .5, width: 11, height: 1, rx: .5, fill: '#8ea4ae'});
+  const finger = side => mk('path', {d: `M${x + side * 4.5} ${y + 3.2}v5.6l${-side * 1.4} 1.6`, fill: 'none', stroke: '#2b3943', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'});
+  const l = finger(-1), r = finger(1);
+  $(toolId).append(g);
+  return open => { l.setAttribute('transform', `translate(${-open} 0)`); r.setAttribute('transform', `translate(${open} 0)`); };
+}
+const GRIP = {L: gripper('LtoolMoving', 582, 403), F: gripper('tool', 1088.5, 609), R: gripper('RtoolMoving', 1528, 429)};
 
+/* Ambient stars and lamps. */
+for (let i = 0; i < 22; i++) {
+  const e = document.createElementNS(ns, 'circle');
+  e.setAttribute('cx', 35 + (i * 167) % 1890); e.setAttribute('cy', 35 + (i * 41) % 190); e.setAttribute('r', 4 + (i % 3) * 2);
+  $('stars').append(e);
+}
+[[483, 730, 26, 4], [737, 767, 38, 4], [1236, 767, 40, 4], [1572, 641, 7, 7], [418, 635, 7, 7], [764, 495, 18, 4], [920, 510, 27, 3], [1158, 508, 20, 3]]
+  .forEach(([x, y, width, height]) => {
+    const e = document.createElementNS(ns, 'rect');
+    for (const [k, v] of Object.entries({x, y, width, height, rx: 2})) e.setAttribute(k, v);
+    $('lights').append(e);
+  });
+
+/* Left · Mind. */
+const LEFT = {S: [436, 383], E: [489, 317], W: [580, 364], upper: 'LupperMoving', fore: 'LforeMoving', tool: 'LtoolMoving'};
+const tip = (x, y) => [x - 2, y - 49];                                  // finger tips sit 49 units below the wrist
+const leftKeys = [[0, ...tip(566, 420)], [2.2, ...tip(566, 420)],
+  [2.7, ...tip(538, 424)], [3.0, ...tip(538, 428)], [3.25, ...tip(538, 424)],     // weighs the blue block
+  [3.7, ...tip(574, 422)], [3.95, ...tip(574, 426)], [4.15, ...tip(574, 422)],   // then the yellow one
+  [4.6, ...tip(607, 424)], [4.85, ...tip(607, 439)], [5.15, ...tip(607, 424)],   // and taps green
+  [7.2, ...tip(566, 420)], [LOOP, ...tip(566, 420)]];
+const covers = [...$('covers').children];
+function renderMind(t) {
+  solve(LEFT, track(leftKeys, t), -1);
+  GRIP.L(t > 4.75 && t < 5.0 ? 0 : 1.6);
+  $('cueRing').setAttribute('opacity', pulse(t, .25, .6, 1.7, 2.0) * (.75 + .25 * Math.sin(t * 9)));
+  covers.forEach((c, i) => {
+    // All four close at 2.0 s; the triangle reopens when the right block is chosen, the rest at 7.0 s.
+    const open = i === 2 ? ramp(t, 4.95, 5.25) : ramp(t, 7.0, 7.4);
+    const s = Math.max(.001, ramp(t, 1.95 + i * .06, 2.25 + i * .06) * (1 - open));
+    const x = +c.dataset.x, y = +c.dataset.y;
+    c.setAttribute('transform', `translate(${x} ${y}) scale(1 ${s}) translate(${-x} ${-y})`);
+  });
+  const ok = pulse(t, 4.95, 5.25, 6.6, 7.0);
+  $('okRing').setAttribute('opacity', ok);
+  $('tapRing').setAttribute('opacity', ok * .9);
+  $('tapRing').setAttribute('rx', 13 + 4 * ramp(t, 4.9, 5.6));
+}
+
+/* Front · Mind2Act. The blue cube follows the wrist while carried. */
+const FRONT = {S: [954, 594], E: [1029, 549], W: [1087, 591], upper: 'upperArm', fore: 'foreArm', tool: 'tool'};
+const frontKeys = [[0, 1087, 580], [2.0, 1087, 580], [2.3, 1087, 591], [2.55, 1087, 591], [3.15, 1087, 545],
+  [3.8, 1042, 545], [4.3, 1042, 570], [4.6, 1042, 570], [5.0, 1042, 552], [5.6, 1042, 570], [5.85, 1042, 570],
+  [6.35, 1042, 545], [7.0, 1087, 545], [7.45, 1087, 591], [7.7, 1087, 591], [LOOP, 1087, 580]];
+function renderMind2Act(t) {
+  const p = track(frontKeys, t);
+  solve(FRONT, p, -1);
+  const carry = (t >= 2.55 && t < 4.6) || (t >= 5.85 && t < 7.7), stacked = t >= 4.6 && t < 5.85;
+  const cube = carry ? [p[0] - 1087, p[1] - 591] : stacked ? [-45, -21] : [0, 0];
+  $('movingCube').setAttribute('transform', `translate(${cube})`);
+  const lift = carry ? Math.max(0, -cube[1] - (cube[0] < -30 ? 21 : 0)) : 0;
+  $('shadow').setAttribute('cx', 1092 + cube[0]);
+  $('shadow').setAttribute('rx', 17 + lift * .13);
+  $('shadow').setAttribute('opacity', (stacked || cube[0] < -30 ? 0 : .2) - lift * .0015);
+  GRIP.F(carry ? 0 : 2);
+  // The reference is shown, withdrawn, and shown again in green once the stack matches it.
+  const shown = pulse(t, .2, .55, 1.6, 2.0) * (.8 + .2 * Math.sin(t * 7)), check = pulse(t, 4.6, 4.85, 5.35, 5.6);
+  $('ghost').setAttribute('opacity', Math.max(shown, check));
+  $('ghost').setAttribute('stroke', check > shown ? '#5fae86' : '#7fd0e6');
+  $('status').setAttribute('fill', check > .1 ? '#5fae86' : carry ? '#7fb6c8' : '#d4bb75');
+}
+
+/* Right · Act. The belt runs right to left; the arm matches the parcel's speed before it grips. */
+const RIGHT = {S: [1681, 400], E: [1591, 367], W: [1525, 426], upper: 'RupperMoving', fore: 'RforeMoving', tool: 'RtoolMoving'};
+const BELT = {x0: 1757, x1: 1592, speed: 36, grip: 4.0};
+const beltY = x => 468 + (x - 1590) * 6 / 167;                         // parcel base on the belt
+const parcelX = t => BELT.x0 - BELT.speed * t;
+const GRIP_DY = 26;                                                   // wrist above the parcel base when gripping
+const rightKeys = (() => {
+  const keys = [[0, 1625, 418], [2.4, 1625, 418]];
+  for (let t = 2.8; t <= BELT.grip + 1e-9; t += .2) {                  // follow, then descend onto the moving parcel
+    const x = parcelX(t), d = clamp01((t - 2.8) / (BELT.grip - 2.8));
+    keys.push([t, x, 418 + (beltY(x) - GRIP_DY - 418) * smooth(d)]);
+  }
+  return keys.concat([[4.6, 1602, 410], [5.3, 1548, 410], [5.7, 1548, 449 - GRIP_DY], [5.9, 1548, 449 - GRIP_DY],
+    [6.3, 1556, 412], [7.4, 1625, 418], [LOOP, 1625, 418]]);
+})();
+const rollers = [[1591, 476], [1612, 478], [1634, 480], [1654, 482], [1676, 484], [1698, 486], [1717, 489]];
+rollers.forEach(() => { const e = document.createElementNS(ns, 'path'); $('rollers').append(e); });
+for (let i = 0; i < 16; i++) { const e = document.createElementNS(ns, 'path'); $('belt').append(e); }
+function renderAct(t) {
+  const p = track(rightKeys, t);
+  solve(RIGHT, p, 1);
+  GRIP.R(t >= BELT.grip && t < 5.9 ? 0 : 2);
+  let x, y, o = 1;
+  if (t < BELT.grip) { x = parcelX(t); y = beltY(x); o = ramp(t, 0, .35); }
+  else if (t < 5.9) { x = p[0]; y = p[1] + GRIP_DY; }
+  else { x = 1548; y = 449; o = 1 - ramp(t, 6.7, 7.4); }               // collected
+  $('parcel').setAttribute('transform', `translate(${x} ${y})`);
+  $('parcel').setAttribute('opacity', o);
+  $('tapRingR').setAttribute('opacity', pulse(t, 5.85, 6.05, 6.5, 6.9) * .9);
+  // Roller spokes turn and belt marks drift with the belt speed (36 units/s).
+  [...$('rollers').children].forEach((e, i) => {
+    const [cx, cy] = rollers[i], a = -BELT.speed * t / 4 + i;
+    e.setAttribute('d', `M${cx} ${cy}l${(3 * Math.cos(a)).toFixed(2)} ${(3 * Math.sin(a)).toFixed(2)}`);
+  });
+  [...$('belt').children].forEach((e, i) => {
+    const span = BELT.x0 - BELT.x1 + 12, gx = BELT.x1 + ((i * 12 - BELT.speed * t) % span + span) % span;
+    const y0 = beltY(gx) - 2.2;
+    e.setAttribute('d', gx < BELT.x0 - 4 ? `M${gx.toFixed(1)} ${y0.toFixed(1)}h4` : '');
+  });
+}
+
+window.renderFrame = function (time) {
+  const t = ((time % LOOP) + LOOP) % LOOP;
+  renderMind(t); renderMind2Act(t); renderAct(t);
+  [...$('stars').children].forEach((e, i) => e.setAttribute('opacity', .2 + .3 * (1 + Math.sin(t * Math.PI / 4 + i))));
+  [...$('lights').children].forEach((e, i) => e.setAttribute('opacity', .25 + .45 * (1 + Math.sin(t * Math.PI / 4 - i * .8)) / 2));
+  $('phase').textContent = `${t.toFixed(1)} s`;
+};
+
+let paused = false, last = performance.now(), elapsed = 0;
+function frame(now) { if (!paused) elapsed += (now - last) / 1000; last = now; if (!window.manualFrames) renderFrame(elapsed); requestAnimationFrame(frame); }
+$('pause').onclick = () => { paused = !paused; $('pause').textContent = paused ? 'Play animation' : 'Pause animation'; };
+renderFrame(0);
+requestAnimationFrame(frame);

@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Refresh the diagnostic teaser and its head assets in the maintained Home."""
+"""Refresh the coming-soon improvement loop (#model-diagnostics) and its head assets in the Home.
+
+The section is placed directly after the diagnosis-card block (build_home_diagnosis.py).
+"""
 from pathlib import Path
 import hashlib
 
 ROOT = Path(__file__).resolve().parents[1]
 START = '<!-- HOME DIAGNOSTICS START -->'
 END = '<!-- HOME DIAGNOSTICS END -->'
+AFTER = '<!-- HOME_DIAGNOSIS_END -->\n'
 
 
 def render():
@@ -19,13 +23,13 @@ def main():
         path = ROOT / relative
         # Preserve legacy line endings and every unrelated edit verbatim.
         source = path.read_bytes().decode()
+        # The loop continues the diagnosis-card section, so it sits directly after it.
         if START in source:
             start = source.index(START)
             end = source.index(END, start) + len(END)
-            source = source[:start] + section + source[end:]
-        else:
-            assert source.count('</main>') == 1, relative
-            source = source.replace('</main>', section + '\n</main>')
+            source = source[:start].rstrip('\n') + '\n' + source[end:].lstrip('\n')
+        assert source.count(AFTER) == 1, relative
+        source = source.replace(AFTER, AFTER + section + '\n', 1)
         assets = '<!-- HOME_DIAGNOSTICS_ASSETS_START -->\n'
         for ext in ['css', 'js']:
             version = hashlib.sha256((ROOT / f'scripts/home-diagnostics.{ext}').read_bytes()).hexdigest()[:10]

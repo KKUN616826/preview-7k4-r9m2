@@ -69,27 +69,40 @@ body #overview .hero-intro-kicker {
   letter-spacing: .12em !important;
   text-transform: uppercase;
 }
-/* The title is set like the navigation wordmark: pixel letters, a mint "2"
-   and a widely tracked, lighter "World". */
+/* The title is set like the horizontal logo lockup: pixel planet, pixel letters
+   with a mint "2", and a small tracked "WORLD" on the baseline after "Act". */
 body #overview .hero-intro h1.hero-intro-title {
+  display: flex;
+  align-items: center;
+  gap: .16em;
   margin: 0;
   color: #fafbf7;
-  font-size: clamp(68px, 8vw, 128px);
+  font-size: clamp(60px, 6.4vw, 116px);
   font-weight: 700;
   letter-spacing: .01em !important;
   line-height: .96;
   text-align: left;
   text-shadow: 0 .06em 0 #0b1622b3;
 }
+body #overview .hero-intro-title .hero-intro-mark {
+  flex: none;
+  align-self: center;
+  width: auto;
+  height: .92em;
+  margin-right: .06em;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 .05em 0 #0b1622b3);
+}
+body #overview .hero-intro-title .hero-intro-words { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .32em; row-gap: .1em; }
+body #overview .hero-intro-title .hero-intro-name { white-space: nowrap; }
 body #overview .hero-intro-title .hero-intro-two { color: #bfe3d3; }
 body #overview .hero-intro-title .hero-intro-world {
-  display: block;
-  margin-top: .22em;
-  line-height: 1;
   color: #a9c3cd;
-  font-size: .5em;
-  font-weight: 500;
-  letter-spacing: .42em !important;
+  font-size: .25em;
+  font-weight: 600;
+  letter-spacing: .32em !important;
+  text-transform: uppercase;
+  text-shadow: none;
 }
 body #overview .hero-intro-description {
   max-width: 450px;
@@ -248,7 +261,7 @@ body #overview .hero-intro .demo-no-script { bottom: 24px; left: 6%; }
   html body.dark-hero #overview .demo-hero.hero-intro { height: auto; min-height: 100svh; max-height: none; padding: 112px 20px 28px; gap: 0; }
   body #overview .hero-intro-copy { position: relative; inset: auto; order: 0; width: 100%; margin: 0 0 28px; }
   body #overview .hero-intro-kicker { font-size: 10px; margin-bottom: 16px; letter-spacing: .1em !important; }
-  body #overview .hero-intro h1.hero-intro-title { font-size: clamp(56px, 16vw, 84px); }
+  body #overview .hero-intro h1.hero-intro-title { font-size: clamp(44px, 13vw, 76px); }
   body #overview .hero-intro-description { font-size: 16px; margin-top: 20px; max-width: 450px; }
   body #overview .hero-intro-actions { margin-top: 24px; gap: 10px; }
   body #overview .hero-intro-actions a { font-size: 12px; min-height: 44px; padding: 11px 13px; gap: 12px; }

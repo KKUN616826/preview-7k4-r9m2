@@ -46,17 +46,17 @@ python3 scripts/preview.py --port 8767
 发布前检查共享导航、首页动画、首页排行榜预览、Protocol、Benchmark、90 段任务视频、排行榜与榜单动画，分别运行 `scripts/test_site_navigation_browser.cjs`、`test_hero_browser.cjs`、`test_protocol_browser.cjs`、`test_benchmark_browser.cjs`、`test_benchmark_expansion.cjs`、`test_bench30_sync.cjs`、`test_leaderboard_boards.cjs`、`test_leaderboard_motion.cjs`、`test_view_leaderboard.cjs`。
 
 
-### Home 模型诊断预告
+### Home 训练闭环预告
 
-首页底部的 `#model-diagnostics` 为 Coming soon 动画，不代表诊断服务已经开放。
-卡片仅为合成示例，没有真实模型测评数值。
+诊断卡区（`#diagnosis`）正下方的 `#model-diagnostics` 是 Coming soon 预告：harness 像医生，诊断模型、开出针对性数据（“抓药”），数据回流训练后再评测，模型一轮轮变强，harness 也随看过的模型积累经验（2026-11-05 同步会的“培养方案” loop）。不代表该服务已经开放，图中的条形和代码不是任何模型的结果。
 
-- 内容：`scripts/home-diagnostics.html`；样式和动画：`scripts/home-diagnostics.css`；播放控制：`scripts/home-diagnostics.js`。
-- 成片：`media/diagnostics-teaser/diagnostics-lunar-loop-8s.mp4`，灰银月面背景，包含诊断、针对性改进回流、第二轮测评与 Preview 02 的闭环预告；开场与静态封面为同目录 `opening.webp`、`poster.webp`。
-- 更新：`python3 scripts/build_home_diagnostics.py`，仅同步预告区与 head 中的样式、脚本到 `index.html`，保留其他内容；不依赖已删除的旧首页模板。
-- 浏览器检查：`node scripts/test_home_diagnostics.cjs`，沿用现有 Playwright、`NODE_PATH` 和 `CHROMIUM_EXECUTABLE` 环境。
-- 灰银成片按 8 秒循环：居中大 Model → 首轮测评与诊断卡 → 针对性改进回流 → 第二轮测评与 Preview 02 → 最终文案。卡片下缘保留粒子消散效果；网站直接播放成片，避免与审核预览出现差异。
-- 进入可视范围后加载并静音播放，支持暂停、重播和全屏；离屏、后台时暂停，系统减少动态效果、无 JS 或视频错误时显示完整静态卡片。
+- 内容：`scripts/home-diagnostics.html`；样式：`scripts/home-diagnostics.css`；动画：`scripts/home-diagnostics.js`。直接画在白色页面上（HTML 卡片 + SVG 连线），文字可编辑，不再使用视频。
+- 流程：Your model → 1 Evaluate（Mind / Act / Mind2Act）→ 2 Diagnose（诊断卡）→ 3 Prescribe（针对性数据）→ 4 Train 回流；三轮依次补 Act、Mind2Act、Mind，每轮机器人图标长大一点，harness 经验条增长。约 17 秒一个循环。
+- 性格画像随训练变化：MXPS → AXPS（Act 数据使其偏执行，M→A）→ AXFS（闭环 Mind2Act 数据使其偏反馈驱动，P→F）→ ALFS（记忆数据让不稳定的记忆倾向定下来，X→L）。诊断卡显示诊断时的画像，模型卡片在训练后更新并高亮变化的字母。
+- 窄屏改为竖排，回流线走右侧。离屏或后台时暂停，可手动暂停；系统减少动态效果时显示第三轮的静止画面。
+- 更新：`python3 scripts/build_home_diagnostics.py`，把预告区放在 `<!-- HOME_DIAGNOSIS_END -->` 之后，并同步 head 中的样式和脚本。
+- 浏览器检查：`node scripts/test_home_diagnostics.cjs`。
+- 钢酱的 8 秒灰银视频版（`media/diagnostics-teaser/`）在提交 80a83e3 中，可从 git 历史恢复。
 
 ### 独立 Leaderboard 页面
 

@@ -50,3 +50,11 @@
  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;recover();},{threshold:.1}).observe(root.querySelector('.lb-stage-world'));
  updateButton();
 })();
+
+/* Station labels are anchored to the artwork; hide any the cover crop pushes past the stage edge. */
+(() => {
+ const stage=document.querySelector('.lb-stage'),labels=[...document.querySelectorAll('.lb-station')];
+ if(!stage||!labels.length)return;
+ function fit(){const s=stage.getBoundingClientRect();labels.forEach(a=>{a.removeAttribute('data-clipped');const r=a.getBoundingClientRect();if(r.left<s.left+4||r.right>s.right-4)a.dataset.clipped='';});}
+ new ResizeObserver(fit).observe(stage);
+})();
