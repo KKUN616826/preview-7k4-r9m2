@@ -10,18 +10,21 @@ from html import escape
 # x, y: the label's bottom anchor above the arm, in artwork units (1983 x 793); align: which
 # edge of the label sits on x, so labels near the crop edge stay inside the stage.
 STATIONS = [
-    ('mind', 'Mind', 'memory and decisions', 522, 298, 'center'),
-    ('mind2act', 'Mind2Act', 'reasoning and execution together', 992, 520, 'center'),
-    ('act', 'Act', 'physical execution', 1696, 300, 'right'),
+    # (slug, index, name, gist, shoulder pivot x/y on the 1983x793 artwork (scene.js S), placement, leader length)
+    ('mind', '01', 'Mind', 'memory and decisions', 436, 383, 'start', 116),
+    ('mind2act', '03', 'Mind2Act', 'reasoning and execution together', 954, 594, 'side', 44),
+    ('act', '02', 'Act', 'physical execution', 1681, 400, 'end', 104),
 ]
 
 
 def stations():
+    """HUD tags: each dimension hangs on a leader line whose beacon sits on the shoulder of the arm illustrating it."""
     items = ''.join(
-        f'<a class="lb-station lb-station--{slug} lb-station--{align}" href="benchmark.html#suite-{slug}" '
-        f'style="left:{x / 19.83:.2f}%;top:{y / 7.93:.2f}%">'
-        f'<strong>{name}</strong><span>{escape(gist)}</span></a>'
-        for slug, name, gist, x, y, align in STATIONS)
+        f'<a class="lb-station lb-station--{slug} lb-station--{place}" href="benchmark.html#suite-{slug}" '
+        f'style="left:{x / 19.83:.2f}%;top:{y / 7.93:.2f}%;--lead:{lead / 7.93:.2f}cqh">'
+        f'<span class="lb-station-index">Dimension {num}</span>'
+        f'<strong>{name}</strong><span class="lb-station-gist">{escape(gist)}</span></a>'
+        for slug, num, name, gist, x, y, place, lead in STATIONS)
     return f'<nav class="lb-stations" aria-label="The three evaluation dimensions">{items}</nav>'
 
 

@@ -55,6 +55,6 @@
 (() => {
  const stage=document.querySelector('.lb-stage'),labels=[...document.querySelectorAll('.lb-station')];
  if(!stage||!labels.length)return;
- function fit(){const s=stage.getBoundingClientRect();labels.forEach(a=>{a.removeAttribute('data-clipped');const r=a.getBoundingClientRect();if(r.left<s.left+8||r.right>s.right-8)a.dataset.clipped='';});}
+ function fit(){const s=stage.getBoundingClientRect();labels.forEach(a=>{a.removeAttribute('data-clipped');const r=a.getBoundingClientRect();if(r.left<s.left+4||r.right>s.right-4)a.dataset.clipped='';});}
  new ResizeObserver(fit).observe(stage);
 })();
