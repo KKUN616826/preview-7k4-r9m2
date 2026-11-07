@@ -2,7 +2,7 @@
 
 `campus-loop.mp4` is a silent, eight-second, 2880 × 1152 H.264 loop (CRF 20) used behind the live leaderboard controls and scores. It is rendered from `scene.html` and `scene.js`, with the campus artwork (`media/images/leaderboard-lunar-campus-v2.webp`) and two repair plates (`clean-plate-front.webp`, `clean-plate-sides.webp`). No external video service or Three.js is required.
 
-Each arm illustrates one evaluation dimension, and the leaderboard labels the stations with the dimension only (`STATIONS` in `scripts/leaderboard_stage.py`, linking to the suite on `benchmark.html`). Each label is a dark HUD tag on a dashed leader whose pulsing beacon sits on the arm's fixed shoulder pivot (`S` in `scene.js`); a tag the stage crop pushes past the edge is hidden:
+Each arm illustrates one evaluation dimension, and the leaderboard labels the stations with the dimension only (`STATIONS` in `scripts/leaderboard_stage.py`, linking to the suite on `benchmark.html`). Each label is a light tag in the style of the stage cards, on a thin leader whose marker sits on the arm's fixed shoulder pivot (`S` in `scene.js`); a tag the stage crop pushes past the edge is hidden:
 
 - Left, **Mind** (memory and decisions): the board marks the green triangle and covers its tiles; the arm weighs the blue and yellow blocks before touching the green one, and the triangle reopens with a check.
 - Front, **Mind2Act** (reasoning and execution together): a projected reference (blue on yellow) shows, disappears, and the arm rebuilds it from memory; the reference returns in green.
