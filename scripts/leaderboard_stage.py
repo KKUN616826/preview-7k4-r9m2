@@ -138,13 +138,35 @@ def _pct(x, y):
     return f'left:{x / W * 100:.3f}%;top:{y / H * 100:.3f}%'
 
 
-# A small rocket, nose up, 40 x 80; the model's logo sits in the porthole (centre 20, 36).
-SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 40 80" focusable="false">'
-        '<path class="lb-ship-fin" d="M9 44 L1 58 L1 67 L9 61Z M31 44 L39 58 L39 67 L31 61Z"/>'
-        '<path class="lb-ship-hull" d="M20 2 C30 12 31.5 30 31.5 46 L31 63 L9 63 L8.5 46 C8.5 30 10 12 20 2Z"/>'
-        '<path class="lb-ship-nose" d="M20 2 C25.5 7.5 28.2 13.5 29.4 19 L10.6 19 C11.8 13.5 14.5 7.5 20 2Z"/>'
-        '<path class="lb-ship-fin" d="M18 52 L22 52 L22 66 L18 66Z"/>'
-        '<rect class="lb-ship-nozzle" x="12.5" y="63" width="15" height="5" rx="1.5"/></svg>')
+# A chubby pixel rocket in the style of the site's pixel avatars, 16 x 24 cells: k ink, w hull,
+# a accent, l porthole glass (the model's logo sits on it, centre 8, 8), g nozzle; rows 18-23 hold two
+# flame frames (y, o) that alternate.
+_ROCKET = ['.......kk.......', '......kaak......', '.....kaaaak.....', '....kaaaaaak....',
+           '...kwwkkkkwwk...', '..kwwkllllkwwk..', '..kwkllllllkwk..', '..kwkllllllkwk..',
+           '..kwkllllllkwk..', '..kwkllllllkwk..', '..kwwkllllkwwk..', '..kwwwkkkkwwwk..',
+           '..kwwwwwwwwwwk..', '.kakwwwwwwwwkak.', 'kaaakaaaaaakaaak', 'kaak.kkkkkk.kaak',
+           'kkk..kggggk..kkk', '......kggk......']
+_FLAMES = [['.....yyyyyy.....', '......yooy......', '......oyyo......', '.......oo.......', '.......o........'],
+           ['.....yyyyyy.....', '.....yooooy.....', '......oyyo......', '......o..o......', '.......oo.......', '........o.......']]
+
+
+def _sprite(rows, top=0):
+    out = []
+    for y, row in enumerate(rows):
+        x = 0
+        while x < 16:
+            run = 1
+            while x + run < 16 and row[x + run] == row[x]:
+                run += 1
+            if row[x] != '.':
+                out.append(f'<rect class="s{row[x]}" x="{x}" y="{y + top}" width="{run}" height="1"/>')
+            x += run
+    return ''.join(out)
+
+
+SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 16 24" shape-rendering="crispEdges" focusable="false">'
+        + ''.join(f'<g class="lb-ship-flame lb-ship-flame--{k}">{_sprite(f, 18)}</g>' for k, f in enumerate(_FLAMES))
+        + _sprite(_ROCKET) + '</svg>')
 
 
 def _shot(entries, preview, data, when):
@@ -178,7 +200,7 @@ def _shot(entries, preview, data, when):
         cls = 'lb-shot-model' + (' is-lead' if i == lead else '') + (' is-top' if i in top else '')
         items.append(f'<li class="{cls}" style="{_pct(px, py)};--i:{i};--c:{HUES[i % len(HUES)]}{keys}">'
                      f'<a href="{href}" title="{escape(name)} · Overall {score:.1f}" aria-label="{escape(name)}: Overall {score:.1f}{" (placeholder)" if preview else ""}">'
-                     f'<span class="lb-ship" aria-hidden="true"><span class="lb-ship-body">{SHIP}<span class="lb-ship-flame"></span>'
+                     f'<span class="lb-ship" aria-hidden="true"><span class="lb-ship-body">{SHIP}'
                      f'<span class="lb-shot-badge">{badge}</span></span></span>'
                      f'<span class="lb-shot-label"><span>{escape(name)}</span><b>{score:.1f}</b>'
                      + (f'<small><i>{TARGET - score:.1f}</i> to the Moon</small>' if i == lead else '') + '</span></a></li>')

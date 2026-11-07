@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Make the Earth on the lunar campus read as the Earth: deeper ocean blue under its white clouds, and
+"""Make the Earth on the lunar campus read as the Earth: a soft fog-blue ocean under its white clouds, and
 a thin bright atmosphere along its limb.
 
 Works on v3-frame images (1983 x 793 artwork units, any pixel scale): the campus artwork and the two
@@ -60,9 +60,9 @@ def enhance(src, dst):
     # Ocean: within the band, weighted by how blue the pixel is; fades out toward the lunar ground.
     band = np.clip((ys - h + 1) / 2, 0, 1) * np.clip((g - ys) / 14, 0, 1)
     # Bright bluish pixels only: the ocean is bright (luminance ~200+), the arms' blue joints are dark.
-    w = band * np.clip((blue - 10) / 26, 0, 1) * np.clip((lum - 150) / 30, 0, 1) * .72
+    w = band * np.clip((blue - 10) / 26, 0, 1) * np.clip((lum - 150) / 30, 0, 1) * .5
     t = np.clip((lum - 120) / 120, 0, 1)[..., None]
-    deep, light = np.array([28, 86, 150], np.float32), np.array([104, 162, 214], np.float32)
+    deep, light = np.array([84, 132, 170], np.float32), np.array([158, 196, 222], np.float32)   # the site's fog blues
     ocean = deep * (1 - t) + light * t
     # Slightly deeper toward the limb, as the atmosphere thickens.
     depth = np.clip((ys - h) / 40, 0, 1)[..., None]
@@ -72,8 +72,8 @@ def enhance(src, dst):
     # Atmosphere: a bright rim hugging the horizon and a blue haze just above it, on sky pixels only.
     sky = np.clip((blue - 8) / 14, 0, 1) * (ys < h + 1)
     d = h - ys
-    rim = np.exp(-.5 * ((d - 1.2) / 2.2) ** 2) * .85
-    haze = np.clip(1 - d / 26, 0, 1) * (d > 0) * .35
+    rim = np.exp(-.5 * ((d - 1.2) / 2.2) ** 2) * .6
+    haze = np.clip(1 - d / 26, 0, 1) * (d > 0) * .22
     out = out * (1 - (rim * sky)[..., None]) + np.array([236, 249, 255], np.float32) * (rim * sky)[..., None]
     out = out * (1 - (haze * sky)[..., None]) + np.array([150, 205, 238], np.float32) * (haze * sky)[..., None]
 
