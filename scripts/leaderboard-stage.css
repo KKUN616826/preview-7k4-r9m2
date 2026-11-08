@@ -410,7 +410,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #0008 7%, #000 16%); mask-image: linear-gradient(transparent, #0008 7%, #000 16%); }
 }
 .lb-stage-sub { max-width: 30em; margin-top: 4px !important; font-size: clamp(14px, 1vw, 17px) !important; }
-.lb-shot { --launch: .16s; --fly: 1.2s; --badge: clamp(28px, 2.9vw, 56px); --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
+.lb-shot { --launch: .16s; --fly: 1.2s; --badge: clamp(18px, 1.65vw, 32px); --c: #6f8f97; position: absolute; inset: 0; z-index: 3; pointer-events: none; container-type: size; }
 .lb-shot-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .lb-shot-surface { fill: none; stroke-linecap: round; }
 .lb-shot-surface--earth { stroke: #e9f8ff; stroke-width: 5; filter: drop-shadow(0 0 6px #7cc4ef) drop-shadow(0 0 2px #fff); }
@@ -420,11 +420,11 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-trail {
   fill: none;
   stroke: #ffffff;
-  stroke-width: 4;
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-dasharray: 1 1;
-  opacity: .9;
-  filter: drop-shadow(0 0 1px #6f8f97) drop-shadow(0 0 3px #ffffff);
+  opacity: .85;
+  filter: drop-shadow(0 0 1px #6f8f9799);
   animation: lb-shot-trail var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both;
 }
 .lb-shot-rest { fill: none; stroke: #1f3a4b; stroke-width: 1.4; stroke-dasharray: 2 6; stroke-linecap: round; opacity: .28; animation: lb-shot-fade .6s ease-out calc(.5s + var(--i) * var(--launch) + var(--fly)) both; }
@@ -456,22 +456,18 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* Each model rides a chubby pixel rocket, in the style of the site's pixel avatars, turned along its
    route; its logo sits on the porthole. One soft accent for every rocket, rust for the leader. */
 .lb-shot-model { --ship-ink: #2b4757; --ship-hull: #fbfaf3; --ship-accent: #7d9ba4; }
-.lb-ship { position: relative; flex: none; width: var(--badge); height: calc(var(--badge) * 1.5); transform: rotate(calc(var(--r3) * .5)); transform-origin: 50% 33.3%; animation: lb-ship-turn var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both; }
-.lb-ship-body { position: absolute; inset: 0; animation: lb-ship-hover 3.2s steps(4, jump-none) calc(.5s + var(--i) * var(--launch) + var(--fly)) infinite; }
-.lb-ship-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 2px 3px #1f3a4b33); }
-.lb-ship-svg .sk { fill: var(--ship-ink); }
-.lb-ship-svg .sw { fill: var(--ship-hull); }
-.lb-ship-svg .sa { fill: var(--ship-accent); }
-.lb-ship-svg .sl { fill: #dcEef3; }
-.lb-ship-svg .sg { fill: #8f9aa1; }
-.lb-ship-svg .sy { fill: #ffe39a; }
-.lb-ship-svg .so { fill: #f2a65a; }
-.lb-ship-flame--1 { opacity: 0; }
-.lb-ship-flame--0 { animation: lb-ship-blink .36s steps(1, end) infinite; }
-.lb-ship-flame--1 { animation: lb-ship-blink .36s steps(1, end) .18s infinite; }
-.lb-shot-badge { position: absolute; left: 50%; top: 33.3%; display: grid; place-items: center; width: 37.5%; height: 25%; transform: translate(-50%, -50%) rotate(calc(-.5 * var(--r3))); }
+.lb-ship { position: relative; flex: none; width: var(--badge); height: calc(var(--badge) * 2.2); transform: rotate(calc(var(--r3) * .5)); transform-origin: 50% 38.6%; animation: lb-ship-turn var(--fly) cubic-bezier(.3, .6, .3, 1) calc(.5s + var(--i) * var(--launch)) both; }
+.lb-ship-body { position: absolute; inset: 0; animation: lb-ship-hover 4s ease-in-out calc(.5s + var(--i) * var(--launch) + var(--fly)) infinite; }
+.lb-ship-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 1px 2px #1f3a4b2e); }
+.lb-ship-hull { fill: var(--ship-hull); stroke: var(--ship-ink); stroke-width: 1.1; stroke-linejoin: round; }
+.lb-ship-nose, .lb-ship-fin { fill: var(--ship-accent); stroke: var(--ship-ink); stroke-width: 1.1; stroke-linejoin: round; }
+.lb-ship-nozzle { fill: #8f9aa1; }
+.lb-ship-window { fill: #fff; stroke: var(--ship-ink); stroke-width: 1.1; }
+.lb-ship-flame { fill: #f6c27e; opacity: .85; transform-box: fill-box; transform-origin: 50% 0; animation: lb-ship-flicker .5s ease-in-out infinite alternate; }
+@keyframes lb-ship-flicker { from { transform: scaleY(.75); opacity: .65; } to { transform: scaleY(1.05); opacity: .9; } }
+.lb-shot-badge { position: absolute; left: 50%; top: 38.6%; display: grid; place-items: center; width: 42%; height: 19.1%; border-radius: 50%; overflow: hidden; transform: translate(-50%, -50%) rotate(calc(-.5 * var(--r3))); }
 .lb-shot-badge img { width: 92%; height: 92%; object-fit: contain; }
-.lb-shot-mono { color: var(--ship-ink); font-family: 'Pixelify Sans', 'JetBrains Mono', monospace; font-size: calc(var(--badge) * .26); font-weight: 700; line-height: 1; letter-spacing: -.3px; }
+.lb-shot-mono { color: var(--ship-ink); font-size: calc(var(--badge) * .3); font-weight: 700; line-height: 1; letter-spacing: -.2px; }
 .lb-shot-label { display: inline-flex; align-items: baseline; gap: 5px; padding: 1px 7px; border-radius: 6px; background: rgba(255, 255, 255, .88); color: #2b4757; font-size: 11px; font-weight: 600; white-space: nowrap; }
 .lb-shot-label b { color: #1f3a4b; font-size: 12px; font-variant-numeric: tabular-nums; }
 .lb-shot-model:not(.is-top) .lb-shot-label { display: none; }
@@ -484,11 +480,11 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-model a:hover, .lb-shot-model a:focus-visible { --ship-accent: #a2451f; }
 .lb-shot-model.is-top .lb-shot-label b { color: #a2451f; }
 .lb-shot-model.is-lead { z-index: 1; }
-.lb-shot-model.is-lead a { --badge: clamp(48px, 4.2vw, 80px); flex-direction: column-reverse; gap: 6px; transform: translate(-50%, calc(-100% + var(--badge))); }
+.lb-shot-model.is-lead a { --badge: clamp(24px, 2.2vw, 42px); flex-direction: column-reverse; gap: 6px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
 .lb-shot-model.is-lead { --ship-accent: #a2451f; }
-.lb-shot-model.is-lead .lb-ship-svg { filter: drop-shadow(0 0 8px #f6c9a3) drop-shadow(0 2px 4px #1f3a4b44); }
+.lb-shot-model.is-lead .lb-ship-svg { filter: drop-shadow(0 0 5px #fbe3cc) drop-shadow(0 1px 2px #1f3a4b38); }
 .lb-shot-model.is-lead .lb-shot-label { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: 8px; padding: 5px 11px; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px #1f3a4b33; font-size: 13px; font-weight: 700; }
-.lb-shot-model.is-lead .lb-shot-label b { color: #a2451f; font-size: 22px; font-weight: 800; line-height: 1; }
+.lb-shot-model.is-lead .lb-shot-label b { color: #a2451f; font-size: 19px; font-weight: 800; line-height: 1; }
 .lb-shot-model.is-lead .lb-shot-label small { grid-column: 1 / -1; margin-top: 3px; padding-top: 4px; border-top: 1px solid #e3e9ea; color: #1f3a4b; font-size: 12px; font-weight: 700; }
 .lb-shot-model.is-lead .lb-shot-label small i { color: #a2451f; font-style: normal; }
 /* Preview caption and the first batch, under the page title. */
@@ -505,11 +501,10 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   66% { translate: calc(var(--k2x) * 1cqw) calc(var(--k2y) * 1cqh); }
   100% { opacity: 1; translate: 0 0; }
 }
-.lb-shot-model:not(.is-lead) a { flex-direction: column-reverse; gap: 3px; transform: translate(-50%, calc(-100% + var(--badge))); }
+.lb-shot-model:not(.is-lead) a { flex-direction: column-reverse; gap: 3px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
 /* Pixel art keeps its crisp edges best near upright, so the rockets lean half the route's angle. */
 @keyframes lb-ship-turn { 0% { transform: rotate(calc(var(--r0) * .5)); } 33% { transform: rotate(calc(var(--r1) * .5)); } 66% { transform: rotate(calc(var(--r2) * .5)); } 100% { transform: rotate(calc(var(--r3) * .5)); } }
-@keyframes lb-ship-hover { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
-@keyframes lb-ship-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes lb-ship-hover { 0%, 100% { translate: 0 0; } 50% { translate: 0 -2px; } }
 @keyframes lb-shot-trail { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes lb-shot-fade { from { opacity: 0; } }
 @keyframes lb-shot-glow {
@@ -519,7 +514,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-tag--moon { transform: translate(calc(-100% + 56px), -50%); }
 /* Narrow desktops: the leader's label sits above its badge so it stays inside the stage. */
 @media (min-width: 761px) and (max-width: 1060px) {
-  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge))); }
+  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
   .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 150px), -40%); }
 }
 /* Phones: the stations are hidden and the stage is sized to the band of art that holds every route,
@@ -549,7 +544,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* Narrow desktops: the station tags keep their names only. Phones: the leader's label sits above it. */
 @media (min-width: 761px) and (max-width: 1180px) { .lb-stage .lb-station-gist { display: none; } }
 @media (max-width: 760px) {
-  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge))); }
+  .lb-shot-model.is-lead a { flex-direction: column-reverse; gap: 4px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
   .lb-stage .lb-shot-tag--moon { transform: translate(calc(-100% - 150px), -40%); }
 }
 /* Station tags: compact, sitting close above their arms. */
@@ -560,8 +555,8 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* The Earth tag hangs left of its point, so it stays inside the stage on narrower screens. */
 .lb-stage .lb-shot-tag--earth { transform: translate(-82%, -50%); }
 @media (max-width: 760px) {
-  .lb-shot { --badge: 15px; }
-  .lb-shot-model.is-lead a { --badge: 32px; }
+  .lb-shot { --badge: 12px; }
+  .lb-shot-model.is-lead a { --badge: 19px; }
   .lb-shot-mono { font-size: 4px; }
   /* The phone window starts at artwork x 610; the tag sits at its left edge, on the ocean. */
   .lb-stage .lb-shot-tag--earth { left: calc(622 / 1983 * 100%) !important; transform: translateY(-20%); }
@@ -572,7 +567,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-summit-ring { fill: #fff; stroke: #a2451f; stroke-width: 3; }
 .lb-shot-summit-core { fill: #a2451f; }
 .lb-shot-summit-pulse { fill: none; stroke: #a2451f; stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: lb-summit-pulse 2.6s ease-out infinite; }
-@keyframes lb-summit-pulse { from { transform: scale(1); opacity: .75; } to { transform: scale(3.4); opacity: 0; } }
+@keyframes lb-summit-pulse { from { transform: scale(1); opacity: .5; } to { transform: scale(2.4); opacity: 0; } }
 /* The Moon tag stands on the Moon right above its beacon, clear of the leader's label below. */
 .lb-stage .lb-shot-tag--moon { transform: translate(-50%, calc(-100% - 2.4cqw)); }
 @media (prefers-reduced-motion: reduce) { .lb-shot-summit-pulse { animation: none; opacity: 0; } }
@@ -580,8 +575,8 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-stage .lb-shot-tag--moon { transform: translate(-62%, calc(-100% - 12px)); }
 }
 .lb-shot-summit-halo { fill: none; stroke: #a2451f; stroke-width: 1.5; stroke-dasharray: 3 5; opacity: .55; }
-.lb-shot-summit-ring { stroke-width: 4; filter: drop-shadow(0 0 6px #ffd7ae); }
+.lb-shot-summit-ring { stroke-width: 3; filter: drop-shadow(0 0 4px #ffe2c4); }
 /* Score chips of the runners-up sit above their rockets, like the leader's, so neighbours on converging routes do not cover each other. */
-.lb-shot-model.is-top:not(.is-lead) a { flex-direction: column-reverse; gap: 2px; transform: translate(-50%, calc(-100% + var(--badge))); }
+.lb-shot-model.is-top:not(.is-lead) a { flex-direction: column-reverse; gap: 2px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
 .lb-shot-model.is-top.is-label-left a { flex-direction: row-reverse; gap: 4px; transform: translate(calc(-100% + var(--badge) / 2), -50%); }
 .lb-shot-model.is-top.is-label-right a { flex-direction: row; gap: 4px; transform: translate(calc(var(--badge) / -2), -50%); }

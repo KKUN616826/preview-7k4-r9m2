@@ -141,35 +141,15 @@ def _pct(x, y):
     return f'left:{x / W * 100:.3f}%;top:{y / H * 100:.3f}%'
 
 
-# A chubby pixel rocket in the style of the site's pixel avatars, 16 x 24 cells: k ink, w hull,
-# a accent, l porthole glass (the model's logo sits on it, centre 8, 8), g nozzle; rows 18-23 hold two
-# flame frames (y, o) that alternate.
-_ROCKET = ['.......kk.......', '......kaak......', '.....kaaaak.....', '....kaaaaaak....',
-           '...kwwkkkkwwk...', '..kwwkllllkwwk..', '..kwkllllllkwk..', '..kwkllllllkwk..',
-           '..kwkllllllkwk..', '..kwkllllllkwk..', '..kwwkllllkwwk..', '..kwwwkkkkwwwk..',
-           '..kwwwwwwwwwwk..', '.kakwwwwwwwwkak.', 'kaaakaaaaaakaaak', 'kaak.kkkkkk.kaak',
-           'kkk..kggggk..kkk', '......kggk......']
-_FLAMES = [['.....yyyyyy.....', '......yooy......', '......oyyo......', '.......oo.......', '.......o........'],
-           ['.....yyyyyy.....', '.....yooooy.....', '......oyyo......', '......o..o......', '.......oo.......', '........o.......']]
-
-
-def _sprite(rows, top=0):
-    out = []
-    for y, row in enumerate(rows):
-        x = 0
-        while x < 16:
-            run = 1
-            while x + run < 16 and row[x + run] == row[x]:
-                run += 1
-            if row[x] != '.':
-                out.append(f'<rect class="s{row[x]}" x="{x}" y="{y + top}" width="{run}" height="1"/>')
-            x += run
-    return ''.join(out)
-
-
-SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 16 24" shape-rendering="crispEdges" focusable="false">'
-        + ''.join(f'<g class="lb-ship-flame lb-ship-flame--{k}">{_sprite(f, 18)}</g>' for k, f in enumerate(_FLAMES))
-        + _sprite(_ROCKET) + '</svg>')
+# A slim rocket, 20 x 44 units: an ogive hull with an accent nose, two swept fins, a round porthole
+# (centre 10, 17, radius 5; the model's logo sits on it) and a soft flame under the nozzle.
+SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 20 44" focusable="false">'
+        '<path class="lb-ship-flame" d="M7.6 33.5Q10 44 12.4 33.5Z"/>'
+        '<path class="lb-ship-fin" d="M4.6 23.5Q1 27 .8 33.2L4.6 30.6ZM15.4 23.5Q19 27 19.2 33.2L15.4 30.6Z"/>'
+        '<path class="lb-ship-hull" d="M10 1C14.6 5.4 16 11.6 16 18.6V31.2H4V18.6C4 11.6 5.4 5.4 10 1Z"/>'
+        '<path class="lb-ship-nose" d="M10 1C12.1 3 13.5 5.2 14.4 7.6H5.6C6.5 5.2 7.9 3 10 1Z"/>'
+        '<rect class="lb-ship-nozzle" x="6.6" y="31.2" width="6.8" height="2.4" rx=".8"/>'
+        '<circle class="lb-ship-window" cx="10" cy="17" r="5"/></svg>')
 
 
 def _slots(entries):
@@ -194,7 +174,8 @@ def _slots(entries):
 def _label_sides(points, lead, top):
     """Where each runner-up's score chip goes: above its rocket, or beside it when a neighbour on a
     converging route, or the leader's label, is in the way. Boxes in artwork units at a 1440 px
-    stage (a rocket is about 58 x 87, a chip 55 x 25, the leader's label 190 x 80)."""
+    stage (a rocket is about 33 x 73 with its porthole on the point, a chip 55 x 25, the leader's
+    label 170 x 72)."""
     def box(x0, y0, x1, y1):
         return (x0, y0, x1, y1)
 
@@ -203,20 +184,20 @@ def _label_sides(points, lead, top):
 
     taken = []
     for i, (x, y) in enumerate(points):
-        s = 1.43 if i == lead else 1.0
-        taken.append(box(x - 29 * s, y - 29 * s, x + 29 * s, y + 58 * s))
+        s = 1.35 if i == lead else 1.0
+        taken.append(box(x - 17 * s, y - 28 * s, x + 17 * s, y + 45 * s))
     lx, ly = points[lead]
-    taken.append(box(lx - 96, ly - 41 - 85, lx + 96, ly - 41))
+    taken.append(box(lx - 86, ly - 38 - 76, lx + 86, ly - 38))
     out = {}
     for i in sorted(top - {lead}, key=lambda i: -points[i][1]):
         x, y = points[i]
-        for side, b in (('', box(x - 28, y - 58, x + 28, y - 32)),
-                        (' is-label-left', box(x - 88, y - 12, x - 33, y + 13)),
-                        (' is-label-right', box(x + 33, y - 12, x + 88, y + 13))):
+        for side, b in (('', box(x - 28, y - 57, x + 28, y - 31)),
+                        (' is-label-left', box(x - 76, y - 12, x - 21, y + 13)),
+                        (' is-label-right', box(x + 21, y - 12, x + 76, y + 13))):
             if not any(hit(b, o) for o in taken):
                 break
         else:
-            side, b = '', box(x - 28, y - 58, x + 28, y - 32)
+            side, b = '', box(x - 28, y - 57, x + 28, y - 31)
         out[i] = side
         taken.append(b)
     return out

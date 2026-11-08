@@ -51,3 +51,12 @@
 - Runner-up score chips sit above their rockets, or beside them when a neighbour or the leader's label
   is in the way (`_label_sides`). The 75 contour keeps its line but not its number, which the leader's
   label would cover.
+
+## 2026-11-08: slim rockets
+
+- The pixel rockets read as too big and loud. Each model now rides a slim vector rocket (20 x 44):
+  cream ogive hull with an ink outline, accent nose and swept fins, a round porthole holding the logo
+  and a soft flickering flame. About 1.65vw wide (leader 2.2vw, rust accent, faint warm glow); 12 px
+  on phones (leader 19 px).
+- Calmer effects: thinner contrails (2.2), a gentle hover, a smaller and fainter summit pulse, and a
+  slightly smaller leader score. `_label_sides` uses the new rocket size.
