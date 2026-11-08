@@ -22,7 +22,7 @@ def render():
         model_detail = f'{batch} with results on {first.day} {first.strftime("%b")}'
     metrics = [
         (task_count, 'Tasks', 'Ten per capability suite', 'layout-grid'),
-        (task_count * 3, 'Task configurations', 'Easy · Medium · Hard', 'chart-bar'),
+        (task_count * 3 * 2, 'Task configurations', '3 levels × Clean and Random', 'chart-bar'),
         (len(suites), 'Capability suites', 'Mind · Act · Mind2Act', 'stack'),
         (len(models), 'Models on the leaderboard', model_detail, 'robot'),
     ]
