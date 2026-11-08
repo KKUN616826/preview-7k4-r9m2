@@ -8,6 +8,7 @@ its stars and wisps blurred away before stretching and a fresh sprinkling of sta
 lower copy is filled with sky graded from the columns beside and below it.
 
     python3 scripts/extend_lunar_sky.py media/images/leaderboard-lunar-campus-v3.webp media/images/leaderboard-lunar-campus-v4.webp
+    python3 scripts/extend_lunar_sky.py <in> <out> --no-moon    # leave the Moon out (scripts/center_moon.py)
 """
 import sys
 
@@ -19,7 +20,7 @@ MOON = (1698.5, -369.5, 590.0)             # centre x, y and radius of the Moon'
 CLEAN = 220                                # rows 0..CLEAN (artwork units) hold only sky and the Moon
 
 
-def main(src, dst):
+def main(src, dst, keep_moon=True):
     im = Image.open(src).convert('RGB')
     W, H = im.size
     k = W / 1983                           # pixels per artwork unit
@@ -81,6 +82,10 @@ def main(src, dst):
     glow = stars.filter(ImageFilter.GaussianBlur(1.6 * k))
     out = Image.composite(Image.new('RGB', out.size, (255, 251, 238)), out, Image.eval(glow, lambda v: min(255, v * 2)))
 
+    if not keep_moon:                      # a moonless sky, for scripts/center_moon.py
+        out.save(dst, 'WEBP', quality=88, method=6)
+        print(f'{src} -> {dst}: {W}x{H} -> {out.size[0]}x{out.size[1]}, no Moon')
+        return
     # 4. The Moon, unmoved, over everything.
     mask = Image.fromarray((np.clip((r + 2 * k - dist) / (3 * k), 0, 1) * 255).astype(np.uint8))
     moon_layer = Image.new('RGB', out.size)
@@ -93,4 +98,4 @@ def main(src, dst):
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:3])
+    main(*sys.argv[1:3], keep_moon='--no-moon' not in sys.argv)

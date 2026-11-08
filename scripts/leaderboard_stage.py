@@ -1,9 +1,11 @@
-"""Leaderboard hero: the lunar campus under a wide sky, with the Earth on the horizon and the Moon above.
+"""Leaderboard hero: the lunar campus under a wide sky, the Earth's horizon below and the Moon overhead,
+their surfaces facing each other across the sky, both level and centred.
 Each reported end-to-end model launches from the Earth's surface (0) straight toward the Moon's surface
 (100, every case solved) and stops at the fraction of the way given by its Overall score (plain mean
 over all 30 tasks, Clean setting). The best model launches from the middle and the others alternate
 outward by rank, so the rockets stand like a mountain; every route converges on one landing beacon on
-the Moon, the summit at 100. Contours mark 25, 50 and 75 percent of every route.
+the Moon, the summit at 100. Every model carries its name tag; contours mark 25, 50 and 75 percent of
+every route.
 
 Mind, Act and Mind2Act scores and the Random setting are columns in the tables below.
 
@@ -20,7 +22,7 @@ from html import escape
 # edge of the label sits on x, so labels near the crop edge stay inside the stage.
 STATIONS = [
     # (slug, index, name, gist, shoulder pivot x/y on the 1983x793 artwork (scene.js S), placement, leader length)
-    ('mind', '01', 'Mind', 'memory and decisions', 436, 383, 'start', 58),
+    ('mind', '01', 'Mind', 'memory and decisions', 436, 383, 'start', 14),
     ('mind2act', '03', 'Mind2Act', 'reasoning and execution together', 954, 594, 'side', 28),
     ('act', '02', 'Act', 'physical execution', 1681, 400, 'end', 52),
 ]
@@ -59,9 +61,10 @@ def _icon(m, size):
     return f'<span class="lb-podium-monogram">{escape(monogram(m["name"]))}</span>'
 
 
-# Geometry of leaderboard-lunar-campus-v5.webp (v4 with the Earth enhanced, scripts/enhance_earth.py) in
-# artwork units (1983 x 1053): v3 with SKY units of sky
-# inserted between the Moon and the Earth (scripts/extend_lunar_sky.py), so v3 y + SKY = v4 y.
+# Geometry of leaderboard-lunar-campus-v6.webp in artwork units (1983 x 1053): v3 with the Earth
+# enhanced (scripts/enhance_earth.py), SKY units of sky inserted above the Earth and the Moon taken out
+# (scripts/extend_lunar_sky.py --no-moon), so v3 y + SKY = v6 y, then the Moon painted back at the top
+# centre (scripts/center_moon.py).
 W, H, SKY = 1983, 1053, 260
 # The painted camera is rolled: the Earth's horizon falls about 2.8 degrees to the right, so its crest
 # sits off the left edge and the Earth looks tilted. The page turns the art (still and loop) back by
@@ -71,10 +74,12 @@ W, H, SKY = 1983, 1053, 260
 ROLL, ZOOM = 2.8, 1.035
 # The horizon on v4, fitted to a parabola from x 360 to 1840: y = A x^2 + B x + C, artwork units.
 HORIZON_FIT = (1.8239e-05, 1.31081e-02, 528.449)
-MOON_ART = ((1698.5, -369.5), 590.0)         # the Moon's centre and radius on v4
-LAUNCH = (650, 1540)                         # launch sites along the horizon, clear of the Mind and Act labels
-LANDING = (1500, 1620)                       # a narrow landing zone on the Moon's lower limb: every route converges on it
-SUMMIT = 1560                               # the beacon at its centre, the 100 every model is heading for
+# The Moon hangs at the top centre (scripts/center_moon.py paints it there): centre and radius in view
+# units, its lowest point at y MOON_LOW, so its surface faces the Earth's horizon across the sky.
+MOON_R, MOON_LOW = 1250.0, 232.0
+LAUNCH = (440, 1543)                         # launch sites along the horizon, clear of the Mind and Act labels
+LANDING = (871, 1112)                        # a narrow landing zone at the bottom of the Moon: every route converges on it
+SUMMIT = 991.5                              # the beacon at its centre, straight above the middle launch site
 
 
 def _view(x, y):
@@ -86,7 +91,7 @@ def _view(x, y):
 
 
 _HZ = sorted(_view(x, HORIZON_FIT[0] * x * x + HORIZON_FIT[1] * x + HORIZON_FIT[2]) for x in range(-200, 2201, 25))
-MOON = (*_view(*MOON_ART[0]), MOON_ART[1] * ZOOM)   # centre and radius of the Moon's disc in view
+MOON = (W / 2, MOON_LOW - MOON_R, MOON_R)           # centre and radius of the Moon's disc in view
 
 
 def _earth(x):
@@ -110,7 +115,7 @@ def _ray(t):
     the list is that fraction of the distance flown."""
     ex = LAUNCH[0] + (LAUNCH[1] - LAUNCH[0]) * t
     (ex, ey), (lx, ly) = (ex, _earth(ex) - 6), _limb(LANDING[0] + (LANDING[1] - LANDING[0]) * t)
-    c1, c2 = (ex, ey - .85 * (ey - ly)), (lx, ly + .15 * (ey - ly))
+    c1, c2 = (ex, ey - .6 * (ey - ly)), (lx, ly + .3 * (ey - ly))
     pts = []
     for k in range(121):
         u = k / 120
@@ -153,53 +158,55 @@ SHIP = ('<svg class="lb-ship-svg" viewBox="0 0 20 44" focusable="false">'
 
 
 def _slots(entries):
-    """Launch site t in [0, 1] for each entry: the best score launches a little right of the middle,
-    under the landing beacon, and the rest alternate outward by rank (the right flank, where routes
-    lean toward the Moon, filling more slowly), with every other pair swapped, so the rockets stand
-    like a mountain, highest in the middle, without forming two straight flanks."""
+    """Launch site t in [0, 1] for each entry: the best score launches from the middle, under the
+    landing beacon, and the rest alternate outward by rank, with every other pair swapped, so the
+    rockets stand like a mountain, highest in the middle, without forming two straight flanks."""
     n = len(entries)
     if n == 1:
-        return [.6]
-    c = round(.6 * (n - 1))
-    order = sorted(range(n), key=lambda k: ((c - k) if k < c else (k - c) * 1.4, k))
+        return [.5]
+    c = (n - 1) // 2
+    order = sorted(range(n), key=lambda k: (abs(k - c), k))
     for j in range(3, n - 1, 4):
         order[j], order[j + 1] = order[j + 1], order[j]
     ranked = sorted(range(n), key=lambda i: -entries[i][1])
     # The leader's rocket is larger: widen the two gaps beside its site.
-    gaps = [1.5 if k + 1 == c else 2.2 if k == c else 1.0 for k in range(n - 1)]
+    gaps = [2.0 if order[0] in (k, k + 1) else 1.0 for k in range(n - 1)]
     at = [sum(gaps[:k]) / sum(gaps) for k in range(n)]
     return {i: at[order[r]] for r, i in enumerate(ranked)}
 
 
-def _label_sides(points, lead, top):
-    """Where each runner-up's score chip goes: above its rocket, or beside it when a neighbour on a
-    converging route, or the leader's label, is in the way. Boxes in artwork units at a 1440 px
-    stage (a rocket is about 33 x 73 with its porthole on the point, a chip 55 x 25, the leader's
-    label 170 x 72)."""
-    def box(x0, y0, x1, y1):
-        return (x0, y0, x1, y1)
-
+def _label_sides(points, names, lead, top):
+    """Where each model's name tag goes: above its rocket, as on a summit map. Tags are at most one
+    launch spacing wide (CSS truncates longer names), so neighbouring tags cannot overlap; a tag that
+    would still hit the leader's label or a rocket moves below its rocket, then beside it (outward
+    first), or shows on hover only. Boxes in artwork units at a 1440 px stage (1 px = 1.377 units): a rocket about 33 x 73
+    with its porthole on the point, a tag 25 high, the leader's label about 170 x 72."""
     def hit(a, b):
         return a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
 
+    n = len(points)
+    room = (LAUNCH[1] - LAUNCH[0]) / (n + 1) - 8          # n - 1 gaps, two of them doubled
     taken = []
     for i, (x, y) in enumerate(points):
         s = 1.35 if i == lead else 1.0
-        taken.append(box(x - 17 * s, y - 28 * s, x + 17 * s, y + 45 * s))
+        taken.append((x - 17 * s, y - 28 * s, x + 17 * s, y + 45 * s))
     lx, ly = points[lead]
-    taken.append(box(lx - 86, ly - 38 - 76, lx + 86, ly - 38))
+    taken.append((lx - 86, ly - 38 - 76, lx + 86, ly - 38))
     out = {}
-    for i in sorted(top - {lead}, key=lambda i: -points[i][1]):
+    for i in sorted(set(range(n)) - {lead}, key=lambda i: (i not in top, points[i][1])):
         x, y = points[i]
-        for side, b in (('', box(x - 28, y - 57, x + 28, y - 31)),
-                        (' is-label-left', box(x - 76, y - 12, x - 21, y + 13)),
-                        (' is-label-right', box(x + 21, y - 12, x + 76, y + 13))):
+        w = min(room, 8.6 * len(names[i]) + 16) + (40 if i in top else 0)
+        above = (' is-label-above', (x - w / 2, y - 55, x + w / 2, y - 30))
+        left = (' is-label-left', (x - 21 - w, y - 12, x - 21, y + 13))
+        right = (' is-label-right', (x + 21, y - 12, x + 21 + w, y + 13))
+        below = (' is-label-below', (x - w / 2, y + 48, x + w / 2, y + 73))
+        for side, b in (above, below, left, right) if x < lx else (above, below, right, left):
             if not any(hit(b, o) for o in taken):
+                out[i] = side
+                taken.append(b)
                 break
         else:
-            side, b = '', box(x - 28, y - 57, x + 28, y - 31)
-        out[i] = side
-        taken.append(b)
+            out[i] = ' is-label-hidden'
     return out
 
 
@@ -214,7 +221,8 @@ def _shot(entries, preview, data, when):
     top = set(sorted(range(n), key=lambda i: -entries[i][1])[:3])
     lines, items = [], []
     slot = _slots(entries)
-    sides = _label_sides([_at(_ray(slot[i]), sc / TARGET) for i, (_, sc, _) in enumerate(entries)], lead, top)
+    sides = _label_sides([_at(_ray(slot[i]), sc / TARGET) for i, (_, sc, _) in enumerate(entries)],
+                         [nm for nm, _, _ in entries], lead, top)
     for i, (name, score, m) in enumerate(entries):
         t = slot[i]
         ray = _ray(t)
@@ -247,11 +255,12 @@ def _shot(entries, preview, data, when):
         d = 'M' + ' L'.join(f'{x:.1f} {y:.1f}' for x, y in pts)
         lx, ly = pts[0]
         contours += f'<path class="lb-shot-contour" d="{d}"/>'
-        if v < 75:      # near the summit the routes have converged; the leader's label would cover a 75
+        if v == 50:     # one mid-way mark; 25 sits among the name tags and 75 under the leader's label
             contours += f'<text class="lb-shot-contour-label" x="{lx - 10:.1f}" y="{ly + 4:.1f}">{v}</text>'
     # The two surfaces: the Earth's horizon under the launch sites, the Moon's limb above the routes.
     cx, cy, r = MOON
-    moon = f'M{cx - (r * r - (cy + 0) ** 2) ** .5 + 1:.1f} 0 A{r} {r} 0 0 0 {W} {cy + (r * r - (W - cx) ** 2) ** .5:.1f}'
+    hw = (r * r - cy * cy) ** .5         # where the limb meets the top edge
+    moon = f'M{cx - hw:.1f} 0 A{r} {r} 0 0 0 {cx + hw:.1f} 0'
     first = ''
     if preview:
         batch = [m for m in data['models'] if m.get('release') == data['first_release']]
@@ -271,13 +280,16 @@ def _shot(entries, preview, data, when):
               f'<stop offset=".35" stop-color="#ffd9b0" stop-opacity=".55"/><stop offset="1" stop-color="#ffd9b0" stop-opacity="0"/></radialGradient>'
               f'<linearGradient id="lb-corridor-fill" gradientUnits="userSpaceOnUse" x1="0" y1="{gy0:.0f}" x2="0" y2="{gy1:.0f}">'
               f'<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".22"/>'
-              f'<stop offset="1" stop-color="#fff1dc" stop-opacity=".72"/></linearGradient>')
+              f'<stop offset="1" stop-color="#fff1dc" stop-opacity=".72"/></linearGradient>'
+              f'<linearGradient id="lb-moon-rim" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="{MOON_LOW:.0f}">'
+              f'<stop offset="0" stop-color="#fff6e4" stop-opacity="0"/><stop offset=".6" stop-color="#fff6e4"/></linearGradient>')
     summit = (f'<g class="lb-shot-summit" transform="translate({sx:.1f} {sy:.1f})">'
               f'<circle class="lb-shot-summit-glow" r="110" fill="url(#lb-summit-glow)"/>'
               f'<circle class="lb-shot-summit-pulse" r="17"/><circle class="lb-shot-summit-halo" r="27"/><circle class="lb-shot-summit-ring" r="17"/>'
               f'<circle class="lb-shot-summit-core" r="8"/></g>')
     mx0, my0 = sx, sy
-    return (f'<div class="lb-shot{" lb-shot--preview" if preview else ""}" style="--n:{n};--lead:{lead}">'
+    room = ((LAUNCH[1] - LAUNCH[0]) / (n + 1) - 8) / W * 100
+    return (f'<div class="lb-shot{" lb-shot--preview" if preview else ""}" style="--n:{n};--lead:{lead};--tag:{room:.2f}cqw">'
             f'<svg class="lb-shot-svg" viewBox="0 0 {W} {H}" aria-hidden="true">'
             f'<defs>{beacon}</defs><path class="lb-shot-corridor" d="{corridor}" fill="url(#lb-corridor-fill)"/>'
             f'<path class="lb-shot-surface lb-shot-surface--moon" d="{moon}"/>'
@@ -307,7 +319,7 @@ def render(data):
              + ('<div class="lb-stage-controls"><p class="lb-stage-metric">VLA / WAM · Clean · Overall score</p></div>' if not preview else '')
              + '</div><div class="lb-stage-visual"><div class="lb-stage-world">'
              + '<div class="lb-stage-scene">'
-             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v5.webp" alt="Lunar robotics campus under a wide sky, '
+             '<img class="lb-stage-art" src="media/images/leaderboard-lunar-campus-v6.webp" alt="Lunar robotics campus under a wide sky, '
              'with the Earth on the horizon and the Moon above." width="1983" height="1053" fetchpriority="high">'
              '<video class="lb-stage-motion-video" muted loop playsinline preload="metadata" poster="media/images/leaderboard-lunar-campus-v3e.webp" '
              'aria-hidden="true" tabindex="-1"><source src="media/leaderboard-motion/campus-loop.mp4" type="video/mp4"></video>']

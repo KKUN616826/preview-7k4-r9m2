@@ -60,3 +60,21 @@
   on phones (leader 19 px).
 - Calmer effects: thinner contrails (2.2), a gentle hover, a smaller and fainter summit pulse, and a
   slightly smaller leader score. `_label_sides` uses the new rocket size.
+
+## 2026-11-08: the Moon overhead, names on every rocket
+
+- The Moon sat in the top-right corner, so every route leaned right. It now hangs at the top centre,
+  its surface a level arc facing the Earth's horizon. `extend_lunar_sky.py --no-moon` builds the sky
+  without the Moon; `center_moon.py` paints it back from the artwork's own Moon texture, resampled in
+  limb coordinates (craters keep their foreshortening; the texture folds back, mirrored, where the
+  source runs out of arc or depth). The result is `leaderboard-lunar-campus-v6.webp` (v5 removed).
+  The phone header uses a crop of the moonless sky, `leaderboard-sky.webp`.
+- Routes are symmetric: launch sites 440 to 1543 around the centre, a landing zone 871 to 1112 under
+  the beacon at the Moon's lowest point. The leader launches from the middle; the rest alternate
+  outward by rank. The Mind tag hangs lower so the left launch sites clear it.
+- Every model carries its name (desktop above 1180 px): a tag above its rocket, at most one launch
+  spacing wide (`--tag`, longer names end in an ellipsis and show in full on hover); below or beside
+  the rocket when the leader's label or a rocket is in the way. The top three add their score. Only the
+  50 contour keeps its number.
+- On narrow desktops the Moon tag sits right of the beacon; on phones above it, and the phone crop
+  (artwork x 391 to 1591) is centred on the Moon.

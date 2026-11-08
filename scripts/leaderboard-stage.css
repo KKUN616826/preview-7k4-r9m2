@@ -318,7 +318,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
     content: "";
     position: absolute;
     inset: 0;
-    background: url('../media/images/leaderboard-lunar-campus-v5.webp') center top / auto 2400px no-repeat;
+    background: url('../media/images/leaderboard-sky.webp') center top / cover no-repeat;   /* moonless sky (scripts/extend_lunar_sky.py --no-moon) */
   }
   .lb-stage-scene {
     top: auto;
@@ -414,7 +414,7 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .lb-shot-surface { fill: none; stroke-linecap: round; }
 .lb-shot-surface--earth { stroke: #e9f8ff; stroke-width: 5; filter: drop-shadow(0 0 6px #7cc4ef) drop-shadow(0 0 2px #fff); }
-.lb-shot-surface--moon { stroke: #fff6e4; stroke-width: 4; filter: drop-shadow(0 0 7px #f3c98f) drop-shadow(0 0 2px #fff); }
+.lb-shot-surface--moon { stroke: url(#lb-moon-rim); stroke-width: 4; filter: drop-shadow(0 0 7px #f3c98f) drop-shadow(0 0 2px #fff); }
 .lb-shot-contour { fill: none; stroke: #315f72; stroke-width: 1.2; stroke-dasharray: 2 8; opacity: .35; }
 .lb-shot-contour-label { fill: #315f72; font-size: 15px; font-weight: 700; text-anchor: end; paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
 .lb-shot-trail {
@@ -520,8 +520,8 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 /* Phones: the stations are hidden and the stage is sized to the band of art that holds every route,
    from the first launch site to the Moon; the sky above it continues behind the title. */
 @media (max-width: 760px) {
-  .lb-stage { --scene-w: calc(100vw * 1983 / 1130); --stage-height: calc(var(--scene-w) * 1053 / 1983 + 300px); height: var(--stage-height); }
-  .lb-stage-scene { top: auto; bottom: 0; left: 0; width: var(--scene-w); transform: translateX(calc(var(--scene-w) * -610 / 1983)); mask-image: none; -webkit-mask-image: none; }
+  .lb-stage { --scene-w: calc(100vw * 1983 / 1200); --stage-height: calc(var(--scene-w) * 1053 / 1983 + 300px); height: var(--stage-height); }
+  .lb-stage-scene { top: auto; bottom: 0; left: 0; width: var(--scene-w); transform: translateX(calc(var(--scene-w) * -391 / 1983)); mask-image: none; -webkit-mask-image: none; }
   .lb-stage-art, .lb-stage-motion-video { -webkit-mask-image: none; mask-image: none; }
   .lb-stage-art { -webkit-mask-image: linear-gradient(transparent, #000 40px); mask-image: linear-gradient(transparent, #000 40px); }
   .lb-stage-motion-video, .lb-stage .lb-stage-motion-toggle { display: none !important; }
@@ -558,8 +558,8 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   .lb-shot { --badge: 12px; }
   .lb-shot-model.is-lead a { --badge: 19px; }
   .lb-shot-mono { font-size: 4px; }
-  /* The phone window starts at artwork x 610; the tag sits at its left edge, on the ocean. */
-  .lb-stage .lb-shot-tag--earth { left: calc(622 / 1983 * 100%) !important; transform: translateY(-20%); }
+  /* The phone window is artwork x 391 to 1591, centred on the Moon; the tag sits at its left edge, on the ocean. */
+  .lb-stage .lb-shot-tag--earth { left: calc(403 / 1983 * 100%) !important; transform: translateY(-20%); }
 }
 /* The summit: every route converges on one landing beacon on the Moon's surface, inside a corridor of
    light that brightens toward it, so the eye runs from the Earth up to 100. */
@@ -580,3 +580,22 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
 .lb-shot-model.is-top:not(.is-lead) a { flex-direction: column-reverse; gap: 2px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
 .lb-shot-model.is-top.is-label-left a { flex-direction: row-reverse; gap: 4px; transform: translate(calc(-100% + var(--badge) / 2), -50%); }
 .lb-shot-model.is-top.is-label-right a { flex-direction: row; gap: 4px; transform: translate(calc(var(--badge) / -2), -50%); }
+/* Every model carries its name, as on a summit map: a small tag on the outward side of its rocket,
+   placed by _label_sides (left, right or above; hidden when nothing fits, shown on hover). The top
+   three add their score. Narrow desktops and phones keep only the leader's label. */
+@media (min-width: 1181px) {
+  .lb-shot-model:not(.is-lead) .lb-shot-label { display: inline-flex; padding: 0 6px; border-radius: 5px; background: rgba(255, 255, 255, .78); font-size: 10.5px; line-height: 17px; }
+  .lb-shot-model:not(.is-lead) .lb-shot-label > span { display: inline-block; max-width: var(--tag); overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+  .lb-shot-model:not(.is-lead) a:hover .lb-shot-label > span, .lb-shot-model:not(.is-lead) a:focus-visible .lb-shot-label > span { max-width: none; }
+  .lb-shot-model:not(.is-top) .lb-shot-label b { display: none; }
+  .lb-shot-model.is-label-hidden .lb-shot-label { display: none; }
+  .lb-shot-model.is-label-hidden a:hover .lb-shot-label, .lb-shot-model.is-label-hidden a:focus-visible .lb-shot-label { display: inline-flex; }
+  .lb-shot-model:not(.is-lead).is-label-right a, .lb-shot-model:not(.is-lead).is-label-hidden a { flex-direction: row; gap: 3px; transform: translate(calc(var(--badge) / -2), -38.6%); }
+  .lb-shot-model:not(.is-lead).is-label-left a { flex-direction: row-reverse; gap: 3px; transform: translate(calc(-100% + var(--badge) / 2), -38.6%); }
+  .lb-shot-model:not(.is-lead).is-label-above a { flex-direction: column-reverse; gap: 2px; transform: translate(-50%, calc(-100% + var(--badge) * 1.35)); }
+  .lb-shot-model:not(.is-lead).is-label-below a { flex-direction: column; gap: 2px; transform: translate(-50%, calc(var(--badge) * -.85)); }
+}
+@media (min-width: 1181px) { .lb-shot-model.is-top:not(.is-lead) .lb-shot-label > span { max-width: none; } }
+/* Narrow desktops and phones: the Moon tag sits right of the beacon, clear of the subtitle and the leader. */
+@media (max-width: 1180px) { .lb-stage .lb-shot-tag--moon { transform: translate(22px, -50%); } }
+@media (max-width: 760px) { .lb-stage .lb-shot-tag--moon { transform: translate(-50%, calc(-100% - 22px)); } }
