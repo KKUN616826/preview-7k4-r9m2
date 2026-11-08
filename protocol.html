@@ -10,8 +10,8 @@
   <p class="pr-lead">Mind2Act runs every model itself, on the same hidden cases, with fixed budgets and environment-side scorers. End-to-end models and coding agents are ranked on separate boards.</p>
   <dl class="pr-facts">
     <div><dt>tasks</dt><dd>30</dd></div>
-    <div><dt>task configurations</dt><dd>90</dd></div>
-    <div><dt>cases per setting</dt><dd>4,500</dd></div>
+    <div><dt>task configurations</dt><dd>180</dd></div>
+    <div><dt>cases, Clean + Random</dt><dd>9,000</dd></div>
     <div><dt>leaderboards</dt><dd>2</dd></div>
   </dl>
 </div>
@@ -87,9 +87,9 @@
 
 <section id="episodes" aria-labelledby="episodes-title">
   <h2 id="episodes-title">Cases</h2>
-  <p class="pr-section-lead">30 tasks × 3 difficulties × 50 cases = 4,500 cases per setting, run in two settings. A case fixes the task, difficulty, seed, scene and instruction, identically for every model.</p>
+  <p class="pr-section-lead">30 tasks × 3 difficulties × 2 settings (Clean and Random) = 180 task configurations. With 50 cases each, that is 4,500 cases per setting and 9,000 in all. A case fixes the task, difficulty, seed, scene and instruction, identically for every model.</p>
   <ul class="pr-chips">
-    <li><b>Mind</b><span>E, E2, F, F2, M, M2, P, P2, S, S2</span></li>
+    <li><b>Mind</b><span>E1, E2, F1, F2, M1, M2, P1, P2, S1, S2</span></li>
     <li><b>Act</b><span>FR1, FR2, DR3, DR7, PR1–PR6</span></li>
     <li><b>Mind2Act</b><span>CP01–CP10</span></li>
     <li><b>Clean</b><span>Original scenes</span></li>
@@ -115,11 +115,11 @@
     </div>
     <div>
       <h3>Coding agents</h3>
-      <p>4 × the end-to-end physics budget and at most 150 decisions; whichever runs out first ends the case. A rejected or invalid action still costs a decision. Network retries (up to 12 per decision) do not.</p>
+      <p>4 × the end-to-end physics budget and at most 150 decisions; whichever runs out first ends the case. A rejected or invalid action still costs a decision. Network retries (up to 12 per decision) do not; a request that exceeds the declared timeout is retried as a network error.</p>
       <dl><div><dt>Calls</dt><dd>150 decisions</dd></div><div><dt>Wall clock</dt><dd>6 h per case (safety stop, not scored)</dd></div></dl>
     </div>
   </div>
-  <p><strong>Two kinds of ending.</strong> Outcome tasks (22) check the success condition after every action, end at 100 when it is met, and otherwise run to the end of the budget and score the final state. Event tasks (8: E, E2, F2, FR2, M, CP04, CP05, CP10) score mechanism events and end when the prescribed sequence is complete.</p>
+  <p><strong>Two kinds of ending.</strong> Outcome tasks (22) check the success condition after every action, end at 100 when it is met, and otherwise run to the end of the budget and score the final state. Event tasks (8: E1, E2, F2, FR2, M1, CP04, CP05, CP10) score mechanism events and end when the prescribed sequence is complete.</p>
   <p>Violations do not end a case early; only the final state is judged. "Inside" means supported by the container with its centre inside, with no tolerance margin; buttons, keys and levers count once per press of the mechanism itself.</p>
 </section>
 
@@ -158,8 +158,11 @@
     <li><b>Checkpoint</b><span>Servable checkpoint and its SHA</span></li>
     <li><b>Inference settings</b><span>Chunk length, execution rate, stochasticity</span></li>
     <li><b>Preprocessing</b><span>Image resizing is the adapter's choice</span></li>
-    <li><b>Agent settings</b><span>Model, effort, transport, call limit, retries</span></li>
     <li><b>Statistics</b><span>Data statistics an E2E model needs</span></li>
+    <li><b>Agent reasoning</b><span>Reasoning effort, such as low, medium or high</span></li>
+    <li><b>Agent sampling</b><span>Temperature and max output tokens; “default” when not set</span></li>
+    <li><b>Agent transport</b><span>API form (e.g. Responses), direct or through a named relay</span></li>
+    <li><b>Agent limits</b><span>Per-request timeout, call limit, retries</span></li>
   </ul>
   <p>Each case stores its score, success, termination reason, score components, the three camera videos and run metadata. See <a href="leaderboard.html#protocol">Reading the leaderboard</a> for how these appear on the boards.</p>
 </section>

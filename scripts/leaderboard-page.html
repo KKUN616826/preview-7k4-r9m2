@@ -84,7 +84,7 @@ __SCHEDULE__
 <li>The evaluation set is hidden and has no validation split; evaluation seeds are separate from training seeds.</li>
 <li>Mind2Act runs every model on its own machines with the released code, assets and budgets. Each case is run once; no uncertainty is reported.</li>
 <li>Infrastructure failures are retried once and then excluded; valid zeros are kept. Each result reports its valid cases out of the total.</li>
-<li>Submitters declare the model, version, checkpoint SHA and inference settings (agents: model, effort, transport, call limit and retries).</li>
+<li>Submitters declare the model, version, checkpoint SHA and inference settings (agents: model, reasoning effort, temperature, max output tokens, API form and relay, per-request timeout, call limit and retries, with “default” for anything not set).</li>
 </ul>
 </section>
 </section>

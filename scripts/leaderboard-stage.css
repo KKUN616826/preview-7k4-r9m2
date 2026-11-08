@@ -566,3 +566,22 @@ body.leaderboard-explorer .lb-page { max-width: none; padding-top: 0; }
   /* The phone window starts at artwork x 610; the tag sits at its left edge, on the ocean. */
   .lb-stage .lb-shot-tag--earth { left: calc(622 / 1983 * 100%) !important; transform: translateY(-20%); }
 }
+/* The summit: every route converges on one landing beacon on the Moon's surface, inside a corridor of
+   light that brightens toward it, so the eye runs from the Earth up to 100. */
+.lb-shot-corridor { pointer-events: none; }
+.lb-shot-summit-ring { fill: #fff; stroke: #a2451f; stroke-width: 3; }
+.lb-shot-summit-core { fill: #a2451f; }
+.lb-shot-summit-pulse { fill: none; stroke: #a2451f; stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: lb-summit-pulse 2.6s ease-out infinite; }
+@keyframes lb-summit-pulse { from { transform: scale(1); opacity: .75; } to { transform: scale(3.4); opacity: 0; } }
+/* The Moon tag stands on the Moon right above its beacon, clear of the leader's label below. */
+.lb-stage .lb-shot-tag--moon { transform: translate(-50%, calc(-100% - 2.4cqw)); }
+@media (prefers-reduced-motion: reduce) { .lb-shot-summit-pulse { animation: none; opacity: 0; } }
+@media (max-width: 760px) {
+  .lb-stage .lb-shot-tag--moon { transform: translate(-62%, calc(-100% - 12px)); }
+}
+.lb-shot-summit-halo { fill: none; stroke: #a2451f; stroke-width: 1.5; stroke-dasharray: 3 5; opacity: .55; }
+.lb-shot-summit-ring { stroke-width: 4; filter: drop-shadow(0 0 6px #ffd7ae); }
+/* Score chips of the runners-up sit above their rockets, like the leader's, so neighbours on converging routes do not cover each other. */
+.lb-shot-model.is-top:not(.is-lead) a { flex-direction: column-reverse; gap: 2px; transform: translate(-50%, calc(-100% + var(--badge))); }
+.lb-shot-model.is-top.is-label-left a { flex-direction: row-reverse; gap: 4px; transform: translate(calc(-100% + var(--badge) / 2), -50%); }
+.lb-shot-model.is-top.is-label-right a { flex-direction: row; gap: 4px; transform: translate(calc(var(--badge) / -2), -50%); }

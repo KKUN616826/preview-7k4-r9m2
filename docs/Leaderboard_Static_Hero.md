@@ -34,3 +34,20 @@
 - 火箭改为与网站像素小人同风格的 16 × 24 像素图（`leaderboard_stage.py` 的 `_ROCKET`、`_FLAMES`）：圆胖机身、大圆舷窗放 logo、短尾翼，两帧像素尾焰交替闪动。为保持像素边缘清晰，火箭只倾斜航线角度的一半。
 - 配色统一为网站色板：所有火箭奶油白机身配雾蓝灰，第一名锈红；航线从彩色改为白色尾烟。第一名的标签始终在火箭正上方，避免盖住相邻火箭。
 - 地球的蓝色调淡为网站的雾蓝（`enhance_earth.py` 混合强度 0.5），大气亮边减弱；动画已重新渲染。
+
+## 2026-11-08: one summit
+
+- Every route converges on one landing beacon on the Moon's lower limb (`SUMMIT`, inside the narrow
+  `LANDING` zone), with a pulsing rust ring, a glow and a corridor of light between the outermost
+  routes. The Moon tag stands on the Moon right above the beacon.
+- Launch sites are chosen by rank, not release order (`_slots`): the best model launches a little
+  right of the middle, under the beacon, and the rest alternate outward, the right flank filling more
+  slowly because routes lean toward the Moon there; every other pair is swapped so the flanks are not
+  straight lines. The rockets stand like a mountain with the leader at its peak. The two gaps beside
+  the leader are wider for its larger rocket.
+- Routes climb almost straight up (first control point at 85 % of the height) and converge only near
+  the Moon, so the many low scores keep their spacing. Parameters were picked by measuring rocket
+  overlap over the placeholder and 60 random rosters.
+- Runner-up score chips sit above their rockets, or beside them when a neighbour or the leader's label
+  is in the way (`_label_sides`). The 75 contour keeps its line but not its number, which the leader's
+  label would cover.
