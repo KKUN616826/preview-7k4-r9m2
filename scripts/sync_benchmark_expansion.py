@@ -39,7 +39,7 @@ def main():
         p=ROOT/relative;p.write_bytes(apply_homepage(p.read_bytes().decode()).encode())
     p=ROOT/'resources.html';s=p.read_text()
     s=s.replace('comprises 15 tasks','comprises 30 tasks').replace('<td>5</td>','<td>10</td>').replace('<td>15</td>','<td>30</td>').replace('45 task–level configurations','180 task configurations: each level in Clean and Random').replace('Browse the 15 tasks','Browse the 30 tasks')
-    note='Only the E2 Hard demonstration is pending; all other added task levels have videos available.'
+    note='Every task has a head-camera demonstration at all three levels: 90 videos in all.'
     s=s.replace('Some new difficulty-level videos are pending; task pages identify the recordings currently available.', note)
     if note not in s:s=s.replace('The instruction panel describes the operation required at that level.','The instruction panel describes the task operation. '+note)
     s=s.replace('Use the leaderboard to inspect policy, category, and per-task views; unreported results are marked with a dash.','The leaderboard preserves the original 15-task result snapshot; results for the added tasks are not yet reported. Unreported results are marked with a dash.')
