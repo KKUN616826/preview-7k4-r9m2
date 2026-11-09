@@ -25,7 +25,7 @@ jobs:
           mkdir -p _site
           rsync -a --exclude='/_site/' --exclude='/.git/' --exclude='/.github/' --exclude='/intro_video_hyperframes/' --exclude='node_modules/' ./ _site/
           mkdir -p _site/intro_video_hyperframes/renders
-          cp intro_video_hyperframes/renders/mind2act-world-promo-2026-v15-1080p.mp4 _site/intro_video_hyperframes/renders/
+          cp intro_video_hyperframes/renders/mind2act-world-promo-2026-v16-1080p.mp4 _site/intro_video_hyperframes/renders/
           touch _site/.nojekyll
           python3 - <<'PY'
           from pathlib import Path
