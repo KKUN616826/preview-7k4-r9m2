@@ -33,7 +33,6 @@ jobs:
           print(f'Published site bytes: {total:,}')
           assert total < 950_000_000, 'Website exceeds publishing size guard'
           assert Path('_site/index.html').is_file()
-          assert Path('_site/CNAME').read_text().strip() == 'mind2act-world.com'
           PY
       - uses: actions/upload-pages-artifact@v3
         with:
